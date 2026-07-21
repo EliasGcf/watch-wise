@@ -26,5 +26,6 @@ export default await Env.create(new URL('../', import.meta.url), {
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
 
   // Catalog Provider
+  CATALOG_PROVIDER_DRIVER: Env.schema.enum.optional(['fake', 'tmdb'] as const),
   TMDB_ACCESS_TOKEN: Env.schema.string.optional(),
 })

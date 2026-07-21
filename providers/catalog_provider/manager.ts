@@ -1,3 +1,4 @@
+import FakeCatalogProviderDriver from '#providers/catalog_provider/fake_driver'
 import TmdbCatalogProviderDriver from '#providers/catalog_provider/tmdb_driver'
 import {
   CatalogProvider,
@@ -30,6 +31,10 @@ export class CatalogProviderManager extends CatalogProvider {
   }
 
   private createDriver(name: CatalogProviderDriverName) {
+    if (name === 'fake') {
+      return new FakeCatalogProviderDriver(this.config.drivers.fake)
+    }
+
     if (name === 'tmdb') {
       return new TmdbCatalogProviderDriver(this.config.drivers.tmdb)
     }

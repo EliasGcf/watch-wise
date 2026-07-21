@@ -1,4 +1,4 @@
-export type CatalogProviderDriverName = 'tmdb'
+export type CatalogProviderDriverName = 'fake' | 'tmdb'
 
 export type CatalogTitleResult = {
   provider: 'tmdb'
@@ -23,9 +23,15 @@ export type TmdbCatalogProviderConfig = {
   accessToken?: string
 }
 
+export type FakeCatalogProviderConfig = {
+  failureQuery: string
+  results: CatalogTitleResult[]
+}
+
 export type CatalogProviderConfig = {
   default: CatalogProviderDriverName
   drivers: {
+    fake: FakeCatalogProviderConfig
     tmdb: TmdbCatalogProviderConfig
   }
 }

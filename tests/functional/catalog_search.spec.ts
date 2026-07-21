@@ -1,47 +1,12 @@
-import {
-  CatalogProvider,
-  CatalogProviderError,
-  type CatalogTitleResult,
-} from '#services/catalog_provider'
 import User from '#models/user'
-import app from '@adonisjs/core/services/app'
 import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
 
-class FakeCatalogProvider extends CatalogProvider {
-  async search(query: string): Promise<CatalogTitleResult[]> {
-    if (query === 'fail') {
-      throw new CatalogProviderError('Provider unavailable')
-    }
-
-    return [
-      {
-        provider: 'tmdb',
-        providerTitleId: 'movie-1',
-        type: 'movie' as const,
-        name: 'Heat',
-        releaseYear: 1995,
-        summary: 'A professional thief and a relentless detective collide.',
-      },
-      {
-        provider: 'tmdb',
-        providerTitleId: 'series-1',
-        type: 'series' as const,
-        name: 'Heat Vision and Jack',
-        releaseYear: 1999,
-        summary: 'A pilot about a super-intelligent astronaut.',
-      },
-    ]
-  }
-}
-
 test.group('Catalog search', (group) => {
   group.each.setup(async () => {
-    app.container.swap(CatalogProvider, () => new FakeCatalogProvider())
     await db.from('users').delete()
 
     return async () => {
-      app.container.restore(CatalogProvider)
       await db.from('users').delete()
     }
   })

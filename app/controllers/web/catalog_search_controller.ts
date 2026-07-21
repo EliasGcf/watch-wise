@@ -1,10 +1,8 @@
-import { CatalogProvider, CatalogProviderError } from '#services/catalog_provider'
+import catalogProvider, { CatalogProviderError } from '#services/catalog_provider'
 import type { HttpContext } from '@adonisjs/core/http'
-import { inject } from '@adonisjs/core'
 
 export default class CatalogSearchController {
-  @inject()
-  async index({ inertia, request }: HttpContext, catalogProvider: CatalogProvider) {
+  async index({ inertia, request }: HttpContext) {
     const query = String(request.input('q', '')).trim()
 
     if (!query) {
