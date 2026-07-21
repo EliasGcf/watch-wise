@@ -45,22 +45,17 @@ test.group('Catalog search', (group) => {
     }
   })
 
-  async function login(visit: (url: string) => Promise<import('playwright').Page>, user: User) {
-    const loginPage = await visit('/app/login')
-    await loginPage.locator('input[name="email"]').fill(user.email)
-    await loginPage.locator('input[name="password"]').fill('secret123')
-    await loginPage.locator('button[type="submit"]').click()
-    await loginPage.waitForURL('**/app')
-  }
-
-  test('authenticated users can search movie and series titles', async ({ visit }) => {
+  test('authenticated users can search movie and series titles', async ({
+    browserContext,
+    visit,
+  }) => {
     const user = await User.create({
       fullName: 'Taylor Viewer',
       email: 'taylor@example.com',
       password: 'secret123',
     })
 
-    await login(visit, user)
+    await browserContext.loginAs(user)
 
     const page = await visit('/app/catalog/search?q=heat')
 
@@ -77,14 +72,17 @@ test.group('Catalog search', (group) => {
     await page.assertTextContains('body', 'A pilot about a super-intelligent astronaut.')
   })
 
-  test('provider failures are shown as catalog search limitations', async ({ visit }) => {
+  test('provider failures are shown as catalog search limitations', async ({
+    browserContext,
+    visit,
+  }) => {
     const user = await User.create({
       fullName: 'Casey Viewer',
       email: 'casey@example.com',
       password: 'secret123',
     })
 
-    await login(visit, user)
+    await browserContext.loginAs(user)
 
     const page = await visit('/app/catalog/search?q=fail')
 
