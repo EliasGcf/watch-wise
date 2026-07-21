@@ -12,7 +12,7 @@ const dbConfig = defineConfig({
      * SQLite connection (default).
      */
     sqlite: {
-      client: 'better-sqlite3',
+      client: 'sqlite3',
 
       connection: {
         /**
