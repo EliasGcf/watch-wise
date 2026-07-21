@@ -73,6 +73,7 @@
     "@adonisjs/static": "2.0.1",
     "@adonisjs/vite": "5.1.1",
     "@inertiajs/react": "2.3.24",
+    "@tailwindcss/vite": "4.3.3",
     "@tuyau/core": "1.2.2",
     "@vinejs/vine": "4.4.0",
     "edge.js": "6.5.1",
@@ -81,7 +82,8 @@
     "react-dom": "19.2.6",
     "reflect-metadata": "0.2.2",
     "sonner": "2.0.7",
-    "sqlite3": "6.0.1"
+    "sqlite3": "6.0.1",
+    "tailwindcss": "4.3.3"
   },
   "hotHook": {
     "boundaries": [

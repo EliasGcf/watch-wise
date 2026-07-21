@@ -9,7 +9,7 @@ export default function Signup() {
       </div>
 
       <div>
-        <Form route="new_account.store">
+        <Form route="app.new_account.store">
           {({ errors }) => (
             <>
               <div>

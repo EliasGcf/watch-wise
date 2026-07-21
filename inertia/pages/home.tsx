@@ -1,29 +1,8 @@
 export default function Home() {
   return (
     <>
-      <div className="hero">
-        <h1>It works — welcome to the power of a full-stack React app</h1>
-        <p>
-          Powered by Inertia and React, this setup blends server-driven routing with rich
-          client-side interactivity — seamless, fast, and cohesive.
-        </p>
-      </div>
-
-      <div className="cards">
-        <a href="https://docs.adonisjs.com/introduction" target="_blank" rel="noreferrer">
-          <h3>Official Docs &nbsp;›</h3>
-          <p>Comprehensive reference for building with AdonisJS</p>
-        </a>
-
-        <a href="https://adocasts.com/" target="_blank" rel="noreferrer">
-          <h3>Adocasts &nbsp;›</h3>
-          <p>Guided video tutorials for everyday development</p>
-        </a>
-
-        <a href="https://discord.gg/vDcEjq6" target="_blank" rel="noreferrer">
-          <h3>Discord &nbsp;›</h3>
-          <p>Connect with developers building with AdonisJS every day</p>
-        </a>
+      <div className="flex flex-col items-center justify-center min-h-screen py-2">
+        <h1>Welcome to Watch Wise</h1>
       </div>
     </>
   )
