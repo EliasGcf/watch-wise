@@ -1,0 +1,14 @@
+node_modules
+.git
+tmp
+storage/logs
+.env
+.env.*
+.editorconfig
+.gitignore
+.prettierignore
+eslint.config.js
+mise.toml
+tests/
+Dockerfile
+build/
