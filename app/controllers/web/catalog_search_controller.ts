@@ -1,4 +1,4 @@
-import CatalogProvider, { CatalogProviderError } from '#services/catalog_provider'
+import { CatalogProvider, CatalogProviderError } from '#services/catalog_provider'
 import type { HttpContext } from '@adonisjs/core/http'
 import { inject } from '@adonisjs/core'
 

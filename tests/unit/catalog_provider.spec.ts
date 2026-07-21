@@ -1,4 +1,5 @@
-import CatalogProvider, { CatalogProviderError } from '#services/catalog_provider'
+import TmdbCatalogProviderDriver from '#providers/catalog_provider/tmdb_driver'
+import { CatalogProviderError } from '#services/catalog_provider'
 import { test } from '@japa/runner'
 
 test.group('Catalog provider', (group) => {
@@ -38,7 +39,9 @@ test.group('Catalog provider', (group) => {
       )
     }
 
-    const results = await new CatalogProvider().search('heat')
+    const results = await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }).search(
+      'heat'
+    )
 
     assert.deepEqual(results, [
       {
@@ -68,6 +71,9 @@ test.group('Catalog provider', (group) => {
       })
     }
 
-    await assert.rejects(() => new CatalogProvider().search('heat'), CatalogProviderError)
+    await assert.rejects(
+      () => new TmdbCatalogProviderDriver({ accessToken: 'test-token' }).search('heat'),
+      CatalogProviderError
+    )
   })
 })

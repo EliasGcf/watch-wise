@@ -1,4 +1,5 @@
-import CatalogProvider, {
+import {
+  CatalogProvider,
   CatalogProviderError,
   type CatalogTitleResult,
 } from '#services/catalog_provider'
