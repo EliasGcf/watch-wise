@@ -20,7 +20,7 @@ export const plugins: Config['plugins'] = [
   assert(),
   pluginAdonisJS(app),
   dbAssertions(app),
-  browserClient({ runInSuites: ['browser'] }),
+  browserClient({ runInSuites: ['browser', 'functional'] }),
   sessionBrowserClient(app),
   authBrowserClient(app),
 ]

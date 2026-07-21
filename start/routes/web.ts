@@ -16,7 +16,10 @@ const group = router.group(() => {
     .use(middleware.guest())
 
   router
-    .group(() => router.post('logout', [controllers.web.Session, 'destroy']))
+    .group(() => {
+      router.post('logout', [controllers.web.Session, 'destroy'])
+      router.get('catalog/search', [controllers.web.CatalogSearch, 'index'])
+    })
     .use(middleware.auth())
 })
 
