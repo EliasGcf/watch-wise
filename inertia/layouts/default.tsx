@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
       <header>
         <div>
           <div>
-            <Link route="home">
+            <Link route="app.home">
               <svg
                 width="120"
                 height="24"
@@ -44,14 +44,14 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
               {children.props.user ? (
                 <>
                   <span>{children.props.user.initials}</span>
-                  <Form route="session.destroy">
+                  <Form route="app.session.destroy">
                     <button type="submit"> Logout </button>
                   </Form>
                 </>
               ) : (
                 <>
-                  <Link route="new_account.create">Signup</Link>
-                  <Link route="session.create">Login</Link>
+                  <Link route="app.new_account.create">Signup</Link>
+                  <Link route="app.session.create">Login</Link>
                 </>
               )}
             </nav>

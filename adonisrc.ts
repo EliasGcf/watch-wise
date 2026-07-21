@@ -133,6 +133,7 @@ export default defineConfig({
       indexPages({ framework: 'react' }),
       generateRegistry(),
     ],
+    devServerStarted: [() => import('#start/dev_server')],
     buildStarting: [() => import('@adonisjs/vite/build_hook')],
   },
 })
