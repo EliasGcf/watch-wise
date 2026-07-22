@@ -44,7 +44,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
       return [
         {
           provider: 'tmdb',
-          providerTitleId: String(result.id),
+          providerId: String(result.id),
           type,
           name: name || 'Unknown',
           bannerUrl: imageUrl(result.backdrop_path ?? result.poster_path),

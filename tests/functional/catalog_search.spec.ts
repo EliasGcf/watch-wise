@@ -74,9 +74,9 @@ test.group('Catalog search', (group) => {
     assert.containsSubset(await user.related('libraryEntries').query(), [
       {
         provider: 'tmdb',
-        providerTitleId: 'movie-1',
-        titleType: 'movie',
-        titleName: 'Heat',
+        providerId: 'movie-1',
+        type: 'movie',
+        name: 'Heat',
       },
     ])
   })
@@ -106,9 +106,9 @@ test.group('Catalog search', (group) => {
     assert.containsSubset(await user.related('libraryEntries').query(), [
       {
         provider: 'tmdb',
-        providerTitleId: 'series-1',
-        titleType: 'series',
-        titleName: 'Heat Vision and Jack',
+        providerId: 'series-1',
+        type: 'series',
+        name: 'Heat Vision and Jack',
       },
     ])
   })
@@ -135,10 +135,7 @@ test.group('Catalog search', (group) => {
     const libraryPage = await visit('/app/library')
 
     await libraryPage.assertTextContains('body', 'Heat')
-    assert.lengthOf(
-      await user.related('libraryEntries').query().where('providerTitleId', 'movie-1'),
-      1
-    )
+    assert.lengthOf(await user.related('libraryEntries').query().where('providerId', 'movie-1'), 1)
   })
 
   test('authenticated users can add titles without optional catalog metadata', async ({
@@ -165,9 +162,9 @@ test.group('Catalog search', (group) => {
     assert.containsSubset(await user.related('libraryEntries').query(), [
       {
         provider: 'tmdb',
-        providerTitleId: 'movie-2',
-        titleType: 'movie',
-        titleName: 'Unknown Heat',
+        providerId: 'movie-2',
+        type: 'movie',
+        name: 'Unknown Heat',
         bannerUrl: null,
         releaseYear: null,
         summary: null,

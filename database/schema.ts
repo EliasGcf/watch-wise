@@ -12,12 +12,12 @@ export class LibraryEntrySchema extends BaseModel {
     'bannerUrl',
     'createdAt',
     'id',
+    'name',
     'provider',
-    'providerTitleId',
+    'providerId',
     'releaseYear',
     'summary',
-    'titleName',
-    'titleType',
+    'type',
     'updatedAt',
     'userId',
   ] as const
@@ -29,17 +29,17 @@ export class LibraryEntrySchema extends BaseModel {
   @column({ isPrimary: true })
   declare id: number
   @column()
+  declare name: string
+  @column()
   declare provider: string
   @column()
-  declare providerTitleId: string
+  declare providerId: string
   @column()
   declare releaseYear: number | null
   @column()
   declare summary: string | null
   @column()
-  declare titleName: string
-  @column()
-  declare titleType: string
+  declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()

@@ -9,7 +9,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
       results: [
         {
           provider: 'tmdb',
-          providerTitleId: 'movie-1',
+          providerId: 'movie-1',
           type: 'movie',
           name: 'Heat',
           bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
@@ -18,7 +18,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
         },
         {
           provider: 'tmdb',
-          providerTitleId: 'series-1',
+          providerId: 'series-1',
           type: 'series',
           name: 'Heat Vision and Jack',
           bannerUrl: 'https://image.tmdb.org/t/p/w780/series-1.jpg',
@@ -27,7 +27,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
         },
         {
           provider: 'tmdb',
-          providerTitleId: 'movie-2',
+          providerId: 'movie-2',
           type: 'movie',
           name: 'Unknown Heat',
           bannerUrl: null,

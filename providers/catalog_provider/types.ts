@@ -2,7 +2,7 @@ export type CatalogProviderDriverName = 'fake' | 'tmdb'
 
 export type CatalogTitleResult = {
   provider: 'tmdb'
-  providerTitleId: string
+  providerId: string
   type: 'movie' | 'series'
   name: string
   bannerUrl: string | null

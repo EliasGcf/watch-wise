@@ -44,7 +44,7 @@ test.group('Catalog provider', () => {
     assert.deepEqual(results, [
       {
         provider: 'tmdb',
-        providerTitleId: '1',
+        providerId: '1',
         type: 'movie',
         name: 'Heat',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
@@ -53,7 +53,7 @@ test.group('Catalog provider', () => {
       },
       {
         provider: 'tmdb',
-        providerTitleId: '2',
+        providerId: '2',
         type: 'series',
         name: 'Heat Vision and Jack',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat-vision.jpg',

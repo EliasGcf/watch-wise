@@ -14,9 +14,9 @@ export default class extends BaseSchema {
         .inTable('users')
         .onDelete('CASCADE')
       table.string('provider').notNullable()
-      table.string('provider_title_id').notNullable()
-      table.string('title_type').notNullable()
-      table.string('title_name').notNullable()
+      table.string('provider_id').notNullable()
+      table.enum('type', ['movie', 'series']).notNullable()
+      table.string('name').notNullable()
       table.string('banner_url').nullable()
       table.integer('release_year').nullable()
       table.text('summary').nullable()
@@ -24,7 +24,9 @@ export default class extends BaseSchema {
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
 
-      table.unique(['user_id', 'provider', 'provider_title_id'], 'library_entries_title_unique')
+      table.unique(['user_id', 'provider', 'provider_id'], {
+        indexName: 'library_entries_provider_identity_unique',
+      })
     })
   }
 

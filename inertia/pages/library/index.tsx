@@ -4,9 +4,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 type LibraryEntry = {
   id: number
   provider: string
-  providerTitleId: string
-  titleType: 'movie' | 'series'
-  titleName: string
+  providerId: string
+  type: 'movie' | 'series'
+  name: string
   bannerUrl: string | null
   releaseYear: number | null
   summary: string | null
@@ -37,9 +37,9 @@ export default function LibraryIndex({ entries }: Props) {
             )}
             <CardHeader>
               <div className="flex flex-col gap-2">
-                <CardTitle>{entry.titleName}</CardTitle>
+                <CardTitle>{entry.name}</CardTitle>
                 <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary">{entry.titleType}</Badge>
+                  <Badge variant="secondary">{entry.type}</Badge>
                   {entry.releaseYear && <Badge variant="outline">{entry.releaseYear}</Badge>}
                 </div>
               </div>
@@ -49,7 +49,7 @@ export default function LibraryIndex({ entries }: Props) {
                 <p className="line-clamp-4 text-muted-foreground">{entry.summary}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                {entry.provider} title ID: {entry.providerTitleId}
+                {entry.provider} ID: {entry.providerId}
               </p>
             </CardContent>
           </Card>

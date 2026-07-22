@@ -8,7 +8,7 @@ import { Input } from '~/components/ui/input'
 
 type CatalogSearchResult = {
   provider: string
-  providerTitleId: string
+  providerId: string
   type: 'movie' | 'series'
   name: string
   bannerUrl: string | null
@@ -65,7 +65,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
         aria-label="Catalog search results"
       >
         {results.map((result) => (
-          <Card key={`${result.provider}:${result.providerTitleId}`}>
+          <Card key={`${result.provider}:${result.providerId}`}>
             {result.bannerUrl && (
               <img src={result.bannerUrl} alt="" className="aspect-video w-full object-cover" />
             )}
@@ -87,9 +87,9 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
               <CardContent>
                 <Form route="app.library.store">
                   <input type="hidden" name="provider" value={result.provider} />
-                  <input type="hidden" name="providerTitleId" value={result.providerTitleId} />
-                  <input type="hidden" name="titleType" value={result.type} />
-                  <input type="hidden" name="titleName" value={result.name} />
+                  <input type="hidden" name="providerId" value={result.providerId} />
+                  <input type="hidden" name="type" value={result.type} />
+                  <input type="hidden" name="name" value={result.name} />
                   <input type="hidden" name="bannerUrl" value={result.bannerUrl ?? ''} />
                   <input type="hidden" name="releaseYear" value={result.releaseYear ?? ''} />
                   <input type="hidden" name="summary" value={result.summary ?? ''} />
