@@ -1,3 +1,4 @@
+import { Form } from '@adonisjs/inertia/react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -83,6 +84,20 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <p className="line-clamp-4 text-muted-foreground">{result.summary}</p>
                 </CardContent>
               )}
+              <CardContent>
+                <Form route="app.library.store">
+                  <input type="hidden" name="provider" value={result.provider} />
+                  <input type="hidden" name="providerTitleId" value={result.providerTitleId} />
+                  <input type="hidden" name="titleType" value={result.type} />
+                  <input type="hidden" name="titleName" value={result.name} />
+                  <input type="hidden" name="bannerUrl" value={result.bannerUrl ?? ''} />
+                  <input type="hidden" name="releaseYear" value={result.releaseYear ?? ''} />
+                  <input type="hidden" name="summary" value={result.summary ?? ''} />
+                  <Button type="submit" className="w-full">
+                    Add {result.name} to library
+                  </Button>
+                </Form>
+              </CardContent>
             </div>
           </Card>
         ))}

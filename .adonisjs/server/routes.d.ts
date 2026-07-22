@@ -12,6 +12,8 @@ export type ScannedRoutes = {
     'app.session.store': { paramsTuple?: []; params?: {} }
     'app.session.destroy': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
+    'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.store': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -19,6 +21,7 @@ export type ScannedRoutes = {
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
+    'app.library.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -26,11 +29,13 @@ export type ScannedRoutes = {
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
+    'app.library.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'app.new_account.store': { paramsTuple?: []; params?: {} }
     'app.session.store': { paramsTuple?: []; params?: {} }
     'app.session.destroy': { paramsTuple?: []; params?: {} }
+    'app.library.store': { paramsTuple?: []; params?: {} }
   }
 }
 declare module '@adonisjs/core/types/http' {

@@ -25,6 +25,15 @@ const catalogProviderConfig: CatalogProviderConfig = {
           releaseYear: 1999,
           summary: 'A pilot about a super-intelligent astronaut.',
         },
+        {
+          provider: 'tmdb',
+          providerTitleId: 'movie-2',
+          type: 'movie',
+          name: 'Unknown Heat',
+          bannerUrl: null,
+          releaseYear: null,
+          summary: null,
+        },
       ],
     },
     tmdb: {

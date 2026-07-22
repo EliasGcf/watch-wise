@@ -103,4 +103,28 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/catalog_search_controller').default['index']>>>
     }
   }
+  'app.library.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
+    }
+  }
+  'app.library.store': {
+    methods: ["POST"]
+    pattern: '/app/library'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
 }

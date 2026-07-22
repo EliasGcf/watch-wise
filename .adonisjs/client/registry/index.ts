@@ -54,6 +54,18 @@ const routes = {
     tokens: [{"old":"/app/catalog/search","type":0,"val":"app","end":""},{"old":"/app/catalog/search","type":0,"val":"catalog","end":""},{"old":"/app/catalog/search","type":0,"val":"search","end":""}],
     types: placeholder as Registry['app.catalog_search.index']['types'],
   },
+  'app.library.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/library',
+    tokens: [{"old":"/app/library","type":0,"val":"app","end":""},{"old":"/app/library","type":0,"val":"library","end":""}],
+    types: placeholder as Registry['app.library.index']['types'],
+  },
+  'app.library.store': {
+    methods: ["POST"],
+    pattern: '/app/library',
+    tokens: [{"old":"/app/library","type":0,"val":"app","end":""},{"old":"/app/library","type":0,"val":"library","end":""}],
+    types: placeholder as Registry['app.library.store']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

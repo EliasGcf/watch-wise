@@ -48,4 +48,130 @@ test.group('Catalog search', (group) => {
 
     await page.assertTextContains('body', 'Catalog search is temporarily limited. Try again later.')
   })
+
+  test('authenticated users can add movie titles from catalog search to their library', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Morgan Viewer',
+      email: 'morgan@example.com',
+      password: 'secret123',
+    })
+
+    await browserContext.loginAs(user)
+
+    const searchPage = await visit('/app/catalog/search?q=heat')
+    await searchPage.getByRole('button', { name: 'Add Heat to library' }).click()
+
+    const libraryPage = await visit('/app/library')
+
+    await libraryPage.assertTextContains('body', 'Heat')
+    await libraryPage.assertTextContains('body', 'movie')
+    await libraryPage.assertTextContains('body', '1995')
+
+    assert.containsSubset(await user.related('libraryEntries').query(), [
+      {
+        provider: 'tmdb',
+        providerTitleId: 'movie-1',
+        titleType: 'movie',
+        titleName: 'Heat',
+      },
+    ])
+  })
+
+  test('authenticated users can add series titles from catalog search to their library', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Riley Viewer',
+      email: 'riley@example.com',
+      password: 'secret123',
+    })
+
+    await browserContext.loginAs(user)
+
+    const searchPage = await visit('/app/catalog/search?q=heat')
+    await searchPage.getByRole('button', { name: 'Add Heat Vision and Jack to library' }).click()
+
+    const libraryPage = await visit('/app/library')
+
+    await libraryPage.assertTextContains('body', 'Heat Vision and Jack')
+    await libraryPage.assertTextContains('body', 'series')
+    await libraryPage.assertTextContains('body', '1999')
+
+    assert.containsSubset(await user.related('libraryEntries').query(), [
+      {
+        provider: 'tmdb',
+        providerTitleId: 'series-1',
+        titleType: 'series',
+        titleName: 'Heat Vision and Jack',
+      },
+    ])
+  })
+
+  test('users cannot create duplicate library entries for the same provider title', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Jamie Viewer',
+      email: 'jamie@example.com',
+      password: 'secret123',
+    })
+
+    await browserContext.loginAs(user)
+
+    const firstSearchPage = await visit('/app/catalog/search?q=heat')
+    await firstSearchPage.getByRole('button', { name: 'Add Heat to library' }).click()
+
+    const secondSearchPage = await visit('/app/catalog/search?q=heat')
+    await secondSearchPage.getByRole('button', { name: 'Add Heat to library' }).click()
+
+    const libraryPage = await visit('/app/library')
+
+    await libraryPage.assertTextContains('body', 'Heat')
+    assert.lengthOf(
+      await user.related('libraryEntries').query().where('providerTitleId', 'movie-1'),
+      1
+    )
+  })
+
+  test('authenticated users can add titles without optional catalog metadata', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Avery Viewer',
+      email: 'avery@example.com',
+      password: 'secret123',
+    })
+
+    await browserContext.loginAs(user)
+
+    const searchPage = await visit('/app/catalog/search?q=heat')
+    await searchPage.getByRole('button', { name: 'Add Unknown Heat to library' }).click()
+
+    const libraryPage = await visit('/app/library')
+
+    await libraryPage.assertTextContains('body', 'Unknown Heat')
+    await libraryPage.assertTextContains('body', 'movie')
+
+    assert.containsSubset(await user.related('libraryEntries').query(), [
+      {
+        provider: 'tmdb',
+        providerTitleId: 'movie-2',
+        titleType: 'movie',
+        titleName: 'Unknown Heat',
+        bannerUrl: null,
+        releaseYear: null,
+        summary: null,
+      },
+    ])
+  })
 })
