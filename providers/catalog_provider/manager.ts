@@ -1,5 +1,5 @@
-import FakeCatalogProviderDriver from '#providers/catalog_provider/fake_driver'
-import TmdbCatalogProviderDriver from '#providers/catalog_provider/tmdb_driver'
+import FakeCatalogProviderDriver from '#providers/catalog_provider/drivers/fake_driver'
+import TmdbCatalogProviderDriver from '#providers/catalog_provider/drivers/tmdb_driver'
 import {
   CatalogProvider,
   CatalogProviderError,

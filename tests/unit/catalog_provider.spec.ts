@@ -1,17 +1,13 @@
-import TmdbCatalogProviderDriver from '#providers/catalog_provider/tmdb_driver'
+import { createClient } from '#generated/tmdb/client/index'
+import { TmdbSdk } from '#generated/tmdb/sdk.gen'
+import TmdbCatalogProviderDriver from '#providers/catalog_provider/drivers/tmdb_driver'
 import { CatalogProviderError } from '#services/catalog_provider'
 import { test } from '@japa/runner'
 
-test.group('Catalog provider', (group) => {
-  const originalFetch = globalThis.fetch
-
-  group.each.teardown(() => {
-    globalThis.fetch = originalFetch
-  })
-
+test.group('Catalog provider', () => {
   test('maps TMDB multi search to movie and series titles only', async ({ assert }) => {
-    globalThis.fetch = async () => {
-      return new Response(
+    const tmdb = makeTmdbSdk(
+      new Response(
         JSON.stringify({
           results: [
             {
@@ -25,7 +21,7 @@ test.group('Catalog provider', (group) => {
               id: 2,
               media_type: 'tv',
               name: 'Heat Vision and Jack',
-              first_air_date: '1999-01-01',
+              release_date: '1999-01-01',
               overview: 'A pilot about a super-intelligent astronaut.',
             },
             {
@@ -37,9 +33,9 @@ test.group('Catalog provider', (group) => {
         }),
         { status: 200, headers: { 'content-type': 'application/json' } }
       )
-    }
+    )
 
-    const results = await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }).search(
+    const results = await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search(
       'heat'
     )
 
@@ -64,16 +60,25 @@ test.group('Catalog provider', (group) => {
   })
 
   test('represents invalid TMDB responses as provider failures', async ({ assert }) => {
-    globalThis.fetch = async () => {
-      return new Response('not-json', {
+    const tmdb = makeTmdbSdk(
+      new Response('not-json', {
         status: 200,
         headers: { 'content-type': 'application/json' },
       })
-    }
+    )
 
     await assert.rejects(
-      () => new TmdbCatalogProviderDriver({ accessToken: 'test-token' }).search('heat'),
+      () => new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search('heat'),
       CatalogProviderError
     )
   })
 })
+
+function makeTmdbSdk(response: Response) {
+  return new TmdbSdk({
+    client: createClient({
+      baseUrl: 'https://api.themoviedb.org',
+      fetch: async () => response,
+    }),
+  })
+}

@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit && tsc --noEmit --project inertia/tsconfig.json",
-    "vite:build": "bun --bun vite build"
+    "vite:build": "bun --bun vite build",
+    "generate:tmpd-sdk": "bunx --bun @hey-api/openapi-ts"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.ts",
@@ -41,6 +42,7 @@
     "@adonisjs/eslint-config": "3.1.0",
     "@adonisjs/prettier-config": "1.5.0",
     "@adonisjs/tsconfig": "2.0.0",
+    "@hey-api/openapi-ts": "0.99.0",
     "@japa/assert": "4.2.0",
     "@japa/browser-client": "2.3.0",
     "@japa/plugin-adonisjs": "5.2.0",
@@ -76,6 +78,7 @@
     "@tailwindcss/vite": "4.3.3",
     "@tuyau/core": "1.2.2",
     "@vinejs/vine": "4.4.0",
+    "dayjs": "1.11.21",
     "edge.js": "6.5.1",
     "luxon": "3.7.2",
     "react": "19.2.6",

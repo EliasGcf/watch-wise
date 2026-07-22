@@ -13,5 +13,8 @@ export interface ApiDefinition {
       store: typeof routes['app.session.store']
       destroy: typeof routes['app.session.destroy']
     }
+    catalogSearch: {
+      index: typeof routes['app.catalog_search.index']
+    }
   }
 }

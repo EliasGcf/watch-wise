@@ -42,6 +42,12 @@ const routes = {
     tokens: [{"old":"/app/logout","type":0,"val":"app","end":""},{"old":"/app/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['app.session.destroy']['types'],
   },
+  'app.catalog_search.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/catalog/search',
+    tokens: [{"old":"/app/catalog/search","type":0,"val":"app","end":""},{"old":"/app/catalog/search","type":0,"val":"catalog","end":""},{"old":"/app/catalog/search","type":0,"val":"search","end":""}],
+    types: placeholder as Registry['app.catalog_search.index']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }
