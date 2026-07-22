@@ -94,7 +94,7 @@ test.group('Catalog provider', () => {
       ],
     })
 
-    assert.deepEqual(await driver.find('movie-1', 'movie'), {
+    assert.deepEqual(await driver.find('movie', 'movie-1'), {
       provider: 'tmdb',
       providerId: 'movie-1',
       type: 'movie',
@@ -103,7 +103,7 @@ test.group('Catalog provider', () => {
       releaseDate: '1995-12-15',
       summary: null,
     })
-    assert.isNull(await driver.find('movie-1', 'series'))
+    assert.isNull(await driver.find('series', 'movie-1'))
   })
 
   test('maps TMDB detail responses to catalog titles', async ({ assert }) => {
@@ -121,7 +121,7 @@ test.group('Catalog provider', () => {
     )
 
     assert.deepEqual(
-      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).find('1', 'movie'),
+      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findMovieById('1'),
       {
         provider: 'tmdb',
         providerId: '1',

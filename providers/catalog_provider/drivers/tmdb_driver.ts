@@ -1,13 +1,14 @@
 import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import type {
-  CatalogProviderDriver,
+  CatalogProvider,
   CatalogTitleResult,
   TmdbCatalogProviderConfig,
+  ItemType,
 } from '#providers/catalog_provider/types'
 import { CatalogProviderError } from '#providers/catalog_provider/types'
 
-export default class TmdbCatalogProviderDriver implements CatalogProviderDriver {
+export default class TmdbCatalogProviderDriver implements CatalogProvider {
   constructor(
     private config: TmdbCatalogProviderConfig,
     private tmdb: TmdbSdk = new TmdbSdk()
@@ -52,13 +53,8 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
     })
   }
 
-  async find(
-    providerId: string,
-    type: CatalogTitleResult['type']
-  ): Promise<CatalogTitleResult | null> {
-    if (type === 'movie') {
-      return this.findMovieById(providerId)
-    }
+  async find(type: ItemType, providerId: string): Promise<CatalogTitleResult | null> {
+    if (type === 'movie') return this.findMovieById(providerId)
 
     return this.findShowById(providerId)
   }
@@ -71,9 +67,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
     })
 
     if (response.error) {
-      throw new CatalogProviderError('TMDB movie details request failed', {
-        cause: response.error,
-      })
+      throw new CatalogProviderError('TMDB movie details request failed', { cause: response.error })
     }
 
     if (!response.data?.id) return null
@@ -97,9 +91,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
     })
 
     if (response.error) {
-      throw new CatalogProviderError('TMDB series details request failed', {
-        cause: response.error,
-      })
+      throw new CatalogProviderError('TMDB show details request failed', { cause: response.error })
     }
 
     if (!response.data?.id) return null
