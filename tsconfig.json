@@ -5,7 +5,10 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "jsx": "react",
     "outDir": "./build",
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "paths": {
+      "~/*": ["./inertia/*"]
+    }
   },
   "references": [{ "path": "./tsconfig.inertia.json" }]
 }
