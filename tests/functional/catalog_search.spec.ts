@@ -63,7 +63,7 @@ test.group('Catalog search', (group) => {
     await browserContext.loginAs(user)
 
     const searchPage = await visit('/app/catalog/search?q=heat')
-    await searchPage.getByRole('button', { name: 'Add Heat to library' }).click()
+    await searchPage.getByRole('button', { name: 'Add to library' }).first().click()
 
     const libraryPage = await visit('/app/library')
 
@@ -95,7 +95,7 @@ test.group('Catalog search', (group) => {
     await browserContext.loginAs(user)
 
     const searchPage = await visit('/app/catalog/search?q=heat')
-    await searchPage.getByRole('button', { name: 'Add Heat Vision and Jack to library' }).click()
+    await searchPage.getByRole('button', { name: 'Add to library' }).nth(1).click()
 
     const libraryPage = await visit('/app/library')
 
@@ -127,10 +127,10 @@ test.group('Catalog search', (group) => {
     await browserContext.loginAs(user)
 
     const firstSearchPage = await visit('/app/catalog/search?q=heat')
-    await firstSearchPage.getByRole('button', { name: 'Add Heat to library' }).click()
+    await firstSearchPage.getByRole('button', { name: 'Add to library' }).first().click()
 
     const secondSearchPage = await visit('/app/catalog/search?q=heat')
-    await secondSearchPage.getByRole('button', { name: 'Add Heat to library' }).click()
+    await secondSearchPage.getByRole('button', { name: 'Add to library' }).first().click()
 
     const libraryPage = await visit('/app/library')
 
@@ -152,7 +152,7 @@ test.group('Catalog search', (group) => {
     await browserContext.loginAs(user)
 
     const searchPage = await visit('/app/catalog/search?q=heat')
-    await searchPage.getByRole('button', { name: 'Add Unknown Heat to library' }).click()
+    await searchPage.getByRole('button', { name: 'Add to library' }).nth(2).click()
 
     const libraryPage = await visit('/app/library')
 

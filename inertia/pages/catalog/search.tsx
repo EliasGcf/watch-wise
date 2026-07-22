@@ -93,7 +93,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <input type="hidden" name="providerId" value={result.providerId} />
                   <input type="hidden" name="type" value={result.type} />
                   <Button type="submit" className="w-full">
-                    Add {result.name} to library
+                    Add to library
                   </Button>
                 </Form>
               </CardContent>
