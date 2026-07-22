@@ -6,8 +6,6 @@ import type {
   TmdbCatalogProviderConfig,
 } from '#providers/catalog_provider/types'
 import { CatalogProviderError } from '#providers/catalog_provider/types'
-import dayjs from 'dayjs'
-
 export default class TmdbCatalogProviderDriver implements CatalogProviderDriver {
   constructor(
     private config: TmdbCatalogProviderConfig,
@@ -39,8 +37,6 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
 
       const type = result.media_type === 'movie' ? 'movie' : 'series'
       const name = result.media_type === 'movie' ? result.title : result.name
-      const releaseDate = result.release_date ? dayjs(result.release_date) : null
-
       return [
         {
           provider: 'tmdb',
@@ -48,7 +44,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
           type,
           name: name || 'Unknown',
           bannerUrl: imageUrl(result.backdrop_path ?? result.poster_path),
-          releaseYear: releaseDate?.isValid() ? releaseDate.year() : null,
+          releaseDate: result.release_date || null,
           summary: result.overview || null,
         },
       ]

@@ -13,7 +13,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
           type: 'movie',
           name: 'Heat',
           bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
-          releaseYear: 1995,
+          releaseDate: '1995-12-15',
           summary: 'A professional thief and a relentless detective collide.',
         },
         {
@@ -22,7 +22,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
           type: 'series',
           name: 'Heat Vision and Jack',
           bannerUrl: 'https://image.tmdb.org/t/p/w780/series-1.jpg',
-          releaseYear: 1999,
+          releaseDate: '1999-01-01',
           summary: 'A pilot about a super-intelligent astronaut.',
         },
         {
@@ -31,7 +31,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
           type: 'movie',
           name: 'Unknown Heat',
           bannerUrl: null,
-          releaseYear: null,
+          releaseDate: null,
           summary: null,
         },
       ],

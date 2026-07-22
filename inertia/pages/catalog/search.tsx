@@ -1,4 +1,5 @@
 import { Form } from '@adonisjs/inertia/react'
+import dayjs from 'dayjs'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -12,7 +13,7 @@ type CatalogSearchResult = {
   type: 'movie' | 'series'
   name: string
   bannerUrl: string | null
-  releaseYear: number | null
+  releaseDate: string | null
   summary: string | null
 }
 
@@ -75,7 +76,9 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <CardTitle>{result.name}</CardTitle>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="secondary">{result.type}</Badge>
-                    {result.releaseYear && <Badge variant="outline">{result.releaseYear}</Badge>}
+                    {result.releaseDate && (
+                      <Badge variant="outline">{dayjs(result.releaseDate).year()}</Badge>
+                    )}
                   </div>
                 </div>
               </CardHeader>
@@ -91,7 +94,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <input type="hidden" name="type" value={result.type} />
                   <input type="hidden" name="name" value={result.name} />
                   <input type="hidden" name="bannerUrl" value={result.bannerUrl ?? ''} />
-                  <input type="hidden" name="releaseYear" value={result.releaseYear ?? ''} />
+                  <input type="hidden" name="releaseDate" value={result.releaseDate ?? ''} />
                   <input type="hidden" name="summary" value={result.summary ?? ''} />
                   <Button type="submit" className="w-full">
                     Add {result.name} to library

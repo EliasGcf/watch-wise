@@ -1,6 +1,7 @@
 import LibraryEntry from '#models/library_entry'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
+import { DateTime } from 'luxon'
 
 export default class LibraryController {
   async index({ auth, inertia }: HttpContext) {
@@ -8,7 +9,18 @@ export default class LibraryController {
       .where('userId', auth.user!.id)
       .orderBy('createdAt', 'desc')
 
-    return inertia.render('library/index', { entries })
+    return inertia.render('library/index', {
+      entries: entries.map((entry) => ({
+        id: entry.id,
+        provider: entry.provider,
+        providerId: entry.providerId,
+        type: entry.type,
+        name: entry.name,
+        bannerUrl: entry.bannerUrl,
+        releaseDate: entry.releaseDate?.toISODate() ?? null,
+        summary: entry.summary,
+      })),
+    })
   }
 
   async store({ auth, request, response, session }: HttpContext) {
@@ -31,7 +43,7 @@ export default class LibraryController {
       type: payload.type,
       name: payload.name,
       bannerUrl: payload.bannerUrl,
-      releaseYear: payload.releaseYear,
+      releaseDate: payload.releaseDate ? DateTime.fromISO(payload.releaseDate) : null,
       summary: payload.summary,
     })
 

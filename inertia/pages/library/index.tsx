@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { Badge } from '~/components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
@@ -8,7 +9,7 @@ type LibraryEntry = {
   type: 'movie' | 'series'
   name: string
   bannerUrl: string | null
-  releaseYear: number | null
+  releaseDate: string | null
   summary: string | null
 }
 
@@ -40,7 +41,9 @@ export default function LibraryIndex({ entries }: Props) {
                 <CardTitle>{entry.name}</CardTitle>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary">{entry.type}</Badge>
-                  {entry.releaseYear && <Badge variant="outline">{entry.releaseYear}</Badge>}
+                  {entry.releaseDate && (
+                    <Badge variant="outline">{dayjs(entry.releaseDate).year()}</Badge>
+                  )}
                 </div>
               </div>
             </CardHeader>

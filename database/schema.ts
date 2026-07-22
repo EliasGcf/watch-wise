@@ -15,7 +15,7 @@ export class LibraryEntrySchema extends BaseModel {
     'name',
     'provider',
     'providerId',
-    'releaseYear',
+    'releaseDate',
     'summary',
     'type',
     'updatedAt',
@@ -34,8 +34,8 @@ export class LibraryEntrySchema extends BaseModel {
   declare provider: string
   @column()
   declare providerId: string
-  @column()
-  declare releaseYear: number | null
+  @column.date()
+  declare releaseDate: DateTime | null
   @column()
   declare summary: string | null
   @column()

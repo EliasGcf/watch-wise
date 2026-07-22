@@ -166,7 +166,7 @@ test.group('Catalog search', (group) => {
         type: 'movie',
         name: 'Unknown Heat',
         bannerUrl: null,
-        releaseYear: null,
+        releaseDate: null,
         summary: null,
       },
     ])

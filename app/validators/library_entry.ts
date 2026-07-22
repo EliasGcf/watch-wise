@@ -6,6 +6,10 @@ export const addLibraryEntryValidator = vine.create({
   type: vine.enum(['movie', 'series']),
   name: vine.string().trim().minLength(1).maxLength(255),
   bannerUrl: vine.string().trim().url().nullable(),
-  releaseYear: vine.number().withoutDecimals().min(1800).max(3000).nullable(),
+  releaseDate: vine
+    .string()
+    .trim()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .nullable(),
   summary: vine.string().trim().nullable(),
 })
