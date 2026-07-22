@@ -1,4 +1,5 @@
 import app from '@adonisjs/core/services/app'
+import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
 
 const dbConfig = defineConfig({
@@ -18,7 +19,7 @@ const dbConfig = defineConfig({
         /**
          * Database file location.
          */
-        filename: app.tmpPath('db.sqlite3'),
+        filename: env.get('DATABASE_NAME', app.tmpPath('db.sqlite3')),
       },
 
       /**
@@ -50,7 +51,7 @@ const dbConfig = defineConfig({
     //     port: env.get('DB_PORT'),
     //     user: env.get('DB_USER'),
     //     password: env.get('DB_PASSWORD'),
-    //     database: env.get('DB_DATABASE'),
+    //     database: env.get('DATABASE_NAME'),
     //   },
     //   migrations: {
     //     naturalSort: true,
@@ -70,7 +71,7 @@ const dbConfig = defineConfig({
     //     port: env.get('DB_PORT'),
     //     user: env.get('DB_USER'),
     //     password: env.get('DB_PASSWORD'),
-    //     database: env.get('DB_DATABASE'),
+    //     database: env.get('DATABASE_NAME'),
     //   },
     //   migrations: {
     //     naturalSort: true,
@@ -90,7 +91,7 @@ const dbConfig = defineConfig({
     //     port: env.get('DB_PORT'),
     //     user: env.get('DB_USER'),
     //     password: env.get('DB_PASSWORD'),
-    //     database: env.get('DB_DATABASE'),
+    //     database: env.get('DATABASE_NAME'),
     //   },
     //   migrations: {
     //     naturalSort: true,

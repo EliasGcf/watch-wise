@@ -1,15 +1,9 @@
 import User from '#models/user'
-import db from '@adonisjs/lucid/services/db'
+import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
 test.group('Catalog search', (group) => {
-  group.each.setup(async () => {
-    await db.from('users').delete()
-
-    return async () => {
-      await db.from('users').delete()
-    }
-  })
+  group.each.setup(() => testUtils.db().truncate())
 
   test('authenticated users can search movie and series titles', async ({
     browserContext,
