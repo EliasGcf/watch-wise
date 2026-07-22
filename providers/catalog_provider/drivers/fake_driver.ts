@@ -15,4 +15,15 @@ export default class FakeCatalogProviderDriver implements CatalogProviderDriver 
 
     return this.config.results
   }
+
+  async find(
+    providerId: string,
+    type: CatalogTitleResult['type']
+  ): Promise<CatalogTitleResult | null> {
+    return (
+      this.config.results.find(
+        (result) => result.providerId === providerId && result.type === type
+      ) ?? null
+    )
+  }
 }

@@ -12,10 +12,15 @@ export type CatalogTitleResult = {
 
 export abstract class CatalogProvider {
   abstract search(query: string): Promise<CatalogTitleResult[]>
+  abstract find(
+    providerId: string,
+    type: CatalogTitleResult['type']
+  ): Promise<CatalogTitleResult | null>
 }
 
 export interface CatalogProviderDriver {
   search(query: string): Promise<CatalogTitleResult[]>
+  find(providerId: string, type: CatalogTitleResult['type']): Promise<CatalogTitleResult | null>
 }
 
 export class CatalogProviderError extends Error {}

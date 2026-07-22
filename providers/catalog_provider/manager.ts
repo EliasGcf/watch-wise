@@ -30,6 +30,10 @@ export class CatalogProviderManager extends CatalogProvider {
     return this.use().search(query)
   }
 
+  find(providerId: string, type: 'movie' | 'series') {
+    return this.use().find(providerId, type)
+  }
+
   private createDriver(name: CatalogProviderDriverName) {
     if (name === 'fake') {
       return new FakeCatalogProviderDriver(this.config.drivers.fake)

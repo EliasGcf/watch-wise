@@ -92,10 +92,6 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <input type="hidden" name="provider" value={result.provider} />
                   <input type="hidden" name="providerId" value={result.providerId} />
                   <input type="hidden" name="type" value={result.type} />
-                  <input type="hidden" name="name" value={result.name} />
-                  <input type="hidden" name="bannerUrl" value={result.bannerUrl ?? ''} />
-                  <input type="hidden" name="releaseDate" value={result.releaseDate ?? ''} />
-                  <input type="hidden" name="summary" value={result.summary ?? ''} />
                   <Button type="submit" className="w-full">
                     Add {result.name} to library
                   </Button>

@@ -71,7 +71,7 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'movie')
     await libraryPage.assertTextContains('body', '1995')
 
-    assert.containsSubset(await user.related('libraryEntries').query(), [
+    assert.containsSubset(await user.related('movies').query(), [
       {
         provider: 'tmdb',
         providerId: 'movie-1',
@@ -103,7 +103,7 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'series')
     await libraryPage.assertTextContains('body', '1999')
 
-    assert.containsSubset(await user.related('libraryEntries').query(), [
+    assert.containsSubset(await user.related('shows').query(), [
       {
         provider: 'tmdb',
         providerId: 'series-1',
@@ -135,7 +135,7 @@ test.group('Catalog search', (group) => {
     const libraryPage = await visit('/app/library')
 
     await libraryPage.assertTextContains('body', 'Heat')
-    assert.lengthOf(await user.related('libraryEntries').query().where('providerId', 'movie-1'), 1)
+    assert.lengthOf(await user.related('movies').query().where('providerId', 'movie-1'), 1)
   })
 
   test('authenticated users can add titles without optional catalog metadata', async ({
@@ -159,7 +159,7 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'Unknown Heat')
     await libraryPage.assertTextContains('body', 'movie')
 
-    assert.containsSubset(await user.related('libraryEntries').query(), [
+    assert.containsSubset(await user.related('movies').query(), [
       {
         provider: 'tmdb',
         providerId: 'movie-2',

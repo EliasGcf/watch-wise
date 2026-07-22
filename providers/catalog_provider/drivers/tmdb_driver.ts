@@ -6,6 +6,7 @@ import type {
   TmdbCatalogProviderConfig,
 } from '#providers/catalog_provider/types'
 import { CatalogProviderError } from '#providers/catalog_provider/types'
+
 export default class TmdbCatalogProviderDriver implements CatalogProviderDriver {
   constructor(
     private config: TmdbCatalogProviderConfig,
@@ -49,6 +50,69 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
         },
       ]
     })
+  }
+
+  async find(
+    providerId: string,
+    type: CatalogTitleResult['type']
+  ): Promise<CatalogTitleResult | null> {
+    if (type === 'movie') {
+      return this.findMovieById(providerId)
+    }
+
+    return this.findShowById(providerId)
+  }
+
+  async findMovieById(providerId: string): Promise<CatalogTitleResult | null> {
+    const response = await this.tmdb.movie.details({
+      throwOnError: false,
+      path: { movie_id: Number(providerId) },
+      query: { language: 'en-US' },
+    })
+
+    if (response.error) {
+      throw new CatalogProviderError('TMDB movie details request failed', {
+        cause: response.error,
+      })
+    }
+
+    if (!response.data?.id) return null
+
+    return {
+      provider: 'tmdb',
+      providerId: String(response.data.id),
+      type: 'movie',
+      name: response.data.title || 'Unknown',
+      bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
+      releaseDate: response.data.release_date || null,
+      summary: response.data.overview || null,
+    }
+  }
+
+  async findShowById(providerId: string): Promise<CatalogTitleResult | null> {
+    const response = await this.tmdb.tv.series.details({
+      throwOnError: false,
+      path: { series_id: Number(providerId) },
+      query: { language: 'en-US' },
+    })
+
+    if (response.error) {
+      throw new CatalogProviderError('TMDB series details request failed', {
+        cause: response.error,
+      })
+    }
+
+    if (!response.data?.id) return null
+
+    return {
+      provider: 'tmdb',
+      providerId: String(response.data.id),
+      type: 'series',
+      name: response.data.name || 'Unknown',
+      bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
+      releaseDate: response.data.first_air_date || null,
+      summary: response.data.overview || null,
+    }
   }
 }
 
