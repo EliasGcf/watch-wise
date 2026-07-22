@@ -1,11 +1,12 @@
 import type {
-  CatalogProviderDriver,
+  CatalogProvider,
   CatalogTitleResult,
   FakeCatalogProviderConfig,
+  ItemType,
 } from '#providers/catalog_provider/types'
 import { CatalogProviderError } from '#providers/catalog_provider/types'
 
-export default class FakeCatalogProviderDriver implements CatalogProviderDriver {
+export default class FakeCatalogProviderDriver implements CatalogProvider {
   constructor(private config: FakeCatalogProviderConfig) {}
 
   async search(query: string): Promise<CatalogTitleResult[]> {
@@ -14,5 +15,13 @@ export default class FakeCatalogProviderDriver implements CatalogProviderDriver 
     }
 
     return this.config.results
+  }
+
+  async find(type: ItemType, providerId: string): Promise<CatalogTitleResult | null> {
+    return (
+      this.config.results.find(
+        (result) => result.providerId === providerId && result.type === type
+      ) ?? null
+    )
   }
 }

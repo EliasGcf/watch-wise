@@ -6,6 +6,7 @@
 export const controllers = {
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
+    Library: () => import('#controllers/web/library_controller'),
     NewAccount: () => import('#controllers/web/new_account_controller'),
     Session: () => import('#controllers/web/session_controller'),
   },

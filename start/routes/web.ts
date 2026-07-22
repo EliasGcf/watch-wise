@@ -2,6 +2,8 @@ import { controllers } from '#generated/controllers'
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
+const LibraryController = () => import('#controllers/web/library_controller')
+
 const group = router.group(() => {
   router.on('/').renderInertia('home', {}).as('home')
 
@@ -19,6 +21,8 @@ const group = router.group(() => {
     .group(() => {
       router.post('logout', [controllers.web.Session, 'destroy'])
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index'])
+      router.get('library', [LibraryController, 'index']).as('library.index')
+      router.post('library', [LibraryController, 'store']).as('library.store')
     })
     .use(middleware.auth())
 })

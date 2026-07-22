@@ -19,5 +19,9 @@ export interface ApiDefinition {
     catalogSearch: {
       index: typeof routes['app.catalog_search.index']
     }
+    library: {
+      index: typeof routes['app.library.index']
+      store: typeof routes['app.library.store']
+    }
   }
 }

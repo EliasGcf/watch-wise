@@ -1,5 +1,6 @@
 import { createClient } from '#generated/tmdb/client/index'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
+import FakeCatalogProviderDriver from '#providers/catalog_provider/drivers/fake_driver'
 import TmdbCatalogProviderDriver from '#providers/catalog_provider/drivers/tmdb_driver'
 import { CatalogProviderError } from '#services/catalog_provider'
 import { test } from '@japa/runner'
@@ -44,20 +45,20 @@ test.group('Catalog provider', () => {
     assert.deepEqual(results, [
       {
         provider: 'tmdb',
-        providerTitleId: '1',
+        providerId: '1',
         type: 'movie',
         name: 'Heat',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
-        releaseYear: 1995,
+        releaseDate: '1995-12-15',
         summary: 'A professional thief and a relentless detective collide.',
       },
       {
         provider: 'tmdb',
-        providerTitleId: '2',
+        providerId: '2',
         type: 'series',
         name: 'Heat Vision and Jack',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat-vision.jpg',
-        releaseYear: 1999,
+        releaseDate: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
       },
     ])
@@ -74,6 +75,62 @@ test.group('Catalog provider', () => {
     await assert.rejects(
       () => new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search('heat'),
       CatalogProviderError
+    )
+  })
+
+  test('finds fake catalog titles by provider id and type', async ({ assert }) => {
+    const driver = new FakeCatalogProviderDriver({
+      failureQuery: 'fail',
+      results: [
+        {
+          provider: 'tmdb',
+          providerId: 'movie-1',
+          type: 'movie',
+          name: 'Heat',
+          bannerUrl: null,
+          releaseDate: '1995-12-15',
+          summary: null,
+        },
+      ],
+    })
+
+    assert.deepEqual(await driver.find('movie', 'movie-1'), {
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      type: 'movie',
+      name: 'Heat',
+      bannerUrl: null,
+      releaseDate: '1995-12-15',
+      summary: null,
+    })
+    assert.isNull(await driver.find('series', 'movie-1'))
+  })
+
+  test('maps TMDB detail responses to catalog titles', async ({ assert }) => {
+    const tmdb = makeTmdbSdk(
+      new Response(
+        JSON.stringify({
+          id: 1,
+          title: 'Heat',
+          backdrop_path: '/heat.jpg',
+          release_date: '1995-12-15',
+          overview: 'A professional thief and a relentless detective collide.',
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      )
+    )
+
+    assert.deepEqual(
+      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findMovieById('1'),
+      {
+        provider: 'tmdb',
+        providerId: '1',
+        type: 'movie',
+        name: 'Heat',
+        bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
+        releaseDate: '1995-12-15',
+        summary: 'A professional thief and a relentless detective collide.',
+      }
     )
   })
 })

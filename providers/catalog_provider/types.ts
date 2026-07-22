@@ -1,21 +1,20 @@
 export type CatalogProviderDriverName = 'fake' | 'tmdb'
 
+export type ItemType = 'movie' | 'series'
+
 export type CatalogTitleResult = {
-  provider: 'tmdb'
-  providerTitleId: string
-  type: 'movie' | 'series'
+  provider: CatalogProviderDriverName
+  providerId: string
+  type: ItemType
   name: string
   bannerUrl: string | null
-  releaseYear: number | null
+  releaseDate: string | null
   summary: string | null
 }
 
 export abstract class CatalogProvider {
   abstract search(query: string): Promise<CatalogTitleResult[]>
-}
-
-export interface CatalogProviderDriver {
-  search(query: string): Promise<CatalogTitleResult[]>
+  abstract find(type: ItemType, providerId: string): Promise<CatalogTitleResult | null>
 }
 
 export class CatalogProviderError extends Error {}

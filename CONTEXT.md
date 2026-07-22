@@ -21,12 +21,16 @@ The personal collection of movies and series a user has chosen to follow.
 _Avoid_: Catalog
 
 **Title**:
-A movie or series identified by a catalog provider and that provider's title ID. It can appear in the catalog and be added to a user's library.
-_Avoid_: Content item, media item
+A catalog-facing movie or series identified by a catalog provider and that provider's ID. Use this term for provider search/detail results and product language, not as an application model name.
+_Avoid_: Content item, media item, Title model
 
 **Library Entry**:
-A user's unique saved relationship to a title in their library and the scope for tracking that title's watched marks.
+A user's unique saved relationship to a catalog movie or series in their library and the scope for tracking watched marks. It persists provider identity, provider ID, type, and the display snapshot needed to render the library, including name, banner URL, release date, and summary.
 _Avoid_: Favorite, bookmark
+
+**Library Item**:
+A technical read model for loading mixed movie and series library entries from the shared library entries table and mapping them to their concrete models.
+_Avoid_: Product-facing term, watchable item
 
 **Tracking State**:
 The derived state of a library entry based on its watched marks, such as not started, in progress, or completed.

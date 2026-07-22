@@ -1,3 +1,5 @@
+import { Form } from '@adonisjs/inertia/react'
+import dayjs from 'dayjs'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -7,11 +9,11 @@ import { Input } from '~/components/ui/input'
 
 type CatalogSearchResult = {
   provider: string
-  providerTitleId: string
+  providerId: string
   type: 'movie' | 'series'
   name: string
   bannerUrl: string | null
-  releaseYear: number | null
+  releaseDate: string | null
   summary: string | null
 }
 
@@ -64,7 +66,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
         aria-label="Catalog search results"
       >
         {results.map((result) => (
-          <Card key={`${result.provider}:${result.providerTitleId}`}>
+          <Card key={`${result.provider}:${result.providerId}`}>
             {result.bannerUrl && (
               <img src={result.bannerUrl} alt="" className="aspect-video w-full object-cover" />
             )}
@@ -74,7 +76,9 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <CardTitle>{result.name}</CardTitle>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="secondary">{result.type}</Badge>
-                    {result.releaseYear && <Badge variant="outline">{result.releaseYear}</Badge>}
+                    {result.releaseDate && (
+                      <Badge variant="outline">{dayjs(result.releaseDate).year()}</Badge>
+                    )}
                   </div>
                 </div>
               </CardHeader>
@@ -83,6 +87,16 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <p className="line-clamp-4 text-muted-foreground">{result.summary}</p>
                 </CardContent>
               )}
+              <CardContent>
+                <Form route="app.library.store">
+                  <input type="hidden" name="provider" value={result.provider} />
+                  <input type="hidden" name="providerId" value={result.providerId} />
+                  <input type="hidden" name="type" value={result.type} />
+                  <Button type="submit" className="w-full">
+                    Add to library
+                  </Button>
+                </Form>
+              </CardContent>
             </div>
           </Card>
         ))}
