@@ -1,73 +1,95 @@
 import { Form } from '@adonisjs/inertia/react'
+import { Button } from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import { Field, FieldError, FieldGroup, FieldLabel } from '~/components/ui/field'
+import { Input } from '~/components/ui/input'
 
 export default function Signup() {
   return (
-    <div className="form-container">
-      <div>
-        <h1> Signup </h1>
-        <p>Enter your details below to create your account</p>
-      </div>
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Create your account</CardTitle>
+          <CardDescription>
+            Enter your details below to start tracking your library.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form route="app.new_account.store">
+            {({ errors }) => (
+              <FieldGroup>
+                <Field data-invalid={!!errors.fullName}>
+                  <FieldLabel htmlFor="fullName">Full name</FieldLabel>
+                  <Input
+                    id="fullName"
+                    name="fullName"
+                    type="text"
+                    autoComplete="name"
+                    aria-invalid={!!errors.fullName}
+                    required
+                  />
+                  <FieldError>{errors.fullName}</FieldError>
+                </Field>
 
-      <div>
-        <Form route="app.new_account.store">
-          {({ errors }) => (
-            <>
-              <div>
-                <label htmlFor="fullName">Full name</label>
-                <input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  data-invalid={errors.fullName ? 'true' : undefined}
-                />
-                {errors.fullName && <div>{errors.fullName}</div>}
-              </div>
+                <Field data-invalid={!!errors.email}>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    aria-invalid={!!errors.email}
+                    required
+                  />
+                  <FieldError>{errors.email}</FieldError>
+                </Field>
 
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="email"
-                  data-invalid={errors.email ? 'true' : undefined}
-                />
-                {errors.email && <div>{errors.email}</div>}
-              </div>
+                <Field data-invalid={!!errors.password}>
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="new-password"
+                    aria-invalid={!!errors.password}
+                    required
+                  />
+                  <FieldError>{errors.password}</FieldError>
+                </Field>
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  autoComplete="new-password"
-                  data-invalid={errors.password ? 'true' : undefined}
-                />
-                {errors.password && <div>{errors.password}</div>}
-              </div>
+                <Field data-invalid={!!errors.passwordConfirmation}>
+                  <FieldLabel htmlFor="passwordConfirmation">Confirm password</FieldLabel>
+                  <Input
+                    id="passwordConfirmation"
+                    name="passwordConfirmation"
+                    type="password"
+                    autoComplete="new-password"
+                    aria-invalid={!!errors.passwordConfirmation}
+                    required
+                  />
+                  <FieldError>{errors.passwordConfirmation}</FieldError>
+                </Field>
 
-              <div>
-                <label htmlFor="passwordConfirmation">Confirm password</label>
-                <input
-                  type="password"
-                  name="passwordConfirmation"
-                  id="passwordConfirmation"
-                  autoComplete="new-password"
-                  data-invalid={errors.passwordConfirmation ? 'true' : undefined}
-                />
-                {errors.passwordConfirmation && <div>{errors.passwordConfirmation}</div>}
-              </div>
-
-              <div>
-                <button type="submit" className="button">
-                  Sign up
-                </button>
-              </div>
-            </>
-          )}
-        </Form>
-      </div>
+                <Field>
+                  <Button type="submit">Sign up</Button>
+                </Field>
+              </FieldGroup>
+            )}
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <p className="w-full text-center text-sm text-muted-foreground">
+            Already have an account? <a href="/app/login">Login</a>
+          </p>
+        </CardFooter>
+      </Card>
     </div>
   )
 }

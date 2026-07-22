@@ -1,49 +1,67 @@
 import { Form } from '@adonisjs/inertia/react'
+import { Button } from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import { Field, FieldError, FieldGroup, FieldLabel } from '~/components/ui/field'
+import { Input } from '~/components/ui/input'
 
 export default function Login() {
   return (
-    <div className="form-container">
-      <div>
-        <h1> Login </h1>
-        <p>Enter your details below to login to your account</p>
-      </div>
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Login to Watch Wise</CardTitle>
+          <CardDescription>Enter your email and password to access your library.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form route="app.session.store">
+            {({ errors }) => (
+              <FieldGroup>
+                <Field data-invalid={!!errors.email}>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="username"
+                    aria-invalid={!!errors.email}
+                    required
+                  />
+                  <FieldError>{errors.email}</FieldError>
+                </Field>
 
-      <div>
-        <Form route="app.session.store">
-          {({ errors }) => (
-            <>
-              <div>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  autoComplete="username"
-                  data-invalid={errors.email ? 'true' : undefined}
-                />
-                {errors.email && <div>{errors.email}</div>}
-              </div>
+                <Field data-invalid={!!errors.password}>
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    aria-invalid={!!errors.password}
+                    required
+                  />
+                  <FieldError>{errors.password}</FieldError>
+                </Field>
 
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  autoComplete="current-password"
-                />
-                {errors.password ? <span>{errors.password}</span> : ''}
-              </div>
-
-              <div>
-                <button type="submit" className="button">
-                  Login
-                </button>
-              </div>
-            </>
-          )}
-        </Form>
-      </div>
+                <Field>
+                  <Button type="submit">Login</Button>
+                </Field>
+              </FieldGroup>
+            )}
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <p className="w-full text-center text-sm text-muted-foreground">
+            Don&apos;t have an account? <a href="/app/signup">Sign up</a>
+          </p>
+        </CardFooter>
+      </Card>
     </div>
   )
 }

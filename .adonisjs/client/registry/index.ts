@@ -6,6 +6,12 @@ import type { ApiDefinition } from './tree.d.ts'
 const placeholder: any = {}
 
 const routes = {
+  'api.hello': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/hello',
+    tokens: [{"old":"/api/hello","type":0,"val":"api","end":""},{"old":"/api/hello","type":0,"val":"hello","end":""}],
+    types: placeholder as Registry['api.hello']['types'],
+  },
   'app.home': {
     methods: ["GET","HEAD"],
     pattern: '/app',
@@ -41,6 +47,12 @@ const routes = {
     pattern: '/app/logout',
     tokens: [{"old":"/app/logout","type":0,"val":"app","end":""},{"old":"/app/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['app.session.destroy']['types'],
+  },
+  'app.catalog_search.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/catalog/search',
+    tokens: [{"old":"/app/catalog/search","type":0,"val":"app","end":""},{"old":"/app/catalog/search","type":0,"val":"catalog","end":""},{"old":"/app/catalog/search","type":0,"val":"search","end":""}],
+    types: placeholder as Registry['app.catalog_search.index']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 
