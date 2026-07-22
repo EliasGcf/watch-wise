@@ -2,6 +2,9 @@
 import type { routes } from './index.ts'
 
 export interface ApiDefinition {
+  api: {
+    hello: typeof routes['api.hello']
+  }
   app: {
     home: typeof routes['app.home']
     newAccount: {

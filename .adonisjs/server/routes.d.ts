@@ -4,6 +4,7 @@ type ParamValue = string | number | bigint | boolean
 
 export type ScannedRoutes = {
   ALL: {
+    'api.hello': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
@@ -13,12 +14,14 @@ export type ScannedRoutes = {
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
   }
   GET: {
+    'api.hello': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
+    'api.hello': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }

@@ -7,6 +7,18 @@ import type { InferInput, SimpleError } from '@vinejs/vine/types'
 export type ParamValue = string | number | bigint | boolean
 
 export interface Registry {
+  'api.hello': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/hello'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'app.home': {
     methods: ["GET","HEAD"]
     pattern: '/app'

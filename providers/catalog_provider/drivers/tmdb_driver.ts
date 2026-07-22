@@ -47,10 +47,15 @@ export default class TmdbCatalogProviderDriver implements CatalogProviderDriver 
           providerTitleId: String(result.id),
           type,
           name: name || 'Unknown',
+          bannerUrl: imageUrl(result.backdrop_path ?? result.poster_path),
           releaseYear: releaseDate?.isValid() ? releaseDate.year() : null,
           summary: result.overview || null,
         },
       ]
     })
   }
+}
+
+function imageUrl(path: string | undefined) {
+  return path ? `https://image.tmdb.org/t/p/w780${path}` : null
 }

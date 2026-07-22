@@ -5,6 +5,7 @@ export type CatalogTitleResult = {
   providerTitleId: string
   type: 'movie' | 'series'
   name: string
+  bannerUrl: string | null
   releaseYear: number | null
   summary: string | null
 }
