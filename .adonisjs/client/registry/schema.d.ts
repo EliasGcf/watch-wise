@@ -115,6 +115,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
     }
   }
+  'app.library.movies.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library/movies'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['movies']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['movies']>>>
+    }
+  }
+  'app.library.series.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library/series'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['series']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['series']>>>
+    }
+  }
   'app.library.store': {
     methods: ["POST"]
     pattern: '/app/library'
@@ -125,6 +149,30 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'app.library.watched.store': {
+    methods: ["POST"]
+    pattern: '/app/library/:id/watched'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['markWatched']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['markWatched']>>>
+    }
+  }
+  'app.library.watched.destroy': {
+    methods: ["DELETE"]
+    pattern: '/app/library/:id/watched'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unmarkWatched']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unmarkWatched']>>>
     }
   }
 }

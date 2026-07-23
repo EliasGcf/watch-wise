@@ -9,6 +9,7 @@ export type CatalogTitleResult = {
   name: string
   bannerUrl: string | null
   releaseDate: string | null
+  duration: number | null
   summary: string | null
 }
 

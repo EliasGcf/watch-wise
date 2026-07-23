@@ -1,4 +1,3 @@
-import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Show from '#models/show'
 import catalog from '#services/catalog_provider'
@@ -7,21 +6,43 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class LibraryController {
-  async index({ auth, inertia }: HttpContext) {
-    const entries = await LibraryItem.forUser(auth.user!.id)
+  async index({ inertia }: HttpContext) {
+    return inertia.render('library/index', {})
+  }
 
-    return inertia.render('library/index', {
-      entries: entries.map((entry) => ({
-        id: entry.id,
-        provider: entry.provider,
-        providerId: entry.providerId,
-        type: entry.type,
-        name: entry.name,
-        bannerUrl: entry.bannerUrl,
-        releaseDate: entry.releaseDate?.toISODate() ?? null,
-        summary: entry.summary,
+  async movies({ auth }: HttpContext) {
+    const movies = await Movie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
+
+    return {
+      movies: movies.map((movie) => ({
+        id: movie.id,
+        provider: movie.provider,
+        providerId: movie.providerId,
+        type: movie.type,
+        name: movie.name,
+        bannerUrl: movie.bannerUrl,
+        releaseDate: movie.releaseDate?.toISODate() ?? null,
+        summary: movie.summary,
+        watched: Boolean(movie.watched),
       })),
-    })
+    }
+  }
+
+  async series({ auth }: HttpContext) {
+    const series = await Show.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
+
+    return {
+      series: series.map((show) => ({
+        id: show.id,
+        provider: show.provider,
+        providerId: show.providerId,
+        type: show.type,
+        name: show.name,
+        bannerUrl: show.bannerUrl,
+        releaseDate: show.releaseDate?.toISODate() ?? null,
+        summary: show.summary,
+      })),
+    }
   }
 
   async store({ auth, request, response, session }: HttpContext) {
@@ -57,5 +78,29 @@ export default class LibraryController {
 
     session.flash('success', `${item.name} was added to your library.`)
     return response.redirect().toRoute('app.library.index')
+  }
+
+  async markWatched({ auth, params, response, session }: HttpContext) {
+    const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    if (!entry.isReleased) {
+      session.flash('error', `${entry.name} has not been released yet.`)
+      return response.redirect().back()
+    }
+
+    const catalogMovie = await catalog.find('movie', entry.providerId)
+    await entry.watch(catalogMovie?.duration ?? null)
+
+    session.flash('success', `${entry.name} was marked as watched.`)
+    return response.redirect().back()
+  }
+
+  async unmarkWatched({ auth, params, response, session }: HttpContext) {
+    const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    await entry.unwatch()
+
+    session.flash('success', `${entry.name} is no longer marked as watched.`)
+    return response.redirect().back()
   }
 }

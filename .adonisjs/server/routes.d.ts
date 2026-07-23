@@ -13,7 +13,11 @@ export type ScannedRoutes = {
     'app.session.destroy': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.movies.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.store': { paramsTuple?: []; params?: {} }
+    'app.library.watched.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'app.library.watched.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -22,6 +26,8 @@ export type ScannedRoutes = {
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.movies.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -30,12 +36,18 @@ export type ScannedRoutes = {
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog_search.index': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.movies.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'app.new_account.store': { paramsTuple?: []; params?: {} }
     'app.session.store': { paramsTuple?: []; params?: {} }
     'app.session.destroy': { paramsTuple?: []; params?: {} }
     'app.library.store': { paramsTuple?: []; params?: {} }
+    'app.library.watched.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  DELETE: {
+    'app.library.watched.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

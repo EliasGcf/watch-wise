@@ -21,7 +21,17 @@ export interface ApiDefinition {
     }
     library: {
       index: typeof routes['app.library.index']
+      movies: {
+        index: typeof routes['app.library.movies.index']
+      }
+      series: {
+        index: typeof routes['app.library.series.index']
+      }
       store: typeof routes['app.library.store']
+      watched: {
+        store: typeof routes['app.library.watched.store']
+        destroy: typeof routes['app.library.watched.destroy']
+      }
     }
   }
 }
