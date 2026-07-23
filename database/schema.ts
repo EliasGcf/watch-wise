@@ -8,19 +8,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class LibraryEntrySchema extends BaseModel {
-  static $columns = [
-    'bannerUrl',
-    'createdAt',
-    'id',
-    'name',
-    'provider',
-    'providerId',
-    'releaseDate',
-    'summary',
-    'type',
-    'updatedAt',
-    'userId',
-  ] as const
+  static $columns = ['bannerUrl', 'createdAt', 'id', 'name', 'provider', 'providerId', 'releasedAt', 'summary', 'type', 'updatedAt', 'userId'] as const
   $columns = LibraryEntrySchema.$columns
   @column()
   declare bannerUrl: string | null
@@ -35,7 +23,7 @@ export class LibraryEntrySchema extends BaseModel {
   @column()
   declare providerId: string
   @column.date()
-  declare releaseDate: DateTime | null
+  declare releasedAt: DateTime | null
   @column()
   declare summary: string | null
   @column()
@@ -61,4 +49,29 @@ export class UserSchema extends BaseModel {
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class WatchedMarkSchema extends BaseModel {
+  static $columns = ['createdAt', 'duration', 'episode', 'id', 'libraryEntryId', 'providerId', 'season', 'updatedAt', 'userId', 'watchedAt'] as const
+  $columns = WatchedMarkSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare duration: number | null
+  @column()
+  declare episode: number | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libraryEntryId: number
+  @column()
+  declare providerId: string | null
+  @column()
+  declare season: number | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+  @column.dateTime()
+  declare watchedAt: DateTime
 }

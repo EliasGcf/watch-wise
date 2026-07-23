@@ -1,4 +1,3 @@
-import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Show from '#models/show'
 import catalog from '#services/catalog_provider'
@@ -7,21 +6,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class LibraryController {
-  async index({ auth, inertia }: HttpContext) {
-    const entries = await LibraryItem.forUser(auth.user!.id)
-
-    return inertia.render('library/index', {
-      entries: entries.map((entry) => ({
-        id: entry.id,
-        provider: entry.provider,
-        providerId: entry.providerId,
-        type: entry.type,
-        name: entry.name,
-        bannerUrl: entry.bannerUrl,
-        releaseDate: entry.releaseDate?.toISODate() ?? null,
-        summary: entry.summary,
-      })),
-    })
+  async index({ inertia }: HttpContext) {
+    return inertia.render('library/index', {})
   }
 
   async store({ auth, request, response, session }: HttpContext) {
@@ -51,11 +37,35 @@ export default class LibraryController {
       providerId: item.providerId,
       name: item.name,
       bannerUrl: item.bannerUrl,
-      releaseDate: item.releaseDate ? DateTime.fromISO(item.releaseDate) : null,
+      releasedAt: item.releasedAt ? DateTime.fromISO(item.releasedAt) : null,
       summary: item.summary,
     })
 
     session.flash('success', `${item.name} was added to your library.`)
     return response.redirect().toRoute('app.library.index')
+  }
+
+  async watch({ auth, params, response, session }: HttpContext) {
+    const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    if (!entry.isReleased) {
+      session.flash('error', `${entry.name} has not been released yet.`)
+      return response.redirect().back()
+    }
+
+    const catalogMovie = await catalog.find('movie', entry.providerId)
+    await entry.watch(catalogMovie?.duration ?? null)
+
+    session.flash('success', `${entry.name} was marked as watched.`)
+    return response.redirect().back()
+  }
+
+  async unwatch({ auth, params, response, session }: HttpContext) {
+    const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    await entry.unwatch()
+
+    session.flash('success', `${entry.name} is no longer marked as watched.`)
+    return response.redirect().back()
   }
 }

@@ -18,7 +18,7 @@ export default class extends BaseSchema {
       table.enum('type', ['movie', 'series']).notNullable()
       table.string('name').notNullable()
       table.string('banner_url').nullable()
-      table.date('release_date').nullable()
+      table.date('released_at').nullable()
       table.text('summary').nullable()
 
       table.timestamp('created_at').notNullable()

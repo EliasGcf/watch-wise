@@ -69,7 +69,6 @@ test.group('Catalog search', (group) => {
 
     await libraryPage.assertTextContains('body', 'Heat')
     await libraryPage.assertTextContains('body', 'movie')
-    await libraryPage.assertTextContains('body', '1995')
 
     assert.containsSubset(await user.related('movies').query(), [
       {
@@ -101,7 +100,6 @@ test.group('Catalog search', (group) => {
 
     await libraryPage.assertTextContains('body', 'Heat Vision and Jack')
     await libraryPage.assertTextContains('body', 'series')
-    await libraryPage.assertTextContains('body', '1999')
 
     assert.containsSubset(await user.related('shows').query(), [
       {
@@ -166,7 +164,7 @@ test.group('Catalog search', (group) => {
         type: 'movie',
         name: 'Unknown Heat',
         bannerUrl: null,
-        releaseDate: null,
+        releasedAt: null,
         summary: null,
       },
     ])

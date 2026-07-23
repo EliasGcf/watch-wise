@@ -49,7 +49,8 @@ test.group('Catalog provider', () => {
         type: 'movie',
         name: 'Heat',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
-        releaseDate: '1995-12-15',
+        releasedAt: '1995-12-15',
+        duration: null,
         summary: 'A professional thief and a relentless detective collide.',
       },
       {
@@ -58,7 +59,8 @@ test.group('Catalog provider', () => {
         type: 'series',
         name: 'Heat Vision and Jack',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat-vision.jpg',
-        releaseDate: '1999-01-01',
+        releasedAt: '1999-01-01',
+        duration: null,
         summary: 'A pilot about a super-intelligent astronaut.',
       },
     ])
@@ -88,7 +90,8 @@ test.group('Catalog provider', () => {
           type: 'movie',
           name: 'Heat',
           bannerUrl: null,
-          releaseDate: '1995-12-15',
+          releasedAt: '1995-12-15',
+          duration: 170,
           summary: null,
         },
       ],
@@ -100,7 +103,8 @@ test.group('Catalog provider', () => {
       type: 'movie',
       name: 'Heat',
       bannerUrl: null,
-      releaseDate: '1995-12-15',
+      releasedAt: '1995-12-15',
+      duration: 170,
       summary: null,
     })
     assert.isNull(await driver.find('series', 'movie-1'))
@@ -114,6 +118,7 @@ test.group('Catalog provider', () => {
           title: 'Heat',
           backdrop_path: '/heat.jpg',
           release_date: '1995-12-15',
+          runtime: 170,
           overview: 'A professional thief and a relentless detective collide.',
         }),
         { status: 200, headers: { 'content-type': 'application/json' } }
@@ -128,7 +133,8 @@ test.group('Catalog provider', () => {
         type: 'movie',
         name: 'Heat',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
-        releaseDate: '1995-12-15',
+        releasedAt: '1995-12-15',
+        duration: 170,
         summary: 'A professional thief and a relentless detective collide.',
       }
     )
