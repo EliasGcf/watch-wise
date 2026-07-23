@@ -1,15 +1,15 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
-const ApiLibraryController = () => import('#controllers/api/library_controller')
+import { controllers } from '#generated/controllers'
 
 const group = router.group(() => {
   router.get('hello', () => ({ message: 'Hello from Watch Wise' })).as('hello')
 
   router
     .group(() => {
-      router.get('library/movies', [ApiLibraryController, 'movies']).as('library.movies.index')
-      router.get('library/series', [ApiLibraryController, 'series']).as('library.series.index')
+      router.get('library/movies', [controllers.api.Library, 'movies'])
+      router.get('library/series', [controllers.api.Library, 'series'])
     })
     .use(middleware.auth())
 })

@@ -5,12 +5,8 @@ export interface ApiDefinition {
   api: {
     hello: typeof routes['api.hello']
     library: {
-      movies: {
-        index: typeof routes['api.library.movies.index']
-      }
-      series: {
-        index: typeof routes['api.library.series.index']
-      }
+      movies: typeof routes['api.library.movies']
+      series: typeof routes['api.library.series']
     }
   }
   app: {
@@ -24,16 +20,14 @@ export interface ApiDefinition {
       store: typeof routes['app.session.store']
       destroy: typeof routes['app.session.destroy']
     }
-    catalogSearch: {
-      index: typeof routes['app.catalog_search.index']
+    catalog: {
+      search: typeof routes['app.catalog.search']
     }
     library: {
       index: typeof routes['app.library.index']
       store: typeof routes['app.library.store']
-      watched: {
-        store: typeof routes['app.library.watched.store']
-        destroy: typeof routes['app.library.watched.destroy']
-      }
+      watch: typeof routes['app.library.watch']
+      unwatch: typeof routes['app.library.unwatch']
     }
   }
 }

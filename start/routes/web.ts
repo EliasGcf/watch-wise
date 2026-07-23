@@ -18,15 +18,11 @@ const group = router.group(() => {
   router
     .group(() => {
       router.post('logout', [controllers.web.Session, 'destroy'])
-      router.get('catalog/search', [controllers.web.CatalogSearch, 'index'])
-      router.get('library', [controllers.web.Library, 'index']).as('library.index')
-      router.post('library', [controllers.web.Library, 'store']).as('library.store')
-      router
-        .post('library/:id/watched', [controllers.web.Library, 'markWatched'])
-        .as('library.watched.store')
-      router
-        .delete('library/:id/watched', [controllers.web.Library, 'unmarkWatched'])
-        .as('library.watched.destroy')
+      router.get('catalog/search', [controllers.web.CatalogSearch, 'index']).as('catalog.search')
+      router.get('library', [controllers.web.Library, 'index'])
+      router.post('library', [controllers.web.Library, 'store'])
+      router.post('library/:id/watched', [controllers.web.Library, 'watch'])
+      router.delete('library/:id/watched', [controllers.web.Library, 'unwatch'])
     })
     .use(middleware.auth())
 })

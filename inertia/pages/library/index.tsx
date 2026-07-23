@@ -1,40 +1,13 @@
 import { Form } from '@adonisjs/inertia/react'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
+import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
-type MovieEntry = {
-  id: number
-  provider: string
-  providerId: string
-  type: 'movie'
-  name: string
-  bannerUrl: string | null
-  releaseDate: string | null
-  summary: string | null
-  watched: boolean
-}
-
-type SeriesEntry = {
-  id: number
-  provider: string
-  providerId: string
-  type: 'series'
-  name: string
-  bannerUrl: string | null
-  releaseDate: string | null
-  summary: string | null
-}
-
-type MoviesResponse = {
-  movies: MovieEntry[]
-}
-
-type SeriesResponse = {
-  series: SeriesEntry[]
-}
+type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['movies'][number]
+type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['series'][number]
 
 export default function LibraryIndex() {
   const [movies, setMovies] = useState<MovieEntry[]>([])
@@ -51,21 +24,14 @@ export default function LibraryIndex() {
 
       try {
         const [moviesResponse, seriesResponse] = await Promise.all([
-          fetch('/api/library/movies'),
-          fetch('/api/library/series'),
+          client.api.api.library.movies({}),
+          client.api.api.library.series({}),
         ])
-
-        if (!moviesResponse.ok || !seriesResponse.ok) {
-          throw new Error('Library could not be loaded.')
-        }
-
-        const moviesData = (await moviesResponse.json()) as MoviesResponse
-        const seriesData = (await seriesResponse.json()) as SeriesResponse
 
         if (!isCurrent) return
 
-        setMovies(moviesData.movies)
-        setSeries(seriesData.series)
+        setMovies(moviesResponse.movies)
+        setSeries(seriesResponse.series)
       } catch {
         if (!isCurrent) return
         setError('Library could not be loaded. Try again later.')

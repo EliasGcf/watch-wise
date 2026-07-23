@@ -19,7 +19,7 @@ export interface Registry {
       errorResponse: unknown
     }
   }
-  'api.library.movies.index': {
+  'api.library.movies': {
     methods: ["GET","HEAD"]
     pattern: '/api/library/movies'
     types: {
@@ -31,7 +31,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
     }
   }
-  'api.library.series.index': {
+  'api.library.series': {
     methods: ["GET","HEAD"]
     pattern: '/api/library/series'
     types: {
@@ -115,7 +115,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['destroy']>>>
     }
   }
-  'app.catalog_search.index': {
+  'app.catalog.search': {
     methods: ["GET","HEAD"]
     pattern: '/app/catalog/search'
     types: {
@@ -151,7 +151,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'app.library.watched.store': {
+  'app.library.watch': {
     methods: ["POST"]
     pattern: '/app/library/:id/watched'
     types: {
@@ -159,11 +159,11 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['markWatched']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['markWatched']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['watch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['watch']>>>
     }
   }
-  'app.library.watched.destroy': {
+  'app.library.unwatch': {
     methods: ["DELETE"]
     pattern: '/app/library/:id/watched'
     types: {
@@ -171,8 +171,8 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unmarkWatched']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unmarkWatched']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unwatch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unwatch']>>>
     }
   }
 }

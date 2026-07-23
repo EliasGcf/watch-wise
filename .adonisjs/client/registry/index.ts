@@ -12,17 +12,17 @@ const routes = {
     tokens: [{"old":"/api/hello","type":0,"val":"api","end":""},{"old":"/api/hello","type":0,"val":"hello","end":""}],
     types: placeholder as Registry['api.hello']['types'],
   },
-  'api.library.movies.index': {
+  'api.library.movies': {
     methods: ["GET","HEAD"],
     pattern: '/api/library/movies',
     tokens: [{"old":"/api/library/movies","type":0,"val":"api","end":""},{"old":"/api/library/movies","type":0,"val":"library","end":""},{"old":"/api/library/movies","type":0,"val":"movies","end":""}],
-    types: placeholder as Registry['api.library.movies.index']['types'],
+    types: placeholder as Registry['api.library.movies']['types'],
   },
-  'api.library.series.index': {
+  'api.library.series': {
     methods: ["GET","HEAD"],
     pattern: '/api/library/series',
     tokens: [{"old":"/api/library/series","type":0,"val":"api","end":""},{"old":"/api/library/series","type":0,"val":"library","end":""},{"old":"/api/library/series","type":0,"val":"series","end":""}],
-    types: placeholder as Registry['api.library.series.index']['types'],
+    types: placeholder as Registry['api.library.series']['types'],
   },
   'app.home': {
     methods: ["GET","HEAD"],
@@ -60,11 +60,11 @@ const routes = {
     tokens: [{"old":"/app/logout","type":0,"val":"app","end":""},{"old":"/app/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['app.session.destroy']['types'],
   },
-  'app.catalog_search.index': {
+  'app.catalog.search': {
     methods: ["GET","HEAD"],
     pattern: '/app/catalog/search',
     tokens: [{"old":"/app/catalog/search","type":0,"val":"app","end":""},{"old":"/app/catalog/search","type":0,"val":"catalog","end":""},{"old":"/app/catalog/search","type":0,"val":"search","end":""}],
-    types: placeholder as Registry['app.catalog_search.index']['types'],
+    types: placeholder as Registry['app.catalog.search']['types'],
   },
   'app.library.index': {
     methods: ["GET","HEAD"],
@@ -78,17 +78,17 @@ const routes = {
     tokens: [{"old":"/app/library","type":0,"val":"app","end":""},{"old":"/app/library","type":0,"val":"library","end":""}],
     types: placeholder as Registry['app.library.store']['types'],
   },
-  'app.library.watched.store': {
+  'app.library.watch': {
     methods: ["POST"],
     pattern: '/app/library/:id/watched',
     tokens: [{"old":"/app/library/:id/watched","type":0,"val":"app","end":""},{"old":"/app/library/:id/watched","type":0,"val":"library","end":""},{"old":"/app/library/:id/watched","type":1,"val":"id","end":""},{"old":"/app/library/:id/watched","type":0,"val":"watched","end":""}],
-    types: placeholder as Registry['app.library.watched.store']['types'],
+    types: placeholder as Registry['app.library.watch']['types'],
   },
-  'app.library.watched.destroy': {
+  'app.library.unwatch': {
     methods: ["DELETE"],
     pattern: '/app/library/:id/watched',
     tokens: [{"old":"/app/library/:id/watched","type":0,"val":"app","end":""},{"old":"/app/library/:id/watched","type":0,"val":"library","end":""},{"old":"/app/library/:id/watched","type":1,"val":"id","end":""},{"old":"/app/library/:id/watched","type":0,"val":"watched","end":""}],
-    types: placeholder as Registry['app.library.watched.destroy']['types'],
+    types: placeholder as Registry['app.library.unwatch']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

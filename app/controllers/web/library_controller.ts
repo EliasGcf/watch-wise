@@ -45,7 +45,7 @@ export default class LibraryController {
     return response.redirect().toRoute('app.library.index')
   }
 
-  async markWatched({ auth, params, response, session }: HttpContext) {
+  async watch({ auth, params, response, session }: HttpContext) {
     const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     if (!entry.isReleased) {
@@ -60,7 +60,7 @@ export default class LibraryController {
     return response.redirect().back()
   }
 
-  async unmarkWatched({ auth, params, response, session }: HttpContext) {
+  async unwatch({ auth, params, response, session }: HttpContext) {
     const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     await entry.unwatch()
