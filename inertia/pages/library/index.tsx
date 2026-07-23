@@ -1,13 +1,12 @@
 import { Form } from '@adonisjs/inertia/react'
-import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
-type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data']['movies'][number]
-type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['data']['series'][number]
+type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data'][number]
+type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['data'][number]
 
 export default function LibraryIndex() {
   const [movies, setMovies] = useState<MovieEntry[]>([])
@@ -30,8 +29,8 @@ export default function LibraryIndex() {
 
         if (!isCurrent) return
 
-        setMovies(moviesResponse.data.movies)
-        setSeries(seriesResponse.data.series)
+        setMovies(moviesResponse.data)
+        setSeries(seriesResponse.data)
       } catch {
         if (!isCurrent) return
         setError('Library could not be loaded. Try again later.')
@@ -76,8 +75,16 @@ export default function LibraryIndex() {
 
       {!isLoading && (
         <>
-          <LibrarySection title="Movies" entries={movies} emptyMessage="No movies in your library yet." />
-          <LibrarySection title="Series" entries={series} emptyMessage="No series in your library yet." />
+          <LibrarySection
+            title="Movies"
+            entries={movies}
+            emptyMessage="No movies in your library yet."
+          />
+          <LibrarySection
+            title="Series"
+            entries={series}
+            emptyMessage="No series in your library yet."
+          />
         </>
       )}
 
@@ -137,7 +144,6 @@ function LibraryCard({ entry }: { entry: MovieEntry | SeriesEntry }) {
           <div className="flex flex-wrap gap-2">
             <Badge variant="secondary">{entry.type}</Badge>
             {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
-            {entry.releaseDate && <Badge variant="outline">{dayjs(entry.releaseDate).year()}</Badge>}
           </div>
         </div>
       </CardHeader>

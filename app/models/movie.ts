@@ -1,7 +1,14 @@
 import { LibraryEntrySchema } from '#database/schema'
 import { MovieWatchedMark } from '#models/watched_mark'
 import User from '#models/user'
-import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasOne } from '@adonisjs/lucid/orm'
+import {
+  beforeCreate,
+  beforeFetch,
+  beforeFind,
+  belongsTo,
+  computed,
+  hasOne,
+} from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
@@ -28,8 +35,9 @@ export default class Movie extends LibraryEntrySchema {
     query.where('type', 'movie').preload('watched')
   }
 
+  @computed()
   get isReleased() {
-    return Boolean(this.releaseDate && this.releaseDate <= DateTime.now())
+    return Boolean(this.releasedAt && this.releasedAt <= DateTime.now())
   }
 
   async watch(duration: number | null = null) {

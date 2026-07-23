@@ -7,17 +7,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class LibraryController {
   async movies({ auth, serialize }: HttpContext) {
     const movies = await Movie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
-
-    return serialize({
-      movies: MovieTransformer.transform(movies),
-    })
+    return serialize(MovieTransformer.transform(movies))
   }
 
   async series({ auth, serialize }: HttpContext) {
     const series = await Show.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
-
-    return serialize({
-      series: ShowTransformer.transform(series),
-    })
+    return serialize(ShowTransformer.transform(series))
   }
 }

@@ -24,7 +24,7 @@ test.group('Library movie watched records', (group) => {
       providerId: 'movie-1',
       name: 'Heat',
       bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
-      releaseDate: DateTime.fromISO('1995-12-15'),
+      releasedAt: DateTime.fromISO('1995-12-15'),
       summary: 'A professional thief and a relentless detective collide.',
     })
 
@@ -67,7 +67,7 @@ test.group('Library movie watched records', (group) => {
       providerId: 'movie-1',
       name: 'Heat',
       bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
-      releaseDate: DateTime.fromISO('1995-12-15'),
+      releasedAt: DateTime.fromISO('1995-12-15'),
       summary: 'A professional thief and a relentless detective collide.',
     })
     await browserContext.loginAs(user)
@@ -106,7 +106,7 @@ test.group('Library movie watched records', (group) => {
       providerId: 'movie-future',
       name: 'Future Heat',
       bannerUrl: null,
-      releaseDate: DateTime.now().plus({ days: 1 }),
+      releasedAt: DateTime.now().plus({ days: 1 }),
       summary: null,
     })
 

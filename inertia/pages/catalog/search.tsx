@@ -13,7 +13,7 @@ type CatalogSearchResult = {
   type: 'movie' | 'series'
   name: string
   bannerUrl: string | null
-  releaseDate: string | null
+  releasedAt: string | null
   summary: string | null
 }
 
@@ -76,8 +76,8 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                   <CardTitle>{result.name}</CardTitle>
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="secondary">{result.type}</Badge>
-                    {result.releaseDate && (
-                      <Badge variant="outline">{dayjs(result.releaseDate).year()}</Badge>
+                    {result.releasedAt && (
+                      <Badge variant="outline">{dayjs(result.releasedAt).year()}</Badge>
                     )}
                   </div>
                 </div>

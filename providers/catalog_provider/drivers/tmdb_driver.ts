@@ -46,7 +46,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
           type,
           name: name || 'Unknown',
           bannerUrl: imageUrl(result.backdrop_path ?? result.poster_path),
-          releaseDate: result.release_date || null,
+          releasedAt: result.release_date || null,
           duration: null,
           summary: result.overview || null,
         },
@@ -79,7 +79,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       type: 'movie',
       name: response.data.title || 'Unknown',
       bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
-      releaseDate: response.data.release_date || null,
+      releasedAt: response.data.release_date || null,
       duration: response.data.runtime ?? null,
       summary: response.data.overview || null,
     }
@@ -104,7 +104,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       type: 'series',
       name: response.data.name || 'Unknown',
       bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
-      releaseDate: response.data.first_air_date || null,
+      releasedAt: response.data.first_air_date || null,
       duration: null,
       summary: response.data.overview || null,
     }

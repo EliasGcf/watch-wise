@@ -8,7 +8,7 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class LibraryEntrySchema extends BaseModel {
-  static $columns = ['bannerUrl', 'createdAt', 'id', 'name', 'provider', 'providerId', 'releaseDate', 'summary', 'type', 'updatedAt', 'userId'] as const
+  static $columns = ['bannerUrl', 'createdAt', 'id', 'name', 'provider', 'providerId', 'releasedAt', 'summary', 'type', 'updatedAt', 'userId'] as const
   $columns = LibraryEntrySchema.$columns
   @column()
   declare bannerUrl: string | null
@@ -23,7 +23,7 @@ export class LibraryEntrySchema extends BaseModel {
   @column()
   declare providerId: string
   @column.date()
-  declare releaseDate: DateTime | null
+  declare releasedAt: DateTime | null
   @column()
   declare summary: string | null
   @column()
