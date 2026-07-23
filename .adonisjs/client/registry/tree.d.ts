@@ -4,6 +4,14 @@ import type { routes } from './index.ts'
 export interface ApiDefinition {
   api: {
     hello: typeof routes['api.hello']
+    library: {
+      movies: {
+        index: typeof routes['api.library.movies.index']
+      }
+      series: {
+        index: typeof routes['api.library.series.index']
+      }
+    }
   }
   app: {
     home: typeof routes['app.home']
@@ -21,12 +29,6 @@ export interface ApiDefinition {
     }
     library: {
       index: typeof routes['app.library.index']
-      movies: {
-        index: typeof routes['app.library.movies.index']
-      }
-      series: {
-        index: typeof routes['app.library.series.index']
-      }
       store: typeof routes['app.library.store']
       watched: {
         store: typeof routes['app.library.watched.store']

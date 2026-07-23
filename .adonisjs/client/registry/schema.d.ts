@@ -19,6 +19,30 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'api.library.movies.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/library/movies'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
+    }
+  }
+  'api.library.series.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/library/series'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
+    }
+  }
   'app.home': {
     methods: ["GET","HEAD"]
     pattern: '/app'
@@ -113,30 +137,6 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
-    }
-  }
-  'app.library.movies.index': {
-    methods: ["GET","HEAD"]
-    pattern: '/app/library/movies'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['movies']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['movies']>>>
-    }
-  }
-  'app.library.series.index': {
-    methods: ["GET","HEAD"]
-    pattern: '/app/library/series'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['series']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['series']>>>
     }
   }
   'app.library.store': {

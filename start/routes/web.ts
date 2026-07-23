@@ -20,8 +20,6 @@ const group = router.group(() => {
       router.post('logout', [controllers.web.Session, 'destroy'])
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index'])
       router.get('library', [controllers.web.Library, 'index']).as('library.index')
-      router.get('library/movies', [controllers.web.Library, 'movies']).as('library.movies.index')
-      router.get('library/series', [controllers.web.Library, 'series']).as('library.series.index')
       router.post('library', [controllers.web.Library, 'store']).as('library.store')
       router
         .post('library/:id/watched', [controllers.web.Library, 'markWatched'])

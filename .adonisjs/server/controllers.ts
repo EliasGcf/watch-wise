@@ -4,6 +4,9 @@
  */
 
 export const controllers = {
+  api: {
+    Library: () => import('#controllers/api/library_controller'),
+  },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
     Library: () => import('#controllers/web/library_controller'),

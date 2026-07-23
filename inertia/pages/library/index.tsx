@@ -51,8 +51,8 @@ export default function LibraryIndex() {
 
       try {
         const [moviesResponse, seriesResponse] = await Promise.all([
-          fetch('/app/library/movies'),
-          fetch('/app/library/series'),
+          fetch('/api/library/movies'),
+          fetch('/api/library/series'),
         ])
 
         if (!moviesResponse.ok || !seriesResponse.ok) {
