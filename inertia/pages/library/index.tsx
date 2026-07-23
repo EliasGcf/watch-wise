@@ -6,8 +6,8 @@ import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
-type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['movies'][number]
-type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['series'][number]
+type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data']['movies'][number]
+type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['data']['series'][number]
 
 export default function LibraryIndex() {
   const [movies, setMovies] = useState<MovieEntry[]>([])
@@ -30,8 +30,8 @@ export default function LibraryIndex() {
 
         if (!isCurrent) return
 
-        setMovies(moviesResponse.movies)
-        setSeries(seriesResponse.series)
+        setMovies(moviesResponse.data.movies)
+        setSeries(seriesResponse.data.series)
       } catch {
         if (!isCurrent) return
         setError('Library could not be loaded. Try again later.')

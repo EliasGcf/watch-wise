@@ -1,40 +1,23 @@
 import Movie from '#models/movie'
 import Show from '#models/show'
+import MovieTransformer from '#transformers/movie_transformer'
+import ShowTransformer from '#transformers/show_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LibraryController {
-  async movies({ auth }: HttpContext) {
+  async movies({ auth, serialize }: HttpContext) {
     const movies = await Movie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
 
-    return {
-      movies: movies.map((movie) => ({
-        id: movie.id,
-        provider: movie.provider,
-        providerId: movie.providerId,
-        type: movie.type,
-        name: movie.name,
-        bannerUrl: movie.bannerUrl,
-        releaseDate: movie.releaseDate?.toISODate() ?? null,
-        summary: movie.summary,
-        watched: Boolean(movie.watched),
-      })),
-    }
+    return serialize({
+      movies: MovieTransformer.transform(movies),
+    })
   }
 
-  async series({ auth }: HttpContext) {
+  async series({ auth, serialize }: HttpContext) {
     const series = await Show.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
 
-    return {
-      series: series.map((show) => ({
-        id: show.id,
-        provider: show.provider,
-        providerId: show.providerId,
-        type: show.type,
-        name: show.name,
-        bannerUrl: show.bannerUrl,
-        releaseDate: show.releaseDate?.toISODate() ?? null,
-        summary: show.summary,
-      })),
-    }
+    return serialize({
+      series: ShowTransformer.transform(series),
+    })
   }
 }
