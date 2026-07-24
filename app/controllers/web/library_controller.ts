@@ -46,6 +46,20 @@ export default class LibraryController {
     return response.redirect().toRoute('app.library.index')
   }
 
+  async destroy({ auth, params, response, session }: HttpContext) {
+    if (params.type !== 'movie' && params.type !== 'serie') {
+      return response.notFound()
+    }
+
+    const EntryModel = params.type === 'movie' ? Movie : Serie
+    const entry = await EntryModel.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    await entry.delete()
+
+    session.flash('success', `${entry.name} was removed from your library.`)
+    return response.redirect().back()
+  }
+
   async watch({ auth, params, response, session }: HttpContext) {
     const entry = await Movie.findByOrFail({ id: params.id, userId: auth.user!.id })
 

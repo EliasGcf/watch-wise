@@ -79,11 +79,17 @@ export default function LibraryIndex() {
             title="Movies"
             entries={movies}
             emptyMessage="No movies in your library yet."
+            onRemoveEntry={(entry) =>
+              setMovies((current) => current.filter((movie) => movie.id !== entry.id))
+            }
           />
           <LibrarySection
             title="Series"
             entries={series}
             emptyMessage="No series in your library yet."
+            onRemoveEntry={(entry) =>
+              setSeries((current) => current.filter((serie) => serie.id !== entry.id))
+            }
           />
         </>
       )}
@@ -103,10 +109,12 @@ function LibrarySection({
   title,
   entries,
   emptyMessage,
+  onRemoveEntry,
 }: {
   title: string
   entries: Array<MovieEntry | SeriesEntry>
   emptyMessage: string
+  onRemoveEntry: (entry: MovieEntry | SeriesEntry) => void
 }) {
   return (
     <section className="flex flex-col gap-3" aria-label={title}>
@@ -124,7 +132,11 @@ function LibrarySection({
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {entries.map((entry) => (
-            <LibraryCard key={`${entry.type}-${entry.id}`} entry={entry} />
+            <LibraryCard
+              key={`${entry.type}-${entry.id}`}
+              entry={entry}
+              onRemoveEntry={onRemoveEntry}
+            />
           ))}
         </div>
       )}
@@ -132,7 +144,13 @@ function LibrarySection({
   )
 }
 
-function LibraryCard({ entry }: { entry: MovieEntry | SeriesEntry }) {
+function LibraryCard({
+  entry,
+  onRemoveEntry,
+}: {
+  entry: MovieEntry | SeriesEntry
+  onRemoveEntry: (entry: MovieEntry | SeriesEntry) => void
+}) {
   return (
     <Card>
       {entry.bannerUrl && (
@@ -152,9 +170,35 @@ function LibraryCard({ entry }: { entry: MovieEntry | SeriesEntry }) {
         <p className="text-xs text-muted-foreground">
           {entry.provider} ID: {entry.providerId}
         </p>
+        <RemoveLibraryEntryForm entry={entry} onRemoveEntry={onRemoveEntry} />
         {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
       </CardContent>
     </Card>
+  )
+}
+
+function RemoveLibraryEntryForm({
+  entry,
+  onRemoveEntry,
+}: {
+  entry: MovieEntry | SeriesEntry
+  onRemoveEntry: (entry: MovieEntry | SeriesEntry) => void
+}) {
+  return (
+    <Form
+      action={`/app/library/${entry.type}/${entry.id}`}
+      method="delete"
+      onSuccess={() => onRemoveEntry(entry)}
+    >
+      <Button
+        type="submit"
+        variant="destructive"
+        className="w-full"
+        aria-label={`Remove ${entry.name} from library`}
+      >
+        Remove from library
+      </Button>
+    </Form>
   )
 }
 
