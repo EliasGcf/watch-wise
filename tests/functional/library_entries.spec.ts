@@ -8,6 +8,34 @@ import { DateTime } from 'luxon'
 test.group('Library entries', (group) => {
   group.each.setup(() => testUtils.db().truncate())
 
+  test('library entries save image paths relative to the configured image base URL', async ({
+    assert,
+  }) => {
+    const user = await User.create({
+      fullName: 'Path Viewer',
+      email: 'path-viewer@example.com',
+      password: 'secret123',
+    })
+
+    const movie = await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-paths',
+      name: 'Path Movie',
+      bannerPath: '/movie-paths.jpg',
+      posterPath: '/movie-paths-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: null,
+    })
+
+    assert.include(movie.serialize(), {
+      bannerPath: 'movie-paths.jpg',
+      posterPath: 'movie-paths-poster.jpg',
+      bannerUrl: 'http://localhost:3000/images/movie-paths.jpg',
+      posterUrl: 'http://localhost:3000/images/movie-paths-poster.jpg',
+    })
+  })
+
   test('authenticated users can remove a movie library entry from their library', async ({
     assert,
     browserContext,
