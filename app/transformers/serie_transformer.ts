@@ -1,7 +1,7 @@
-import type Show from '#models/show'
+import type Serie from '#models/serie'
 import { BaseTransformer } from '@adonisjs/core/transformers'
 
-export default class ShowTransformer extends BaseTransformer<Show> {
+export default class SerieTransformer extends BaseTransformer<Serie> {
   toObject() {
     return this.pick(this.resource, [...this.resource.$columns, 'bannerUrl', 'posterUrl'])
   }

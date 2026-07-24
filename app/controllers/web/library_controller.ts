@@ -1,5 +1,5 @@
 import Movie from '#models/movie'
-import Show from '#models/show'
+import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -12,7 +12,7 @@ export default class LibraryController {
 
   async store({ auth, request, response, session }: HttpContext) {
     const payload = await request.validateUsing(addLibraryEntryValidator)
-    const EntryModel = payload.type === 'movie' ? Movie : Show
+    const EntryModel = payload.type === 'movie' ? Movie : Serie
     const existingEntry = await EntryModel.query()
       .where('userId', auth.user!.id)
       .where('provider', payload.provider)

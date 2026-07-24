@@ -1,23 +1,28 @@
 import { LibraryEntrySchema } from '#database/schema'
-import Movie from '#models/movie'
-import Show from '#models/show'
-
-type LibraryEntryModel = Movie | Show
+import User from '#models/user'
+import { catalog } from '#services/catalog_provider'
+import { belongsTo, computed } from '@adonisjs/lucid/orm'
+import { type BelongsTo } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 export default class LibraryItem extends LibraryEntrySchema {
   static table = 'library_entries'
 
-  static async forUser(userId: number): Promise<LibraryEntryModel[]> {
-    const entries = await this.query().where('userId', userId).orderBy('createdAt', 'desc')
-    return entries.map(this.fromEntry)
+  @belongsTo(() => User)
+  declare user: BelongsTo<typeof User>
+
+  @computed()
+  get isReleased() {
+    return Boolean(this.releasedAt && this.releasedAt <= DateTime.now())
   }
 
-  static fromEntry(entry: LibraryItem): LibraryEntryModel {
-    const item = entry.type === 'movie' ? new Movie() : new Show()
+  @computed()
+  get bannerUrl() {
+    return new URL(this.bannerPath, catalog.config('tmdb').baseImageUrl).toString()
+  }
 
-    item.$isPersisted = entry.$isPersisted
-    item.merge(entry.$attributes)
-
-    return item
+  @computed()
+  get posterUrl() {
+    return new URL(this.posterPath, catalog.config('tmdb').baseImageUrl).toString()
   }
 }

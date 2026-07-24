@@ -1,6 +1,6 @@
 import { UserSchema } from '#database/schema'
 import Movie from '#models/movie'
-import Show from '#models/show'
+import Serie from '#models/serie'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
@@ -11,8 +11,8 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
   @hasMany(() => Movie)
   declare movies: HasMany<typeof Movie>
 
-  @hasMany(() => Show)
-  declare shows: HasMany<typeof Show>
+  @hasMany(() => Serie)
+  declare series: HasMany<typeof Serie>
 
   get initials() {
     const [first, last] = this.fullName ? this.fullName.split(' ') : this.email.split('@')

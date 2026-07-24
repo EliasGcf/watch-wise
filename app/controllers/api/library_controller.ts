@@ -1,7 +1,7 @@
 import Movie from '#models/movie'
-import Show from '#models/show'
+import Serie from '#models/serie'
 import MovieTransformer from '#transformers/movie_transformer'
-import ShowTransformer from '#transformers/show_transformer'
+import SerieTransformer from '#transformers/serie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LibraryController {
@@ -11,7 +11,7 @@ export default class LibraryController {
   }
 
   async series({ auth, serialize }: HttpContext) {
-    const series = await Show.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
-    return serialize(ShowTransformer.transform(series))
+    const series = await Serie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
+    return serialize(SerieTransformer.transform(series))
   }
 }

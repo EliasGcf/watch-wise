@@ -64,10 +64,10 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
   async find(type: ItemType, providerId: string): Promise<FindResult | null> {
     if (type === 'movie') return this.findMovieById(providerId)
 
-    return this.findShowById(providerId)
+    return this.findSerieById(providerId)
   }
 
-  async findMovieById(providerId: string): Promise<Movie | Serie | null> {
+  async findMovieById(providerId: string): Promise<Movie | null> {
     const response = await this.tmdb.movie.details({
       throwOnError: false,
       path: { movie_id: Number(providerId) },
@@ -97,7 +97,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
   }
 
-  async findShowById(providerId: string): Promise<Serie | null> {
+  async findSerieById(providerId: string): Promise<Serie | null> {
     const response = await this.tmdb.tv.series.details({
       throwOnError: false,
       path: { series_id: Number(providerId) },
@@ -105,7 +105,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     })
 
     if (response.error) {
-      throw new CatalogProviderError('TMDB show details request failed', { cause: response.error })
+      throw new CatalogProviderError('TMDB serie details request failed', { cause: response.error })
     }
 
     if (!response.data?.id) return null

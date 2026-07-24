@@ -1,26 +1,14 @@
-import { LibraryEntrySchema } from '#database/schema'
 import { MovieWatchedMark } from '#models/watched_mark'
-import User from '#models/user'
-import { catalog } from '#services/catalog_provider'
-import {
-  beforeCreate,
-  beforeFetch,
-  beforeFind,
-  belongsTo,
-  computed,
-  hasOne,
-} from '@adonisjs/lucid/orm'
+import { beforeCreate, beforeFetch, beforeFind, hasOne } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
-import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
+import type { HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
+import LibraryItem from '#models/library_item'
 
-export default class Movie extends LibraryEntrySchema {
-  static table = 'library_entries'
+export default class Movie extends LibraryItem {
+  static table = LibraryItem.table
 
   declare type: 'movie'
-
-  @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
 
   @hasOne(() => MovieWatchedMark, { foreignKey: 'libraryEntryId' })
   declare watched: HasOne<typeof MovieWatchedMark>
@@ -34,21 +22,6 @@ export default class Movie extends LibraryEntrySchema {
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Movie>) {
     query.where('type', 'movie').preload('watched')
-  }
-
-  @computed()
-  get isReleased() {
-    return Boolean(this.releasedAt && this.releasedAt <= DateTime.now())
-  }
-
-  @computed()
-  get bannerUrl() {
-    return new URL(this.bannerPath, catalog.config('tmdb').baseImageUrl).toString()
-  }
-
-  @computed()
-  get posterUrl() {
-    return new URL(this.posterPath, catalog.config('tmdb').baseImageUrl).toString()
   }
 
   async watch(duration: number | null = null) {

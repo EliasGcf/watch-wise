@@ -100,8 +100,8 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'Heat Vision and Jack')
     await libraryPage.assertTextContains('body', 'series')
 
-    const show = await user.related('shows').query().where('providerId', 'series-1').firstOrFail()
-    assert.include(show.serialize(), {
+    const serie = await user.related('series').query().where('providerId', 'series-1').firstOrFail()
+    assert.include(serie.serialize(), {
       provider: 'tmdb',
       providerId: 'series-1',
       type: 'serie',
