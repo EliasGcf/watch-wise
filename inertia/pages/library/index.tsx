@@ -186,7 +186,7 @@ function RemoveLibraryEntryForm({
 }) {
   return (
     <Form
-      action={`/app/library/${entry.type}/${entry.id}`}
+      action={`/app/library/${entry.id}`}
       method="delete"
       onSuccess={() => onRemoveEntry(entry)}
     >

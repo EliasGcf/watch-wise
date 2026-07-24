@@ -1,3 +1,4 @@
+import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
@@ -47,12 +48,7 @@ export default class LibraryController {
   }
 
   async destroy({ auth, params, response, session }: HttpContext) {
-    if (params.type !== 'movie' && params.type !== 'serie') {
-      return response.notFound()
-    }
-
-    const EntryModel = params.type === 'movie' ? Movie : Serie
-    const entry = await EntryModel.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const entry = await LibraryItem.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     await entry.delete()
 
