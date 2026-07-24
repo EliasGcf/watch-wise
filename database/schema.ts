@@ -8,16 +8,18 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class LibraryEntrySchema extends BaseModel {
-  static $columns = ['bannerUrl', 'createdAt', 'id', 'name', 'provider', 'providerId', 'releasedAt', 'summary', 'type', 'updatedAt', 'userId'] as const
+  static $columns = ['bannerPath', 'createdAt', 'id', 'name', 'posterPath', 'provider', 'providerId', 'releasedAt', 'summary', 'type', 'updatedAt', 'userId'] as const
   $columns = LibraryEntrySchema.$columns
   @column()
-  declare bannerUrl: string | null
+  declare bannerPath: string
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
   declare id: number
   @column()
   declare name: string
+  @column()
+  declare posterPath: string
   @column()
   declare provider: string
   @column()

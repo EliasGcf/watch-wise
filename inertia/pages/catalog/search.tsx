@@ -12,9 +12,12 @@ type CatalogSearchResult = {
   id: string
   type: 'movie' | 'serie'
   name: string
-  bannerUrl: string | null
-  releasedAt: string | null
-  summary: string | null
+  bannerPath: string
+  bannerUrl: string
+  posterPath: string
+  posterUrl: string
+  releasedAt: string
+  summary: string
 }
 
 type Props = {
@@ -75,7 +78,9 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                 <div className="flex flex-col gap-2">
                   <CardTitle>{result.name}</CardTitle>
                   <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">{result.type === 'serie' ? 'series' : result.type}</Badge>
+                    <Badge variant="secondary">
+                      {result.type === 'serie' ? 'series' : result.type}
+                    </Badge>
                     {result.releasedAt && (
                       <Badge variant="outline">{dayjs(result.releasedAt).year()}</Badge>
                     )}

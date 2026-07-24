@@ -23,7 +23,8 @@ test.group('Library movie watched records', (group) => {
       provider: 'tmdb',
       providerId: 'movie-1',
       name: 'Heat',
-      bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
       releasedAt: DateTime.fromISO('1995-12-15'),
       summary: 'A professional thief and a relentless detective collide.',
     })
@@ -66,7 +67,8 @@ test.group('Library movie watched records', (group) => {
       provider: 'tmdb',
       providerId: 'movie-1',
       name: 'Heat',
-      bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
       releasedAt: DateTime.fromISO('1995-12-15'),
       summary: 'A professional thief and a relentless detective collide.',
     })
@@ -77,7 +79,7 @@ test.group('Library movie watched records', (group) => {
     await firstPage.getByRole('button', { name: 'Mark Heat as watched' }).click()
     await duplicatePage.getByRole('button', { name: 'Mark Heat as watched' }).click()
 
-    await movie.merge({ name: 'Changed Heat', bannerUrl: null, summary: null }).save()
+    await movie.merge({ name: 'Changed Heat', bannerPath: '', posterPath: '', summary: null }).save()
 
     const secondPage = await visit('/app/library')
     await secondPage.assertTextContains('body', 'Watched')
@@ -105,7 +107,8 @@ test.group('Library movie watched records', (group) => {
       provider: 'tmdb',
       providerId: 'movie-future',
       name: 'Future Heat',
-      bannerUrl: null,
+      bannerPath: '/movie-future.jpg',
+      posterPath: '/movie-future-poster.jpg',
       releasedAt: DateTime.now().plus({ days: 1 }),
       summary: null,
     })

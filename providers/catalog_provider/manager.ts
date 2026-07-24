@@ -11,11 +11,11 @@ import {
 export class CatalogProviderManager extends CatalogProvider {
   #drivers = new Map<CatalogDriver, CatalogProvider>()
 
-  constructor(private config: CatalogProviderConfig) {
+  constructor(private _config: CatalogProviderConfig) {
     super()
   }
 
-  use(name: CatalogDriver = this.config.default) {
+  use(name: CatalogDriver = this._config.default) {
     const cachedDriver = this.#drivers.get(name)
 
     if (cachedDriver) return cachedDriver
@@ -26,13 +26,21 @@ export class CatalogProviderManager extends CatalogProvider {
     return driver
   }
 
+  config<T extends CatalogDriver>(
+    driver: T = this._config.default as T
+  ): CatalogProviderConfig['drivers'][T] {
+    const config = this._config.drivers[driver]
+    if (!config) throw new CatalogProviderError(`Unsupported catalog provider driver "${driver}"`)
+    return config
+  }
+
   private createDriver(name: CatalogDriver) {
     if (name === 'fake') {
-      return new FakeCatalogProviderDriver(this.config.drivers.fake)
+      return new FakeCatalogProviderDriver(this._config.drivers.fake)
     }
 
     if (name === 'tmdb') {
-      return new TmdbCatalogProviderDriver(this.config.drivers.tmdb)
+      return new TmdbCatalogProviderDriver(this._config.drivers.tmdb)
     }
 
     throw new CatalogProviderError(`Unsupported catalog provider driver "${name}"`)

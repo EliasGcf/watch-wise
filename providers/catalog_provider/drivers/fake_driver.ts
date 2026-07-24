@@ -59,6 +59,8 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     return response.results.flatMap((result) => {
       if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
+      const bannerPath = result.backdrop_path
+      const posterPath = result.poster_path
 
       return [
         {
@@ -66,7 +68,10 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
           id: result.media_type === 'movie' ? `movie-${result.id}` : `series-${result.id}`,
           type: result.media_type === 'movie' ? 'movie' : 'serie',
           name: result.media_type === 'movie' ? result.title : result.name,
-          bannerUrl: imageUrl(result.backdrop_path),
+          bannerPath,
+          bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+          posterPath,
+          posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
           releasedAt: result.release_date,
           summary: result.overview,
         },
@@ -80,16 +85,22 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       movie.id = 1
       movie.title = 'Heat'
       movie.backdrop_path = '/movie-1.jpg'
+      movie.poster_path = '/movie-1-poster.jpg'
       movie.release_date = '1995-12-15'
       movie.runtime = 170
       movie.overview = 'A professional thief and a relentless detective collide.'
+      const bannerPath = movie.backdrop_path
+      const posterPath = movie.poster_path
 
       return {
         provider: 'tmdb',
         id: providerId,
         type: 'movie',
         name: movie.title,
-        bannerUrl: imageUrl(movie.backdrop_path),
+        bannerPath,
+        bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+        posterPath,
+        posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
@@ -101,15 +112,21 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       series.id = 1
       series.name = 'Heat Vision and Jack'
       series.backdrop_path = '/series-1.jpg'
+      series.poster_path = '/series-1-poster.jpg'
       series.first_air_date = '1999-01-01'
       series.overview = 'A pilot about a super-intelligent astronaut.'
+      const bannerPath = series.backdrop_path
+      const posterPath = series.poster_path
 
       return {
         provider: 'tmdb',
         id: providerId,
         type: 'serie',
         name: series.name,
-        bannerUrl: imageUrl(series.backdrop_path),
+        bannerPath,
+        bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+        posterPath,
+        posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
         releasedAt: series.first_air_date,
         summary: series.overview,
       }
@@ -120,16 +137,22 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       movie.id = 2
       movie.title = 'Unknown Heat'
       movie.backdrop_path = '/movie-2.jpg'
+      movie.poster_path = '/movie-2-poster.jpg'
       movie.release_date = '2000-01-01'
       movie.runtime = 90
       movie.overview = 'A fake generated movie result.'
+      const bannerPath = movie.backdrop_path
+      const posterPath = movie.poster_path
 
       return {
         provider: 'tmdb',
         id: providerId,
         type: 'movie',
         name: movie.title,
-        bannerUrl: imageUrl(movie.backdrop_path),
+        bannerPath,
+        bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+        posterPath,
+        posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
@@ -138,8 +161,4 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     return null
   }
-}
-
-function imageUrl(path: string) {
-  return `https://image.tmdb.org/t/p/w780${path}`
 }

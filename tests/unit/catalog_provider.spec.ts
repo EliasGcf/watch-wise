@@ -16,6 +16,7 @@ test.group('Catalog provider', () => {
               media_type: 'movie',
               title: 'Heat',
               backdrop_path: '/heat.jpg',
+              poster_path: '/heat-poster.jpg',
               release_date: '1995-12-15',
               overview: 'A professional thief and a relentless detective collide.',
             },
@@ -23,6 +24,7 @@ test.group('Catalog provider', () => {
               id: 2,
               media_type: 'tv',
               name: 'Heat Vision and Jack',
+              backdrop_path: '/heat-vision-backdrop.jpg',
               poster_path: '/heat-vision.jpg',
               release_date: '1999-01-01',
               overview: 'A pilot about a super-intelligent astronaut.',
@@ -38,9 +40,10 @@ test.group('Catalog provider', () => {
       )
     )
 
-    const results = await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search(
-      'heat'
-    )
+    const results = await new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+      tmdb
+    ).search('heat')
 
     assert.deepEqual(results, [
       {
@@ -48,7 +51,10 @@ test.group('Catalog provider', () => {
         id: '1',
         type: 'movie',
         name: 'Heat',
-        bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
+        bannerPath: '/heat.jpg',
+        bannerUrl: 'https://image.tmdb.org/heat.jpg',
+        posterPath: '/heat-poster.jpg',
+        posterUrl: 'https://image.tmdb.org/heat-poster.jpg',
         releasedAt: '1995-12-15',
         summary: 'A professional thief and a relentless detective collide.',
       },
@@ -57,7 +63,10 @@ test.group('Catalog provider', () => {
         id: '2',
         type: 'serie',
         name: 'Heat Vision and Jack',
-        bannerUrl: 'https://image.tmdb.org/t/p/w780/heat-vision.jpg',
+        bannerPath: '/heat-vision-backdrop.jpg',
+        bannerUrl: 'https://image.tmdb.org/heat-vision-backdrop.jpg',
+        posterPath: '/heat-vision.jpg',
+        posterUrl: 'https://image.tmdb.org/heat-vision.jpg',
         releasedAt: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
       },
@@ -73,13 +82,18 @@ test.group('Catalog provider', () => {
     )
 
     await assert.rejects(
-      () => new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search('heat'),
+      () =>
+        new TmdbCatalogProviderDriver(
+          { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+          tmdb
+        ).search('heat'),
       CatalogProviderError
     )
   })
 
   test('finds fake catalog titles by provider id and type', async ({ assert }) => {
     const driver = new FakeCatalogProviderDriver({
+      baseImageUrl: 'https://image.tmdb.org/t/p/original/',
       failureQuery: 'fail',
     })
 
@@ -88,7 +102,10 @@ test.group('Catalog provider', () => {
       id: 'movie-1',
       type: 'movie',
       name: 'Heat',
-      bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
+      bannerPath: '/movie-1.jpg',
+      bannerUrl: 'https://image.tmdb.org/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      posterUrl: 'https://image.tmdb.org/movie-1-poster.jpg',
       releasedAt: '1995-12-15',
       duration: 170,
       summary: 'A professional thief and a relentless detective collide.',
@@ -103,6 +120,7 @@ test.group('Catalog provider', () => {
           id: 1,
           title: 'Heat',
           backdrop_path: '/heat.jpg',
+          poster_path: '/heat-poster.jpg',
           release_date: '1995-12-15',
           runtime: 170,
           overview: 'A professional thief and a relentless detective collide.',
@@ -112,13 +130,19 @@ test.group('Catalog provider', () => {
     )
 
     assert.deepEqual(
-      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findMovieById('1'),
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+        tmdb
+      ).findMovieById('1'),
       {
         provider: 'tmdb',
         id: '1',
         type: 'movie',
         name: 'Heat',
-        bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
+        bannerPath: '/heat.jpg',
+        bannerUrl: 'https://image.tmdb.org/heat.jpg',
+        posterPath: '/heat-poster.jpg',
+        posterUrl: 'https://image.tmdb.org/heat-poster.jpg',
         releasedAt: '1995-12-15',
         duration: 170,
         summary: 'A professional thief and a relentless detective collide.',

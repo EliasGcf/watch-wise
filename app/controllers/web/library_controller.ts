@@ -36,7 +36,8 @@ export default class LibraryController {
       provider: item.provider,
       providerId: item.id,
       name: item.name,
-      bannerUrl: item.bannerUrl,
+      bannerPath: item.bannerPath,
+      posterPath: item.posterPath,
       releasedAt: item.releasedAt ? DateTime.fromISO(item.releasedAt) : null,
       summary: item.summary,
     })

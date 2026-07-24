@@ -1,6 +1,7 @@
 import { LibraryEntrySchema } from '#database/schema'
 import { MovieWatchedMark } from '#models/watched_mark'
 import User from '#models/user'
+import { catalog } from '#services/catalog_provider'
 import {
   beforeCreate,
   beforeFetch,
@@ -38,6 +39,16 @@ export default class Movie extends LibraryEntrySchema {
   @computed()
   get isReleased() {
     return Boolean(this.releasedAt && this.releasedAt <= DateTime.now())
+  }
+
+  @computed()
+  get bannerUrl() {
+    return new URL(this.bannerPath, catalog.config('tmdb').baseImageUrl).toString()
+  }
+
+  @computed()
+  get posterUrl() {
+    return new URL(this.posterPath, catalog.config('tmdb').baseImageUrl).toString()
   }
 
   async watch(duration: number | null = null) {

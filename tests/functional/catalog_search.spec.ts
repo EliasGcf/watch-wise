@@ -165,7 +165,8 @@ test.group('Catalog search', (group) => {
         providerId: 'movie-2',
         type: 'movie',
         name: 'Unknown Heat',
-        bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-2.jpg',
+        bannerPath: '/movie-2.jpg',
+        posterPath: '/movie-2-poster.jpg',
         summary: 'A fake generated movie result.',
       },
     ])

@@ -8,7 +8,10 @@ export type CatalogSearchResult = {
   name: string
   releasedAt: string
   summary: string
+  bannerPath: string
   bannerUrl: string
+  posterPath: string
+  posterUrl: string
 } & ({ type: 'movie' } | { type: 'serie' })
 
 export type FindResult = {
@@ -17,7 +20,10 @@ export type FindResult = {
   name: string
   releasedAt: string
   summary: string
+  bannerPath: string
   bannerUrl: string
+  posterPath: string
+  posterUrl: string
 } & ({ type: 'movie'; duration: number } | { type: 'serie' })
 
 export type Movie = Extract<FindResult, { type: 'movie' }>
@@ -31,10 +37,12 @@ export abstract class CatalogProvider {
 export class CatalogProviderError extends Error {}
 
 export type TmdbCatalogProviderConfig = {
+  baseImageUrl: string
   accessToken?: string
 }
 
 export type FakeCatalogProviderConfig = {
+  baseImageUrl: string
   failureQuery: string
 }
 

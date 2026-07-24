@@ -41,6 +41,8 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
       const type = result.media_type === 'movie' ? 'movie' : 'serie'
       const name = result.media_type === 'movie' ? result.title : result.name
+      const bannerPath = result.backdrop_path
+      const posterPath = result.poster_path
 
       return [
         {
@@ -48,7 +50,10 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
           id: String(result.id),
           type,
           name: name,
-          bannerUrl: imageUrl(result.backdrop_path ?? result.poster_path),
+          bannerPath,
+          bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+          posterPath,
+          posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
           releasedAt: result.release_date,
           summary: result.overview,
         },
@@ -74,13 +79,18 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
 
     if (!response.data?.id) return null
+    const bannerPath = response.data.backdrop_path
+    const posterPath = response.data.poster_path
 
     return {
       provider: 'tmdb',
       id: String(response.data.id),
       type: 'movie',
       name: response.data.title,
-      bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
+      bannerPath,
+      bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+      posterPath,
+      posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
       releasedAt: response.data.release_date,
       duration: response.data.runtime,
       summary: response.data.overview,
@@ -99,19 +109,20 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
 
     if (!response.data?.id) return null
+    const bannerPath = response.data.backdrop_path
+    const posterPath = response.data.poster_path
 
     return {
       provider: 'tmdb',
       id: String(response.data.id),
       type: 'serie',
       name: response.data.name,
-      bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
+      bannerPath,
+      bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+      posterPath,
+      posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
       releasedAt: response.data.first_air_date,
       summary: response.data.overview,
     }
   }
-}
-
-function imageUrl(path: string) {
-  return `https://image.tmdb.org/t/p/w780${path}`
 }
