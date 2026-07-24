@@ -6,15 +6,15 @@ import {
 } from '#providers/catalog_provider/types'
 import app from '@adonisjs/core/services/app'
 
-let catalogProvider!: CatalogProviderManager
+let catalog!: CatalogProviderManager
 
 await app.booted(async () => {
-  catalogProvider = await app.container.make('catalog_provider')
+  catalog = await app.container.make('catalog_provider')
 })
 
 export {
   CatalogProviderError,
-  catalogProvider as default,
+  catalog,
   type CatalogProviderManager,
   type CatalogSearchResult,
   type FindResult,

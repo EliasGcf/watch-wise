@@ -1,6 +1,6 @@
 import Movie from '#models/movie'
 import Show from '#models/show'
-import catalog from '#services/catalog_provider'
+import { catalog } from '#services/catalog_provider'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'

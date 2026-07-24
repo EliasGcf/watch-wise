@@ -1,4 +1,4 @@
-import catalogProvider, { CatalogProviderError } from '#services/catalog_provider'
+import { catalog, CatalogProviderError } from '#services/catalog_provider'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CatalogSearchController {
@@ -10,7 +10,7 @@ export default class CatalogSearchController {
     }
 
     try {
-      const results = await catalogProvider.search(query)
+      const results = await catalog.search(query)
 
       return inertia.render('catalog/search', {
         query,
