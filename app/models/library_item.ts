@@ -18,11 +18,11 @@ export default class LibraryItem extends LibraryEntrySchema {
 
   @computed()
   get bannerUrl() {
-    return new URL(this.bannerPath, catalog.config('tmdb').baseImageUrl).toString()
+    return new URL(this.bannerPath, catalog.config().baseImageUrl).toString()
   }
 
   @computed()
   get posterUrl() {
-    return new URL(this.posterPath, catalog.config('tmdb').baseImageUrl).toString()
+    return new URL(this.posterPath, catalog.config().baseImageUrl).toString()
   }
 }

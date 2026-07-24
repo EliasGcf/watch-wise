@@ -18,6 +18,7 @@ export type ScannedRoutes = {
     'app.library.store': { paramsTuple?: []; params?: {} }
     'app.library.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'app.library.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'app.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -48,6 +49,7 @@ export type ScannedRoutes = {
   }
   DELETE: {
     'app.library.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'app.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

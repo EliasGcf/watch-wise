@@ -90,6 +90,12 @@ const routes = {
     tokens: [{"old":"/app/library/:id/watched","type":0,"val":"app","end":""},{"old":"/app/library/:id/watched","type":0,"val":"library","end":""},{"old":"/app/library/:id/watched","type":1,"val":"id","end":""},{"old":"/app/library/:id/watched","type":0,"val":"watched","end":""}],
     types: placeholder as Registry['app.library.unwatch']['types'],
   },
+  'app.library.destroy': {
+    methods: ["DELETE"],
+    pattern: '/app/library/:id',
+    tokens: [{"old":"/app/library/:id","type":0,"val":"app","end":""},{"old":"/app/library/:id","type":0,"val":"library","end":""},{"old":"/app/library/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['app.library.destroy']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

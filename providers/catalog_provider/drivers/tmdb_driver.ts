@@ -51,9 +51,9 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
           type,
           name: name,
           bannerPath,
-          bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+          bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
           posterPath,
-          posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+          posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
           releasedAt: result.release_date,
           summary: result.overview,
         },
@@ -88,9 +88,9 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       type: 'movie',
       name: response.data.title,
       bannerPath,
-      bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+      bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
       posterPath,
-      posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+      posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.release_date,
       duration: response.data.runtime,
       summary: response.data.overview,
@@ -118,11 +118,15 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       type: 'serie',
       name: response.data.name,
       bannerPath,
-      bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+      bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
       posterPath,
-      posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+      posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.first_air_date,
       summary: response.data.overview,
     }
   }
+}
+
+function makeImageUrl(baseImageUrl: string, path: string) {
+  return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
 }

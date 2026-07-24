@@ -37,7 +37,7 @@ export abstract class CatalogProvider {
 export class CatalogProviderError extends Error {}
 
 export type TmdbCatalogProviderConfig = {
-  baseImageUrl: string
+  baseImageUrl: `${string}/`
   accessToken?: string
 }
 
