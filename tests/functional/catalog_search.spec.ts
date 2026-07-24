@@ -105,7 +105,7 @@ test.group('Catalog search', (group) => {
       {
         provider: 'tmdb',
         providerId: 'series-1',
-        type: 'series',
+        type: 'serie',
         name: 'Heat Vision and Jack',
       },
     ])
@@ -136,7 +136,7 @@ test.group('Catalog search', (group) => {
     assert.lengthOf(await user.related('movies').query().where('providerId', 'movie-1'), 1)
   })
 
-  test('authenticated users can add titles without optional catalog metadata', async ({
+  test('authenticated users can add generated catalog titles to their library', async ({
     assert,
     browserContext,
     visit,
@@ -157,16 +157,18 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'Unknown Heat')
     await libraryPage.assertTextContains('body', 'movie')
 
-    assert.containsSubset(await user.related('movies').query(), [
+    const movies = await user.related('movies').query()
+
+    assert.containsSubset(movies, [
       {
         provider: 'tmdb',
         providerId: 'movie-2',
         type: 'movie',
         name: 'Unknown Heat',
-        bannerUrl: null,
-        releasedAt: null,
-        summary: null,
+        bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-2.jpg',
+        summary: 'A fake generated movie result.',
       },
     ])
+    assert.equal(movies[0].releasedAt?.toISODate(), '2000-01-01')
   })
 })

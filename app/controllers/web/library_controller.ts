@@ -34,7 +34,7 @@ export default class LibraryController {
     await EntryModel.create({
       userId: auth.user!.id,
       provider: item.provider,
-      providerId: item.providerId,
+      providerId: item.id,
       name: item.name,
       bannerUrl: item.bannerUrl,
       releasedAt: item.releasedAt ? DateTime.fromISO(item.releasedAt) : null,
@@ -54,7 +54,13 @@ export default class LibraryController {
     }
 
     const catalogMovie = await catalog.find('movie', entry.providerId)
-    await entry.watch(catalogMovie?.duration ?? null)
+
+    if (!catalogMovie) {
+      session.flash('error', 'Movie could not be found in the catalog.')
+      return response.redirect().back()
+    }
+
+    await entry.watch(catalogMovie.type === 'movie' ? catalogMovie.duration : null)
 
     session.flash('success', `${entry.name} was marked as watched.`)
     return response.redirect().back()

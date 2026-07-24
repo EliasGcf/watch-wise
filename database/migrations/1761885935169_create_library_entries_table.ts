@@ -15,7 +15,7 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
       table.string('provider').notNullable()
       table.string('provider_id').notNullable()
-      table.enum('type', ['movie', 'series']).notNullable()
+      table.enum('type', ['movie', 'serie']).notNullable()
       table.string('name').notNullable()
       table.string('banner_url').nullable()
       table.date('released_at').nullable()

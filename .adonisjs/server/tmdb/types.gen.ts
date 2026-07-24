@@ -16,9 +16,9 @@ export type Get3AuthenticationErrors = {
      * 401
      */
     401: {
-        status_code?: number;
-        status_message?: string;
-        success?: boolean;
+        status_code: number;
+        status_message: string;
+        success: boolean;
     };
 };
 
@@ -29,9 +29,9 @@ export type Get3AuthenticationResponses = {
      * 200
      */
     200: {
-        success?: boolean;
-        status_code?: number;
-        status_message?: string;
+        success: boolean;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -53,20 +53,20 @@ export type Get3AccountByAccountIdResponses = {
      * 200
      */
     200: {
-        avatar?: {
-            gravatar?: {
-                hash?: string;
+        avatar: {
+            gravatar: {
+                hash: string;
             };
-            tmdb?: {
-                avatar_path?: string;
+            tmdb: {
+                avatar_path: string;
             };
         };
-        id?: number;
-        iso_639_1?: string;
-        iso_3166_1?: string;
-        name?: string;
-        include_adult?: boolean;
-        username?: string;
+        id: number;
+        iso_639_1: string;
+        iso_3166_1: string;
+        name: string;
+        include_adult: boolean;
+        username: string;
     };
 };
 
@@ -90,8 +90,8 @@ export type Post3AccountByAccountIdFavoriteResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -115,8 +115,8 @@ export type Post3AccountByAccountIdWatchlistResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -141,25 +141,25 @@ export type Get3AccountByAccountIdFavoriteMoviesResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -184,25 +184,25 @@ export type Get3AccountByAccountIdFavoriteTvResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -225,19 +225,19 @@ export type Get3AccountByAccountIdListsResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            description?: string;
-            favorite_count?: number;
-            id?: number;
-            item_count?: number;
-            iso_639_1?: string;
-            list_type?: string;
-            name?: string;
-            poster_path?: unknown;
+        page: number;
+        results: Array<{
+            description: string;
+            favorite_count: number;
+            id: number;
+            item_count: number;
+            iso_639_1: string;
+            list_type: string;
+            name: string;
+            poster_path: unknown;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -262,26 +262,26 @@ export type Get3AccountByAccountIdRatedMoviesResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            rating?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            rating: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -306,26 +306,26 @@ export type Get3AccountByAccountIdRatedTvResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
-            rating?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
+            rating: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -350,24 +350,24 @@ export type Get3AccountByAccountIdRatedTvEpisodesResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            air_date?: string;
-            episode_number?: number;
-            id?: number;
-            name?: string;
-            overview?: string;
-            production_code?: string;
-            runtime?: number;
-            season_number?: number;
-            show_id?: number;
-            still_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            rating?: number;
+        page: number;
+        results: Array<{
+            air_date: string;
+            episode_number: number;
+            id: number;
+            name: string;
+            overview: string;
+            production_code: string;
+            runtime: number;
+            season_number: number;
+            show_id: number;
+            still_path: string;
+            vote_average: number;
+            vote_count: number;
+            rating: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -392,25 +392,25 @@ export type Get3AccountByAccountIdWatchlistMoviesResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -435,25 +435,25 @@ export type Get3AccountByAccountIdWatchlistTvResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -471,9 +471,9 @@ export type Get3AuthenticationGuestSessionNewResponses = {
      * 200
      */
     200: {
-        success?: boolean;
-        guest_session_id?: string;
-        expires_at?: string;
+        success: boolean;
+        guest_session_id: string;
+        expires_at: string;
     };
 };
 
@@ -491,9 +491,9 @@ export type Get3AuthenticationTokenNewResponses = {
      * 200
      */
     200: {
-        success?: boolean;
-        expires_at?: string;
-        request_token?: string;
+        success: boolean;
+        expires_at: string;
+        request_token: string;
     };
 };
 
@@ -513,8 +513,8 @@ export type Post3AuthenticationSessionNewResponses = {
      * 200
      */
     200: {
-        success?: boolean;
-        session_id?: string;
+        success: boolean;
+        session_id: string;
     };
 };
 
@@ -534,8 +534,8 @@ export type Post3AuthenticationSessionConvert4Responses = {
      * 200
      */
     200: {
-        success?: boolean;
-        session_id?: string;
+        success: boolean;
+        session_id: string;
     };
 };
 
@@ -555,9 +555,9 @@ export type Post3AuthenticationTokenValidateWithLoginResponses = {
      * 200
      */
     200: {
-        success?: boolean;
-        expires_at?: string;
-        request_token?: string;
+        success: boolean;
+        expires_at: string;
+        request_token: string;
     };
 };
 
@@ -577,7 +577,7 @@ export type Delete3AuthenticationSessionResponses = {
      * 200
      */
     200: {
-        success?: boolean;
+        success: boolean;
     };
 };
 
@@ -595,231 +595,231 @@ export type Get3CertificationMovieListResponses = {
      * 200
      */
     200: {
-        certifications?: {
-            AU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+        certifications: {
+            AU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            BG?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            BG: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            BR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            BR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            CA?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            CA: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            'CA-QC'?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            'CA-QC': Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            DE?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            DE: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            DK?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            DK: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            ES?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            ES: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            FI?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            FI: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            FR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            FR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            GB?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            GB: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            HU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            HU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IN?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IN: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IT?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IT: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            LT?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            LT: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            MY?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            MY: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            NL?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            NL: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            NO?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            NO: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            NZ?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            NZ: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PH?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PH: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PT?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PT: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            RU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            RU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            SE?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            SE: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            US?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            US: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            KR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            KR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            SK?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            SK: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            TH?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            TH: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            MX?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            MX: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            ID?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            ID: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            TR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            TR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            AR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            AR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            GR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            GR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            TW?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            TW: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            ZA?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            ZA: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            SG?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            SG: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IE?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IE: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            JP?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            JP: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            VI?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            VI: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            CH?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            CH: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IL?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IL: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            HK?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            HK: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            MO?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            MO: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            LV?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            LV: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            LU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            LU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
         };
     };
@@ -839,206 +839,206 @@ export type Get3CertificationTvListResponses = {
      * 200
      */
     200: {
-        certifications?: {
-            AU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+        certifications: {
+            AU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            BR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            BR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            CA?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            CA: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            'CA-QC'?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            'CA-QC': Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            DE?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            DE: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            ES?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            ES: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            FR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            FR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            GB?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            GB: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            HU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            HU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            KR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            KR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            LT?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            LT: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            NL?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            NL: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PH?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PH: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PT?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PT: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            RU?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            RU: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            SK?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            SK: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            TH?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            TH: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            US?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            US: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IT?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IT: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            FI?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            FI: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            MY?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            MY: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            NZ?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            NZ: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            NO?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            NO: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            BG?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            BG: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            MX?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            MX: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IN?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IN: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            DK?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            DK: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            SE?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            SE: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            ID?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            ID: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            TR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            TR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            AR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            AR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PL?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PL: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            MA?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            MA: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            GR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            GR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            IL?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            IL: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            TW?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            TW: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            ZA?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            ZA: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            SG?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            SG: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            PR?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            PR: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
-            VI?: Array<{
-                certification?: string;
-                meaning?: string;
-                order?: number;
+            VI: Array<{
+                certification: string;
+                meaning: string;
+                order: number;
             }>;
         };
     };
@@ -1062,13 +1062,13 @@ export type Get3MovieChangesResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            id?: number;
-            adult?: boolean;
+        results: Array<{
+            id: number;
+            adult: boolean;
         }>;
-        page?: number;
-        total_pages?: number;
-        total_results?: number;
+        page: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1090,13 +1090,13 @@ export type Get3PersonChangesResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            id?: number;
-            adult?: boolean;
+        results: Array<{
+            id: number;
+            adult: boolean;
         }>;
-        page?: number;
-        total_pages?: number;
-        total_results?: number;
+        page: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1118,13 +1118,13 @@ export type Get3TvChangesResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            id?: number;
-            adult?: boolean;
+        results: Array<{
+            id: number;
+            adult: boolean;
         }>;
-        page?: number;
-        total_pages?: number;
-        total_results?: number;
+        page: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1146,29 +1146,29 @@ export type Get3CollectionByCollectionIdResponses = {
      * 200
      */
     200: {
-        id?: number;
-        name?: string;
-        original_language?: string;
-        original_name?: string;
-        overview?: string;
-        poster_path?: string;
-        backdrop_path?: string;
-        parts?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            name?: string;
-            original_name?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            original_language?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            release_date?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        id: number;
+        name: string;
+        original_language: string;
+        original_name: string;
+        overview: string;
+        poster_path: string;
+        backdrop_path: string;
+        parts: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            name: string;
+            original_name: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            original_language: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            release_date: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
     };
 };
@@ -1195,24 +1195,24 @@ export type Get3CollectionByCollectionIdImagesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        backdrops?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: unknown;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        backdrops: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: unknown;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
-        posters?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: string;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        posters: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: string;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -1233,16 +1233,16 @@ export type Get3CollectionByCollectionIdTranslationsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        translations?: Array<{
-            iso_3166_1?: string;
-            iso_639_1?: string;
-            name?: string;
-            english_name?: string;
-            data?: {
-                title?: string;
-                overview?: string;
-                homepage?: string;
+        id: number;
+        translations: Array<{
+            iso_3166_1: string;
+            iso_639_1: string;
+            name: string;
+            english_name: string;
+            data: {
+                title: string;
+                overview: string;
+                homepage: string;
             };
         }>;
     };
@@ -1264,14 +1264,14 @@ export type Get3CompanyByCompanyIdResponses = {
      * 200
      */
     200: {
-        description?: string;
-        headquarters?: string;
-        homepage?: string;
-        id?: number;
-        logo_path?: string;
-        name?: string;
-        origin_country?: string;
-        parent_company?: unknown;
+        description: string;
+        headquarters: string;
+        homepage: string;
+        id: number;
+        logo_path: string;
+        name: string;
+        origin_country: string;
+        parent_company: unknown;
     };
 };
 
@@ -1291,10 +1291,10 @@ export type Get3CompanyByCompanyIdAlternativeNamesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            name?: string;
-            type?: string;
+        id: number;
+        results: Array<{
+            name: string;
+            type: string;
         }>;
     };
 };
@@ -1315,16 +1315,16 @@ export type Get3CompanyByCompanyIdImagesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        logos?: Array<{
-            aspect_ratio?: number;
-            file_path?: string;
-            height?: number;
-            id?: string;
-            file_type?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        logos: Array<{
+            aspect_ratio: number;
+            file_path: string;
+            height: number;
+            id: string;
+            file_type: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -1343,16 +1343,16 @@ export type Get3ConfigurationResponses = {
      * 200
      */
     200: {
-        images?: {
-            base_url?: string;
-            secure_base_url?: string;
-            backdrop_sizes?: Array<string>;
-            logo_sizes?: Array<string>;
-            poster_sizes?: Array<string>;
-            profile_sizes?: Array<string>;
-            still_sizes?: Array<string>;
+        images: {
+            base_url: string;
+            secure_base_url: string;
+            backdrop_sizes: Array<string>;
+            logo_sizes: Array<string>;
+            poster_sizes: Array<string>;
+            profile_sizes: Array<string>;
+            still_sizes: Array<string>;
         };
-        change_keys?: Array<string>;
+        change_keys: Array<string>;
     };
 };
 
@@ -1372,9 +1372,9 @@ export type Get3ConfigurationCountriesResponses = {
      * 200
      */
     200: Array<{
-        iso_3166_1?: string;
-        english_name?: string;
-        native_name?: string;
+        iso_3166_1: string;
+        english_name: string;
+        native_name: string;
     }>;
 };
 
@@ -1392,8 +1392,8 @@ export type Get3ConfigurationJobsResponses = {
      * 200
      */
     200: Array<{
-        department?: string;
-        jobs?: Array<string>;
+        department: string;
+        jobs: Array<string>;
     }>;
 };
 
@@ -1411,9 +1411,9 @@ export type Get3ConfigurationLanguagesResponses = {
      * 200
      */
     200: Array<{
-        iso_639_1?: string;
-        english_name?: string;
-        name?: string;
+        iso_639_1: string;
+        english_name: string;
+        name: string;
     }>;
 };
 
@@ -1447,8 +1447,8 @@ export type Get3ConfigurationTimezonesResponses = {
      * 200
      */
     200: Array<{
-        iso_3166_1?: string;
-        zones?: Array<string>;
+        iso_3166_1: string;
+        zones: Array<string>;
     }>;
 };
 
@@ -1470,50 +1470,50 @@ export type Get3CreditByCreditIdResponses = {
      * 200
      */
     200: {
-        credit_type?: string;
-        department?: string;
-        job?: string;
-        media?: {
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            name?: string;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            first_air_date?: string;
-            vote_average?: number;
-            vote_count?: number;
-            origin_country?: Array<string>;
-            character?: string;
-            episodes?: Array<unknown>;
-            seasons?: Array<{
-                air_date?: string;
-                episode_count?: number;
-                id?: number;
-                name?: string;
-                overview?: string;
-                poster_path?: string;
-                season_number?: number;
-                show_id?: number;
+        credit_type: string;
+        department: string;
+        job: string;
+        media: {
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            name: string;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            first_air_date: string;
+            vote_average: number;
+            vote_count: number;
+            origin_country: Array<string>;
+            character: string;
+            episodes: Array<unknown>;
+            seasons: Array<{
+                air_date: string;
+                episode_count: number;
+                id: number;
+                name: string;
+                overview: string;
+                poster_path: string;
+                season_number: number;
+                show_id: number;
             }>;
         };
-        media_type?: string;
-        id?: string;
-        person?: {
-            adult?: boolean;
-            id?: number;
-            name?: string;
-            original_name?: string;
-            media_type?: string;
-            popularity?: number;
-            gender?: number;
-            known_for_department?: string;
-            profile_path?: string;
+        media_type: string;
+        id: string;
+        person: {
+            adult: boolean;
+            id: number;
+            name: string;
+            original_name: string;
+            media_type: string;
+            popularity: number;
+            gender: number;
+            known_for_department: string;
+            profile_path: string;
         };
     };
 };
@@ -1613,25 +1613,25 @@ export type Get3DiscoverMovieResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1707,24 +1707,24 @@ export type Get3DiscoverTvResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            backdrop_path?: string;
-            first_air_date?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            name?: string;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            backdrop_path: string;
+            first_air_date: string;
+            genre_ids: Array<number>;
+            id: number;
+            name: string;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1747,27 +1747,27 @@ export type Get3FindByExternalIdResponses = {
      * 200
      */
     200: {
-        movie_results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            title?: string;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            release_date?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        movie_results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            title: string;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            release_date: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        person_results?: Array<unknown>;
-        tv_results?: Array<unknown>;
-        tv_episode_results?: Array<unknown>;
-        tv_season_results?: Array<unknown>;
+        person_results: Array<unknown>;
+        tv_results: Array<unknown>;
+        tv_episode_results: Array<unknown>;
+        tv_season_results: Array<unknown>;
     };
 };
 
@@ -1787,9 +1787,9 @@ export type Get3GenreMovieListResponses = {
      * 200
      */
     200: {
-        genres?: Array<{
-            id?: number;
-            name?: string;
+        genres: Array<{
+            id: number;
+            name: string;
         }>;
     };
 };
@@ -1810,9 +1810,9 @@ export type Get3GenreTvListResponses = {
      * 200
      */
     200: {
-        genres?: Array<{
-            id?: number;
-            name?: string;
+        genres: Array<{
+            id: number;
+            name: string;
         }>;
     };
 };
@@ -1837,26 +1837,26 @@ export type Get3GuestSessionByGuestSessionIdRatedMoviesResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            rating?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            rating: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1880,26 +1880,26 @@ export type Get3GuestSessionByGuestSessionIdRatedTvResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
-            rating?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
+            rating: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1923,24 +1923,24 @@ export type Get3GuestSessionByGuestSessionIdRatedTvEpisodesResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            air_date?: string;
-            episode_number?: number;
-            id?: number;
-            name?: string;
-            overview?: string;
-            production_code?: string;
-            runtime?: number;
-            season_number?: number;
-            show_id?: number;
-            still_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            rating?: number;
+        page: number;
+        results: Array<{
+            air_date: string;
+            episode_number: number;
+            id: number;
+            name: string;
+            overview: string;
+            production_code: string;
+            runtime: number;
+            season_number: number;
+            show_id: number;
+            still_path: string;
+            vote_average: number;
+            vote_count: number;
+            rating: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -1960,8 +1960,8 @@ export type Get3KeywordByKeywordIdResponses = {
      * 200
      */
     200: {
-        id?: number;
-        name?: string;
+        id: number;
+        name: string;
     };
 };
 
@@ -1985,26 +1985,26 @@ export type Get3KeywordByKeywordIdMoviesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        id: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2012,7 +2012,7 @@ export type Get3KeywordByKeywordIdMoviesResponse = Get3KeywordByKeywordIdMoviesR
 
 export type Post3ListByListIdAddItemData = {
     body?: {
-        RAW_BODY?: string;
+        RAW_BODY: string;
     };
     path: {
         list_id: number;
@@ -2028,8 +2028,8 @@ export type Post3ListByListIdAddItemResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -2052,8 +2052,8 @@ export type Get3ListByListIdItemStatusResponses = {
      * 200
      */
     200: {
-        id?: number;
-        item_present?: boolean;
+        id: number;
+        item_present: boolean;
     };
 };
 
@@ -2076,8 +2076,8 @@ export type Post3ListByListIdClearResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -2099,10 +2099,10 @@ export type Post3ListResponses = {
      * 200
      */
     200: {
-        status_message?: string;
-        success?: boolean;
-        status_code?: number;
-        list_id?: number;
+        status_message: string;
+        success: boolean;
+        status_code: number;
+        list_id: number;
     };
 };
 
@@ -2124,8 +2124,8 @@ export type Delete3ListByListIdResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -2148,31 +2148,31 @@ export type Get3ListByListIdResponses = {
      * 200
      */
     200: {
-        created_by?: string;
-        description?: string;
-        favorite_count?: number;
-        id?: string;
-        items?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            media_type?: string;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        created_by: string;
+        description: string;
+        favorite_count: number;
+        id: string;
+        items: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            media_type: string;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        item_count?: number;
-        iso_639_1?: string;
-        name?: string;
-        poster_path?: string;
+        item_count: number;
+        iso_639_1: string;
+        name: string;
+        poster_path: string;
     };
 };
 
@@ -2196,8 +2196,8 @@ export type Post3ListByListIdRemoveItemResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -2222,29 +2222,29 @@ export type Get3MovieNowPlayingResponses = {
      * 200
      */
     200: {
-        dates?: {
-            maximum?: string;
-            minimum?: string;
+        dates: {
+            maximum: string;
+            minimum: string;
         };
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2269,25 +2269,25 @@ export type Get3MoviePopularResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2312,25 +2312,25 @@ export type Get3MovieTopRatedResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2355,29 +2355,29 @@ export type Get3MovieUpcomingResponses = {
      * 200
      */
     200: {
-        dates?: {
-            maximum?: string;
-            minimum?: string;
+        dates: {
+            maximum: string;
+            minimum: string;
         };
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2403,52 +2403,52 @@ export type Get3MovieByMovieIdResponses = {
      * 200
      */
     200: {
-        adult?: boolean;
-        backdrop_path?: string;
-        belongs_to_collection?: {
-            id?: number;
-            name?: string;
-            poster_path?: string;
-            backdrop_path?: string;
+        adult: boolean;
+        backdrop_path: string;
+        belongs_to_collection: {
+            id: number;
+            name: string;
+            poster_path: string;
+            backdrop_path: string;
         };
-        budget?: number;
-        genres?: Array<{
-            id?: number;
-            name?: string;
+        budget: number;
+        genres: Array<{
+            id: number;
+            name: string;
         }>;
-        homepage?: string;
-        id?: number;
-        imdb_id?: string;
-        origin_country?: Array<string>;
-        original_language?: string;
-        original_title?: string;
-        overview?: string;
-        popularity?: number;
-        poster_path?: string;
-        production_companies?: Array<{
-            id?: number;
-            logo_path?: string;
-            name?: string;
-            origin_country?: string;
+        homepage: string;
+        id: number;
+        imdb_id: string;
+        origin_country: Array<string>;
+        original_language: string;
+        original_title: string;
+        overview: string;
+        popularity: number;
+        poster_path: string;
+        production_companies: Array<{
+            id: number;
+            logo_path: string;
+            name: string;
+            origin_country: string;
         }>;
-        production_countries?: Array<{
-            iso_3166_1?: string;
-            name?: string;
+        production_countries: Array<{
+            iso_3166_1: string;
+            name: string;
         }>;
-        release_date?: string;
-        revenue?: number;
-        runtime?: number;
-        spoken_languages?: Array<{
-            english_name?: string;
-            iso_639_1?: string;
-            name?: string;
+        release_date: string;
+        revenue: number;
+        runtime: number;
+        spoken_languages: Array<{
+            english_name: string;
+            iso_639_1: string;
+            name: string;
         }>;
-        status?: string;
-        tagline?: string;
-        title?: string;
-        video?: boolean;
-        vote_average?: number;
-        vote_count?: number;
+        status: string;
+        tagline: string;
+        title: string;
+        video: boolean;
+        vote_average: number;
+        vote_count: number;
     };
 };
 
@@ -2471,12 +2471,12 @@ export type Get3MovieByMovieIdAccountStatesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        favorite?: boolean;
-        rated?: {
-            value?: number;
+        id: number;
+        favorite: boolean;
+        rated: {
+            value: number;
         };
-        watchlist?: boolean;
+        watchlist: boolean;
     };
 };
 
@@ -2501,11 +2501,11 @@ export type Get3MovieByMovieIdAlternativeTitlesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        titles?: Array<{
-            iso_3166_1?: string;
-            title?: string;
-            type?: string;
+        id: number;
+        titles: Array<{
+            iso_3166_1: string;
+            title: string;
+            type: string;
         }>;
     };
 };
@@ -2530,17 +2530,17 @@ export type Get3MovieByMovieIdChangesResponses = {
      * 200
      */
     200: {
-        changes?: Array<{
-            key?: string;
-            items?: Array<{
-                id?: string;
-                action?: string;
-                time?: string;
-                iso_639_1?: string;
-                iso_3166_1?: string;
-                value?: {
-                    poster?: {
-                        file_path?: string;
+        changes: Array<{
+            key: string;
+            items: Array<{
+                id: string;
+                action: string;
+                time: string;
+                iso_639_1: string;
+                iso_3166_1: string;
+                value: {
+                    poster: {
+                        file_path: string;
                     };
                 };
             }>;
@@ -2566,33 +2566,33 @@ export type Get3MovieByMovieIdCreditsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        cast?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            cast_id?: number;
-            character?: string;
-            credit_id?: string;
-            order?: number;
+        id: number;
+        cast: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            cast_id: number;
+            character: string;
+            credit_id: string;
+            order: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            credit_id?: string;
-            department?: string;
-            job?: string;
+        crew: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            credit_id: string;
+            department: string;
+            job: string;
         }>;
     };
 };
@@ -2613,12 +2613,12 @@ export type Get3MovieByMovieIdExternalIdsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        imdb_id?: string;
-        wikidata_id?: unknown;
-        facebook_id?: string;
-        instagram_id?: unknown;
-        twitter_id?: unknown;
+        id: number;
+        imdb_id: string;
+        wikidata_id: unknown;
+        facebook_id: string;
+        instagram_id: unknown;
+        twitter_id: unknown;
     };
 };
 
@@ -2644,33 +2644,33 @@ export type Get3MovieByMovieIdImagesResponses = {
      * 200
      */
     200: {
-        backdrops?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: unknown;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        backdrops: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: unknown;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
-        id?: number;
-        logos?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: string;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        logos: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: string;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
-        posters?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: string;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        posters: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: string;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -2691,10 +2691,10 @@ export type Get3MovieByMovieIdKeywordsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        keywords?: Array<{
-            id?: number;
-            name?: string;
+        id: number;
+        keywords: Array<{
+            id: number;
+            name: string;
         }>;
     };
 };
@@ -2713,31 +2713,31 @@ export type Get3MovieLatestResponses = {
      * 200
      */
     200: {
-        adult?: boolean;
-        backdrop_path?: unknown;
-        belongs_to_collection?: unknown;
-        budget?: number;
-        genres?: Array<unknown>;
-        homepage?: string;
-        id?: number;
-        imdb_id?: unknown;
-        original_language?: string;
-        original_title?: string;
-        overview?: string;
-        popularity?: number;
-        poster_path?: unknown;
-        production_companies?: Array<unknown>;
-        production_countries?: Array<unknown>;
-        release_date?: string;
-        revenue?: number;
-        runtime?: number;
-        spoken_languages?: Array<unknown>;
-        status?: string;
-        tagline?: string;
-        title?: string;
-        video?: boolean;
-        vote_average?: number;
-        vote_count?: number;
+        adult: boolean;
+        backdrop_path: unknown;
+        belongs_to_collection: unknown;
+        budget: number;
+        genres: Array<unknown>;
+        homepage: string;
+        id: number;
+        imdb_id: unknown;
+        original_language: string;
+        original_title: string;
+        overview: string;
+        popularity: number;
+        poster_path: unknown;
+        production_companies: Array<unknown>;
+        production_countries: Array<unknown>;
+        release_date: string;
+        revenue: number;
+        runtime: number;
+        spoken_languages: Array<unknown>;
+        status: string;
+        tagline: string;
+        title: string;
+        video: boolean;
+        vote_average: number;
+        vote_count: number;
     };
 };
 
@@ -2760,20 +2760,20 @@ export type Get3MovieByMovieIdListsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        page?: number;
-        results?: Array<{
-            description?: string;
-            favorite_count?: number;
-            id?: number;
-            item_count?: number;
-            iso_639_1?: string;
-            list_type?: string;
-            name?: string;
-            poster_path?: unknown;
+        id: number;
+        page: number;
+        results: Array<{
+            description: string;
+            favorite_count: number;
+            id: number;
+            item_count: number;
+            iso_639_1: string;
+            list_type: string;
+            name: string;
+            poster_path: unknown;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2816,16 +2816,16 @@ export type Get3MovieByMovieIdReleaseDatesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            iso_3166_1?: string;
-            release_dates?: Array<{
-                certification?: string;
-                descriptors?: Array<unknown>;
-                iso_639_1?: string;
-                note?: string;
-                release_date?: string;
-                type?: number;
+        id: number;
+        results: Array<{
+            iso_3166_1: string;
+            release_dates: Array<{
+                certification: string;
+                descriptors: Array<unknown>;
+                iso_639_1: string;
+                note: string;
+                release_date: string;
+                type: number;
             }>;
         }>;
     };
@@ -2850,24 +2850,24 @@ export type Get3MovieByMovieIdReviewsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        page?: number;
-        results?: Array<{
-            author?: string;
-            author_details?: {
-                name?: string;
-                username?: string;
-                avatar_path?: string;
-                rating?: unknown;
+        id: number;
+        page: number;
+        results: Array<{
+            author: string;
+            author_details: {
+                name: string;
+                username: string;
+                avatar_path: string;
+                rating: unknown;
             };
-            content?: string;
-            created_at?: string;
-            id?: string;
-            updated_at?: string;
-            url?: string;
+            content: string;
+            created_at: string;
+            id: string;
+            updated_at: string;
+            url: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2890,25 +2890,25 @@ export type Get3MovieByMovieIdSimilarResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -2928,18 +2928,18 @@ export type Get3MovieByMovieIdTranslationsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        translations?: Array<{
-            iso_3166_1?: string;
-            iso_639_1?: string;
-            name?: string;
-            english_name?: string;
-            data?: {
-                homepage?: string;
-                overview?: string;
-                runtime?: number;
-                tagline?: string;
-                title?: string;
+        id: number;
+        translations: Array<{
+            iso_3166_1: string;
+            iso_639_1: string;
+            name: string;
+            english_name: string;
+            data: {
+                homepage: string;
+                overview: string;
+                runtime: number;
+                tagline: string;
+                title: string;
             };
         }>;
     };
@@ -2963,18 +2963,18 @@ export type Get3MovieByMovieIdVideosResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            iso_639_1?: string;
-            iso_3166_1?: string;
-            name?: string;
-            key?: string;
-            site?: string;
-            size?: number;
-            type?: string;
-            official?: boolean;
-            published_at?: string;
-            id?: string;
+        id: number;
+        results: Array<{
+            iso_639_1: string;
+            iso_3166_1: string;
+            name: string;
+            key: string;
+            site: string;
+            size: number;
+            type: string;
+            official: boolean;
+            published_at: string;
+            id: string;
         }>;
     };
 };
@@ -2995,1479 +2995,1479 @@ export type Get3MovieByMovieIdWatchProvidersResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: {
-            AE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AL?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AR?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BA?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BE?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BG?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BH?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CA?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CL?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CO?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CV?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DK?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EC?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EE?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EG?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ES?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                ads?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FJ?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FR?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GF?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HR?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                ads?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ID?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IE?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IL?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IQ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IS?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JP?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            KR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            KW?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LT?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LV?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MD?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MU?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MX?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MZ?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NL?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NO?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            OM?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PE?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PL?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            QA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RU?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SE?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SI?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SK?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SV?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TR?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TW?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            UG?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            US?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            UY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            VE?: {
-                link?: string;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            YE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ZA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
+        id: number;
+        results: {
+            AE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AL: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AR: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BA: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BE: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BG: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BH: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CA: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CL: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CO: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CV: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DK: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EC: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EE: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EG: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ES: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                ads: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FJ: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FR: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GF: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HR: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                ads: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ID: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IE: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IL: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IQ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IS: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JP: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            KR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            KW: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LT: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LV: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MD: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MU: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MX: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MZ: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NL: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NO: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            OM: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PE: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PL: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            QA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RU: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SE: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SI: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SK: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SV: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TR: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TW: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            UG: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            US: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            UY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            VE: {
+                link: string;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            YE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ZA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
                 }>;
             };
         };
@@ -4496,8 +4496,8 @@ export type Delete3MovieByMovieIdRatingResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -4525,8 +4525,8 @@ export type Post3MovieByMovieIdRatingResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -4546,12 +4546,12 @@ export type Get3NetworkByNetworkIdResponses = {
      * 200
      */
     200: {
-        headquarters?: string;
-        homepage?: string;
-        id?: number;
-        logo_path?: string;
-        name?: string;
-        origin_country?: string;
+        headquarters: string;
+        homepage: string;
+        id: number;
+        logo_path: string;
+        name: string;
+        origin_country: string;
     };
 };
 
@@ -4571,10 +4571,10 @@ export type Get3NetworkByNetworkIdAlternativeNamesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            name?: string;
-            type?: string;
+        id: number;
+        results: Array<{
+            name: string;
+            type: string;
         }>;
     };
 };
@@ -4595,16 +4595,16 @@ export type Get3NetworkByNetworkIdImagesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        logos?: Array<{
-            aspect_ratio?: number;
-            file_path?: string;
-            height?: number;
-            id?: string;
-            file_type?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        logos: Array<{
+            aspect_ratio: number;
+            file_path: string;
+            height: number;
+            id: string;
+            file_type: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -4626,34 +4626,34 @@ export type Get3PersonPopularResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for?: Array<{
-                adult?: boolean;
-                backdrop_path?: string;
-                genre_ids?: Array<number>;
-                id?: number;
-                media_type?: string;
-                original_language?: string;
-                original_title?: string;
-                overview?: string;
-                poster_path?: string;
-                release_date?: string;
-                title?: string;
-                video?: boolean;
-                vote_average?: number;
-                vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for: Array<{
+                adult: boolean;
+                backdrop_path: string;
+                genre_ids: Array<number>;
+                id: number;
+                media_type: string;
+                original_language: string;
+                original_title: string;
+                overview: string;
+                poster_path: string;
+                release_date: string;
+                title: string;
+                video: boolean;
+                vote_average: number;
+                vote_count: number;
             }>;
-            known_for_department?: string;
-            name?: string;
-            popularity?: number;
-            profile_path?: string;
+            known_for_department: string;
+            name: string;
+            popularity: number;
+            profile_path: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -4679,20 +4679,20 @@ export type Get3PersonByPersonIdResponses = {
      * 200
      */
     200: {
-        adult?: boolean;
-        also_known_as?: Array<string>;
-        biography?: string;
-        birthday?: string;
-        deathday?: unknown;
-        gender?: number;
-        homepage?: unknown;
-        id?: number;
-        imdb_id?: string;
-        known_for_department?: string;
-        name?: string;
-        place_of_birth?: string;
-        popularity?: number;
-        profile_path?: string;
+        adult: boolean;
+        also_known_as: Array<string>;
+        biography: string;
+        birthday: string;
+        deathday: unknown;
+        gender: number;
+        homepage: unknown;
+        id: number;
+        imdb_id: string;
+        known_for_department: string;
+        name: string;
+        place_of_birth: string;
+        popularity: number;
+        profile_path: string;
     };
 };
 
@@ -4716,15 +4716,15 @@ export type Get3PersonByPersonIdChangesResponses = {
      * 200
      */
     200: {
-        changes?: Array<{
-            key?: string;
-            items?: Array<{
-                id?: string;
-                action?: string;
-                time?: string;
-                iso_639_1?: string;
-                iso_3166_1?: string;
-                value?: string;
+        changes: Array<{
+            key: string;
+            items: Array<{
+                id: string;
+                action: string;
+                time: string;
+                iso_639_1: string;
+                iso_3166_1: string;
+                value: string;
             }>;
         }>;
     };
@@ -4748,47 +4748,47 @@ export type Get3PersonByPersonIdCombinedCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            character?: string;
-            credit_id?: string;
-            order?: number;
-            media_type?: string;
+        cast: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            character: string;
+            credit_id: string;
+            order: number;
+            media_type: string;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            credit_id?: string;
-            department?: string;
-            job?: string;
-            media_type?: string;
+        crew: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            credit_id: string;
+            department: string;
+            job: string;
+            media_type: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -4808,17 +4808,17 @@ export type Get3PersonByPersonIdExternalIdsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        freebase_mid?: string;
-        freebase_id?: string;
-        imdb_id?: string;
-        tvrage_id?: number;
-        wikidata_id?: string;
-        facebook_id?: string;
-        instagram_id?: string;
-        tiktok_id?: string;
-        twitter_id?: string;
-        youtube_id?: unknown;
+        id: number;
+        freebase_mid: string;
+        freebase_id: string;
+        imdb_id: string;
+        tvrage_id: number;
+        wikidata_id: string;
+        facebook_id: string;
+        instagram_id: string;
+        tiktok_id: string;
+        twitter_id: string;
+        youtube_id: unknown;
     };
 };
 
@@ -4838,15 +4838,15 @@ export type Get3PersonByPersonIdImagesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        profiles?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: unknown;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        profiles: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: unknown;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -4865,20 +4865,20 @@ export type Get3PersonLatestResponses = {
      * 200
      */
     200: {
-        adult?: boolean;
-        also_known_as?: Array<unknown>;
-        biography?: string;
-        birthday?: unknown;
-        deathday?: unknown;
-        gender?: number;
-        homepage?: unknown;
-        id?: number;
-        imdb_id?: unknown;
-        known_for_department?: unknown;
-        name?: string;
-        place_of_birth?: unknown;
-        popularity?: number;
-        profile_path?: unknown;
+        adult: boolean;
+        also_known_as: Array<unknown>;
+        biography: string;
+        birthday: unknown;
+        deathday: unknown;
+        gender: number;
+        homepage: unknown;
+        id: number;
+        imdb_id: unknown;
+        known_for_department: unknown;
+        name: string;
+        place_of_birth: unknown;
+        popularity: number;
+        profile_path: unknown;
     };
 };
 
@@ -4900,45 +4900,45 @@ export type Get3PersonByPersonIdMovieCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            character?: string;
-            credit_id?: string;
-            order?: number;
+        cast: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            character: string;
+            credit_id: string;
+            order: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            credit_id?: string;
-            department?: string;
-            job?: string;
+        crew: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            credit_id: string;
+            department: string;
+            job: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -4960,46 +4960,46 @@ export type Get3PersonByPersonIdTvCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
-            character?: string;
-            credit_id?: string;
-            episode_count?: number;
+        cast: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
+            character: string;
+            credit_id: string;
+            episode_count: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
-            credit_id?: string;
-            department?: string;
-            episode_count?: number;
-            job?: string;
+        crew: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
+            credit_id: string;
+            department: string;
+            episode_count: number;
+            job: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -5021,39 +5021,39 @@ export type Get3PersonByPersonIdTaggedImagesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        page?: number;
-        results?: Array<{
-            aspect_ratio?: number;
-            file_path?: string;
-            height?: number;
-            id?: string;
-            iso_639_1?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
-            image_type?: string;
-            media?: {
-                adult?: boolean;
-                backdrop_path?: string;
-                id?: number;
-                title?: string;
-                original_language?: string;
-                original_title?: string;
-                overview?: string;
-                poster_path?: string;
-                media_type?: string;
-                genre_ids?: Array<number>;
-                popularity?: number;
-                release_date?: string;
-                video?: boolean;
-                vote_average?: number;
-                vote_count?: number;
+        id: number;
+        page: number;
+        results: Array<{
+            aspect_ratio: number;
+            file_path: string;
+            height: number;
+            id: string;
+            iso_639_1: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
+            image_type: string;
+            media: {
+                adult: boolean;
+                backdrop_path: string;
+                id: number;
+                title: string;
+                original_language: string;
+                original_title: string;
+                overview: string;
+                poster_path: string;
+                media_type: string;
+                genre_ids: Array<number>;
+                popularity: number;
+                release_date: string;
+                video: boolean;
+                vote_average: number;
+                vote_count: number;
             };
-            media_type?: string;
+            media_type: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5073,15 +5073,15 @@ export type Get3PersonByPersonIdTranslationsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        translations?: Array<{
-            iso_3166_1?: string;
-            iso_639_1?: string;
-            name?: string;
-            english_name?: string;
-            data?: {
-                biography?: string;
-                name?: string;
+        id: number;
+        translations: Array<{
+            iso_3166_1: string;
+            iso_639_1: string;
+            name: string;
+            english_name: string;
+            data: {
+                biography: string;
+                name: string;
             };
         }>;
     };
@@ -5103,22 +5103,22 @@ export type Get3ReviewByReviewIdResponses = {
      * 200
      */
     200: {
-        id?: string;
-        author?: string;
-        author_details?: {
-            name?: string;
-            username?: string;
-            avatar_path?: string;
-            rating?: number;
+        id: string;
+        author: string;
+        author_details: {
+            name: string;
+            username: string;
+            avatar_path: string;
+            rating: number;
         };
-        content?: string;
-        created_at?: string;
-        iso_639_1?: string;
-        media_id?: number;
-        media_title?: string;
-        media_type?: string;
-        updated_at?: string;
-        url?: string;
+        content: string;
+        created_at: string;
+        iso_639_1: string;
+        media_id: number;
+        media_title: string;
+        media_type: string;
+        updated_at: string;
+        url: string;
     };
 };
 
@@ -5142,19 +5142,19 @@ export type Get3SearchCollectionResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            name?: string;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            poster_path?: string;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            name: string;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            poster_path: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5175,15 +5175,15 @@ export type Get3SearchCompanyResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            id?: number;
-            logo_path?: string;
-            name?: string;
-            origin_country?: string;
+        page: number;
+        results: Array<{
+            id: number;
+            logo_path: string;
+            name: string;
+            origin_country: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5204,13 +5204,13 @@ export type Get3SearchKeywordResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            id?: number;
-            name?: string;
+        page: number;
+        results: Array<{
+            id: number;
+            name: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5236,25 +5236,25 @@ export type Get3SearchMovieResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            release_date?: string;
-            title?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            release_date: string;
+            title: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5277,28 +5277,28 @@ export type Get3SearchMultiResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            title?: string;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            release_date?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
-            name?: string;
-            original_name?: string;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            title: string;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            release_date: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
+            name: string;
+            original_name: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5321,36 +5321,36 @@ export type Get3SearchPersonResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            known_for?: Array<{
-                adult?: boolean;
-                backdrop_path?: string;
-                id?: number;
-                title?: string;
-                original_language?: string;
-                original_title?: string;
-                overview?: string;
-                poster_path?: string;
-                media_type?: string;
-                genre_ids?: Array<number>;
-                popularity?: number;
-                release_date?: string;
-                video?: boolean;
-                vote_average?: number;
-                vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            known_for: Array<{
+                adult: boolean;
+                backdrop_path: string;
+                id: number;
+                title: string;
+                original_language: string;
+                original_title: string;
+                overview: string;
+                poster_path: string;
+                media_type: string;
+                genre_ids: Array<number>;
+                popularity: number;
+                release_date: string;
+                video: boolean;
+                vote_average: number;
+                vote_count: number;
             }>;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5381,25 +5381,25 @@ export type Get3SearchTvResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5424,26 +5424,26 @@ export type Get3TrendingAllByTimeWindowResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            title?: string;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            release_date?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            title: string;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            release_date: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5468,26 +5468,26 @@ export type Get3TrendingMovieByTimeWindowResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            title?: string;
-            original_language?: string;
-            original_title?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            release_date?: string;
-            video?: boolean;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            title: string;
+            original_language: string;
+            original_title: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            release_date: string;
+            video: boolean;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5512,37 +5512,37 @@ export type Get3TrendingPersonByTimeWindowResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            id?: number;
-            name?: string;
-            original_name?: string;
-            media_type?: string;
-            popularity?: number;
-            gender?: number;
-            known_for_department?: string;
-            profile_path?: string;
-            known_for?: Array<{
-                adult?: boolean;
-                backdrop_path?: string;
-                id?: number;
-                title?: string;
-                original_language?: string;
-                original_title?: string;
-                overview?: string;
-                poster_path?: string;
-                media_type?: string;
-                genre_ids?: Array<number>;
-                popularity?: number;
-                release_date?: string;
-                video?: boolean;
-                vote_average?: number;
-                vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            id: number;
+            name: string;
+            original_name: string;
+            media_type: string;
+            popularity: number;
+            gender: number;
+            known_for_department: string;
+            profile_path: string;
+            known_for: Array<{
+                adult: boolean;
+                backdrop_path: string;
+                id: number;
+                title: string;
+                original_language: string;
+                original_title: string;
+                overview: string;
+                poster_path: string;
+                media_type: string;
+                genre_ids: Array<number>;
+                popularity: number;
+                release_date: string;
+                video: boolean;
+                vote_average: number;
+                vote_count: number;
             }>;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5567,26 +5567,26 @@ export type Get3TrendingTvByTimeWindowResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            name?: string;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            first_air_date?: string;
-            vote_average?: number;
-            vote_count?: number;
-            origin_country?: Array<string>;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            name: string;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            first_air_date: string;
+            vote_average: number;
+            vote_count: number;
+            origin_country: Array<string>;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5608,24 +5608,24 @@ export type Get3TvAiringTodayResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            backdrop_path?: string;
-            first_air_date?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            name?: string;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            backdrop_path: string;
+            first_air_date: string;
+            genre_ids: Array<number>;
+            id: number;
+            name: string;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5647,24 +5647,24 @@ export type Get3TvOnTheAirResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            backdrop_path?: string;
-            first_air_date?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            name?: string;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            backdrop_path: string;
+            first_air_date: string;
+            genre_ids: Array<number>;
+            id: number;
+            name: string;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5685,24 +5685,24 @@ export type Get3TvPopularResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            backdrop_path?: string;
-            first_air_date?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            name?: string;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            backdrop_path: string;
+            first_air_date: string;
+            genre_ids: Array<number>;
+            id: number;
+            name: string;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5723,24 +5723,24 @@ export type Get3TvTopRatedResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            backdrop_path?: string;
-            first_air_date?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            name?: string;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            backdrop_path: string;
+            first_air_date: string;
+            genre_ids: Array<number>;
+            id: number;
+            name: string;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -5766,86 +5766,86 @@ export type Get3TvBySeriesIdResponses = {
      * 200
      */
     200: {
-        adult?: boolean;
-        backdrop_path?: string;
-        created_by?: Array<{
-            id?: number;
-            credit_id?: string;
-            name?: string;
-            gender?: number;
-            profile_path?: string;
+        adult: boolean;
+        backdrop_path: string;
+        created_by: Array<{
+            id: number;
+            credit_id: string;
+            name: string;
+            gender: number;
+            profile_path: string;
         }>;
-        episode_run_time?: Array<number>;
-        first_air_date?: string;
-        genres?: Array<{
-            id?: number;
-            name?: string;
+        episode_run_time: Array<number>;
+        first_air_date: string;
+        genres: Array<{
+            id: number;
+            name: string;
         }>;
-        homepage?: string;
-        id?: number;
-        in_production?: boolean;
-        languages?: Array<string>;
-        last_air_date?: string;
-        last_episode_to_air?: {
-            id?: number;
-            name?: string;
-            overview?: string;
-            vote_average?: number;
-            vote_count?: number;
-            air_date?: string;
-            episode_number?: number;
-            production_code?: string;
-            runtime?: number;
-            season_number?: number;
-            show_id?: number;
-            still_path?: string;
+        homepage: string;
+        id: number;
+        in_production: boolean;
+        languages: Array<string>;
+        last_air_date: string;
+        last_episode_to_air: {
+            id: number;
+            name: string;
+            overview: string;
+            vote_average: number;
+            vote_count: number;
+            air_date: string;
+            episode_number: number;
+            production_code: string;
+            runtime: number;
+            season_number: number;
+            show_id: number;
+            still_path: string;
         };
-        name?: string;
-        next_episode_to_air?: unknown;
-        networks?: Array<{
-            id?: number;
-            logo_path?: string;
-            name?: string;
-            origin_country?: string;
+        name: string;
+        next_episode_to_air: unknown;
+        networks: Array<{
+            id: number;
+            logo_path: string;
+            name: string;
+            origin_country: string;
         }>;
-        number_of_episodes?: number;
-        number_of_seasons?: number;
-        origin_country?: Array<string>;
-        original_language?: string;
-        original_name?: string;
-        overview?: string;
-        popularity?: number;
-        poster_path?: string;
-        production_companies?: Array<{
-            id?: number;
-            logo_path?: string;
-            name?: string;
-            origin_country?: string;
+        number_of_episodes: number;
+        number_of_seasons: number;
+        origin_country: Array<string>;
+        original_language: string;
+        original_name: string;
+        overview: string;
+        popularity: number;
+        poster_path: string;
+        production_companies: Array<{
+            id: number;
+            logo_path: string;
+            name: string;
+            origin_country: string;
         }>;
-        production_countries?: Array<{
-            iso_3166_1?: string;
-            name?: string;
+        production_countries: Array<{
+            iso_3166_1: string;
+            name: string;
         }>;
-        seasons?: Array<{
-            air_date?: string;
-            episode_count?: number;
-            id?: number;
-            name?: string;
-            overview?: string;
-            poster_path?: string;
-            season_number?: number;
-            vote_average?: number;
+        seasons: Array<{
+            air_date: string;
+            episode_count: number;
+            id: number;
+            name: string;
+            overview: string;
+            poster_path: string;
+            season_number: number;
+            vote_average: number;
         }>;
-        spoken_languages?: Array<{
-            english_name?: string;
-            iso_639_1?: string;
-            name?: string;
+        spoken_languages: Array<{
+            english_name: string;
+            iso_639_1: string;
+            name: string;
         }>;
-        status?: string;
-        tagline?: string;
-        type?: string;
-        vote_average?: number;
-        vote_count?: number;
+        status: string;
+        tagline: string;
+        type: string;
+        vote_average: number;
+        vote_count: number;
     };
 };
 
@@ -5868,12 +5868,12 @@ export type Get3TvBySeriesIdAccountStatesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        favorite?: boolean;
-        rated?: {
-            value?: number;
+        id: number;
+        favorite: boolean;
+        rated: {
+            value: number;
         };
-        watchlist?: boolean;
+        watchlist: boolean;
     };
 };
 
@@ -5895,41 +5895,41 @@ export type Get3TvBySeriesIdAggregateCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            roles?: Array<{
-                credit_id?: string;
-                character?: string;
-                episode_count?: number;
+        cast: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            roles: Array<{
+                credit_id: string;
+                character: string;
+                episode_count: number;
             }>;
-            total_episode_count?: number;
-            order?: number;
+            total_episode_count: number;
+            order: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            jobs?: Array<{
-                credit_id?: string;
-                job?: string;
-                episode_count?: number;
+        crew: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            jobs: Array<{
+                credit_id: string;
+                job: string;
+                episode_count: number;
             }>;
-            department?: string;
-            total_episode_count?: number;
+            department: string;
+            total_episode_count: number;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -5949,11 +5949,11 @@ export type Get3TvBySeriesIdAlternativeTitlesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            iso_3166_1?: string;
-            title?: string;
-            type?: string;
+        id: number;
+        results: Array<{
+            iso_3166_1: string;
+            title: string;
+            type: string;
         }>;
     };
 };
@@ -5978,24 +5978,24 @@ export type Get3TvBySeriesIdChangesResponses = {
      * 200
      */
     200: {
-        changes?: Array<{
-            key?: string;
-            items?: Array<{
-                id?: string;
-                action?: string;
-                time?: string;
-                iso_639_1?: string;
-                iso_3166_1?: string;
-                value?: {
-                    poster?: {
-                        file_path?: string;
-                        iso_639_1?: string;
+        changes: Array<{
+            key: string;
+            items: Array<{
+                id: string;
+                action: string;
+                time: string;
+                iso_639_1: string;
+                iso_3166_1: string;
+                value: {
+                    poster: {
+                        file_path: string;
+                        iso_639_1: string;
                     };
                 };
-                original_value?: {
-                    poster?: {
-                        file_path?: string;
-                        iso_639_1?: string;
+                original_value: {
+                    poster: {
+                        file_path: string;
+                        iso_639_1: string;
                     };
                 };
             }>;
@@ -6019,12 +6019,12 @@ export type Get3TvBySeriesIdContentRatingsResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            descriptors?: Array<unknown>;
-            iso_3166_1?: string;
-            rating?: string;
+        results: Array<{
+            descriptors: Array<unknown>;
+            iso_3166_1: string;
+            rating: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -6046,33 +6046,33 @@ export type Get3TvBySeriesIdCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            character?: string;
-            credit_id?: string;
-            order?: number;
+        cast: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            character: string;
+            credit_id: string;
+            order: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            credit_id?: string;
-            department?: string;
-            job?: string;
+        crew: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            credit_id: string;
+            department: string;
+            job: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -6092,21 +6092,21 @@ export type Get3TvBySeriesIdEpisodeGroupsResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            description?: string;
-            episode_count?: number;
-            group_count?: number;
-            id?: string;
-            name?: string;
-            network?: {
-                id?: number;
-                logo_path?: string;
-                name?: string;
-                origin_country?: string;
+        results: Array<{
+            description: string;
+            episode_count: number;
+            group_count: number;
+            id: string;
+            name: string;
+            network: {
+                id: number;
+                logo_path: string;
+                name: string;
+                origin_country: string;
             };
-            type?: number;
+            type: number;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -6126,16 +6126,16 @@ export type Get3TvBySeriesIdExternalIdsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        imdb_id?: string;
-        freebase_mid?: string;
-        freebase_id?: string;
-        tvdb_id?: number;
-        tvrage_id?: number;
-        wikidata_id?: string;
-        facebook_id?: string;
-        instagram_id?: string;
-        twitter_id?: string;
+        id: number;
+        imdb_id: string;
+        freebase_mid: string;
+        freebase_id: string;
+        tvdb_id: number;
+        tvrage_id: number;
+        wikidata_id: string;
+        facebook_id: string;
+        instagram_id: string;
+        twitter_id: string;
     };
 };
 
@@ -6161,33 +6161,33 @@ export type Get3TvBySeriesIdImagesResponses = {
      * 200
      */
     200: {
-        backdrops?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: unknown;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        backdrops: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: unknown;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
-        id?: number;
-        logos?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: string;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        logos: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: string;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
-        posters?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: string;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        posters: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: string;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -6208,10 +6208,10 @@ export type Get3TvBySeriesIdKeywordsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            name?: string;
-            id?: number;
+        id: number;
+        results: Array<{
+            name: string;
+            id: number;
         }>;
     };
 };
@@ -6230,59 +6230,59 @@ export type Get3TvLatestResponses = {
      * 200
      */
     200: {
-        adult?: boolean;
-        backdrop_path?: unknown;
-        created_by?: Array<unknown>;
-        episode_run_time?: Array<unknown>;
-        first_air_date?: string;
-        genres?: Array<unknown>;
-        homepage?: string;
-        id?: number;
-        in_production?: boolean;
-        languages?: Array<unknown>;
-        last_air_date?: string;
-        last_episode_to_air?: {
-            id?: number;
-            name?: string;
-            overview?: string;
-            vote_average?: number;
-            vote_count?: number;
-            air_date?: string;
-            episode_number?: number;
-            production_code?: string;
-            runtime?: unknown;
-            season_number?: number;
-            show_id?: number;
-            still_path?: unknown;
+        adult: boolean;
+        backdrop_path: unknown;
+        created_by: Array<unknown>;
+        episode_run_time: Array<unknown>;
+        first_air_date: string;
+        genres: Array<unknown>;
+        homepage: string;
+        id: number;
+        in_production: boolean;
+        languages: Array<unknown>;
+        last_air_date: string;
+        last_episode_to_air: {
+            id: number;
+            name: string;
+            overview: string;
+            vote_average: number;
+            vote_count: number;
+            air_date: string;
+            episode_number: number;
+            production_code: string;
+            runtime: unknown;
+            season_number: number;
+            show_id: number;
+            still_path: unknown;
         };
-        name?: string;
-        next_episode_to_air?: unknown;
-        networks?: Array<unknown>;
-        number_of_episodes?: number;
-        number_of_seasons?: number;
-        origin_country?: Array<string>;
-        original_language?: string;
-        original_name?: string;
-        overview?: string;
-        popularity?: number;
-        poster_path?: unknown;
-        production_companies?: Array<unknown>;
-        production_countries?: Array<unknown>;
-        seasons?: Array<{
-            air_date?: unknown;
-            episode_count?: number;
-            id?: number;
-            name?: string;
-            overview?: string;
-            poster_path?: unknown;
-            season_number?: number;
+        name: string;
+        next_episode_to_air: unknown;
+        networks: Array<unknown>;
+        number_of_episodes: number;
+        number_of_seasons: number;
+        origin_country: Array<string>;
+        original_language: string;
+        original_name: string;
+        overview: string;
+        popularity: number;
+        poster_path: unknown;
+        production_companies: Array<unknown>;
+        production_countries: Array<unknown>;
+        seasons: Array<{
+            air_date: unknown;
+            episode_count: number;
+            id: number;
+            name: string;
+            overview: string;
+            poster_path: unknown;
+            season_number: number;
         }>;
-        spoken_languages?: Array<unknown>;
-        status?: string;
-        tagline?: string;
-        type?: string;
-        vote_average?: number;
-        vote_count?: number;
+        spoken_languages: Array<unknown>;
+        status: string;
+        tagline: string;
+        type: string;
+        vote_average: number;
+        vote_count: number;
     };
 };
 
@@ -6305,20 +6305,20 @@ export type Get3TvBySeriesIdListsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        page?: number;
-        results?: Array<{
-            description?: string;
-            favorite_count?: number;
-            id?: number;
-            item_count?: number;
-            iso_639_1?: string;
-            iso_3166_1?: string;
-            name?: string;
-            poster_path?: unknown;
+        id: number;
+        page: number;
+        results: Array<{
+            description: string;
+            favorite_count: number;
+            id: number;
+            item_count: number;
+            iso_639_1: string;
+            iso_3166_1: string;
+            name: string;
+            poster_path: unknown;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -6341,26 +6341,26 @@ export type Get3TvBySeriesIdRecommendationsResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            id?: number;
-            name?: string;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            poster_path?: string;
-            media_type?: string;
-            genre_ids?: Array<number>;
-            popularity?: number;
-            first_air_date?: string;
-            vote_average?: number;
-            vote_count?: number;
-            origin_country?: Array<string>;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            id: number;
+            name: string;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            poster_path: string;
+            media_type: string;
+            genre_ids: Array<number>;
+            popularity: number;
+            first_air_date: string;
+            vote_average: number;
+            vote_count: number;
+            origin_country: Array<string>;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -6383,24 +6383,24 @@ export type Get3TvBySeriesIdReviewsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        page?: number;
-        results?: Array<{
-            author?: string;
-            author_details?: {
-                name?: string;
-                username?: string;
-                avatar_path?: string;
-                rating?: number;
+        id: number;
+        page: number;
+        results: Array<{
+            author: string;
+            author_details: {
+                name: string;
+                username: string;
+                avatar_path: string;
+                rating: number;
             };
-            content?: string;
-            created_at?: string;
-            id?: string;
-            updated_at?: string;
-            url?: string;
+            content: string;
+            created_at: string;
+            id: string;
+            updated_at: string;
+            url: string;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -6420,11 +6420,11 @@ export type Get3TvBySeriesIdScreenedTheatricallyResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            id?: number;
-            episode_number?: number;
-            season_number?: number;
+        id: number;
+        results: Array<{
+            id: number;
+            episode_number: number;
+            season_number: number;
         }>;
     };
 };
@@ -6448,25 +6448,25 @@ export type Get3TvBySeriesIdSimilarResponses = {
      * 200
      */
     200: {
-        page?: number;
-        results?: Array<{
-            adult?: boolean;
-            backdrop_path?: string;
-            genre_ids?: Array<number>;
-            id?: number;
-            origin_country?: Array<string>;
-            original_language?: string;
-            original_name?: string;
-            overview?: string;
-            popularity?: number;
-            poster_path?: string;
-            first_air_date?: string;
-            name?: string;
-            vote_average?: number;
-            vote_count?: number;
+        page: number;
+        results: Array<{
+            adult: boolean;
+            backdrop_path: string;
+            genre_ids: Array<number>;
+            id: number;
+            origin_country: Array<string>;
+            original_language: string;
+            original_name: string;
+            overview: string;
+            popularity: number;
+            poster_path: string;
+            first_air_date: string;
+            name: string;
+            vote_average: number;
+            vote_count: number;
         }>;
-        total_pages?: number;
-        total_results?: number;
+        total_pages: number;
+        total_results: number;
     };
 };
 
@@ -6486,17 +6486,17 @@ export type Get3TvBySeriesIdTranslationsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        translations?: Array<{
-            iso_3166_1?: string;
-            iso_639_1?: string;
-            name?: string;
-            english_name?: string;
-            data?: {
-                name?: string;
-                overview?: string;
-                homepage?: string;
-                tagline?: string;
+        id: number;
+        translations: Array<{
+            iso_3166_1: string;
+            iso_639_1: string;
+            name: string;
+            english_name: string;
+            data: {
+                name: string;
+                overview: string;
+                homepage: string;
+                tagline: string;
             };
         }>;
     };
@@ -6524,18 +6524,18 @@ export type Get3TvBySeriesIdVideosResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            iso_639_1?: string;
-            iso_3166_1?: string;
-            name?: string;
-            key?: string;
-            site?: string;
-            size?: number;
-            type?: string;
-            official?: boolean;
-            published_at?: string;
-            id?: string;
+        id: number;
+        results: Array<{
+            iso_639_1: string;
+            iso_3166_1: string;
+            name: string;
+            key: string;
+            site: string;
+            size: number;
+            type: string;
+            official: boolean;
+            published_at: string;
+            id: string;
         }>;
     };
 };
@@ -6556,912 +6556,912 @@ export type Get3TvBySeriesIdWatchProvidersResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: {
-            AE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CA?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CL?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DE?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ES?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FI?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FR?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GF?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GQ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ID?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IL?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IQ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JP?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            KE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            KR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MD?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MX?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NL?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PL?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                ads?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SV?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TW?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            UG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            US?: {
-                link?: string;
-                free?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            UY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            VE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ZA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ZM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
+        id: number;
+        results: {
+            AE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CA: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CL: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DE: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ES: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FI: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FR: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GF: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GQ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ID: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IL: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IQ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JP: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            KE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            KR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MD: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MX: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NL: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PL: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                ads: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SV: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TW: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            UG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            US: {
+                link: string;
+                free: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            UY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            VE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ZA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ZM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
                 }>;
             };
         };
@@ -7490,8 +7490,8 @@ export type Delete3TvBySeriesIdRatingResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -7519,8 +7519,8 @@ export type Post3TvBySeriesIdRatingResponses = {
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -7547,61 +7547,61 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberResponses = {
      * 200
      */
     200: {
-        _id?: string;
-        air_date?: string;
-        episodes?: Array<{
-            air_date?: string;
-            episode_number?: number;
-            episode_type?: string;
-            id?: number;
-            name?: string;
-            overview?: string;
-            production_code?: string;
-            runtime?: number;
-            season_number?: number;
-            show_id?: number;
-            still_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            crew?: Array<{
-                department?: string;
-                job?: string;
-                credit_id?: string;
-                adult?: boolean;
-                gender?: number;
-                id?: number;
-                known_for_department?: string;
-                name?: string;
-                original_name?: string;
-                popularity?: number;
-                profile_path?: string;
+        _id: string;
+        air_date: string;
+        episodes: Array<{
+            air_date: string;
+            episode_number: number;
+            episode_type: string;
+            id: number;
+            name: string;
+            overview: string;
+            production_code: string;
+            runtime: number;
+            season_number: number;
+            show_id: number;
+            still_path: string;
+            vote_average: number;
+            vote_count: number;
+            crew: Array<{
+                department: string;
+                job: string;
+                credit_id: string;
+                adult: boolean;
+                gender: number;
+                id: number;
+                known_for_department: string;
+                name: string;
+                original_name: string;
+                popularity: number;
+                profile_path: string;
             }>;
-            guest_stars?: Array<{
-                character?: string;
-                credit_id?: string;
-                order?: number;
-                adult?: boolean;
-                gender?: number;
-                id?: number;
-                known_for_department?: string;
-                name?: string;
-                original_name?: string;
-                popularity?: number;
-                profile_path?: string;
+            guest_stars: Array<{
+                character: string;
+                credit_id: string;
+                order: number;
+                adult: boolean;
+                gender: number;
+                id: number;
+                known_for_department: string;
+                name: string;
+                original_name: string;
+                popularity: number;
+                profile_path: string;
             }>;
         }>;
-        name?: string;
-        networks?: Array<{
-            id?: number;
-            logo_path?: string;
-            name?: string;
-            origin_country?: string;
+        name: string;
+        networks: Array<{
+            id: number;
+            logo_path: string;
+            name: string;
+            origin_country: string;
         }>;
-        overview?: string;
-        id?: number;
-        poster_path?: string;
-        season_number?: number;
-        vote_average?: number;
+        overview: string;
+        id: number;
+        poster_path: string;
+        season_number: number;
+        vote_average: number;
     };
 };
 
@@ -7625,12 +7625,12 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberAccountStatesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            id?: number;
-            episode_number?: number;
-            rated?: {
-                value?: number;
+        id: number;
+        results: Array<{
+            id: number;
+            episode_number: number;
+            rated: {
+                value: number;
             };
         }>;
     };
@@ -7655,41 +7655,41 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberAggregateCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            roles?: Array<{
-                credit_id?: string;
-                character?: string;
-                episode_count?: number;
+        cast: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            roles: Array<{
+                credit_id: string;
+                character: string;
+                episode_count: number;
             }>;
-            total_episode_count?: number;
-            order?: number;
+            total_episode_count: number;
+            order: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: unknown;
-            jobs?: Array<{
-                credit_id?: string;
-                job?: string;
-                episode_count?: number;
+        crew: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: unknown;
+            jobs: Array<{
+                credit_id: string;
+                job: string;
+                episode_count: number;
             }>;
-            department?: string;
-            total_episode_count?: number;
+            department: string;
+            total_episode_count: number;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -7713,15 +7713,15 @@ export type Get3TvSeasonBySeasonIdChangesResponses = {
      * 200
      */
     200: {
-        changes?: Array<{
-            key?: string;
-            items?: Array<{
-                id?: string;
-                action?: string;
-                time?: string;
-                value?: {
-                    episode_id?: number;
-                    episode_number?: number;
+        changes: Array<{
+            key: string;
+            items: Array<{
+                id: string;
+                action: string;
+                time: string;
+                value: {
+                    episode_id: number;
+                    episode_number: number;
                 };
             }>;
         }>;
@@ -7747,33 +7747,33 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberCreditsResponses = {
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            character?: string;
-            credit_id?: string;
-            order?: number;
+        cast: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            character: string;
+            credit_id: string;
+            order: number;
         }>;
-        crew?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: unknown;
-            credit_id?: string;
-            department?: string;
-            job?: string;
+        crew: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: unknown;
+            credit_id: string;
+            department: string;
+            job: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -7794,12 +7794,12 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberExternalIdsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        freebase_mid?: string;
-        freebase_id?: string;
-        tvdb_id?: number;
-        tvrage_id?: unknown;
-        wikidata_id?: string;
+        id: number;
+        freebase_mid: string;
+        freebase_id: string;
+        tvdb_id: number;
+        tvrage_id: unknown;
+        wikidata_id: string;
     };
 };
 
@@ -7826,15 +7826,15 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberImagesResponses = {
      * 200
      */
     200: {
-        id?: number;
-        posters?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: string;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        posters: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: string;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -7856,15 +7856,15 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberTranslationsResponses = {
      * 200
      */
     200: {
-        id?: number;
-        translations?: Array<{
-            iso_3166_1?: string;
-            iso_639_1?: string;
-            name?: string;
-            english_name?: string;
-            data?: {
-                name?: string;
-                overview?: string;
+        id: number;
+        translations: Array<{
+            iso_3166_1: string;
+            iso_639_1: string;
+            name: string;
+            english_name: string;
+            data: {
+                name: string;
+                overview: string;
             };
         }>;
     };
@@ -7893,18 +7893,18 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberVideosResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            iso_639_1?: string;
-            iso_3166_1?: string;
-            name?: string;
-            key?: string;
-            site?: string;
-            size?: number;
-            type?: string;
-            official?: boolean;
-            published_at?: string;
-            id?: string;
+        id: number;
+        results: Array<{
+            iso_639_1: string;
+            iso_3166_1: string;
+            name: string;
+            key: string;
+            site: string;
+            size: number;
+            type: string;
+            official: boolean;
+            published_at: string;
+            id: string;
         }>;
     };
 };
@@ -7928,1008 +7928,1008 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberWatchProvidersResponses = {
      * 200
      */
     200: {
-        id?: number;
-        results?: {
-            AD?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            AU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BE?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            BZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CH?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CL?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            CZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            DO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            EG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ES?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            FR?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GB?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GG?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GQ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            GY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            HU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ID?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IQ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            IT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            JP?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                rent?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            KE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LB?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            LC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MD?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ME?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ML?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MX?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            MZ?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NL?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            NZ?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            OM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PL?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PT?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            PY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            QA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RO?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RS?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            RU?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SE?: {
-                link?: string;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SG?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SI?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SK?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SN?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            SV?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TC?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TD?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TH?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TR?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TT?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            TW?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            US?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-                buy?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            UY?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            VE?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ZA?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ZM?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
-                }>;
-            };
-            ZW?: {
-                link?: string;
-                flatrate?: Array<{
-                    logo_path?: string;
-                    provider_id?: number;
-                    provider_name?: string;
-                    display_priority?: number;
+        id: number;
+        results: {
+            AD: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            AU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BE: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            BZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CH: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CL: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            CZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            DO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            EG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ES: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            FR: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GB: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GG: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GQ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            GY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            HU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ID: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IQ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            IT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            JP: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                rent: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            KE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LB: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            LC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MD: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ME: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ML: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MX: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            MZ: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NL: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            NZ: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            OM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PL: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PT: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            PY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            QA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RO: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RS: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            RU: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SE: {
+                link: string;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SG: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SI: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SK: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SN: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            SV: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TC: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TD: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TH: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TR: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TT: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            TW: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            US: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+                buy: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            UY: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            VE: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ZA: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ZM: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
+                }>;
+            };
+            ZW: {
+                link: string;
+                flatrate: Array<{
+                    logo_path: string;
+                    provider_id: number;
+                    provider_name: string;
+                    display_priority: number;
                 }>;
             };
         };
@@ -8960,43 +8960,43 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberResponses 
      * 200
      */
     200: {
-        air_date?: string;
-        crew?: Array<{
-            department?: string;
-            job?: string;
-            credit_id?: string;
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
+        air_date: string;
+        crew: Array<{
+            department: string;
+            job: string;
+            credit_id: string;
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
         }>;
-        episode_number?: number;
-        guest_stars?: Array<{
-            character?: string;
-            credit_id?: string;
-            order?: number;
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
+        episode_number: number;
+        guest_stars: Array<{
+            character: string;
+            credit_id: string;
+            order: number;
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
         }>;
-        name?: string;
-        overview?: string;
-        id?: number;
-        production_code?: string;
-        runtime?: number;
-        season_number?: number;
-        still_path?: string;
-        vote_average?: number;
-        vote_count?: number;
+        name: string;
+        overview: string;
+        id: number;
+        production_code: string;
+        runtime: number;
+        season_number: number;
+        still_path: string;
+        vote_average: number;
+        vote_count: number;
     };
 };
 
@@ -9021,12 +9021,12 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberAccountSta
      * 200
      */
     200: {
-        id?: number;
-        favorite?: boolean;
-        rated?: {
-            value?: number;
+        id: number;
+        favorite: boolean;
+        rated: {
+            value: number;
         };
-        watchlist?: boolean;
+        watchlist: boolean;
     };
 };
 
@@ -9046,13 +9046,13 @@ export type Get3TvEpisodeByEpisodeIdChangesResponses = {
      * 200
      */
     200: {
-        changes?: Array<{
-            key?: string;
-            items?: Array<{
-                id?: string;
-                action?: string;
-                time?: string;
-                value?: string;
+        changes: Array<{
+            key: string;
+            items: Array<{
+                id: string;
+                action: string;
+                time: string;
+                value: string;
             }>;
         }>;
     };
@@ -9078,46 +9078,46 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberCreditsRes
      * 200
      */
     200: {
-        cast?: Array<{
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
-            character?: string;
-            credit_id?: string;
-            order?: number;
+        cast: Array<{
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
+            character: string;
+            credit_id: string;
+            order: number;
         }>;
-        crew?: Array<{
-            department?: string;
-            job?: string;
-            credit_id?: string;
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
+        crew: Array<{
+            department: string;
+            job: string;
+            credit_id: string;
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
         }>;
-        guest_stars?: Array<{
-            character?: string;
-            credit_id?: string;
-            order?: number;
-            adult?: boolean;
-            gender?: number;
-            id?: number;
-            known_for_department?: string;
-            name?: string;
-            original_name?: string;
-            popularity?: number;
-            profile_path?: string;
+        guest_stars: Array<{
+            character: string;
+            credit_id: string;
+            order: number;
+            adult: boolean;
+            gender: number;
+            id: number;
+            known_for_department: string;
+            name: string;
+            original_name: string;
+            popularity: number;
+            profile_path: string;
         }>;
-        id?: number;
+        id: number;
     };
 };
 
@@ -9139,13 +9139,13 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberExternalId
      * 200
      */
     200: {
-        id?: number;
-        imdb_id?: string;
-        freebase_mid?: string;
-        freebase_id?: string;
-        tvdb_id?: number;
-        tvrage_id?: number;
-        wikidata_id?: string;
+        id: number;
+        imdb_id: string;
+        freebase_mid: string;
+        freebase_id: string;
+        tvdb_id: number;
+        tvrage_id: number;
+        wikidata_id: string;
     };
 };
 
@@ -9173,15 +9173,15 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberImagesResp
      * 200
      */
     200: {
-        id?: number;
-        stills?: Array<{
-            aspect_ratio?: number;
-            height?: number;
-            iso_639_1?: unknown;
-            file_path?: string;
-            vote_average?: number;
-            vote_count?: number;
-            width?: number;
+        id: number;
+        stills: Array<{
+            aspect_ratio: number;
+            height: number;
+            iso_639_1: unknown;
+            file_path: string;
+            vote_average: number;
+            vote_count: number;
+            width: number;
         }>;
     };
 };
@@ -9204,15 +9204,15 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberTranslatio
      * 200
      */
     200: {
-        id?: number;
-        translations?: Array<{
-            iso_3166_1?: string;
-            iso_639_1?: string;
-            name?: string;
-            english_name?: string;
-            data?: {
-                name?: string;
-                overview?: string;
+        id: number;
+        translations: Array<{
+            iso_3166_1: string;
+            iso_639_1: string;
+            name: string;
+            english_name: string;
+            data: {
+                name: string;
+                overview: string;
             };
         }>;
     };
@@ -9242,18 +9242,18 @@ export type Get3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberVideosResp
      * 200
      */
     200: {
-        id?: number;
-        results?: Array<{
-            iso_639_1?: string;
-            iso_3166_1?: string;
-            name?: string;
-            key?: string;
-            site?: string;
-            size?: number;
-            type?: string;
-            official?: boolean;
-            published_at?: string;
-            id?: string;
+        id: number;
+        results: Array<{
+            iso_639_1: string;
+            iso_3166_1: string;
+            name: string;
+            key: string;
+            site: string;
+            size: number;
+            type: string;
+            official: boolean;
+            published_at: string;
+            id: string;
         }>;
     };
 };
@@ -9282,8 +9282,8 @@ export type Delete3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberRatingR
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -9313,8 +9313,8 @@ export type Post3TvBySeriesIdSeasonBySeasonNumberEpisodeByEpisodeNumberRatingRes
      * 200
      */
     200: {
-        status_code?: number;
-        status_message?: string;
+        status_code: number;
+        status_message: string;
     };
 };
 
@@ -9334,39 +9334,39 @@ export type Get3TvEpisodeGroupByTvEpisodeGroupIdResponses = {
      * 200
      */
     200: {
-        description?: string;
-        episode_count?: number;
-        group_count?: number;
-        groups?: Array<{
-            id?: string;
-            name?: string;
-            order?: number;
-            episodes?: Array<{
-                air_date?: string;
-                episode_number?: number;
-                id?: number;
-                name?: string;
-                overview?: string;
-                production_code?: string;
-                runtime?: unknown;
-                season_number?: number;
-                show_id?: number;
-                still_path?: string;
-                vote_average?: number;
-                vote_count?: number;
-                order?: number;
+        description: string;
+        episode_count: number;
+        group_count: number;
+        groups: Array<{
+            id: string;
+            name: string;
+            order: number;
+            episodes: Array<{
+                air_date: string;
+                episode_number: number;
+                id: number;
+                name: string;
+                overview: string;
+                production_code: string;
+                runtime: unknown;
+                season_number: number;
+                show_id: number;
+                still_path: string;
+                vote_average: number;
+                vote_count: number;
+                order: number;
             }>;
-            locked?: boolean;
+            locked: boolean;
         }>;
-        id?: string;
-        name?: string;
-        network?: {
-            id?: number;
-            logo_path?: string;
-            name?: string;
-            origin_country?: string;
+        id: string;
+        name: string;
+        network: {
+            id: number;
+            logo_path: string;
+            name: string;
+            origin_country: string;
         };
-        type?: number;
+        type: number;
     };
 };
 
@@ -9386,10 +9386,10 @@ export type Get3WatchProvidersRegionsResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            iso_3166_1?: string;
-            english_name?: string;
-            native_name?: string;
+        results: Array<{
+            iso_3166_1: string;
+            english_name: string;
+            native_name: string;
         }>;
     };
 };
@@ -9411,76 +9411,76 @@ export type Get3WatchProvidersMovieResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            display_priorities?: {
-                CA?: number;
-                AE?: number;
-                AR?: number;
-                AT?: number;
-                AU?: number;
-                BE?: number;
-                BO?: number;
-                BR?: number;
-                BG?: number;
-                CH?: number;
-                CL?: number;
-                CO?: number;
-                CR?: number;
-                CZ?: number;
-                DE?: number;
-                DK?: number;
-                EC?: number;
-                EE?: number;
-                EG?: number;
-                ES?: number;
-                FI?: number;
-                FR?: number;
-                GB?: number;
-                GR?: number;
-                GT?: number;
-                HK?: number;
-                HN?: number;
-                HU?: number;
-                ID?: number;
-                IE?: number;
-                IN?: number;
-                IT?: number;
-                JP?: number;
-                LT?: number;
-                LV?: number;
-                MX?: number;
-                MY?: number;
-                NL?: number;
-                NO?: number;
-                NZ?: number;
-                PE?: number;
-                PH?: number;
-                PL?: number;
-                PT?: number;
-                PY?: number;
-                RU?: number;
-                SA?: number;
-                SE?: number;
-                SG?: number;
-                SK?: number;
-                TH?: number;
-                TR?: number;
-                TW?: number;
-                US?: number;
-                VE?: number;
-                ZA?: number;
-                SI?: number;
-                CV?: number;
-                GH?: number;
-                MU?: number;
-                MZ?: number;
-                UG?: number;
-                IL?: number;
+        results: Array<{
+            display_priorities: {
+                CA: number;
+                AE: number;
+                AR: number;
+                AT: number;
+                AU: number;
+                BE: number;
+                BO: number;
+                BR: number;
+                BG: number;
+                CH: number;
+                CL: number;
+                CO: number;
+                CR: number;
+                CZ: number;
+                DE: number;
+                DK: number;
+                EC: number;
+                EE: number;
+                EG: number;
+                ES: number;
+                FI: number;
+                FR: number;
+                GB: number;
+                GR: number;
+                GT: number;
+                HK: number;
+                HN: number;
+                HU: number;
+                ID: number;
+                IE: number;
+                IN: number;
+                IT: number;
+                JP: number;
+                LT: number;
+                LV: number;
+                MX: number;
+                MY: number;
+                NL: number;
+                NO: number;
+                NZ: number;
+                PE: number;
+                PH: number;
+                PL: number;
+                PT: number;
+                PY: number;
+                RU: number;
+                SA: number;
+                SE: number;
+                SG: number;
+                SK: number;
+                TH: number;
+                TR: number;
+                TW: number;
+                US: number;
+                VE: number;
+                ZA: number;
+                SI: number;
+                CV: number;
+                GH: number;
+                MU: number;
+                MZ: number;
+                UG: number;
+                IL: number;
             };
-            display_priority?: number;
-            logo_path?: string;
-            provider_name?: string;
-            provider_id?: number;
+            display_priority: number;
+            logo_path: string;
+            provider_name: string;
+            provider_id: number;
         }>;
     };
 };
@@ -9502,76 +9502,76 @@ export type Get3WatchProvidersTvResponses = {
      * 200
      */
     200: {
-        results?: Array<{
-            display_priorities?: {
-                CA?: number;
-                AE?: number;
-                AR?: number;
-                AT?: number;
-                AU?: number;
-                BE?: number;
-                BO?: number;
-                BR?: number;
-                BG?: number;
-                CH?: number;
-                CL?: number;
-                CO?: number;
-                CR?: number;
-                CZ?: number;
-                DE?: number;
-                DK?: number;
-                EC?: number;
-                EE?: number;
-                EG?: number;
-                ES?: number;
-                FI?: number;
-                FR?: number;
-                GB?: number;
-                GR?: number;
-                GT?: number;
-                HK?: number;
-                HN?: number;
-                HU?: number;
-                ID?: number;
-                IE?: number;
-                IN?: number;
-                IT?: number;
-                JP?: number;
-                LT?: number;
-                LV?: number;
-                MX?: number;
-                MY?: number;
-                NL?: number;
-                NO?: number;
-                NZ?: number;
-                PE?: number;
-                PH?: number;
-                PL?: number;
-                PT?: number;
-                PY?: number;
-                RU?: number;
-                SA?: number;
-                SE?: number;
-                SG?: number;
-                SK?: number;
-                TH?: number;
-                TR?: number;
-                TW?: number;
-                US?: number;
-                VE?: number;
-                ZA?: number;
-                SI?: number;
-                CV?: number;
-                GH?: number;
-                MU?: number;
-                MZ?: number;
-                UG?: number;
-                IL?: number;
+        results: Array<{
+            display_priorities: {
+                CA: number;
+                AE: number;
+                AR: number;
+                AT: number;
+                AU: number;
+                BE: number;
+                BO: number;
+                BR: number;
+                BG: number;
+                CH: number;
+                CL: number;
+                CO: number;
+                CR: number;
+                CZ: number;
+                DE: number;
+                DK: number;
+                EC: number;
+                EE: number;
+                EG: number;
+                ES: number;
+                FI: number;
+                FR: number;
+                GB: number;
+                GR: number;
+                GT: number;
+                HK: number;
+                HN: number;
+                HU: number;
+                ID: number;
+                IE: number;
+                IN: number;
+                IT: number;
+                JP: number;
+                LT: number;
+                LV: number;
+                MX: number;
+                MY: number;
+                NL: number;
+                NO: number;
+                NZ: number;
+                PE: number;
+                PH: number;
+                PL: number;
+                PT: number;
+                PY: number;
+                RU: number;
+                SA: number;
+                SE: number;
+                SG: number;
+                SK: number;
+                TH: number;
+                TR: number;
+                TW: number;
+                US: number;
+                VE: number;
+                ZA: number;
+                SI: number;
+                CV: number;
+                GH: number;
+                MU: number;
+                MZ: number;
+                UG: number;
+                IL: number;
             };
-            display_priority?: number;
-            logo_path?: string;
-            provider_name?: string;
-            provider_id?: number;
+            display_priority: number;
+            logo_path: string;
+            provider_name: string;
+            provider_id: number;
         }>;
     };
 };

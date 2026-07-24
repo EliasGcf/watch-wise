@@ -1,21 +1,31 @@
-export type CatalogProviderDriverName = 'fake' | 'tmdb'
+export type CatalogDriver = 'fake' | 'tmdb'
 
-export type ItemType = 'movie' | 'series'
+export type ItemType = 'movie' | 'serie'
 
-export type CatalogTitleResult = {
-  provider: CatalogProviderDriverName
-  providerId: string
-  type: ItemType
+export type CatalogSearchResult = {
+  provider: CatalogDriver
+  id: string
   name: string
-  bannerUrl: string | null
-  releasedAt: string | null
-  duration: number | null
-  summary: string | null
-}
+  releasedAt: string
+  summary: string
+  bannerUrl: string
+} & ({ type: 'movie' } | { type: 'serie' })
+
+export type FindResult = {
+  provider: CatalogDriver
+  id: string
+  name: string
+  releasedAt: string
+  summary: string
+  bannerUrl: string
+} & ({ type: 'movie'; duration: number } | { type: 'serie' })
+
+export type Movie = Extract<FindResult, { type: 'movie' }>
+export type Serie = Extract<FindResult, { type: 'serie' }>
 
 export abstract class CatalogProvider {
-  abstract search(query: string): Promise<CatalogTitleResult[]>
-  abstract find(type: ItemType, providerId: string): Promise<CatalogTitleResult | null>
+  abstract search(query: string): Promise<CatalogSearchResult[]>
+  abstract find(type: ItemType, providerId: string): Promise<Movie | Serie | null>
 }
 
 export class CatalogProviderError extends Error {}
@@ -26,11 +36,10 @@ export type TmdbCatalogProviderConfig = {
 
 export type FakeCatalogProviderConfig = {
   failureQuery: string
-  results: CatalogTitleResult[]
 }
 
 export type CatalogProviderConfig = {
-  default: CatalogProviderDriverName
+  default: CatalogDriver
   drivers: {
     fake: FakeCatalogProviderConfig
     tmdb: TmdbCatalogProviderConfig

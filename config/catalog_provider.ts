@@ -6,38 +6,6 @@ const catalogProviderConfig: CatalogProviderConfig = {
   drivers: {
     fake: {
       failureQuery: 'fail',
-      results: [
-        {
-          provider: 'tmdb',
-          providerId: 'movie-1',
-          type: 'movie',
-          name: 'Heat',
-          bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
-          releasedAt: '1995-12-15',
-          duration: 170,
-          summary: 'A professional thief and a relentless detective collide.',
-        },
-        {
-          provider: 'tmdb',
-          providerId: 'series-1',
-          type: 'series',
-          name: 'Heat Vision and Jack',
-          bannerUrl: 'https://image.tmdb.org/t/p/w780/series-1.jpg',
-          releasedAt: '1999-01-01',
-          duration: null,
-          summary: 'A pilot about a super-intelligent astronaut.',
-        },
-        {
-          provider: 'tmdb',
-          providerId: 'movie-2',
-          type: 'movie',
-          name: 'Unknown Heat',
-          bannerUrl: null,
-          releasedAt: null,
-          duration: null,
-          summary: null,
-        },
-      ],
     },
     tmdb: {
       accessToken: env.get('TMDB_ACCESS_TOKEN'),

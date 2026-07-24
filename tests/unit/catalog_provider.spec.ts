@@ -45,22 +45,20 @@ test.group('Catalog provider', () => {
     assert.deepEqual(results, [
       {
         provider: 'tmdb',
-        providerId: '1',
+        id: '1',
         type: 'movie',
         name: 'Heat',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',
         releasedAt: '1995-12-15',
-        duration: null,
         summary: 'A professional thief and a relentless detective collide.',
       },
       {
         provider: 'tmdb',
-        providerId: '2',
-        type: 'series',
+        id: '2',
+        type: 'serie',
         name: 'Heat Vision and Jack',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat-vision.jpg',
         releasedAt: '1999-01-01',
-        duration: null,
         summary: 'A pilot about a super-intelligent astronaut.',
       },
     ])
@@ -83,31 +81,19 @@ test.group('Catalog provider', () => {
   test('finds fake catalog titles by provider id and type', async ({ assert }) => {
     const driver = new FakeCatalogProviderDriver({
       failureQuery: 'fail',
-      results: [
-        {
-          provider: 'tmdb',
-          providerId: 'movie-1',
-          type: 'movie',
-          name: 'Heat',
-          bannerUrl: null,
-          releasedAt: '1995-12-15',
-          duration: 170,
-          summary: null,
-        },
-      ],
     })
 
     assert.deepEqual(await driver.find('movie', 'movie-1'), {
       provider: 'tmdb',
-      providerId: 'movie-1',
+      id: 'movie-1',
       type: 'movie',
       name: 'Heat',
-      bannerUrl: null,
+      bannerUrl: 'https://image.tmdb.org/t/p/w780/movie-1.jpg',
       releasedAt: '1995-12-15',
       duration: 170,
-      summary: null,
+      summary: 'A professional thief and a relentless detective collide.',
     })
-    assert.isNull(await driver.find('series', 'movie-1'))
+    assert.isNull(await driver.find('serie', 'movie-1'))
   })
 
   test('maps TMDB detail responses to catalog titles', async ({ assert }) => {
@@ -129,7 +115,7 @@ test.group('Catalog provider', () => {
       await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findMovieById('1'),
       {
         provider: 'tmdb',
-        providerId: '1',
+        id: '1',
         type: 'movie',
         name: 'Heat',
         bannerUrl: 'https://image.tmdb.org/t/p/w780/heat.jpg',

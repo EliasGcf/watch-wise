@@ -5,17 +5,17 @@ import {
   CatalogProviderError,
   type ItemType,
   type CatalogProviderConfig,
-  type CatalogProviderDriverName,
+  type CatalogDriver,
 } from '#providers/catalog_provider/types'
 
 export class CatalogProviderManager extends CatalogProvider {
-  #drivers = new Map<CatalogProviderDriverName, CatalogProvider>()
+  #drivers = new Map<CatalogDriver, CatalogProvider>()
 
   constructor(private config: CatalogProviderConfig) {
     super()
   }
 
-  use(name: CatalogProviderDriverName = this.config.default) {
+  use(name: CatalogDriver = this.config.default) {
     const cachedDriver = this.#drivers.get(name)
 
     if (cachedDriver) return cachedDriver
@@ -26,7 +26,7 @@ export class CatalogProviderManager extends CatalogProvider {
     return driver
   }
 
-  private createDriver(name: CatalogProviderDriverName) {
+  private createDriver(name: CatalogDriver) {
     if (name === 'fake') {
       return new FakeCatalogProviderDriver(this.config.drivers.fake)
     }

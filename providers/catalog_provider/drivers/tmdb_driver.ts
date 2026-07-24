@@ -2,9 +2,12 @@ import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import type {
   CatalogProvider,
-  CatalogTitleResult,
+  CatalogSearchResult,
   TmdbCatalogProviderConfig,
   ItemType,
+  FindResult,
+  Movie,
+  Serie,
 } from '#providers/catalog_provider/types'
 import { CatalogProviderError } from '#providers/catalog_provider/types'
 
@@ -17,7 +20,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     tmdbClient.setConfig({ headers: { Authorization: `Bearer ${this.config.accessToken}` } })
   }
 
-  async search(query: string): Promise<CatalogTitleResult[]> {
+  async search(query: string): Promise<CatalogSearchResult[]> {
     const response = await this.tmdb.search.multi({
       throwOnError: false,
       query: {
@@ -34,33 +37,32 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     if (!response.data?.results) return []
 
     return response.data.results.flatMap((result) => {
-      if (!result.id) return []
       if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
 
-      const type = result.media_type === 'movie' ? 'movie' : 'series'
+      const type = result.media_type === 'movie' ? 'movie' : 'serie'
       const name = result.media_type === 'movie' ? result.title : result.name
+
       return [
         {
           provider: 'tmdb',
-          providerId: String(result.id),
+          id: String(result.id),
           type,
-          name: name || 'Unknown',
+          name: name,
           bannerUrl: imageUrl(result.backdrop_path ?? result.poster_path),
-          releasedAt: result.release_date || null,
-          duration: null,
-          summary: result.overview || null,
+          releasedAt: result.release_date,
+          summary: result.overview,
         },
       ]
     })
   }
 
-  async find(type: ItemType, providerId: string): Promise<CatalogTitleResult | null> {
+  async find(type: ItemType, providerId: string): Promise<FindResult | null> {
     if (type === 'movie') return this.findMovieById(providerId)
 
     return this.findShowById(providerId)
   }
 
-  async findMovieById(providerId: string): Promise<CatalogTitleResult | null> {
+  async findMovieById(providerId: string): Promise<Movie | Serie | null> {
     const response = await this.tmdb.movie.details({
       throwOnError: false,
       path: { movie_id: Number(providerId) },
@@ -75,17 +77,17 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     return {
       provider: 'tmdb',
-      providerId: String(response.data.id),
+      id: String(response.data.id),
       type: 'movie',
-      name: response.data.title || 'Unknown',
+      name: response.data.title,
       bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
-      releasedAt: response.data.release_date || null,
-      duration: response.data.runtime ?? null,
-      summary: response.data.overview || null,
+      releasedAt: response.data.release_date,
+      duration: response.data.runtime,
+      summary: response.data.overview,
     }
   }
 
-  async findShowById(providerId: string): Promise<CatalogTitleResult | null> {
+  async findShowById(providerId: string): Promise<Serie | null> {
     const response = await this.tmdb.tv.series.details({
       throwOnError: false,
       path: { series_id: Number(providerId) },
@@ -100,17 +102,16 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     return {
       provider: 'tmdb',
-      providerId: String(response.data.id),
-      type: 'series',
-      name: response.data.name || 'Unknown',
+      id: String(response.data.id),
+      type: 'serie',
+      name: response.data.name,
       bannerUrl: imageUrl(response.data.backdrop_path ?? response.data.poster_path),
-      releasedAt: response.data.first_air_date || null,
-      duration: null,
-      summary: response.data.overview || null,
+      releasedAt: response.data.first_air_date,
+      summary: response.data.overview,
     }
   }
 }
 
-function imageUrl(path: string | undefined) {
-  return path ? `https://image.tmdb.org/t/p/w780${path}` : null
+function imageUrl(path: string) {
+  return `https://image.tmdb.org/t/p/w780${path}`
 }

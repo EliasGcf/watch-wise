@@ -7,19 +7,19 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 export default class Show extends LibraryEntrySchema {
   static table = 'library_entries'
 
-  declare type: 'series'
+  declare type: 'serie'
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
   @beforeCreate()
   static assignType(show: Show) {
-    show.type = 'series'
+    show.type = 'serie'
   }
 
   @beforeFind()
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Show>) {
-    query.where('type', 'series')
+    query.where('type', 'serie')
   }
 }

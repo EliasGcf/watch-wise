@@ -9,8 +9,8 @@ import { Input } from '~/components/ui/input'
 
 type CatalogSearchResult = {
   provider: string
-  providerId: string
-  type: 'movie' | 'series'
+  id: string
+  type: 'movie' | 'serie'
   name: string
   bannerUrl: string | null
   releasedAt: string | null
@@ -66,7 +66,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
         aria-label="Catalog search results"
       >
         {results.map((result) => (
-          <Card key={`${result.provider}:${result.providerId}`}>
+          <Card key={`${result.provider}:${result.id}`}>
             {result.bannerUrl && (
               <img src={result.bannerUrl} alt="" className="aspect-video w-full object-cover" />
             )}
@@ -75,7 +75,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
                 <div className="flex flex-col gap-2">
                   <CardTitle>{result.name}</CardTitle>
                   <div className="flex flex-wrap gap-2">
-                    <Badge variant="secondary">{result.type}</Badge>
+                    <Badge variant="secondary">{result.type === 'serie' ? 'series' : result.type}</Badge>
                     {result.releasedAt && (
                       <Badge variant="outline">{dayjs(result.releasedAt).year()}</Badge>
                     )}
@@ -90,7 +90,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
               <CardContent>
                 <Form route="app.library.store">
                   <input type="hidden" name="provider" value={result.provider} />
-                  <input type="hidden" name="providerId" value={result.providerId} />
+                  <input type="hidden" name="providerId" value={result.id} />
                   <input type="hidden" name="type" value={result.type} />
                   <Button type="submit" className="w-full">
                     Add to library
