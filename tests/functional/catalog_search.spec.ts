@@ -70,14 +70,13 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'Heat')
     await libraryPage.assertTextContains('body', 'movie')
 
-    assert.containsSubset(await user.related('movies').query(), [
-      {
-        provider: 'tmdb',
-        providerId: 'movie-1',
-        type: 'movie',
-        name: 'Heat',
-      },
-    ])
+    const movie = await user.related('movies').query().where('providerId', 'movie-1').firstOrFail()
+    assert.include(movie.serialize(), {
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      type: 'movie',
+      name: 'Heat',
+    })
   })
 
   test('authenticated users can add series titles from catalog search to their library', async ({
@@ -101,14 +100,13 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'Heat Vision and Jack')
     await libraryPage.assertTextContains('body', 'series')
 
-    assert.containsSubset(await user.related('shows').query(), [
-      {
-        provider: 'tmdb',
-        providerId: 'series-1',
-        type: 'serie',
-        name: 'Heat Vision and Jack',
-      },
-    ])
+    const show = await user.related('shows').query().where('providerId', 'series-1').firstOrFail()
+    assert.include(show.serialize(), {
+      provider: 'tmdb',
+      providerId: 'series-1',
+      type: 'serie',
+      name: 'Heat Vision and Jack',
+    })
   })
 
   test('users cannot create duplicate library entries for the same provider title', async ({
@@ -157,19 +155,16 @@ test.group('Catalog search', (group) => {
     await libraryPage.assertTextContains('body', 'Unknown Heat')
     await libraryPage.assertTextContains('body', 'movie')
 
-    const movies = await user.related('movies').query()
-
-    assert.containsSubset(movies, [
-      {
-        provider: 'tmdb',
-        providerId: 'movie-2',
-        type: 'movie',
-        name: 'Unknown Heat',
-        bannerPath: '/movie-2.jpg',
-        posterPath: '/movie-2-poster.jpg',
-        summary: 'A fake generated movie result.',
-      },
-    ])
-    assert.equal(movies[0].releasedAt?.toISODate(), '2000-01-01')
+    const movie = await user.related('movies').query().where('providerId', 'movie-2').firstOrFail()
+    assert.include(movie.serialize(), {
+      provider: 'tmdb',
+      providerId: 'movie-2',
+      type: 'movie',
+      name: 'Unknown Heat',
+      bannerPath: '/movie-2.jpg',
+      posterPath: '/movie-2-poster.jpg',
+      summary: 'A fake generated movie result.',
+    })
+    assert.equal(movie.releasedAt?.toISODate(), '2000-01-01')
   })
 })
