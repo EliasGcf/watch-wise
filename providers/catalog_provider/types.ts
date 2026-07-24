@@ -42,7 +42,7 @@ export type TmdbCatalogProviderConfig = {
 }
 
 export type FakeCatalogProviderConfig = {
-  baseImageUrl: string
+  baseImageUrl: `${string}/`
   failureQuery: string
 }
 
