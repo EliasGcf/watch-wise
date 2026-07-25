@@ -110,11 +110,11 @@ test.group('Library series episodes', (group) => {
     })
 
     await client
-      .post(`/app/library/${serie.id}/seasons/1/episodes/1/watched`)
+      .post(`/app/library/series/${serie.id}/seasons/1/episodes/1/watch`)
       .loginAs(user)
       .withCsrfToken()
     await client
-      .post(`/app/library/${serie.id}/seasons/1/episodes/1/watched`)
+      .post(`/app/library/series/${serie.id}/seasons/1/episodes/1/watch`)
       .loginAs(user)
       .withCsrfToken()
 
@@ -159,7 +159,7 @@ test.group('Library series episodes', (group) => {
     })
 
     await client
-      .delete(`/app/library/${serie.id}/seasons/1/episodes/1/watched`)
+      .delete(`/app/library/series/${serie.id}/seasons/1/episodes/1/watch`)
       .loginAs(user)
       .withCsrfToken()
 
@@ -190,7 +190,7 @@ test.group('Library series episodes', (group) => {
     })
 
     await client
-      .post(`/app/library/${serie.id}/seasons/1/episodes/2/watched`)
+      .post(`/app/library/series/${serie.id}/seasons/1/episodes/2/watch`)
       .loginAs(user)
       .withCsrfToken()
 

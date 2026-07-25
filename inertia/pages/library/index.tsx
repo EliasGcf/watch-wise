@@ -272,7 +272,7 @@ function EpisodeWatchForm({
 
   return (
     <Form
-      action={`/app/library/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watched`}
+      action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}
       method="post"
     >
       <Button type="submit" className="w-full" aria-label={`Mark ${episode.name} as watched`}>
@@ -291,7 +291,7 @@ function EpisodeUnwatchForm({
 }) {
   return (
     <Form
-      action={`/app/library/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watched`}
+      action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}
       method="delete"
     >
       <Button
@@ -333,7 +333,7 @@ function RemoveLibraryEntryForm({
 
 function MovieWatchedForm({ movie }: { movie: MovieEntry }) {
   return movie.watched ? (
-    <Form action={`/app/library/${movie.id}/watched`} method="delete">
+    <Form action={`/app/library/movies/${movie.id}/unwatch`} method="delete">
       <Button
         type="submit"
         variant="outline"
@@ -344,7 +344,7 @@ function MovieWatchedForm({ movie }: { movie: MovieEntry }) {
       </Button>
     </Form>
   ) : (
-    <Form action={`/app/library/${movie.id}/watched`} method="post">
+    <Form action={`/app/library/movies/${movie.id}/watch`} method="post">
       <Button type="submit" className="w-full" aria-label={`Mark ${movie.name} as watched`}>
         Mark as watched
       </Button>

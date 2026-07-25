@@ -28,8 +28,10 @@ export interface ApiDefinition {
     library: {
       index: typeof routes['app.library.index']
       store: typeof routes['app.library.store']
-      watch: typeof routes['app.library.watch']
-      unwatch: typeof routes['app.library.unwatch']
+      movies: {
+        watch: typeof routes['app.library.movies.watch']
+        unwatch: typeof routes['app.library.movies.unwatch']
+      }
       watchEpisode: typeof routes['app.library.watch_episode']
       unwatchEpisode: typeof routes['app.library.unwatch_episode']
       destroy: typeof routes['app.library.destroy']

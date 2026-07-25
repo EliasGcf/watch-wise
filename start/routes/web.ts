@@ -21,18 +21,20 @@ const group = router.group(() => {
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index']).as('catalog.search')
       router.get('library', [controllers.web.Library, 'index'])
       router.post('library', [controllers.web.Library, 'store'])
-      router.post('library/:id/watched', [controllers.web.Movies, 'watch']).as('library.watch')
       router
-        .delete('library/:id/watched', [controllers.web.Movies, 'unwatch'])
-        .as('library.unwatch')
+        .post('library/movies/:id/watch', [controllers.web.Movies, 'watch'])
+        .as('library.movies.watch')
       router
-        .post('library/:id/seasons/:season/episodes/:episode/watched', [
+        .delete('library/movies/:id/unwatch', [controllers.web.Movies, 'unwatch'])
+        .as('library.movies.unwatch')
+      router
+        .post('library/series/:id/seasons/:season/episodes/:episode/watch', [
           controllers.web.Episodes,
           'watch',
         ])
         .as('library.watch_episode')
       router
-        .delete('library/:id/seasons/:season/episodes/:episode/watched', [
+        .delete('library/series/:id/seasons/:season/episodes/:episode/watch', [
           controllers.web.Episodes,
           'unwatch',
         ])

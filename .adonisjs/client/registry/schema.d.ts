@@ -163,9 +163,9 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'app.library.watch': {
+  'app.library.movies.watch': {
     methods: ["POST"]
-    pattern: '/app/library/:id/watched'
+    pattern: '/app/library/movies/:id/watch'
     types: {
       body: {}
       paramsTuple: [ParamValue]
@@ -175,9 +175,9 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['watch']>>>
     }
   }
-  'app.library.unwatch': {
+  'app.library.movies.unwatch': {
     methods: ["DELETE"]
-    pattern: '/app/library/:id/watched'
+    pattern: '/app/library/movies/:id/unwatch'
     types: {
       body: {}
       paramsTuple: [ParamValue]
@@ -189,7 +189,7 @@ export interface Registry {
   }
   'app.library.watch_episode': {
     methods: ["POST"]
-    pattern: '/app/library/:id/seasons/:season/episodes/:episode/watched'
+    pattern: '/app/library/series/:id/seasons/:season/episodes/:episode/watch'
     types: {
       body: {}
       paramsTuple: [ParamValue, ParamValue, ParamValue]
@@ -201,7 +201,7 @@ export interface Registry {
   }
   'app.library.unwatch_episode': {
     methods: ["DELETE"]
-    pattern: '/app/library/:id/seasons/:season/episodes/:episode/watched'
+    pattern: '/app/library/series/:id/seasons/:season/episodes/:episode/watch'
     types: {
       body: {}
       paramsTuple: [ParamValue, ParamValue, ParamValue]
