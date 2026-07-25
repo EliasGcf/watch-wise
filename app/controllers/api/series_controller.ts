@@ -39,7 +39,7 @@ export default class SeriesController {
     return serialize(
       SeriesEpisodesTransformer.transformEpisodes({
         season: Number(params.season),
-        episodes: await catalog.seasonEpisodes(serie.providerId, Number(params.season)),
+        episodes: await catalog.episodes(serie.providerId, Number(params.season)),
         watchedByEpisode,
       })
     )

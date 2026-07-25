@@ -49,7 +49,12 @@ export abstract class CatalogProvider {
   abstract search(query: string): Promise<CatalogSearchResult[]>
   abstract find(type: ItemType, providerId: string): Promise<Movie | Serie | null>
   abstract seasons(providerId: string): Promise<CatalogSeason[]>
-  abstract seasonEpisodes(providerId: string, season: number): Promise<CatalogEpisode[]>
+  abstract episodes(providerId: string, season: number): Promise<CatalogEpisode[]>
+  abstract findEpisode(
+    serieId: string,
+    season: number,
+    episode: number
+  ): Promise<CatalogEpisode | null>
 }
 
 export class CatalogProviderError extends Error {}
