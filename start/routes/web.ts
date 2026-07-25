@@ -21,9 +21,7 @@ const group = router.group(() => {
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index']).as('catalog.search')
       router.get('library', [controllers.web.Library, 'index'])
       router.post('library', [controllers.web.Library, 'store'])
-      router
-        .get('library/series/:id', [controllers.web.Library, 'seriesShow'])
-        .as('library.series.show')
+      router.get('library/series/:id', [controllers.web.Series, 'show']).as('library.series.show')
       router
         .post('library/movies/:id/watch', [controllers.web.Movies, 'watch'])
         .as('library.movies.watch')

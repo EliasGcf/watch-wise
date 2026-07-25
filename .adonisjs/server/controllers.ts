@@ -5,7 +5,8 @@
 
 export const controllers = {
   api: {
-    Library: () => import('#controllers/api/library_controller'),
+    Movies: () => import('#controllers/api/movies_controller'),
+    Series: () => import('#controllers/api/series_controller'),
   },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
@@ -13,6 +14,7 @@ export const controllers = {
     Library: () => import('#controllers/web/library_controller'),
     Movies: () => import('#controllers/web/movies_controller'),
     NewAccount: () => import('#controllers/web/new_account_controller'),
+    Series: () => import('#controllers/web/series_controller'),
     Session: () => import('#controllers/web/session_controller'),
   },
 }

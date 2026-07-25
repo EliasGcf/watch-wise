@@ -11,22 +11,6 @@ export default class LibraryController {
     return inertia.render('library/index', {})
   }
 
-  async seriesShow({ auth, inertia, params }: HttpContext) {
-    const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
-
-    return inertia.render('library/series/show', {
-      serie: {
-        id: serie.id,
-        name: serie.name,
-        summary: serie.summary,
-        bannerUrl: serie.bannerUrl,
-        posterUrl: serie.posterUrl,
-        provider: serie.provider,
-        providerId: serie.providerId,
-      },
-    })
-  }
-
   async store({ auth, request, response, session }: HttpContext) {
     const payload = await request.validateUsing(addLibraryEntryValidator)
     const EntryModel = payload.type === 'movie' ? Movie : Serie

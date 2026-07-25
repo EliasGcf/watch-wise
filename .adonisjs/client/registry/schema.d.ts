@@ -27,8 +27,8 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['index']>>>
     }
   }
   'api.library.series': {
@@ -39,8 +39,8 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
     }
   }
   'api.library.series.seasons': {
@@ -51,8 +51,8 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesSeasons']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesSeasons']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['show']>>>
     }
   }
   'api.library.series.season_episodes': {
@@ -63,8 +63,8 @@ export interface Registry {
       paramsTuple: [ParamValue, ParamValue]
       params: { id: ParamValue; season: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seasonEpisodes']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seasonEpisodes']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
     }
   }
   'app.home': {
@@ -183,8 +183,8 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['seriesShow']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['seriesShow']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
     }
   }
   'app.library.movies.watch': {
