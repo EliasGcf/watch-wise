@@ -1,7 +1,6 @@
 import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
 import SerieTransformer from '#transformers/serie_transformer'
-import SeriesEpisodesTransformer from '#transformers/series_episodes_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SeriesController {
@@ -16,32 +15,20 @@ export default class SeriesController {
       .where('userId', auth.user!.id)
       .firstOrFail()
 
-    return serialize(
-      SeriesEpisodesTransformer.transformSeasons({
-        id: serie.id,
-        name: serie.name,
-        seasons: await catalog.seasons(serie.providerId),
-      })
-    )
+    serie.seasons = await catalog.seasons(serie.providerId)
+
+    return serialize(SerieTransformer.transform(serie))
   }
 
   async episodes({ auth, params, serialize }: HttpContext) {
     const serie = await Serie.query()
       .where('id', params.id)
       .where('userId', auth.user!.id)
-      .preload('watchedEpisodes')
+      .preload('watchedEpisodes', (query) => query.where('season', Number(params.season)))
       .firstOrFail()
 
-    const watchedByEpisode = new Map(
-      serie.watchedEpisodes.map((mark) => [`${mark.season}:${mark.episode}`, mark])
-    )
+    const episodes = await catalog.episodes(serie.providerId, Number(params.season))
 
-    return serialize(
-      SeriesEpisodesTransformer.transformEpisodes({
-        season: Number(params.season),
-        episodes: await catalog.episodes(serie.providerId, Number(params.season)),
-        watchedByEpisode,
-      })
-    )
+    return serialize(SerieTransformer.transform(serie, episodes).useVariant('forEpisodes'))
   }
 }

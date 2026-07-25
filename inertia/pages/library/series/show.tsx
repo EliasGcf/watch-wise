@@ -57,7 +57,13 @@ export default function SeriesShow({ serie }: InertiaProps<{ serie: SerieDetails
           params: { id: serie.id },
         })
 
-        if (isCurrent) setDetails(response.data)
+        if (isCurrent) {
+          setDetails({
+            id: response.data.id,
+            name: response.data.name,
+            seasons: response.data.seasons ?? [],
+          })
+        }
       } catch {
         if (isCurrent) setError('Seasons could not be loaded.')
       }

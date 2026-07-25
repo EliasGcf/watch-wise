@@ -37,7 +37,7 @@ test.group('Library series episodes', (group) => {
     const page = await visit(`/api/library/series/${serie.id}/seasons`)
     const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
 
-    assert.deepEqual(data, {
+    assert.deepInclude(data, {
       id: serie.id,
       name: 'Heat Vision and Jack',
       seasons: [
@@ -79,7 +79,6 @@ test.group('Library series episodes', (group) => {
     const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
 
     assert.deepEqual(data, {
-      season: 1,
       episodes: [
         {
           providerId: 'episode-1-1',

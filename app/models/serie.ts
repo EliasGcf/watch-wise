@@ -1,7 +1,7 @@
 import LibraryItem from '#models/library_item'
 import User from '#models/user'
 import { EpisodeWatchedMark } from '#models/watched_mark'
-import type { CatalogEpisode } from '#providers/catalog_provider/types'
+import type { CatalogEpisode, CatalogSeason } from '#providers/catalog_provider/types'
 import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasMany } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
@@ -59,4 +59,6 @@ export default class Serie extends LibraryItem {
       .where('episode', episode)
       .delete()
   }
+
+  declare seasons?: CatalogSeason[]
 }
