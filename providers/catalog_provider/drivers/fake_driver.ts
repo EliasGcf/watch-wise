@@ -69,9 +69,9 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
           type: result.media_type === 'movie' ? 'movie' : 'serie',
           name: result.media_type === 'movie' ? result.title : result.name,
           bannerPath,
-          bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+          bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
           posterPath,
-          posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+          posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
           releasedAt: result.release_date,
           summary: result.overview,
         },
@@ -98,9 +98,9 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         type: 'movie',
         name: movie.title,
         bannerPath,
-        bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
         posterPath,
-        posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
@@ -124,9 +124,9 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         type: 'serie',
         name: series.name,
         bannerPath,
-        bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
         posterPath,
-        posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
         releasedAt: series.first_air_date,
         summary: series.overview,
       }
@@ -150,9 +150,9 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         type: 'movie',
         name: movie.title,
         bannerPath,
-        bannerUrl: new URL(bannerPath, this.config.baseImageUrl).toString(),
+        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
         posterPath,
-        posterUrl: new URL(posterPath, this.config.baseImageUrl).toString(),
+        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
@@ -161,4 +161,8 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     return null
   }
+}
+
+function makeImageUrl(baseImageUrl: string, path: string) {
+  return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
 }

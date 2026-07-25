@@ -161,8 +161,8 @@ test.group('Catalog search', (group) => {
       providerId: 'movie-2',
       type: 'movie',
       name: 'Unknown Heat',
-      bannerPath: '/movie-2.jpg',
-      posterPath: '/movie-2-poster.jpg',
+      bannerPath: 'movie-2.jpg',
+      posterPath: 'movie-2-poster.jpg',
       summary: 'A fake generated movie result.',
     })
     assert.equal(movie.releasedAt?.toISODate(), '2000-01-01')

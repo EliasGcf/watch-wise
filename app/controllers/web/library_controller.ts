@@ -1,3 +1,4 @@
+import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
@@ -44,6 +45,15 @@ export default class LibraryController {
 
     session.flash('success', `${item.name} was added to your library.`)
     return response.redirect().toRoute('app.library.index')
+  }
+
+  async destroy({ auth, params, response, session }: HttpContext) {
+    const entry = await LibraryItem.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    await entry.delete()
+
+    session.flash('success', `${entry.name} was removed from your library.`)
+    return response.redirect().back()
   }
 
   async watch({ auth, params, response, session }: HttpContext) {

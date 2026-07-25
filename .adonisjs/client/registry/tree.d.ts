@@ -28,6 +28,7 @@ export interface ApiDefinition {
       store: typeof routes['app.library.store']
       watch: typeof routes['app.library.watch']
       unwatch: typeof routes['app.library.unwatch']
+      destroy: typeof routes['app.library.destroy']
     }
   }
 }
