@@ -216,7 +216,7 @@ function RemoveLibraryEntryForm({
 
 function MovieWatchedForm({ movie }: { movie: MovieEntry }) {
   return movie.watched ? (
-    <Form action={`/app/library/movies/${movie.id}/unwatch`} method="delete">
+    <Form action={`/app/library/movies/${movie.id}/watch`} method="delete">
       <Button
         type="submit"
         variant="outline"

@@ -201,7 +201,7 @@ export interface Registry {
   }
   'app.library.movies.unwatch': {
     methods: ["DELETE"]
-    pattern: '/app/library/movies/:id/unwatch'
+    pattern: '/app/library/movies/:id/watch'
     types: {
       body: {}
       paramsTuple: [ParamValue]
@@ -211,7 +211,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['unwatch']>>>
     }
   }
-  'app.library.watch_episode': {
+  'app.library.series.episodes.watch': {
     methods: ["POST"]
     pattern: '/app/library/series/:id/seasons/:season/episodes/:episode/watch'
     types: {
@@ -223,7 +223,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/episodes_controller').default['watch']>>>
     }
   }
-  'app.library.unwatch_episode': {
+  'app.library.series.episodes.unwatch': {
     methods: ["DELETE"]
     pattern: '/app/library/series/:id/seasons/:season/episodes/:episode/watch'
     types: {

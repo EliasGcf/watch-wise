@@ -31,13 +31,15 @@ export interface ApiDefinition {
       store: typeof routes['app.library.store']
       series: {
         show: typeof routes['app.library.series.show']
+        episodes: {
+          watch: typeof routes['app.library.series.episodes.watch']
+          unwatch: typeof routes['app.library.series.episodes.unwatch']
+        }
       }
       movies: {
         watch: typeof routes['app.library.movies.watch']
         unwatch: typeof routes['app.library.movies.unwatch']
       }
-      watchEpisode: typeof routes['app.library.watch_episode']
-      unwatchEpisode: typeof routes['app.library.unwatch_episode']
       destroy: typeof routes['app.library.destroy']
     }
   }

@@ -21,8 +21,8 @@ export type ScannedRoutes = {
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'app.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'app.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'app.library.watch_episode': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
-    'app.library.unwatch_episode': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
+    'app.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
+    'app.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'app.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
@@ -57,11 +57,11 @@ export type ScannedRoutes = {
     'app.session.destroy': { paramsTuple?: []; params?: {} }
     'app.library.store': { paramsTuple?: []; params?: {} }
     'app.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'app.library.watch_episode': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
+    'app.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
   }
   DELETE: {
     'app.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'app.library.unwatch_episode': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
+    'app.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'app.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
