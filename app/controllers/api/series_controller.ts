@@ -1,5 +1,4 @@
 import Serie from '#models/serie'
-import { EpisodeWatchedMark } from '#models/watched_mark'
 import { catalog } from '#services/catalog_provider'
 import SerieTransformer from '#transformers/serie_transformer'
 import SeriesEpisodesTransformer from '#transformers/series_episodes_transformer'
@@ -30,13 +29,11 @@ export default class SeriesController {
     const serie = await Serie.query()
       .where('id', params.id)
       .where('userId', auth.user!.id)
+      .preload('watchedEpisodes')
       .firstOrFail()
-    const watchedEpisodes = await EpisodeWatchedMark.query()
-      .where('userId', auth.user!.id)
-      .where('libraryEntryId', serie.id)
-      .where('season', Number(params.season))
+
     const watchedByEpisode = new Map(
-      watchedEpisodes.map((mark) => [`${mark.season}:${mark.episode}`, mark])
+      serie.watchedEpisodes.map((mark) => [`${mark.season}:${mark.episode}`, mark])
     )
 
     return serialize(
