@@ -7,7 +7,6 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
-    'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
@@ -29,7 +28,6 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
-    'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
@@ -42,7 +40,6 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
-    'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }

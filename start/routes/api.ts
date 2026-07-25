@@ -11,9 +11,6 @@ const group = router.group(() => {
       router.get('library/movies', [controllers.api.Movies, 'index']).as('library.movies')
       router.get('library/series', [controllers.api.Series, 'index']).as('library.series')
       router
-        .get('library/series/:id/seasons', [controllers.api.Series, 'show'])
-        .as('library.series.seasons')
-      router
         .get('library/series/:id/seasons/:season/episodes', [controllers.api.Series, 'episodes'])
         .as('library.series.seasons.episodes')
     })

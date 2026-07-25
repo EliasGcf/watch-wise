@@ -43,18 +43,6 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
     }
   }
-  'api.library.series.seasons': {
-    methods: ["GET","HEAD"]
-    pattern: '/api/library/series/:id/seasons'
-    types: {
-      body: {}
-      paramsTuple: [ParamValue]
-      params: { id: ParamValue }
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['show']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['show']>>>
-    }
-  }
   'api.library.series.seasons.episodes': {
     methods: ["GET","HEAD"]
     pattern: '/api/library/series/:id/seasons/:season/episodes'

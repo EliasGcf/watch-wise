@@ -24,12 +24,6 @@ const routes = {
     tokens: [{"old":"/api/library/series","type":0,"val":"api","end":""},{"old":"/api/library/series","type":0,"val":"library","end":""},{"old":"/api/library/series","type":0,"val":"series","end":""}],
     types: placeholder as Registry['api.library.series']['types'],
   },
-  'api.library.series.seasons': {
-    methods: ["GET","HEAD"],
-    pattern: '/api/library/series/:id/seasons',
-    tokens: [{"old":"/api/library/series/:id/seasons","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons","type":0,"val":"seasons","end":""}],
-    types: placeholder as Registry['api.library.series.seasons']['types'],
-  },
   'api.library.series.seasons.episodes': {
     methods: ["GET","HEAD"],
     pattern: '/api/library/series/:id/seasons/:season/episodes',

@@ -7,7 +7,7 @@ export interface ApiDefinition {
     library: {
       movies: typeof routes['api.library.movies']
       series: typeof routes['api.library.series'] & {
-        seasons: typeof routes['api.library.series.seasons'] & {
+        seasons: {
           episodes: typeof routes['api.library.series.seasons.episodes']
         }
       }

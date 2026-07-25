@@ -9,7 +9,6 @@ test.group('Library series episodes', (group) => {
   group.each.setup(() => testUtils.db().truncate())
 
   test('authenticated users can open a series details page and view provider-sourced seasons', async ({
-    assert,
     browserContext,
     visit,
   }) => {
@@ -33,24 +32,8 @@ test.group('Library series episodes', (group) => {
     const detailsPage = await visit(`/app/library/series/${serie.id}`)
     await detailsPage.assertTextContains('body', 'Heat Vision and Jack')
     await detailsPage.assertTextContains('body', 'Seasons')
-
-    const page = await visit(`/api/library/series/${serie.id}/seasons`)
-    const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
-
-    assert.deepInclude(data, {
-      id: serie.id,
-      name: 'Heat Vision and Jack',
-      seasons: [
-        {
-          season: 0,
-          name: 'Specials',
-        },
-        {
-          season: 1,
-          name: 'Season 1',
-        },
-      ],
-    })
+    await detailsPage.assertTextContains('body', 'Specials')
+    await detailsPage.assertTextContains('body', 'Season 1')
   })
 
   test('authenticated users load provider-sourced episodes for a single season', async ({

@@ -11,71 +11,15 @@ import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { client } from '~/client'
 import type { InertiaProps } from '~/types'
+import { type Data } from '@generated/data'
 
-type SerieDetails = {
-  id: number
-  name: string
-  summary: string | null
-  bannerUrl: string
-  posterUrl: string
-  provider: string
-  providerId: string
-}
+type SeriesSeasons = Data.Serie.Variants['withSeasons']['seasons']
 
-type SeriesSeasons = {
-  id: number
-  name: string
-  seasons: Array<{
-    season: number
-    name: string
-  }>
-}
+type SeasonEpisode = Data.Serie.Variants['forEpisodes']['episodes'][number]
 
-type SeasonEpisode = {
-  providerId: string
-  season: number
-  episode: number
-  name: string
-  releasedAt: string
-  duration: number
-  summary: string
-  isReleased: boolean
-  isSpecial: boolean
-  watched: { watchedAt: string | null } | null
-}
-
-export default function SeriesShow({ serie }: InertiaProps<{ serie: SerieDetails }>) {
-  const [details, setDetails] = useState<SeriesSeasons | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let isCurrent = true
-
-    async function loadSeasons() {
-      try {
-        const response = await client.api.api.library.series.seasons({
-          params: { id: serie.id },
-        })
-
-        if (isCurrent) {
-          setDetails({
-            id: response.data.id,
-            name: response.data.name,
-            seasons: response.data.seasons ?? [],
-          })
-        }
-      } catch {
-        if (isCurrent) setError('Seasons could not be loaded.')
-      }
-    }
-
-    void loadSeasons()
-
-    return () => {
-      isCurrent = false
-    }
-  }, [serie.id])
-
+export default function SeriesShow({
+  serie,
+}: InertiaProps<{ serie: Data.Serie.Variants['withSeasons'] }>) {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
       <a
@@ -108,22 +52,14 @@ export default function SeriesShow({ serie }: InertiaProps<{ serie: SerieDetails
           <CardDescription>Open a season to load its episodes.</CardDescription>
         </CardHeader>
         <CardContent>
-          {error && <p className="text-muted-foreground">{error}</p>}
-          {!details && !error && <p className="text-muted-foreground">Loading seasons...</p>}
-          {details && <SeasonAccordion serie={serie} seasons={details.seasons} />}
+          <SeasonAccordion serie={serie} seasons={serie.seasons} />
         </CardContent>
       </Card>
     </div>
   )
 }
 
-function SeasonAccordion({
-  serie,
-  seasons,
-}: {
-  serie: SerieDetails
-  seasons: SeriesSeasons['seasons']
-}) {
+function SeasonAccordion({ serie, seasons }: { serie: Data.Serie; seasons: SeriesSeasons }) {
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
 
   return (
@@ -149,7 +85,7 @@ function SeasonEpisodes({
   season,
   isOpen,
 }: {
-  serie: SerieDetails
+  serie: Data.Serie
   season: number
   isOpen: boolean
 }) {
@@ -193,7 +129,7 @@ function SeasonEpisodes({
   )
 }
 
-function EpisodeCard({ serie, episode }: { serie: SerieDetails; episode: SeasonEpisode }) {
+function EpisodeCard({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
   return (
     <Card>
       <CardHeader>
@@ -222,7 +158,7 @@ function EpisodeCard({ serie, episode }: { serie: SerieDetails; episode: SeasonE
   )
 }
 
-function EpisodeWatchForm({ serie, episode }: { serie: SerieDetails; episode: SeasonEpisode }) {
+function EpisodeWatchForm({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
   if (!episode.isReleased) {
     return (
       <Button type="button" className="w-full" disabled>
@@ -243,7 +179,7 @@ function EpisodeWatchForm({ serie, episode }: { serie: SerieDetails; episode: Se
   )
 }
 
-function EpisodeUnwatchForm({ serie, episode }: { serie: SerieDetails; episode: SeasonEpisode }) {
+function EpisodeUnwatchForm({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
   return (
     <Form
       action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}

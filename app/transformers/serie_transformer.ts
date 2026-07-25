@@ -12,12 +12,14 @@ export default class SerieTransformer extends BaseTransformer<Serie> {
   }
 
   toObject() {
-    return this.pick(this.resource, [
-      ...this.resource.$columns,
-      'bannerUrl',
-      'posterUrl',
-      'seasons',
-    ])
+    return this.pick(this.resource, [...this.resource.$columns, 'bannerUrl', 'posterUrl'])
+  }
+
+  withSeasons() {
+    return {
+      ...this.toObject(),
+      seasons: this.resource.seasons ?? [],
+    }
   }
 
   forEpisodes() {
