@@ -43,16 +43,28 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
     }
   }
-  'api.library.series.episodes': {
+  'api.library.series.seasons': {
     methods: ["GET","HEAD"]
-    pattern: '/api/library/series/:id/episodes'
+    pattern: '/api/library/series/:id/seasons'
     types: {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesEpisodes']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesEpisodes']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesSeasons']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesSeasons']>>>
+    }
+  }
+  'api.library.series.season_episodes': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/library/series/:id/seasons/:season/episodes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; season: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seasonEpisodes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seasonEpisodes']>>>
     }
   }
   'app.home': {
@@ -161,6 +173,18 @@ export interface Registry {
       query: ExtractQuery<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'app.library.series.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library/series/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['seriesShow']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['seriesShow']>>>
     }
   }
   'app.library.movies.watch': {

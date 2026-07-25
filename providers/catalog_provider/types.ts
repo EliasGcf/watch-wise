@@ -43,13 +43,13 @@ export type CatalogEpisode = {
 export type CatalogSeason = {
   season: number
   name: string
-  episodes: CatalogEpisode[]
 }
 
 export abstract class CatalogProvider {
   abstract search(query: string): Promise<CatalogSearchResult[]>
   abstract find(type: ItemType, providerId: string): Promise<Movie | Serie | null>
   abstract seasons(providerId: string): Promise<CatalogSeason[]>
+  abstract seasonEpisodes(providerId: string, season: number): Promise<CatalogEpisode[]>
 }
 
 export class CatalogProviderError extends Error {}

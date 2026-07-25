@@ -18,7 +18,22 @@ export default class LibraryController {
     return serialize(SerieTransformer.transform(series))
   }
 
-  async seriesEpisodes({ auth, params, serialize }: HttpContext) {
+  async seriesSeasons({ auth, params, serialize }: HttpContext) {
+    const serie = await Serie.query()
+      .where('id', params.id)
+      .where('userId', auth.user!.id)
+      .firstOrFail()
+
+    return serialize(
+      SeriesEpisodesTransformer.transformSeasons({
+        id: serie.id,
+        name: serie.name,
+        seasons: await catalog.seasons(serie.providerId),
+      })
+    )
+  }
+
+  async seasonEpisodes({ auth, params, serialize }: HttpContext) {
     const serie = await Serie.query()
       .where('id', params.id)
       .where('userId', auth.user!.id)
@@ -26,15 +41,15 @@ export default class LibraryController {
     const watchedEpisodes = await EpisodeWatchedMark.query()
       .where('userId', auth.user!.id)
       .where('libraryEntryId', serie.id)
+      .where('season', Number(params.season))
     const watchedByEpisode = new Map(
       watchedEpisodes.map((mark) => [`${mark.season}:${mark.episode}`, mark])
     )
 
     return serialize(
-      SeriesEpisodesTransformer.transform({
-        id: serie.id,
-        name: serie.name,
-        seasons: await catalog.seasons(serie.providerId),
+      SeriesEpisodesTransformer.transformEpisodes({
+        season: Number(params.season),
+        episodes: await catalog.seasonEpisodes(serie.providerId, Number(params.season)),
         watchedByEpisode,
       })
     )

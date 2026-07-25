@@ -57,4 +57,8 @@ export class CatalogProviderManager extends CatalogProvider {
   seasons(providerId: string) {
     return this.use().seasons(providerId)
   }
+
+  seasonEpisodes(providerId: string, season: number) {
+    return this.use().seasonEpisodes(providerId, season)
+  }
 }

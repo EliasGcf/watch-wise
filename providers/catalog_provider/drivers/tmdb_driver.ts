@@ -1,6 +1,7 @@
 import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import type {
+  CatalogEpisode,
   CatalogProvider,
   CatalogSeason,
   CatalogSearchResult,
@@ -140,39 +141,37 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     if (!series.data?.seasons) return []
 
-    const seasons = await Promise.all(
-      series.data.seasons.map(async (season) => {
-        const response = await this.tmdb.tv.season.details({
-          throwOnError: false,
-          path: { series_id: Number(providerId), season_number: season.season_number },
-          query: { language: 'en-US' },
-        })
+    return series.data.seasons.map((season) => ({
+      season: season.season_number,
+      name: season.name,
+    }))
+  }
 
-        if (response.error) {
-          throw new CatalogProviderError('TMDB season details request failed', {
-            cause: response.error,
-          })
-        }
+  async seasonEpisodes(providerId: string, season: number): Promise<CatalogEpisode[]> {
+    const response = await this.tmdb.tv.season.details({
+      throwOnError: false,
+      path: { series_id: Number(providerId), season_number: season },
+      query: { language: 'en-US' },
+    })
 
-        return {
-          season: season.season_number,
-          name: season.name,
-          episodes:
-            response.data?.episodes.map((episode) => ({
-              providerId: `${providerId}:s${episode.season_number}:e${episode.episode_number}`,
-              season: episode.season_number,
-              episode: episode.episode_number,
-              name: episode.name,
-              releasedAt: episode.air_date,
-              duration: episode.runtime,
-              summary: episode.overview,
-              isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
-            })) ?? [],
-        }
+    if (response.error) {
+      throw new CatalogProviderError('TMDB season details request failed', {
+        cause: response.error,
       })
-    )
+    }
 
-    return seasons
+    return (
+      response.data?.episodes.map((episode) => ({
+        providerId: `${providerId}:s${episode.season_number}:e${episode.episode_number}`,
+        season: episode.season_number,
+        episode: episode.episode_number,
+        name: episode.name,
+        releasedAt: episode.air_date,
+        duration: episode.runtime,
+        summary: episode.overview,
+        isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
+      })) ?? []
+    )
   }
 }
 

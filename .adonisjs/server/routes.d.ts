@@ -7,7 +7,8 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
-    'api.library.series.episodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.season_episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
@@ -17,6 +18,7 @@ export type ScannedRoutes = {
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
     'app.library.store': { paramsTuple?: []; params?: {} }
+    'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'app.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'app.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'app.library.watch_episode': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
@@ -27,23 +29,27 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
-    'api.library.series.episodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.season_episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
-    'api.library.series.episodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.season_episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'app.new_account.store': { paramsTuple?: []; params?: {} }

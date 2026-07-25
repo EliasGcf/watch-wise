@@ -8,7 +8,7 @@ import { DateTime } from 'luxon'
 test.group('Library series episodes', (group) => {
   group.each.setup(() => testUtils.db().truncate())
 
-  test('authenticated users can view provider-sourced seasons and released episodes for a series library entry', async ({
+  test('authenticated users can open a series details page and view provider-sourced seasons', async ({
     assert,
     browserContext,
     visit,
@@ -30,7 +30,11 @@ test.group('Library series episodes', (group) => {
     })
 
     await browserContext.loginAs(user)
-    const page = await visit(`/api/library/series/${serie.id}/episodes`)
+    const detailsPage = await visit(`/app/library/series/${serie.id}`)
+    await detailsPage.assertTextContains('body', 'Heat Vision and Jack')
+    await detailsPage.assertTextContains('body', 'Seasons')
+
+    const page = await visit(`/api/library/series/${serie.id}/seasons`)
     const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
 
     assert.deepEqual(data, {
@@ -40,50 +44,66 @@ test.group('Library series episodes', (group) => {
         {
           season: 0,
           name: 'Specials',
-          episodes: [
-            {
-              providerId: 'series-1:s0:e1',
-              season: 0,
-              episode: 1,
-              name: 'Unaired Pilot',
-              releasedAt: '1999-01-01',
-              duration: 28,
-              summary: 'The original special episode.',
-              isReleased: true,
-              isSpecial: true,
-              watched: null,
-            },
-          ],
         },
         {
           season: 1,
           name: 'Season 1',
-          episodes: [
-            {
-              providerId: 'series-1:s1:e1',
-              season: 1,
-              episode: 1,
-              name: 'Pilot',
-              releasedAt: '1999-01-01',
-              duration: 24,
-              summary: 'Jack Austin meets his talking motorcycle.',
-              isReleased: true,
-              isSpecial: false,
-              watched: null,
-            },
-            {
-              providerId: 'series-1:s1:e2',
-              season: 1,
-              episode: 2,
-              name: 'Future Episode',
-              releasedAt: '2999-01-01',
-              duration: 25,
-              summary: 'An episode from the future.',
-              isReleased: false,
-              isSpecial: false,
-              watched: null,
-            },
-          ],
+        },
+      ],
+    })
+  })
+
+  test('authenticated users load provider-sourced episodes for a single season', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Jordan Series',
+      email: 'jordan-series@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await browserContext.loginAs(user)
+    const page = await visit(`/api/library/series/${serie.id}/seasons/1/episodes`)
+    const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
+
+    assert.deepEqual(data, {
+      season: 1,
+      episodes: [
+        {
+          providerId: 'series-1:s1:e1',
+          season: 1,
+          episode: 1,
+          name: 'Pilot',
+          releasedAt: '1999-01-01',
+          duration: 24,
+          summary: 'Jack Austin meets his talking motorcycle.',
+          isReleased: true,
+          isSpecial: false,
+          watched: null,
+        },
+        {
+          providerId: 'series-1:s1:e2',
+          season: 1,
+          episode: 2,
+          name: 'Future Episode',
+          releasedAt: '2999-01-01',
+          duration: 25,
+          summary: 'An episode from the future.',
+          isReleased: false,
+          isSpecial: false,
+          watched: null,
         },
       ],
     })
@@ -146,11 +166,11 @@ test.group('Library series episodes', (group) => {
     })
 
     const detailsResponse = await client
-      .get(`/api/library/series/${serie.id}/episodes`)
+      .get(`/api/library/series/${serie.id}/seasons/1/episodes`)
       .loginAs(user)
     detailsResponse.assertOk()
     const body = detailsResponse.body().data
-    assert.deepInclude(body.seasons[1].episodes[0], {
+    assert.deepInclude(body.episodes[0], {
       season: 1,
       episode: 1,
       watched: {

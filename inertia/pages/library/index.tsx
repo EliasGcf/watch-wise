@@ -2,31 +2,11 @@ import { Form } from '@adonisjs/inertia/react'
 import { useEffect, useState } from 'react'
 import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
-import { Button } from '~/components/ui/button'
+import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
 type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data'][number]
 type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['data'][number]
-type SeriesEpisodes = {
-  id: number
-  name: string
-  seasons: Array<{
-    season: number
-    name: string
-    episodes: Array<{
-      providerId: string
-      season: number
-      episode: number
-      name: string
-      releasedAt: string
-      duration: number
-      summary: string
-      isReleased: boolean
-      isSpecial: boolean
-      watched: { watchedAt: string } | null
-    }>
-  }>
-}
 
 export default function LibraryIndex() {
   const [movies, setMovies] = useState<MovieEntry[]>([])
@@ -192,117 +172,20 @@ function LibraryCard({
         </p>
         <RemoveLibraryEntryForm entry={entry} onRemoveEntry={onRemoveEntry} />
         {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
-        {entry.type === 'serie' && <SeriesEpisodeList serie={entry} />}
+        {entry.type === 'serie' && <SeriesDetailsLink serie={entry} />}
       </CardContent>
     </Card>
   )
 }
 
-function SeriesEpisodeList({ serie }: { serie: SeriesEntry }) {
-  const [details, setDetails] = useState<SeriesEpisodes | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let isCurrent = true
-
-    async function loadEpisodes() {
-      try {
-        const response = await fetch(`/api/library/series/${serie.id}/episodes`)
-        if (!response.ok) throw new Error('Could not load series episodes')
-        const { data } = (await response.json()) as { data: SeriesEpisodes }
-        if (isCurrent) setDetails(data)
-      } catch {
-        if (isCurrent) setError('Episodes could not be loaded.')
-      }
-    }
-
-    void loadEpisodes()
-
-    return () => {
-      isCurrent = false
-    }
-  }, [serie.id])
-
-  if (error) return <p className="text-sm text-muted-foreground">{error}</p>
-  if (!details) return <p className="text-sm text-muted-foreground">Loading episodes...</p>
-
+function SeriesDetailsLink({ serie }: { serie: SeriesEntry }) {
   return (
-    <div className="flex flex-col gap-3">
-      {details.seasons.map((season) => (
-        <div key={season.season} className="flex flex-col gap-2">
-          <h3 className="text-sm font-medium">{season.name}</h3>
-          {season.episodes.map((episode) => (
-            <div key={episode.providerId} className="flex flex-col gap-2 rounded-md border p-3">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-sm font-medium">{episode.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Season {episode.season}, episode {episode.episode}
-                  </p>
-                </div>
-                {episode.isSpecial && <Badge variant="outline">Special</Badge>}
-              </div>
-              {episode.watched ? (
-                <EpisodeUnwatchForm serie={serie} episode={episode} />
-              ) : (
-                <EpisodeWatchForm serie={serie} episode={episode} />
-              )}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function EpisodeWatchForm({
-  serie,
-  episode,
-}: {
-  serie: SeriesEntry
-  episode: SeriesEpisodes['seasons'][number]['episodes'][number]
-}) {
-  if (!episode.isReleased) {
-    return (
-      <Button type="button" className="w-full" disabled>
-        Not released yet
-      </Button>
-    )
-  }
-
-  return (
-    <Form
-      action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}
-      method="post"
+    <a
+      href={`/app/library/series/${serie.id}`}
+      className={buttonVariants({ variant: 'outline', className: 'w-full' })}
     >
-      <Button type="submit" className="w-full" aria-label={`Mark ${episode.name} as watched`}>
-        Mark as watched
-      </Button>
-    </Form>
-  )
-}
-
-function EpisodeUnwatchForm({
-  serie,
-  episode,
-}: {
-  serie: SeriesEntry
-  episode: SeriesEpisodes['seasons'][number]['episodes'][number]
-}) {
-  return (
-    <Form
-      action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}
-      method="delete"
-    >
-      <Button
-        type="submit"
-        variant="outline"
-        className="w-full"
-        aria-label={`Unmark ${episode.name} as watched`}
-      >
-        Unmark as watched
-      </Button>
-    </Form>
+      View seasons
+    </a>
   )
 }
 
