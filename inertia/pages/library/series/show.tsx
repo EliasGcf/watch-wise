@@ -157,7 +157,7 @@ function SeasonEpisodes({
 
     async function loadEpisodes() {
       try {
-        const response = await client.api.api.library.series.seasonEpisodes({
+        const response = await client.api.api.library.series.seasons.episodes({
           params: { id: serie.id, season },
         })
 

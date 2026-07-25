@@ -15,7 +15,7 @@ const group = router.group(() => {
         .as('library.series.seasons')
       router
         .get('library/series/:id/seasons/:season/episodes', [controllers.api.Series, 'episodes'])
-        .as('library.series.season_episodes')
+        .as('library.series.seasons.episodes')
     })
     .use(middleware.auth())
 })

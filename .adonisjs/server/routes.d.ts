@@ -8,7 +8,7 @@ export type ScannedRoutes = {
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'api.library.series.season_episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
+    'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
@@ -30,7 +30,7 @@ export type ScannedRoutes = {
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'api.library.series.season_episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
+    'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }
@@ -43,7 +43,7 @@ export type ScannedRoutes = {
     'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.series': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'api.library.series.season_episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
+    'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
     'app.session.create': { paramsTuple?: []; params?: {} }

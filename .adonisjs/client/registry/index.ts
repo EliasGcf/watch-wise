@@ -30,11 +30,11 @@ const routes = {
     tokens: [{"old":"/api/library/series/:id/seasons","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons","type":0,"val":"seasons","end":""}],
     types: placeholder as Registry['api.library.series.seasons']['types'],
   },
-  'api.library.series.season_episodes': {
+  'api.library.series.seasons.episodes': {
     methods: ["GET","HEAD"],
     pattern: '/api/library/series/:id/seasons/:season/episodes',
     tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"episodes","end":""}],
-    types: placeholder as Registry['api.library.series.season_episodes']['types'],
+    types: placeholder as Registry['api.library.series.seasons.episodes']['types'],
   },
   'app.home': {
     methods: ["GET","HEAD"],

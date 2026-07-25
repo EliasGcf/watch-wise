@@ -55,7 +55,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['show']>>>
     }
   }
-  'api.library.series.season_episodes': {
+  'api.library.series.seasons.episodes': {
     methods: ["GET","HEAD"]
     pattern: '/api/library/series/:id/seasons/:season/episodes'
     types: {
