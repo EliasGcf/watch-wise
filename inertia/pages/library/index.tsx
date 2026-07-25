@@ -18,9 +18,9 @@ type SeriesEpisodes = {
       seasonNumber: number
       episodeNumber: number
       name: string
-      releasedAt: string | null
-      runtime: number | null
-      summary: string | null
+      releasedAt: string
+      runtime: number
+      summary: string
       isReleased: boolean
       isSpecial: boolean
       watched: { watchedAt: string } | null

@@ -47,6 +47,6 @@ function episodeKey(seasonNumber: number, episodeNumber: number) {
   return `${seasonNumber}:${episodeNumber}`
 }
 
-function isReleased(releasedAt: string | null) {
-  return Boolean(releasedAt && DateTime.fromISO(releasedAt) <= DateTime.now())
+function isReleased(releasedAt: string) {
+  return DateTime.fromISO(releasedAt) <= DateTime.now()
 }

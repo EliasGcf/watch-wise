@@ -35,7 +35,7 @@ export default class Serie extends LibraryItem {
         season: episode.seasonNumber,
         episode: episode.episodeNumber,
         name: episode.name,
-        releasedAt: episode.releasedAt ? DateTime.fromISO(episode.releasedAt) : null,
+        releasedAt: DateTime.fromISO(episode.releasedAt),
         providerId: episode.providerId,
         duration: episode.runtime,
         watchedAt: DateTime.now(),

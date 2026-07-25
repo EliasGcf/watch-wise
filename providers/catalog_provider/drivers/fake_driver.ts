@@ -206,7 +206,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
             episodeNumber: 2,
             name: 'Future Episode',
             releasedAt: '2999-01-01',
-            runtime: null,
+            runtime: 25,
             summary: 'An episode from the future.',
             isSpecial: false,
           },

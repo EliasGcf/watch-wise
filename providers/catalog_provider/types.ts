@@ -34,9 +34,9 @@ export type CatalogEpisode = {
   seasonNumber: number
   episodeNumber: number
   name: string
-  releasedAt: string | null
-  runtime: number | null
-  summary: string | null
+  releasedAt: string
+  runtime: number
+  summary: string
   isSpecial: boolean
 }
 

@@ -163,9 +163,9 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
               seasonNumber: episode.season_number,
               episodeNumber: episode.episode_number,
               name: episode.name,
-              releasedAt: episode.air_date || null,
-              runtime: episode.runtime ?? null,
-              summary: episode.overview || null,
+              releasedAt: episode.air_date,
+              runtime: episode.runtime,
+              summary: episode.overview,
               isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
             })) ?? [],
         }

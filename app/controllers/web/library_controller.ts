@@ -99,7 +99,7 @@ export default class LibraryController {
       return response.redirect().back()
     }
 
-    if (!episode.releasedAt || DateTime.fromISO(episode.releasedAt) > DateTime.now()) {
+    if (DateTime.fromISO(episode.releasedAt) > DateTime.now()) {
       session.flash('error', `${episode.name} has not been released yet.`)
       return response.redirect().back()
     }
