@@ -162,7 +162,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     return (
       response.data?.episodes.map((episode) => ({
-        providerId: `${providerId}:s${episode.season_number}:e${episode.episode_number}`,
+        providerId: String(episode.id),
         season: episode.season_number,
         episode: episode.episode_number,
         name: episode.name,
@@ -194,7 +194,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     if (!response.data?.id) return null
 
     return {
-      providerId: `${serieId}:s${response.data.season_number}:e${response.data.episode_number}`,
+      providerId: String(response.data.id),
       season: response.data.season_number,
       episode: response.data.episode_number,
       name: response.data.name,

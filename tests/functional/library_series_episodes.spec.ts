@@ -82,7 +82,7 @@ test.group('Library series episodes', (group) => {
       season: 1,
       episodes: [
         {
-          providerId: 'series-1:s1:e1',
+          providerId: 'episode-1-1',
           season: 1,
           episode: 1,
           name: 'Pilot',
@@ -94,7 +94,7 @@ test.group('Library series episodes', (group) => {
           watched: null,
         },
         {
-          providerId: 'series-1:s1:e2',
+          providerId: 'episode-1-2',
           season: 1,
           episode: 2,
           name: 'Future Episode',
@@ -144,7 +144,7 @@ test.group('Library series episodes', (group) => {
 
     assert.lengthOf(watchedMarks, 1)
     assert.include(watchedMarks[0].serialize(), {
-      providerId: 'series-1:s1:e1',
+      providerId: 'episode-1-1',
       season: 1,
       episode: 1,
       name: 'Pilot',
@@ -159,7 +159,7 @@ test.group('Library series episodes', (group) => {
       .where('libraryEntryId', serie.id)
       .firstOrFail()
     assert.include(persistedSnapshot.serialize(), {
-      providerId: 'series-1:s1:e1',
+      providerId: 'episode-1-1',
       name: 'Pilot',
       releasedAt: '1999-01-01',
       duration: 24,

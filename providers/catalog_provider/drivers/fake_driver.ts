@@ -182,7 +182,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     if (season === 0) {
       return [
         {
-          providerId: 'series-1:s0:e1',
+          providerId: 'episode-0-1',
           season: 0,
           episode: 1,
           name: 'Unaired Pilot',
@@ -197,7 +197,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     if (season === 1) {
       return [
         {
-          providerId: 'series-1:s1:e1',
+          providerId: 'episode-1-1',
           season: 1,
           episode: 1,
           name: firstEpisodeName,
@@ -207,7 +207,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
           isSpecial: false,
         },
         {
-          providerId: 'series-1:s1:e2',
+          providerId: 'episode-1-2',
           season: 1,
           episode: 2,
           name: 'Future Episode',
@@ -234,7 +234,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     if (season === 0 && episode === 1) {
       return {
-        providerId: 'series-1:s0:e1',
+        providerId: 'episode-0-1',
         season: 0,
         episode: 1,
         name: 'Unaired Pilot',
@@ -247,7 +247,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     if (season === 1 && episode === 1) {
       return {
-        providerId: 'series-1:s1:e1',
+        providerId: 'episode-1-1',
         season: 1,
         episode: 1,
         name: firstEpisodeName,
@@ -260,7 +260,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     if (season === 1 && episode === 2) {
       return {
-        providerId: 'series-1:s1:e2',
+        providerId: 'episode-1-2',
         season: 1,
         episode: 2,
         name: 'Future Episode',
