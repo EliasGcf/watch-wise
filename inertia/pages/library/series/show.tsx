@@ -169,7 +169,13 @@ function EpisodeWatchForm({ serie, episode }: { serie: Data.Serie; episode: Seas
 
   return (
     <Form
-      action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}
+      action={
+        client.urlFor.post('app.library.series.episodes.watch', {
+          id: serie.id,
+          season: episode.season,
+          episode: episode.episode,
+        }).url
+      }
       method="post"
     >
       <Button type="submit" className="w-full" aria-label={`Mark ${episode.name} as watched`}>
@@ -182,7 +188,13 @@ function EpisodeWatchForm({ serie, episode }: { serie: Data.Serie; episode: Seas
 function EpisodeUnwatchForm({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
   return (
     <Form
-      action={`/app/library/series/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watch`}
+      action={
+        client.urlFor.delete('app.library.series.episodes.unwatch', {
+          id: serie.id,
+          season: episode.season,
+          episode: episode.episode,
+        }).url
+      }
       method="delete"
     >
       <Button
