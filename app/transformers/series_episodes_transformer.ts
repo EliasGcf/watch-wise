@@ -18,20 +18,18 @@ export default class SeriesEpisodesTransformer {
       id: resource.id,
       name: resource.name,
       seasons: resource.seasons.map((season) => ({
-        seasonNumber: season.seasonNumber,
+        season: season.season,
         name: season.name,
         episodes: season.episodes.map((episode) => {
-          const watched = resource.watchedByEpisode.get(
-            episodeKey(episode.seasonNumber, episode.episodeNumber)
-          )
+          const watched = resource.watchedByEpisode.get(episodeKey(episode.season, episode.episode))
 
           return {
             providerId: episode.providerId,
-            seasonNumber: episode.seasonNumber,
-            episodeNumber: episode.episodeNumber,
+            season: episode.season,
+            episode: episode.episode,
             name: episode.name,
             releasedAt: episode.releasedAt,
-            runtime: episode.runtime,
+            duration: episode.duration,
             summary: episode.summary,
             isReleased: isReleased(episode.releasedAt),
             isSpecial: episode.isSpecial,
@@ -43,8 +41,8 @@ export default class SeriesEpisodesTransformer {
   }
 }
 
-function episodeKey(seasonNumber: number, episodeNumber: number) {
-  return `${seasonNumber}:${episodeNumber}`
+function episodeKey(season: number, episode: number) {
+  return `${season}:${episode}`
 }
 
 function isReleased(releasedAt: string) {

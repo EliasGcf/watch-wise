@@ -11,15 +11,15 @@ type SeriesEpisodes = {
   id: number
   name: string
   seasons: Array<{
-    seasonNumber: number
+    season: number
     name: string
     episodes: Array<{
       providerId: string
-      seasonNumber: number
-      episodeNumber: number
+      season: number
+      episode: number
       name: string
       releasedAt: string
-      runtime: number
+      duration: number
       summary: string
       isReleased: boolean
       isSpecial: boolean
@@ -229,7 +229,7 @@ function SeriesEpisodeList({ serie }: { serie: SeriesEntry }) {
   return (
     <div className="flex flex-col gap-3">
       {details.seasons.map((season) => (
-        <div key={season.seasonNumber} className="flex flex-col gap-2">
+        <div key={season.season} className="flex flex-col gap-2">
           <h3 className="text-sm font-medium">{season.name}</h3>
           {season.episodes.map((episode) => (
             <div key={episode.providerId} className="flex flex-col gap-2 rounded-md border p-3">
@@ -237,7 +237,7 @@ function SeriesEpisodeList({ serie }: { serie: SeriesEntry }) {
                 <div>
                   <p className="text-sm font-medium">{episode.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    Season {episode.seasonNumber}, episode {episode.episodeNumber}
+                    Season {episode.season}, episode {episode.episode}
                   </p>
                 </div>
                 {episode.isSpecial && <Badge variant="outline">Special</Badge>}
@@ -272,7 +272,7 @@ function EpisodeWatchForm({
 
   return (
     <Form
-      action={`/app/library/${serie.id}/seasons/${episode.seasonNumber}/episodes/${episode.episodeNumber}/watched`}
+      action={`/app/library/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watched`}
       method="post"
     >
       <Button type="submit" className="w-full" aria-label={`Mark ${episode.name} as watched`}>
@@ -291,7 +291,7 @@ function EpisodeUnwatchForm({
 }) {
   return (
     <Form
-      action={`/app/library/${serie.id}/seasons/${episode.seasonNumber}/episodes/${episode.episodeNumber}/watched`}
+      action={`/app/library/${serie.id}/seasons/${episode.season}/episodes/${episode.episode}/watched`}
       method="delete"
     >
       <Button

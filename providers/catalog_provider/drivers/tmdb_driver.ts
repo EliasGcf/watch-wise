@@ -155,16 +155,16 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
         }
 
         return {
-          seasonNumber: season.season_number,
+          season: season.season_number,
           name: season.name,
           episodes:
             response.data?.episodes.map((episode) => ({
               providerId: `${providerId}:s${episode.season_number}:e${episode.episode_number}`,
-              seasonNumber: episode.season_number,
-              episodeNumber: episode.episode_number,
+              season: episode.season_number,
+              episode: episode.episode_number,
               name: episode.name,
               releasedAt: episode.air_date,
-              runtime: episode.runtime,
+              duration: episode.runtime,
               summary: episode.overview,
               isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
             })) ?? [],

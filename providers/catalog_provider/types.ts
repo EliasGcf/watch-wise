@@ -31,17 +31,17 @@ export type Serie = Extract<FindResult, { type: 'serie' }>
 
 export type CatalogEpisode = {
   providerId: string
-  seasonNumber: number
-  episodeNumber: number
+  season: number
+  episode: number
   name: string
   releasedAt: string
-  runtime: number
+  duration: number
   summary: string
   isSpecial: boolean
 }
 
 export type CatalogSeason = {
-  seasonNumber: number
+  season: number
   name: string
   episodes: CatalogEpisode[]
 }

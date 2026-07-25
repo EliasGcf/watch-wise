@@ -26,29 +26,29 @@ export default class Serie extends LibraryItem {
       {
         userId: this.userId,
         libraryEntryId: this.id,
-        season: episode.seasonNumber,
-        episode: episode.episodeNumber,
+        season: episode.season,
+        episode: episode.episode,
       },
       {
         userId: this.userId,
         libraryEntryId: this.id,
-        season: episode.seasonNumber,
-        episode: episode.episodeNumber,
+        season: episode.season,
+        episode: episode.episode,
         name: episode.name,
         releasedAt: DateTime.fromISO(episode.releasedAt),
         providerId: episode.providerId,
-        duration: episode.runtime,
+        duration: episode.duration,
         watchedAt: DateTime.now(),
       }
     )
   }
 
-  async unwatchEpisode(seasonNumber: number, episodeNumber: number) {
+  async unwatchEpisode(season: number, episode: number) {
     await EpisodeWatchedMark.query()
       .where('userId', this.userId)
       .where('libraryEntryId', this.id)
-      .where('season', seasonNumber)
-      .where('episode', episodeNumber)
+      .where('season', season)
+      .where('episode', episode)
       .delete()
   }
 }

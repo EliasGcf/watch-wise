@@ -120,9 +120,9 @@ export default class LibraryController {
   }
 }
 
-async function findCatalogEpisode(providerId: string, seasonNumber: number, episodeNumber: number) {
+async function findCatalogEpisode(providerId: string, season: number, episode: number) {
   const seasons = await catalog.seasons(providerId)
   return seasons
-    .find((season) => season.seasonNumber === seasonNumber)
-    ?.episodes.find((episode) => episode.episodeNumber === episodeNumber)
+    .find((catalogSeason) => catalogSeason.season === season)
+    ?.episodes.find((catalogEpisode) => catalogEpisode.episode === episode)
 }

@@ -171,42 +171,42 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     return [
       {
-        seasonNumber: 0,
+        season: 0,
         name: 'Specials',
         episodes: [
           {
             providerId: 'series-1:s0:e1',
-            seasonNumber: 0,
-            episodeNumber: 1,
+            season: 0,
+            episode: 1,
             name: 'Unaired Pilot',
             releasedAt: '1999-01-01',
-            runtime: 28,
+            duration: 28,
             summary: 'The original special episode.',
             isSpecial: true,
           },
         ],
       },
       {
-        seasonNumber: 1,
+        season: 1,
         name: 'Season 1',
         episodes: [
           {
             providerId: 'series-1:s1:e1',
-            seasonNumber: 1,
-            episodeNumber: 1,
+            season: 1,
+            episode: 1,
             name: firstEpisodeName,
             releasedAt: '1999-01-01',
-            runtime: firstEpisodeRuntime,
+            duration: firstEpisodeRuntime,
             summary: 'Jack Austin meets his talking motorcycle.',
             isSpecial: false,
           },
           {
             providerId: 'series-1:s1:e2',
-            seasonNumber: 1,
-            episodeNumber: 2,
+            season: 1,
+            episode: 2,
             name: 'Future Episode',
             releasedAt: '2999-01-01',
-            runtime: 25,
+            duration: 25,
             summary: 'An episode from the future.',
             isSpecial: false,
           },
