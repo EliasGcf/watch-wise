@@ -53,4 +53,8 @@ export class CatalogProviderManager extends CatalogProvider {
   find(type: ItemType, providerId: string) {
     return this.use().find(type, providerId)
   }
+
+  seasons(providerId: string) {
+    return this.use().seasons(providerId)
+  }
 }

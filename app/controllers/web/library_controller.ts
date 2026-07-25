@@ -85,4 +85,44 @@ export default class LibraryController {
     session.flash('success', `${entry.name} is no longer marked as watched.`)
     return response.redirect().back()
   }
+
+  async watchEpisode({ auth, params, response, session }: HttpContext) {
+    const entry = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const episode = await findCatalogEpisode(
+      entry.providerId,
+      Number(params.season),
+      Number(params.episode)
+    )
+
+    if (!episode) {
+      session.flash('error', 'Episode could not be found in the catalog.')
+      return response.redirect().back()
+    }
+
+    if (!episode.releasedAt || DateTime.fromISO(episode.releasedAt) > DateTime.now()) {
+      session.flash('error', `${episode.name} has not been released yet.`)
+      return response.redirect().back()
+    }
+
+    await entry.watchEpisode(episode)
+
+    session.flash('success', `${episode.name} was marked as watched.`)
+    return response.redirect().back()
+  }
+
+  async unwatchEpisode({ auth, params, response, session }: HttpContext) {
+    const entry = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+
+    await entry.unwatchEpisode(Number(params.season), Number(params.episode))
+
+    session.flash('success', 'Episode is no longer marked as watched.')
+    return response.redirect().back()
+  }
+}
+
+async function findCatalogEpisode(providerId: string, seasonNumber: number, episodeNumber: number) {
+  const seasons = await catalog.seasons(providerId)
+  return seasons
+    .find((season) => season.seasonNumber === seasonNumber)
+    ?.episodes.find((episode) => episode.episodeNumber === episodeNumber)
 }

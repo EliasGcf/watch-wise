@@ -10,6 +10,9 @@ const group = router.group(() => {
     .group(() => {
       router.get('library/movies', [controllers.api.Library, 'movies'])
       router.get('library/series', [controllers.api.Library, 'series'])
+      router
+        .get('library/series/:id/episodes', [controllers.api.Library, 'seriesEpisodes'])
+        .as('library.series.episodes')
     })
     .use(middleware.auth())
 })

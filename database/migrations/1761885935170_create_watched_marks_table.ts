@@ -23,6 +23,8 @@ export default class extends BaseSchema {
       table.string('provider_id').nullable()
       table.integer('season').unsigned().nullable()
       table.integer('episode').unsigned().nullable()
+      table.string('name').nullable()
+      table.date('released_at').nullable()
       table.integer('duration').unsigned().nullable()
       table.timestamp('watched_at').notNullable()
 

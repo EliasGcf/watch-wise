@@ -4,6 +4,7 @@ import {
   fakeGet3TvBySeriesIdResponse,
 } from '#generated/tmdb/@faker-js/faker.gen'
 import type {
+  CatalogSeason,
   CatalogProvider,
   CatalogSearchResult,
   FindResult,
@@ -160,6 +161,58 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     }
 
     return null
+  }
+
+  async seasons(providerId: string): Promise<CatalogSeason[]> {
+    if (providerId !== 'series-1' && providerId !== 'series-1-changed') return []
+
+    const firstEpisodeName = providerId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'
+    const firstEpisodeRuntime = providerId === 'series-1-changed' ? 99 : 24
+
+    return [
+      {
+        seasonNumber: 0,
+        name: 'Specials',
+        episodes: [
+          {
+            providerId: 'series-1:s0:e1',
+            seasonNumber: 0,
+            episodeNumber: 1,
+            name: 'Unaired Pilot',
+            releasedAt: '1999-01-01',
+            runtime: 28,
+            summary: 'The original special episode.',
+            isSpecial: true,
+          },
+        ],
+      },
+      {
+        seasonNumber: 1,
+        name: 'Season 1',
+        episodes: [
+          {
+            providerId: 'series-1:s1:e1',
+            seasonNumber: 1,
+            episodeNumber: 1,
+            name: firstEpisodeName,
+            releasedAt: '1999-01-01',
+            runtime: firstEpisodeRuntime,
+            summary: 'Jack Austin meets his talking motorcycle.',
+            isSpecial: false,
+          },
+          {
+            providerId: 'series-1:s1:e2',
+            seasonNumber: 1,
+            episodeNumber: 2,
+            name: 'Future Episode',
+            releasedAt: '2999-01-01',
+            runtime: null,
+            summary: 'An episode from the future.',
+            isSpecial: false,
+          },
+        ],
+      },
+    ]
   }
 }
 

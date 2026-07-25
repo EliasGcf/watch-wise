@@ -2,6 +2,7 @@ import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import type {
   CatalogProvider,
+  CatalogSeason,
   CatalogSearchResult,
   TmdbCatalogProviderConfig,
   ItemType,
@@ -124,6 +125,54 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       releasedAt: response.data.first_air_date,
       summary: response.data.overview,
     }
+  }
+
+  async seasons(providerId: string): Promise<CatalogSeason[]> {
+    const series = await this.tmdb.tv.series.details({
+      throwOnError: false,
+      path: { series_id: Number(providerId) },
+      query: { language: 'en-US' },
+    })
+
+    if (series.error) {
+      throw new CatalogProviderError('TMDB serie details request failed', { cause: series.error })
+    }
+
+    if (!series.data?.seasons) return []
+
+    const seasons = await Promise.all(
+      series.data.seasons.map(async (season) => {
+        const response = await this.tmdb.tv.season.details({
+          throwOnError: false,
+          path: { series_id: Number(providerId), season_number: season.season_number },
+          query: { language: 'en-US' },
+        })
+
+        if (response.error) {
+          throw new CatalogProviderError('TMDB season details request failed', {
+            cause: response.error,
+          })
+        }
+
+        return {
+          seasonNumber: season.season_number,
+          name: season.name,
+          episodes:
+            response.data?.episodes.map((episode) => ({
+              providerId: `${providerId}:s${episode.season_number}:e${episode.episode_number}`,
+              seasonNumber: episode.season_number,
+              episodeNumber: episode.episode_number,
+              name: episode.name,
+              releasedAt: episode.air_date || null,
+              runtime: episode.runtime ?? null,
+              summary: episode.overview || null,
+              isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
+            })) ?? [],
+        }
+      })
+    )
+
+    return seasons
   }
 }
 

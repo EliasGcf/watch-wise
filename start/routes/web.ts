@@ -23,6 +23,18 @@ const group = router.group(() => {
       router.post('library', [controllers.web.Library, 'store'])
       router.post('library/:id/watched', [controllers.web.Library, 'watch'])
       router.delete('library/:id/watched', [controllers.web.Library, 'unwatch'])
+      router
+        .post('library/:id/seasons/:season/episodes/:episode/watched', [
+          controllers.web.Library,
+          'watchEpisode',
+        ])
+        .as('library.watch_episode')
+      router
+        .delete('library/:id/seasons/:season/episodes/:episode/watched', [
+          controllers.web.Library,
+          'unwatchEpisode',
+        ])
+        .as('library.unwatch_episode')
       router.delete('library/:id', [controllers.web.Library, 'destroy'])
     })
     .use(middleware.auth())

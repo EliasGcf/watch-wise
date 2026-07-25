@@ -49,7 +49,10 @@ test.group('Library movie watched records', (group) => {
 
     await markedPage.getByRole('button', { name: 'Unmark Heat as watched' }).click()
 
-    assert.lengthOf(await MovieWatchedMark.query().where('userId', user.id).where('libraryEntryId', movie.id), 0)
+    assert.lengthOf(
+      await MovieWatchedMark.query().where('userId', user.id).where('libraryEntryId', movie.id),
+      0
+    )
   })
 
   test('re-marking a movie preserves a single movie watched record', async ({
@@ -79,7 +82,9 @@ test.group('Library movie watched records', (group) => {
     await firstPage.getByRole('button', { name: 'Mark Heat as watched' }).click()
     await duplicatePage.getByRole('button', { name: 'Mark Heat as watched' }).click()
 
-    await movie.merge({ name: 'Changed Heat', bannerPath: '', posterPath: '', summary: null }).save()
+    await movie
+      .merge({ name: 'Changed Heat', bannerPath: '', posterPath: '', summary: null })
+      .save()
 
     const secondPage = await visit('/app/library')
     await secondPage.assertTextContains('body', 'Watched')
@@ -118,6 +123,9 @@ test.group('Library movie watched records', (group) => {
     const page = await visit('/app/library')
     await page.getByRole('button', { name: 'Mark Future Heat as watched' }).click()
 
-    assert.lengthOf(await MovieWatchedMark.query().where('userId', user.id).where('libraryEntryId', movie.id), 0)
+    assert.lengthOf(
+      await MovieWatchedMark.query().where('userId', user.id).where('libraryEntryId', movie.id),
+      0
+    )
   })
 })
