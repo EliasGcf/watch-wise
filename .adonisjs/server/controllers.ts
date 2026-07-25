@@ -9,7 +9,9 @@ export const controllers = {
   },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
+    Episodes: () => import('#controllers/web/episodes_controller'),
     Library: () => import('#controllers/web/library_controller'),
+    Movies: () => import('#controllers/web/movies_controller'),
     NewAccount: () => import('#controllers/web/new_account_controller'),
     Session: () => import('#controllers/web/session_controller'),
   },

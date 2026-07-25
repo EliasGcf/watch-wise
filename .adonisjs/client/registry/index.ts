@@ -24,6 +24,12 @@ const routes = {
     tokens: [{"old":"/api/library/series","type":0,"val":"api","end":""},{"old":"/api/library/series","type":0,"val":"library","end":""},{"old":"/api/library/series","type":0,"val":"series","end":""}],
     types: placeholder as Registry['api.library.series']['types'],
   },
+  'api.library.series.episodes': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/library/series/:id/episodes',
+    tokens: [{"old":"/api/library/series/:id/episodes","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/episodes","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/episodes","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/episodes","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/episodes","type":0,"val":"episodes","end":""}],
+    types: placeholder as Registry['api.library.series.episodes']['types'],
+  },
   'app.home': {
     methods: ["GET","HEAD"],
     pattern: '/app',
@@ -89,6 +95,18 @@ const routes = {
     pattern: '/app/library/:id/watched',
     tokens: [{"old":"/app/library/:id/watched","type":0,"val":"app","end":""},{"old":"/app/library/:id/watched","type":0,"val":"library","end":""},{"old":"/app/library/:id/watched","type":1,"val":"id","end":""},{"old":"/app/library/:id/watched","type":0,"val":"watched","end":""}],
     types: placeholder as Registry['app.library.unwatch']['types'],
+  },
+  'app.library.watch_episode': {
+    methods: ["POST"],
+    pattern: '/app/library/:id/seasons/:season/episodes/:episode/watched',
+    tokens: [{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"app","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"library","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":1,"val":"id","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"seasons","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":1,"val":"season","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"episodes","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":1,"val":"episode","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"watched","end":""}],
+    types: placeholder as Registry['app.library.watch_episode']['types'],
+  },
+  'app.library.unwatch_episode': {
+    methods: ["DELETE"],
+    pattern: '/app/library/:id/seasons/:season/episodes/:episode/watched',
+    tokens: [{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"app","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"library","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":1,"val":"id","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"seasons","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":1,"val":"season","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"episodes","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":1,"val":"episode","end":""},{"old":"/app/library/:id/seasons/:season/episodes/:episode/watched","type":0,"val":"watched","end":""}],
+    types: placeholder as Registry['app.library.unwatch_episode']['types'],
   },
   'app.library.destroy': {
     methods: ["DELETE"],
