@@ -73,10 +73,9 @@ export class WatchedMarkSchema extends BaseModel {
     'episode',
     'id',
     'libraryEntryId',
-    'name',
     'providerId',
-    'releasedAt',
     'season',
+    'type',
     'updatedAt',
     'userId',
     'watchedAt',
@@ -93,13 +92,11 @@ export class WatchedMarkSchema extends BaseModel {
   @column()
   declare libraryEntryId: number
   @column()
-  declare name: string | null
-  @column()
   declare providerId: string | null
-  @column.date()
-  declare releasedAt: DateTime | null
   @column()
   declare season: number | null
+  @column()
+  declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()

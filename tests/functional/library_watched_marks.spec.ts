@@ -1,5 +1,5 @@
 import Movie from '#models/movie'
-import { MovieWatchedMark } from '#models/watched_mark'
+import { WatchedMovie } from '#models/watched_mark'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
@@ -37,11 +37,12 @@ test.group('Library movie watched records', (group) => {
     const markedPage = await visit('/app/library')
     await markedPage.assertTextContains('body', 'Watched')
 
-    const moviesWatched = await MovieWatchedMark.query()
+    const moviesWatched = await WatchedMovie.query()
       .where('userId', user.id)
       .where('libraryEntryId', movie.id)
 
     assert.lengthOf(moviesWatched, 1)
+    assert.equal(moviesWatched[0].type, 'movie')
     assert.isNull(moviesWatched[0].season)
     assert.isNull(moviesWatched[0].episode)
     assert.equal(moviesWatched[0].duration, 170)
@@ -50,7 +51,7 @@ test.group('Library movie watched records', (group) => {
     await markedPage.getByRole('button', { name: 'Unmark Heat as watched' }).click()
 
     assert.lengthOf(
-      await MovieWatchedMark.query().where('userId', user.id).where('libraryEntryId', movie.id),
+      await WatchedMovie.query().where('userId', user.id).where('libraryEntryId', movie.id),
       0
     )
   })
@@ -89,7 +90,7 @@ test.group('Library movie watched records', (group) => {
     const secondPage = await visit('/app/library')
     await secondPage.assertTextContains('body', 'Watched')
 
-    const moviesWatched = await MovieWatchedMark.query()
+    const moviesWatched = await WatchedMovie.query()
       .where('userId', user.id)
       .where('libraryEntryId', movie.id)
 
@@ -124,7 +125,7 @@ test.group('Library movie watched records', (group) => {
     await page.getByRole('button', { name: 'Mark Future Heat as watched' }).click()
 
     assert.lengthOf(
-      await MovieWatchedMark.query().where('userId', user.id).where('libraryEntryId', movie.id),
+      await WatchedMovie.query().where('userId', user.id).where('libraryEntryId', movie.id),
       0
     )
   })

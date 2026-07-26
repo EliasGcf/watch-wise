@@ -1,4 +1,4 @@
-import { MovieWatchedMark } from '#models/watched_mark'
+import { WatchedMovie } from '#models/watched_mark'
 import User from '#models/user'
 import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasOne } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
@@ -14,8 +14,8 @@ export default class Movie extends LibraryItem {
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @hasOne(() => MovieWatchedMark, { foreignKey: 'libraryEntryId' })
-  declare watched: HasOne<typeof MovieWatchedMark>
+  @hasOne(() => WatchedMovie, { foreignKey: 'libraryEntryId' })
+  declare watched: HasOne<typeof WatchedMovie>
 
   @beforeCreate()
   static assignType(movie: Movie) {
@@ -29,8 +29,8 @@ export default class Movie extends LibraryItem {
   }
 
   async watch(duration: number | null = null) {
-    await MovieWatchedMark.firstOrCreate(
-      { userId: this.userId, libraryEntryId: this.id, season: null, episode: null },
+    await WatchedMovie.firstOrCreate(
+      { userId: this.userId, libraryEntryId: this.id, type: 'movie' },
       { duration, watchedAt: DateTime.now() }
     )
   }

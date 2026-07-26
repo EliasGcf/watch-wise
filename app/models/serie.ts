@@ -1,6 +1,6 @@
 import LibraryItem from '#models/library_item'
 import User from '#models/user'
-import { EpisodeWatchedMark } from '#models/watched_mark'
+import { WatchedEpisode } from '#models/watched_mark'
 import type { CatalogEpisode, CatalogSeason } from '#providers/catalog_provider/types'
 import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasMany } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
@@ -15,8 +15,8 @@ export default class Serie extends LibraryItem {
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
 
-  @hasMany(() => EpisodeWatchedMark, { foreignKey: 'libraryEntryId' })
-  declare watchedEpisodes: HasMany<typeof EpisodeWatchedMark>
+  @hasMany(() => WatchedEpisode, { foreignKey: 'libraryEntryId' })
+  declare watchedEpisodes: HasMany<typeof WatchedEpisode>
 
   @beforeCreate()
   static assignType(serie: Serie) {
@@ -30,10 +30,11 @@ export default class Serie extends LibraryItem {
   }
 
   async watchEpisode(episode: CatalogEpisode) {
-    await EpisodeWatchedMark.firstOrCreate(
+    await WatchedEpisode.firstOrCreate(
       {
         userId: this.userId,
         libraryEntryId: this.id,
+        type: 'episode',
         season: episode.season,
         episode: episode.episode,
       },
@@ -42,8 +43,6 @@ export default class Serie extends LibraryItem {
         libraryEntryId: this.id,
         season: episode.season,
         episode: episode.episode,
-        name: episode.name,
-        releasedAt: DateTime.fromISO(episode.releasedAt),
         providerId: episode.providerId,
         duration: episode.duration,
         watchedAt: DateTime.now(),
@@ -52,7 +51,7 @@ export default class Serie extends LibraryItem {
   }
 
   async unwatchEpisode(season: number, episode: number) {
-    await EpisodeWatchedMark.query()
+    await WatchedEpisode.query()
       .where('userId', this.userId)
       .where('libraryEntryId', this.id)
       .where('season', season)

@@ -21,27 +21,35 @@ export default class extends BaseSchema {
         .inTable('library_entries')
         .onDelete('CASCADE')
       table.string('provider_id').nullable()
+
+      table.enum('type', ['movie', 'episode']).notNullable()
+      table.integer('duration').unsigned().nullable()
+
+      // Series only
       table.integer('season').unsigned().nullable()
       table.integer('episode').unsigned().nullable()
-      table.string('name').nullable()
-      table.date('released_at').nullable()
-      table.integer('duration').unsigned().nullable()
-      table.timestamp('watched_at').notNullable()
 
+      table.timestamp('watched_at').notNullable()
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
+
+      table.check(
+        `(type = 'movie' AND season IS NULL AND episode IS NULL) OR (type = 'episode' AND season IS NOT NULL AND episode IS NOT NULL)`,
+        [],
+        'watched_marks_type_scope_check'
+      )
     })
 
     this.schema.raw(`
       CREATE UNIQUE INDEX watched_marks_movie_unique
       ON watched_marks (user_id, library_entry_id)
-      WHERE season IS NULL AND episode IS NULL
+      WHERE type = 'movie'
     `)
 
     this.schema.raw(`
       CREATE UNIQUE INDEX watched_marks_episode_unique
       ON watched_marks (user_id, library_entry_id, season, episode)
-      WHERE season IS NOT NULL AND episode IS NOT NULL
+      WHERE type = 'episode'
     `)
   }
 

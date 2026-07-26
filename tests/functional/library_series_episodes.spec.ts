@@ -1,5 +1,5 @@
 import Serie from '#models/serie'
-import { EpisodeWatchedMark } from '#models/watched_mark'
+import { WatchedEpisode } from '#models/watched_mark'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
@@ -120,30 +120,28 @@ test.group('Library series episodes', (group) => {
       .loginAs(user)
       .withCsrfToken()
 
-    const watchedMarks = await EpisodeWatchedMark.query()
+    const watchedMarks = await WatchedEpisode.query()
       .where('userId', user.id)
       .where('libraryEntryId', serie.id)
 
     assert.lengthOf(watchedMarks, 1)
     assert.include(watchedMarks[0].serialize(), {
       providerId: 'episode-1-1',
+      type: 'episode',
       season: 1,
       episode: 1,
-      name: 'Pilot',
-      releasedAt: '1999-01-01',
       duration: 24,
     })
     assert.isTrue(watchedMarks[0].watchedAt <= DateTime.now())
 
     await serie.merge({ providerId: 'series-1-changed' }).save()
-    const persistedSnapshot = await EpisodeWatchedMark.query()
+    const persistedSnapshot = await WatchedEpisode.query()
       .where('userId', user.id)
       .where('libraryEntryId', serie.id)
       .firstOrFail()
     assert.include(persistedSnapshot.serialize(), {
       providerId: 'episode-1-1',
-      name: 'Pilot',
-      releasedAt: '1999-01-01',
+      type: 'episode',
       duration: 24,
     })
 
@@ -166,7 +164,7 @@ test.group('Library series episodes', (group) => {
       .withCsrfToken()
 
     assert.lengthOf(
-      await EpisodeWatchedMark.query().where('userId', user.id).where('libraryEntryId', serie.id),
+      await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
   })
@@ -197,7 +195,7 @@ test.group('Library series episodes', (group) => {
       .withCsrfToken()
 
     assert.lengthOf(
-      await EpisodeWatchedMark.query().where('userId', user.id).where('libraryEntryId', serie.id),
+      await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
   })
