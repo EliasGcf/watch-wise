@@ -134,6 +134,9 @@ test.group('Library series episodes', (group) => {
     })
     assert.isTrue(watchedMarks[0].watchedAt <= DateTime.now())
 
+    await user.refresh()
+    assert.equal(user.watchedTime, 24)
+
     await serie.merge({ providerId: 'series-1-changed' }).save()
     const persistedSnapshot = await WatchedEpisode.query()
       .where('userId', user.id)
@@ -167,6 +170,9 @@ test.group('Library series episodes', (group) => {
       await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
+
+    await user.refresh()
+    assert.equal(user.watchedTime, 0)
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({

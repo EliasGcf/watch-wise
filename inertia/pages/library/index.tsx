@@ -4,11 +4,12 @@ import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { type InertiaProps } from '~/types'
 
 type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data'][number]
 type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['data'][number]
 
-export default function LibraryIndex() {
+export default function LibraryIndex({ user }: InertiaProps) {
   const [movies, setMovies] = useState<MovieEntry[]>([])
   const [series, setSeries] = useState<SeriesEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -55,6 +56,14 @@ export default function LibraryIndex() {
           <CardTitle>Your library</CardTitle>
           <CardDescription>Movies and series you have chosen to follow.</CardDescription>
         </CardHeader>
+        {user && (
+          <CardContent>
+            <p className="text-2xl font-semibold">{formatWatchedTime(user.watchedTime)}</p>
+            <p className="text-sm text-muted-foreground">
+              Watched Time from known movie and episode runtimes.
+            </p>
+          </CardContent>
+        )}
       </Card>
 
       {error && (
@@ -103,6 +112,15 @@ export default function LibraryIndex() {
       )}
     </div>
   )
+}
+
+function formatWatchedTime(minutes: number) {
+  const hours = Math.floor(minutes / 60)
+  const remainingMinutes = minutes % 60
+
+  if (hours === 0) return `${remainingMinutes}m`
+  if (remainingMinutes === 0) return `${hours}h`
+  return `${hours}h ${remainingMinutes}m`
 }
 
 function LibrarySection({

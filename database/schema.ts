@@ -50,7 +50,15 @@ export class LibraryEntrySchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'email',
+    'fullName',
+    'id',
+    'password',
+    'updatedAt',
+    'watchedTime',
+  ] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -64,6 +72,8 @@ export class UserSchema extends BaseModel {
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+  @column()
+  declare watchedTime: number
 }
 
 export class WatchedMarkSchema extends BaseModel {
@@ -84,7 +94,7 @@ export class WatchedMarkSchema extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
-  declare duration: number | null
+  declare duration: number
   @column()
   declare episode: number | null
   @column({ isPrimary: true })
@@ -92,7 +102,7 @@ export class WatchedMarkSchema extends BaseModel {
   @column()
   declare libraryEntryId: number
   @column()
-  declare providerId: string | null
+  declare providerId: string
   @column()
   declare season: number | null
   @column()

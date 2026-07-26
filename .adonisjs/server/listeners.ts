@@ -3,4 +3,6 @@
  * DO NOT EDIT manually
  */
 
-export const listeners = {}
+export const listeners = {
+  UpdateUserWatchedTime: () => import('#listeners/update_user_watched_time'),
+}
