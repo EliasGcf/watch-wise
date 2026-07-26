@@ -3,7 +3,7 @@ import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import User from '#models/user'
-import { beforeFetch, beforeFind, belongsTo } from '@adonisjs/lucid/orm'
+import { beforeCreate, beforeFetch, beforeFind, belongsTo } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
@@ -17,26 +17,40 @@ export default class WatchedMark extends WatchedMarkSchema {
   declare libraryEntry: BelongsTo<typeof LibraryItem>
 }
 
-export class MovieWatchedMark extends WatchedMark {
-  static table = 'watched_marks'
+export class WatchedMovie extends WatchedMark {
+  static table = WatchedMark.table
+
+  declare type: 'movie'
+
+  @beforeCreate()
+  static assignType(movie: WatchedMovie) {
+    movie.type = 'movie'
+  }
 
   @beforeFind()
   @beforeFetch()
-  static filterType(query: ModelQueryBuilderContract<typeof MovieWatchedMark>) {
-    query.whereNull('season').whereNull('episode')
+  static filterType(query: ModelQueryBuilderContract<typeof WatchedMovie>) {
+    query.where('type', 'movie')
   }
 
   @belongsTo(() => Movie, { foreignKey: 'libraryEntryId' })
   declare movie: BelongsTo<typeof Movie>
 }
 
-export class EpisodeWatchedMark extends WatchedMark {
-  static table = 'watched_marks'
+export class WatchedEpisode extends WatchedMark {
+  static table = WatchedMark.table
+
+  declare type: 'episode'
+
+  @beforeCreate()
+  static assignType(episode: WatchedEpisode) {
+    episode.type = 'episode'
+  }
 
   @beforeFind()
   @beforeFetch()
-  static filterType(query: ModelQueryBuilderContract<typeof EpisodeWatchedMark>) {
-    query.whereNotNull('season').whereNotNull('episode')
+  static filterType(query: ModelQueryBuilderContract<typeof WatchedEpisode>) {
+    query.where('type', 'episode')
   }
 
   @belongsTo(() => Serie, { foreignKey: 'libraryEntryId' })
