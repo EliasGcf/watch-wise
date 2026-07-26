@@ -16,7 +16,7 @@ export default class UpdateUserWatchedTime {
           ? event.watchedEpisode
           : null
 
-    if (!watchedMark || watchedMark.duration === null) return
+    if (!watchedMark) return
 
     const amount =
       event instanceof events.MovieUnwatched || event instanceof events.EpisodeUnwatched

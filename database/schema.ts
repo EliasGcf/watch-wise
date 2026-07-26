@@ -94,7 +94,7 @@ export class WatchedMarkSchema extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
-  declare duration: number | null
+  declare duration: number
   @column()
   declare episode: number | null
   @column({ isPrimary: true })
@@ -102,7 +102,7 @@ export class WatchedMarkSchema extends BaseModel {
   @column()
   declare libraryEntryId: number
   @column()
-  declare providerId: string | null
+  declare providerId: string
   @column()
   declare season: number | null
   @column()

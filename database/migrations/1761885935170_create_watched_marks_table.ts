@@ -20,10 +20,10 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('library_entries')
         .onDelete('CASCADE')
-      table.string('provider_id').nullable()
+      table.string('provider_id').notNullable()
 
       table.enum('type', ['movie', 'episode']).notNullable()
-      table.integer('duration').unsigned().nullable()
+      table.integer('duration').unsigned().notNullable()
 
       // Series only
       table.integer('season').unsigned().nullable()
