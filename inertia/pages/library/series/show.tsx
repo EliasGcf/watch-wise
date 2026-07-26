@@ -1,4 +1,3 @@
-import { Form } from '@adonisjs/inertia/react'
 import { useEffect, useState } from 'react'
 import {
   Accordion,
@@ -130,6 +129,9 @@ function SeasonEpisodes({
 }
 
 function EpisodeCard({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
+  const [watched, setWatched] = useState(episode.watched)
+  const currentEpisode = { ...episode, watched }
+
   return (
     <Card>
       <CardHeader>
@@ -142,23 +144,39 @@ function EpisodeCard({ serie, episode }: { serie: Data.Serie; episode: SeasonEpi
           </div>
           <div className="flex flex-wrap justify-end gap-2">
             {episode.isSpecial && <Badge variant="outline">Special</Badge>}
-            {episode.watched && <Badge>Watched</Badge>}
+            {watched && <Badge>Watched</Badge>}
           </div>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
         {episode.summary && <p className="text-muted-foreground">{episode.summary}</p>}
-        {episode.watched ? (
-          <EpisodeUnwatchForm serie={serie} episode={episode} />
+        {watched ? (
+          <EpisodeUnwatchButton
+            serie={serie}
+            episode={currentEpisode}
+            onUnwatched={() => setWatched(null)}
+          />
         ) : (
-          <EpisodeWatchForm serie={serie} episode={episode} />
+          <EpisodeWatchButton
+            serie={serie}
+            episode={currentEpisode}
+            onWatched={() => setWatched({ watchedAt: new Date().toISOString() })}
+          />
         )}
       </CardContent>
     </Card>
   )
 }
 
-function EpisodeWatchForm({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
+function EpisodeWatchButton({
+  serie,
+  episode,
+  onWatched,
+}: {
+  serie: Data.Serie
+  episode: SeasonEpisode
+  onWatched: () => void
+}) {
   if (!episode.isReleased) {
     return (
       <Button type="button" className="w-full" disabled>
@@ -167,44 +185,50 @@ function EpisodeWatchForm({ serie, episode }: { serie: Data.Serie; episode: Seas
     )
   }
 
+  async function watchEpisode() {
+    await client.api.api.library.series.episodes.watch({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+    })
+    onWatched()
+  }
+
   return (
-    <Form
-      action={
-        client.urlFor.post('app.library.series.episodes.watch', {
-          id: serie.id,
-          season: episode.season,
-          episode: episode.episode,
-        }).url
-      }
-      method="post"
+    <Button
+      type="button"
+      className="w-full"
+      aria-label={`Mark ${episode.name} as watched`}
+      onClick={() => void watchEpisode()}
     >
-      <Button type="submit" className="w-full" aria-label={`Mark ${episode.name} as watched`}>
-        Mark as watched
-      </Button>
-    </Form>
+      Mark as watched
+    </Button>
   )
 }
 
-function EpisodeUnwatchForm({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
+function EpisodeUnwatchButton({
+  serie,
+  episode,
+  onUnwatched,
+}: {
+  serie: Data.Serie
+  episode: SeasonEpisode
+  onUnwatched: () => void
+}) {
+  async function unwatchEpisode() {
+    await client.api.api.library.series.episodes.unwatch({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+    })
+    onUnwatched()
+  }
+
   return (
-    <Form
-      action={
-        client.urlFor.delete('app.library.series.episodes.unwatch', {
-          id: serie.id,
-          season: episode.season,
-          episode: episode.episode,
-        }).url
-      }
-      method="delete"
+    <Button
+      type="button"
+      variant="outline"
+      className="w-full"
+      aria-label={`Unmark ${episode.name} as watched`}
+      onClick={() => void unwatchEpisode()}
     >
-      <Button
-        type="submit"
-        variant="outline"
-        className="w-full"
-        aria-label={`Unmark ${episode.name} as watched`}
-      >
-        Unmark as watched
-      </Button>
-    </Form>
+      Unmark as watched
+    </Button>
   )
 }

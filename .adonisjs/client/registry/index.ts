@@ -18,6 +18,18 @@ const routes = {
     tokens: [{"old":"/api/library/movies","type":0,"val":"api","end":""},{"old":"/api/library/movies","type":0,"val":"library","end":""},{"old":"/api/library/movies","type":0,"val":"movies","end":""}],
     types: placeholder as Registry['api.library.movies']['types'],
   },
+  'api.library.movies.watch': {
+    methods: ["POST"],
+    pattern: '/api/library/movies/:id/watch',
+    tokens: [{"old":"/api/library/movies/:id/watch","type":0,"val":"api","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"library","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"movies","end":""},{"old":"/api/library/movies/:id/watch","type":1,"val":"id","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"watch","end":""}],
+    types: placeholder as Registry['api.library.movies.watch']['types'],
+  },
+  'api.library.movies.unwatch': {
+    methods: ["DELETE"],
+    pattern: '/api/library/movies/:id/watch',
+    tokens: [{"old":"/api/library/movies/:id/watch","type":0,"val":"api","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"library","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"movies","end":""},{"old":"/api/library/movies/:id/watch","type":1,"val":"id","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"watch","end":""}],
+    types: placeholder as Registry['api.library.movies.unwatch']['types'],
+  },
   'api.library.series': {
     methods: ["GET","HEAD"],
     pattern: '/api/library/series',
@@ -29,6 +41,18 @@ const routes = {
     pattern: '/api/library/series/:id/seasons/:season/episodes',
     tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"episodes","end":""}],
     types: placeholder as Registry['api.library.series.seasons.episodes']['types'],
+  },
+  'api.library.series.episodes.watch': {
+    methods: ["POST"],
+    pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch',
+    tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"episodes","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"episode","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"watch","end":""}],
+    types: placeholder as Registry['api.library.series.episodes.watch']['types'],
+  },
+  'api.library.series.episodes.unwatch': {
+    methods: ["DELETE"],
+    pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch',
+    tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"episodes","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"episode","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"watch","end":""}],
+    types: placeholder as Registry['api.library.series.episodes.unwatch']['types'],
   },
   'app.home': {
     methods: ["GET","HEAD"],
@@ -89,30 +113,6 @@ const routes = {
     pattern: '/app/library/series/:id',
     tokens: [{"old":"/app/library/series/:id","type":0,"val":"app","end":""},{"old":"/app/library/series/:id","type":0,"val":"library","end":""},{"old":"/app/library/series/:id","type":0,"val":"series","end":""},{"old":"/app/library/series/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['app.library.series.show']['types'],
-  },
-  'app.library.movies.watch': {
-    methods: ["POST"],
-    pattern: '/app/library/movies/:id/watch',
-    tokens: [{"old":"/app/library/movies/:id/watch","type":0,"val":"app","end":""},{"old":"/app/library/movies/:id/watch","type":0,"val":"library","end":""},{"old":"/app/library/movies/:id/watch","type":0,"val":"movies","end":""},{"old":"/app/library/movies/:id/watch","type":1,"val":"id","end":""},{"old":"/app/library/movies/:id/watch","type":0,"val":"watch","end":""}],
-    types: placeholder as Registry['app.library.movies.watch']['types'],
-  },
-  'app.library.movies.unwatch': {
-    methods: ["DELETE"],
-    pattern: '/app/library/movies/:id/watch',
-    tokens: [{"old":"/app/library/movies/:id/watch","type":0,"val":"app","end":""},{"old":"/app/library/movies/:id/watch","type":0,"val":"library","end":""},{"old":"/app/library/movies/:id/watch","type":0,"val":"movies","end":""},{"old":"/app/library/movies/:id/watch","type":1,"val":"id","end":""},{"old":"/app/library/movies/:id/watch","type":0,"val":"watch","end":""}],
-    types: placeholder as Registry['app.library.movies.unwatch']['types'],
-  },
-  'app.library.series.episodes.watch': {
-    methods: ["POST"],
-    pattern: '/app/library/series/:id/seasons/:season/episodes/:episode/watch',
-    tokens: [{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"app","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"library","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"series","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"id","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"seasons","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"season","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"episodes","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"episode","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"watch","end":""}],
-    types: placeholder as Registry['app.library.series.episodes.watch']['types'],
-  },
-  'app.library.series.episodes.unwatch': {
-    methods: ["DELETE"],
-    pattern: '/app/library/series/:id/seasons/:season/episodes/:episode/watch',
-    tokens: [{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"app","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"library","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"series","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"id","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"seasons","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"season","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"episodes","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"episode","end":""},{"old":"/app/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"watch","end":""}],
-    types: placeholder as Registry['app.library.series.episodes.unwatch']['types'],
   },
   'app.library.destroy': {
     methods: ["DELETE"],
