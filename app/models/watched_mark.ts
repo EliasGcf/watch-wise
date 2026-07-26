@@ -22,6 +22,9 @@ export class WatchedMovie extends WatchedMark {
 
   declare type: 'movie'
 
+  @belongsTo(() => Movie, { foreignKey: 'libraryEntryId' })
+  declare movie: BelongsTo<typeof Movie>
+
   @beforeCreate()
   static assignType(movie: WatchedMovie) {
     movie.type = 'movie'
@@ -32,15 +35,15 @@ export class WatchedMovie extends WatchedMark {
   static filterType(query: ModelQueryBuilderContract<typeof WatchedMovie>) {
     query.where('type', 'movie')
   }
-
-  @belongsTo(() => Movie, { foreignKey: 'libraryEntryId' })
-  declare movie: BelongsTo<typeof Movie>
 }
 
 export class WatchedEpisode extends WatchedMark {
   static table = WatchedMark.table
 
   declare type: 'episode'
+
+  @belongsTo(() => Serie, { foreignKey: 'libraryEntryId' })
+  declare serie: BelongsTo<typeof Serie>
 
   @beforeCreate()
   static assignType(episode: WatchedEpisode) {
@@ -52,7 +55,4 @@ export class WatchedEpisode extends WatchedMark {
   static filterType(query: ModelQueryBuilderContract<typeof WatchedEpisode>) {
     query.where('type', 'episode')
   }
-
-  @belongsTo(() => Serie, { foreignKey: 'libraryEntryId' })
-  declare serie: BelongsTo<typeof Serie>
 }

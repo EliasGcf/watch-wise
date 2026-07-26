@@ -18,16 +18,7 @@ export default class Serie extends LibraryItem {
   @hasMany(() => WatchedEpisode, { foreignKey: 'libraryEntryId' })
   declare watchedEpisodes: HasMany<typeof WatchedEpisode>
 
-  @beforeCreate()
-  static assignType(serie: Serie) {
-    serie.type = 'serie'
-  }
-
-  @beforeFind()
-  @beforeFetch()
-  static filterType(query: ModelQueryBuilderContract<typeof Serie>) {
-    query.where('type', 'serie')
-  }
+  declare seasons?: CatalogSeason[]
 
   async watchEpisode(this: Serie, episode: CatalogEpisode) {
     await this.related('watchedEpisodes').firstOrCreate(
@@ -56,5 +47,14 @@ export default class Serie extends LibraryItem {
       .delete()
   }
 
-  declare seasons?: CatalogSeason[]
+  @beforeCreate()
+  static assignType(serie: Serie) {
+    serie.type = 'serie'
+  }
+
+  @beforeFind()
+  @beforeFetch()
+  static filterType(query: ModelQueryBuilderContract<typeof Serie>) {
+    query.where('type', 'serie')
+  }
 }

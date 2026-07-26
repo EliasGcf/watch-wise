@@ -17,17 +17,6 @@ export default class Movie extends LibraryItem {
   @hasOne(() => WatchedMovie, { foreignKey: 'libraryEntryId' })
   declare watched: HasOne<typeof WatchedMovie>
 
-  @beforeCreate()
-  static assignType(movie: Movie) {
-    movie.type = 'movie'
-  }
-
-  @beforeFind()
-  @beforeFetch()
-  static filterType(query: ModelQueryBuilderContract<typeof Movie>) {
-    query.where('type', 'movie').preload('watched')
-  }
-
   async watch(this: Movie, duration: number | null = null) {
     await this.related('watched').firstOrCreate(
       { userId: this.userId },
@@ -37,5 +26,16 @@ export default class Movie extends LibraryItem {
 
   async unwatch(this: Movie) {
     await this.watched.delete()
+  }
+
+  @beforeCreate()
+  static assignType(movie: Movie) {
+    movie.type = 'movie'
+  }
+
+  @beforeFind()
+  @beforeFetch()
+  static filterType(query: ModelQueryBuilderContract<typeof Movie>) {
+    query.where('type', 'movie').preload('watched')
   }
 }
