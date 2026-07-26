@@ -29,17 +29,15 @@ export default class Serie extends LibraryItem {
     query.where('type', 'serie')
   }
 
-  async watchEpisode(episode: CatalogEpisode) {
-    await WatchedEpisode.firstOrCreate(
+  async watchEpisode(this: Serie, episode: CatalogEpisode) {
+    await this.related('watchedEpisodes').firstOrCreate(
       {
         userId: this.userId,
-        libraryEntryId: this.id,
         season: episode.season,
         episode: episode.episode,
       },
       {
         userId: this.userId,
-        libraryEntryId: this.id,
         season: episode.season,
         episode: episode.episode,
         providerId: episode.providerId,
@@ -49,10 +47,10 @@ export default class Serie extends LibraryItem {
     )
   }
 
-  async unwatchEpisode(season: number, episode: number) {
-    await WatchedEpisode.query()
+  async unwatchEpisode(this: Serie, season: number, episode: number) {
+    await this.related('watchedEpisodes')
+      .query()
       .where('userId', this.userId)
-      .where('libraryEntryId', this.id)
       .where('season', season)
       .where('episode', episode)
       .delete()

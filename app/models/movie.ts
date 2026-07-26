@@ -28,9 +28,9 @@ export default class Movie extends LibraryItem {
     query.where('type', 'movie').preload('watched')
   }
 
-  async watch(duration: number | null = null) {
-    await WatchedMovie.firstOrCreate(
-      { userId: this.userId, libraryEntryId: this.id },
+  async watch(this: Movie, duration: number | null = null) {
+    await this.related('watched').firstOrCreate(
+      { userId: this.userId },
       { duration, watchedAt: DateTime.now() }
     )
   }
