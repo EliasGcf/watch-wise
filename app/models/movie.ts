@@ -30,7 +30,7 @@ export default class Movie extends LibraryItem {
 
   async watch(duration: number | null = null) {
     await WatchedMovie.firstOrCreate(
-      { userId: this.userId, libraryEntryId: this.id, type: 'movie' },
+      { userId: this.userId, libraryEntryId: this.id },
       { duration, watchedAt: DateTime.now() }
     )
   }

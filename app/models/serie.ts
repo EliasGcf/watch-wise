@@ -34,7 +34,6 @@ export default class Serie extends LibraryItem {
       {
         userId: this.userId,
         libraryEntryId: this.id,
-        type: 'episode',
         season: episode.season,
         episode: episode.episode,
       },
