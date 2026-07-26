@@ -57,6 +57,7 @@ test.group('Library movie watched records', (group) => {
     assert.equal(user.watchedTime, 170)
 
     await markedPage.getByRole('button', { name: 'Unmark Heat as watched' }).click()
+    await markedPage.assertTextContains('body', 'Mark as watched')
 
     assert.lengthOf(
       await WatchedMovie.query().where('userId', user.id).where('libraryEntryId', movie.id),
