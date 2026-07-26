@@ -160,18 +160,18 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       })
     }
 
-    return (
-      response.data?.episodes.map((episode) => ({
-        providerId: String(episode.id),
-        season: episode.season_number,
-        episode: episode.episode_number,
-        name: episode.name,
-        releasedAt: episode.air_date,
-        duration: episode.runtime,
-        summary: episode.overview,
-        isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
-      })) ?? []
-    )
+    if (!response.data?.episodes) return []
+
+    return response.data.episodes.map((episode) => ({
+      providerId: String(episode.id),
+      season: episode.season_number,
+      episode: episode.episode_number,
+      name: episode.name,
+      releasedAt: episode.air_date,
+      duration: episode.runtime,
+      summary: episode.overview,
+      isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
+    }))
   }
 
   async findEpisode(
