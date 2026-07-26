@@ -1,19 +1,24 @@
 import { UserSchema } from '#database/schema'
+import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import { hasMany } from '@adonisjs/lucid/orm'
+import { computed, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 
 export default class User extends compose(UserSchema, withAuthFinder(hash)) {
+  @hasMany(() => LibraryItem)
+  declare libraryEntries: HasMany<typeof LibraryItem>
+
   @hasMany(() => Movie)
   declare movies: HasMany<typeof Movie>
 
   @hasMany(() => Serie)
   declare series: HasMany<typeof Serie>
 
+  @computed()
   get initials() {
     const [first, last] = this.fullName ? this.fullName.split(' ') : this.email.split('@')
     if (first && last) {

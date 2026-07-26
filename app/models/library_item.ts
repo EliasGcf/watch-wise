@@ -1,15 +1,10 @@
 import { LibraryEntrySchema } from '#database/schema'
-import User from '#models/user'
 import { catalog } from '#services/catalog_provider'
-import { beforeSave, belongsTo, computed } from '@adonisjs/lucid/orm'
-import { type BelongsTo } from '@adonisjs/lucid/types/relations'
+import { beforeSave, computed } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export default class LibraryItem extends LibraryEntrySchema {
   static table = 'library_entries'
-
-  @belongsTo(() => User)
-  declare user: BelongsTo<typeof User>
 
   @computed()
   get isReleased() {

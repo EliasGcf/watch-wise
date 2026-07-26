@@ -2,7 +2,7 @@ import { Form } from '@adonisjs/inertia/react'
 import { useEffect, useState } from 'react'
 import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
-import { Button } from '~/components/ui/button'
+import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
 type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data'][number]
@@ -172,8 +172,20 @@ function LibraryCard({
         </p>
         <RemoveLibraryEntryForm entry={entry} onRemoveEntry={onRemoveEntry} />
         {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
+        {entry.type === 'serie' && <SeriesDetailsLink serie={entry} />}
       </CardContent>
     </Card>
+  )
+}
+
+function SeriesDetailsLink({ serie }: { serie: SeriesEntry }) {
+  return (
+    <a
+      href={`/app/library/series/${serie.id}`}
+      className={buttonVariants({ variant: 'outline', className: 'w-full' })}
+    >
+      View seasons
+    </a>
   )
 }
 
@@ -203,22 +215,36 @@ function RemoveLibraryEntryForm({
 }
 
 function MovieWatchedForm({ movie }: { movie: MovieEntry }) {
-  return movie.watched ? (
-    <Form action={`/app/library/${movie.id}/watched`} method="delete">
-      <Button
-        type="submit"
-        variant="outline"
-        className="w-full"
-        aria-label={`Unmark ${movie.name} as watched`}
-      >
-        Unmark as watched
-      </Button>
-    </Form>
+  const [isWatched, setIsWatched] = useState(Boolean(movie.watched))
+
+  async function watchMovie() {
+    await client.api.api.library.movies.watch({ params: { id: movie.id } })
+    setIsWatched(true)
+  }
+
+  async function unwatchMovie() {
+    await client.api.api.library.movies.unwatch({ params: { id: movie.id } })
+    setIsWatched(false)
+  }
+
+  return isWatched ? (
+    <Button
+      type="button"
+      variant="outline"
+      className="w-full"
+      aria-label={`Unmark ${movie.name} as watched`}
+      onClick={() => void unwatchMovie()}
+    >
+      Unmark as watched
+    </Button>
   ) : (
-    <Form action={`/app/library/${movie.id}/watched`} method="post">
-      <Button type="submit" className="w-full" aria-label={`Mark ${movie.name} as watched`}>
-        Mark as watched
-      </Button>
-    </Form>
+    <Button
+      type="button"
+      className="w-full"
+      aria-label={`Mark ${movie.name} as watched`}
+      onClick={() => void watchMovie()}
+    >
+      Mark as watched
+    </Button>
   )
 }

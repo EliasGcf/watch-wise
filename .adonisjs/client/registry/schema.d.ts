@@ -27,8 +27,32 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['movies']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['index']>>>
+    }
+  }
+  'api.library.movies.watch': {
+    methods: ["POST"]
+    pattern: '/api/library/movies/:id/watch'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['watch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['watch']>>>
+    }
+  }
+  'api.library.movies.unwatch': {
+    methods: ["DELETE"]
+    pattern: '/api/library/movies/:id/watch'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['unwatch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['unwatch']>>>
     }
   }
   'api.library.series': {
@@ -39,8 +63,44 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['series']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
+    }
+  }
+  'api.library.series.seasons.episodes': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/library/series/:id/seasons/:season/episodes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; season: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
+    }
+  }
+  'api.library.series.episodes.watch': {
+    methods: ["POST"]
+    pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue, ParamValue]
+      params: { id: ParamValue; season: ParamValue; episode: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchEpisode']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchEpisode']>>>
+    }
+  }
+  'api.library.series.episodes.unwatch': {
+    methods: ["DELETE"]
+    pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue, ParamValue]
+      params: { id: ParamValue; season: ParamValue; episode: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['unwatchEpisode']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['unwatchEpisode']>>>
     }
   }
   'app.home': {
@@ -151,28 +211,16 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'app.library.watch': {
-    methods: ["POST"]
-    pattern: '/app/library/:id/watched'
+  'app.library.series.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library/series/:id'
     types: {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['watch']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['watch']>>>
-    }
-  }
-  'app.library.unwatch': {
-    methods: ["DELETE"]
-    pattern: '/app/library/:id/watched'
-    types: {
-      body: {}
-      paramsTuple: [ParamValue]
-      params: { id: ParamValue }
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unwatch']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['unwatch']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
     }
   }
   'app.library.destroy': {

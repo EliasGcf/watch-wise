@@ -8,7 +8,20 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class LibraryEntrySchema extends BaseModel {
-  static $columns = ['bannerPath', 'createdAt', 'id', 'name', 'posterPath', 'provider', 'providerId', 'releasedAt', 'summary', 'type', 'updatedAt', 'userId'] as const
+  static $columns = [
+    'bannerPath',
+    'createdAt',
+    'id',
+    'name',
+    'posterPath',
+    'provider',
+    'providerId',
+    'releasedAt',
+    'summary',
+    'type',
+    'updatedAt',
+    'userId',
+  ] as const
   $columns = LibraryEntrySchema.$columns
   @column()
   declare bannerPath: string
@@ -54,7 +67,19 @@ export class UserSchema extends BaseModel {
 }
 
 export class WatchedMarkSchema extends BaseModel {
-  static $columns = ['createdAt', 'duration', 'episode', 'id', 'libraryEntryId', 'providerId', 'season', 'updatedAt', 'userId', 'watchedAt'] as const
+  static $columns = [
+    'createdAt',
+    'duration',
+    'episode',
+    'id',
+    'libraryEntryId',
+    'providerId',
+    'season',
+    'type',
+    'updatedAt',
+    'userId',
+    'watchedAt',
+  ] as const
   $columns = WatchedMarkSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -70,6 +95,8 @@ export class WatchedMarkSchema extends BaseModel {
   declare providerId: string | null
   @column()
   declare season: number | null
+  @column()
+  declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()

@@ -29,9 +29,32 @@ export type FindResult = {
 export type Movie = Extract<FindResult, { type: 'movie' }>
 export type Serie = Extract<FindResult, { type: 'serie' }>
 
+export type CatalogEpisode = {
+  providerId: string
+  season: number
+  episode: number
+  name: string
+  releasedAt: string
+  duration: number
+  summary: string
+  isSpecial: boolean
+}
+
+export type CatalogSeason = {
+  season: number
+  name: string
+}
+
 export abstract class CatalogProvider {
   abstract search(query: string): Promise<CatalogSearchResult[]>
   abstract find(type: ItemType, providerId: string): Promise<Movie | Serie | null>
+  abstract seasons(providerId: string): Promise<CatalogSeason[]>
+  abstract episodes(providerId: string, season: number): Promise<CatalogEpisode[]>
+  abstract findEpisode(
+    serieId: string,
+    season: number,
+    episode: number
+  ): Promise<CatalogEpisode | null>
 }
 
 export class CatalogProviderError extends Error {}

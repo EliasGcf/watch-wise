@@ -1,7 +1,9 @@
 import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import type {
+  CatalogEpisode,
   CatalogProvider,
+  CatalogSeason,
   CatalogSearchResult,
   TmdbCatalogProviderConfig,
   ItemType,
@@ -123,6 +125,83 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.first_air_date,
       summary: response.data.overview,
+    }
+  }
+
+  async seasons(providerId: string): Promise<CatalogSeason[]> {
+    const series = await this.tmdb.tv.series.details({
+      throwOnError: false,
+      path: { series_id: Number(providerId) },
+      query: { language: 'en-US' },
+    })
+
+    if (series.error) {
+      throw new CatalogProviderError('TMDB serie details request failed', { cause: series.error })
+    }
+
+    if (!series.data?.seasons) return []
+
+    return series.data.seasons.map((season) => ({
+      season: season.season_number,
+      name: season.name,
+    }))
+  }
+
+  async episodes(providerId: string, season: number): Promise<CatalogEpisode[]> {
+    const response = await this.tmdb.tv.season.details({
+      throwOnError: false,
+      path: { series_id: Number(providerId), season_number: season },
+      query: { language: 'en-US' },
+    })
+
+    if (response.error) {
+      throw new CatalogProviderError('TMDB season details request failed', {
+        cause: response.error,
+      })
+    }
+
+    if (!response.data?.episodes) return []
+
+    return response.data.episodes.map((episode) => ({
+      providerId: String(episode.id),
+      season: episode.season_number,
+      episode: episode.episode_number,
+      name: episode.name,
+      releasedAt: episode.air_date,
+      duration: episode.runtime,
+      summary: episode.overview,
+      isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
+    }))
+  }
+
+  async findEpisode(
+    serieId: string,
+    season: number,
+    episode: number
+  ): Promise<CatalogEpisode | null> {
+    const response = await this.tmdb.tv.episode.details({
+      throwOnError: false,
+      path: { series_id: Number(serieId), season_number: season, episode_number: episode },
+      query: { language: 'en-US' },
+    })
+
+    if (response.error) {
+      throw new CatalogProviderError('TMDB episode details request failed', {
+        cause: response.error,
+      })
+    }
+
+    if (!response.data?.id) return null
+
+    return {
+      providerId: String(response.data.id),
+      season: response.data.season_number,
+      episode: response.data.episode_number,
+      name: response.data.name,
+      releasedAt: response.data.air_date,
+      duration: response.data.runtime,
+      summary: response.data.overview,
+      isSpecial: response.data.season_number === 0,
     }
   }
 }

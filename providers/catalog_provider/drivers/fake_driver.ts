@@ -4,6 +4,8 @@ import {
   fakeGet3TvBySeriesIdResponse,
 } from '#generated/tmdb/@faker-js/faker.gen'
 import type {
+  CatalogEpisode,
+  CatalogSeason,
   CatalogProvider,
   CatalogSearchResult,
   FindResult,
@@ -156,6 +158,116 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
+      }
+    }
+
+    return null
+  }
+
+  async seasons(providerId: string): Promise<CatalogSeason[]> {
+    if (providerId !== 'series-1' && providerId !== 'series-1-changed') return []
+
+    return [
+      { season: 0, name: 'Specials' },
+      { season: 1, name: 'Season 1' },
+    ]
+  }
+
+  async episodes(providerId: string, season: number): Promise<CatalogEpisode[]> {
+    if (providerId !== 'series-1' && providerId !== 'series-1-changed') return []
+
+    const firstEpisodeName = providerId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'
+    const firstEpisodeRuntime = providerId === 'series-1-changed' ? 99 : 24
+
+    if (season === 0) {
+      return [
+        {
+          providerId: 'episode-0-1',
+          season: 0,
+          episode: 1,
+          name: 'Unaired Pilot',
+          releasedAt: '1999-01-01',
+          duration: 28,
+          summary: 'The original special episode.',
+          isSpecial: true,
+        },
+      ]
+    }
+
+    if (season === 1) {
+      return [
+        {
+          providerId: 'episode-1-1',
+          season: 1,
+          episode: 1,
+          name: firstEpisodeName,
+          releasedAt: '1999-01-01',
+          duration: firstEpisodeRuntime,
+          summary: 'Jack Austin meets his talking motorcycle.',
+          isSpecial: false,
+        },
+        {
+          providerId: 'episode-1-2',
+          season: 1,
+          episode: 2,
+          name: 'Future Episode',
+          releasedAt: '2999-01-01',
+          duration: 25,
+          summary: 'An episode from the future.',
+          isSpecial: false,
+        },
+      ]
+    }
+
+    return []
+  }
+
+  async findEpisode(
+    serieId: string,
+    season: number,
+    episode: number
+  ): Promise<CatalogEpisode | null> {
+    if (serieId !== 'series-1' && serieId !== 'series-1-changed') return null
+
+    const firstEpisodeName = serieId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'
+    const firstEpisodeRuntime = serieId === 'series-1-changed' ? 99 : 24
+
+    if (season === 0 && episode === 1) {
+      return {
+        providerId: 'episode-0-1',
+        season: 0,
+        episode: 1,
+        name: 'Unaired Pilot',
+        releasedAt: '1999-01-01',
+        duration: 28,
+        summary: 'The original special episode.',
+        isSpecial: true,
+      }
+    }
+
+    if (season === 1 && episode === 1) {
+      return {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        name: firstEpisodeName,
+        releasedAt: '1999-01-01',
+        duration: firstEpisodeRuntime,
+        summary: 'Jack Austin meets his talking motorcycle.',
+        isSpecial: false,
+      }
+    }
+
+    if (season === 1 && episode === 2) {
+      return {
+        providerId: 'episode-1-2',
+        season: 1,
+        episode: 2,
+        name: 'Future Episode',
+        releasedAt: '2999-01-01',
+        duration: 25,
+        summary: 'An episode from the future.',
+        isSpecial: false,
       }
     }
 

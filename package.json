@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit && tsc --noEmit --project inertia/tsconfig.json",
     "vite:build": "bun --bun vite build",
-    "generate:tmpd-sdk": "bunx --bun @hey-api/openapi-ts"
+    "generate:tmpd-sdk": "bunx --bun @hey-api/openapi-ts",
+    "db:reset": "bun --bun ace migration:fresh --seed"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.ts",
@@ -43,6 +44,7 @@
     "@adonisjs/prettier-config": "1.5.0",
     "@adonisjs/tsconfig": "2.0.0",
     "@hey-api/openapi-ts": "0.99.0",
+    "@japa/api-client": "3.2.1",
     "@japa/assert": "4.2.0",
     "@japa/browser-client": "2.3.0",
     "@japa/plugin-adonisjs": "5.2.0",

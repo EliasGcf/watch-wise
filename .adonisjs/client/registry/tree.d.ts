@@ -5,8 +5,19 @@ export interface ApiDefinition {
   api: {
     hello: typeof routes['api.hello']
     library: {
-      movies: typeof routes['api.library.movies']
-      series: typeof routes['api.library.series']
+      movies: typeof routes['api.library.movies'] & {
+        watch: typeof routes['api.library.movies.watch']
+        unwatch: typeof routes['api.library.movies.unwatch']
+      }
+      series: typeof routes['api.library.series'] & {
+        seasons: {
+          episodes: typeof routes['api.library.series.seasons.episodes']
+        }
+        episodes: {
+          watch: typeof routes['api.library.series.episodes.watch']
+          unwatch: typeof routes['api.library.series.episodes.unwatch']
+        }
+      }
     }
   }
   app: {
@@ -26,8 +37,9 @@ export interface ApiDefinition {
     library: {
       index: typeof routes['app.library.index']
       store: typeof routes['app.library.store']
-      watch: typeof routes['app.library.watch']
-      unwatch: typeof routes['app.library.unwatch']
+      series: {
+        show: typeof routes['app.library.series.show']
+      }
       destroy: typeof routes['app.library.destroy']
     }
   }
