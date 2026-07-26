@@ -1,9 +1,17 @@
 import { WatchedMarkSchema } from '#database/schema'
+import { events } from '#generated/events'
 import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import User from '#models/user'
-import { beforeCreate, beforeFetch, beforeFind, belongsTo } from '@adonisjs/lucid/orm'
+import {
+  afterCreate,
+  afterDelete,
+  beforeCreate,
+  beforeFetch,
+  beforeFind,
+  belongsTo,
+} from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
@@ -30,6 +38,16 @@ export class WatchedMovie extends WatchedMark {
     movie.type = 'movie'
   }
 
+  @afterCreate()
+  static async dispatchWatchedEvent(movie: WatchedMovie) {
+    await events.MovieWatched.dispatch(movie)
+  }
+
+  @afterDelete()
+  static async dispatchUnwatchedEvent(movie: WatchedMovie) {
+    await events.MovieUnwatched.dispatch(movie)
+  }
+
   @beforeFind()
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof WatchedMovie>) {
@@ -48,6 +66,16 @@ export class WatchedEpisode extends WatchedMark {
   @beforeCreate()
   static assignType(episode: WatchedEpisode) {
     episode.type = 'episode'
+  }
+
+  @afterCreate()
+  static async dispatchWatchedEvent(episode: WatchedEpisode) {
+    await events.EpisodeWatched.dispatch(episode)
+  }
+
+  @afterDelete()
+  static async dispatchUnwatchedEvent(episode: WatchedEpisode) {
+    await events.EpisodeUnwatched.dispatch(episode)
   }
 
   @beforeFind()

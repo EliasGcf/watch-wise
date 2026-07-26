@@ -87,6 +87,18 @@ test.group('Library series episodes', (group) => {
           isSpecial: false,
           watched: null,
         },
+        {
+          providerId: 'episode-1-3',
+          season: 1,
+          episode: 3,
+          name: 'Unknown Runtime Episode',
+          releasedAt: '1999-01-08',
+          duration: null,
+          summary: 'An episode without a known runtime.',
+          isReleased: true,
+          isSpecial: false,
+          watched: null,
+        },
       ],
     })
   })
@@ -134,6 +146,9 @@ test.group('Library series episodes', (group) => {
     })
     assert.isTrue(watchedMarks[0].watchedAt <= DateTime.now())
 
+    await user.refresh()
+    assert.equal(user.watchedTime, 24)
+
     await serie.merge({ providerId: 'series-1-changed' }).save()
     const persistedSnapshot = await WatchedEpisode.query()
       .where('userId', user.id)
@@ -167,6 +182,9 @@ test.group('Library series episodes', (group) => {
       await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
+
+    await user.refresh()
+    assert.equal(user.watchedTime, 0)
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({
@@ -198,5 +216,41 @@ test.group('Library series episodes', (group) => {
       await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
+  })
+
+  test('watched episodes with unknown runtime are excluded from watched time', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Unknown Runtime Series',
+      email: 'unknown-runtime-series@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/3/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const watchedMarks = await WatchedEpisode.query()
+      .where('userId', user.id)
+      .where('libraryEntryId', serie.id)
+
+    assert.lengthOf(watchedMarks, 1)
+    assert.isNull(watchedMarks[0].duration)
+
+    await user.refresh()
+    assert.equal(user.watchedTime, 0)
   })
 })

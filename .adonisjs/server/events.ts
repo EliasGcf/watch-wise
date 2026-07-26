@@ -3,4 +3,14 @@
  * DO NOT EDIT manually
  */
 
-export const events = {}
+import EpisodeUnwatched from '#events/episode_unwatched'
+import EpisodeWatched from '#events/episode_watched'
+import MovieUnwatched from '#events/movie_unwatched'
+import MovieWatched from '#events/movie_watched'
+
+export const events = {
+  EpisodeUnwatched: EpisodeUnwatched,
+  EpisodeWatched: EpisodeWatched,
+  MovieUnwatched: MovieUnwatched,
+  MovieWatched: MovieWatched,
+}

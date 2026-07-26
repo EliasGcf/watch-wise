@@ -39,12 +39,14 @@ export default class Serie extends LibraryItem {
   }
 
   async unwatchEpisode(this: Serie, season: number, episode: number) {
-    await this.related('watchedEpisodes')
+    const watchedEpisode = await this.related('watchedEpisodes')
       .query()
       .where('userId', this.userId)
       .where('season', season)
       .where('episode', episode)
-      .delete()
+      .first()
+
+    await watchedEpisode?.delete()
   }
 
   @beforeCreate()

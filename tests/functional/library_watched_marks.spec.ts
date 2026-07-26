@@ -36,6 +36,11 @@ test.group('Library movie watched records', (group) => {
 
     const markedPage = await visit('/app/library')
     await markedPage.assertTextContains('body', 'Watched')
+    await markedPage.assertTextContains('body', '2h 50m')
+    await markedPage.assertTextContains(
+      'body',
+      'Watched Time from known movie and episode runtimes.'
+    )
 
     const moviesWatched = await WatchedMovie.query()
       .where('userId', user.id)
@@ -48,12 +53,18 @@ test.group('Library movie watched records', (group) => {
     assert.equal(moviesWatched[0].duration, 170)
     assert.isTrue(moviesWatched[0].watchedAt <= DateTime.now())
 
+    await user.refresh()
+    assert.equal(user.watchedTime, 170)
+
     await markedPage.getByRole('button', { name: 'Unmark Heat as watched' }).click()
 
     assert.lengthOf(
       await WatchedMovie.query().where('userId', user.id).where('libraryEntryId', movie.id),
       0
     )
+
+    await user.refresh()
+    assert.equal(user.watchedTime, 0)
   })
 
   test('re-marking a movie preserves a single movie watched record', async ({
@@ -96,6 +107,46 @@ test.group('Library movie watched records', (group) => {
 
     assert.lengthOf(moviesWatched, 1)
     assert.isTrue(moviesWatched[0].watchedAt <= DateTime.now())
+
+    await user.refresh()
+    assert.equal(user.watchedTime, 170)
+  })
+
+  test('watched movies with unknown runtime are excluded from watched time', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Unknown Runtime Viewer',
+      email: 'unknown-runtime-watched@example.com',
+      password: 'secret123',
+    })
+    const movie = await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-unknown-runtime',
+      name: 'Unknown Runtime Heat',
+      bannerPath: '/movie-unknown-runtime.jpg',
+      posterPath: '/movie-unknown-runtime-poster.jpg',
+      releasedAt: DateTime.fromISO('2001-01-01'),
+      summary: 'A movie without a known runtime.',
+    })
+
+    await browserContext.loginAs(user)
+
+    const libraryPage = await visit('/app/library')
+    await libraryPage.getByRole('button', { name: 'Mark Unknown Runtime Heat as watched' }).click()
+
+    const moviesWatched = await WatchedMovie.query()
+      .where('userId', user.id)
+      .where('libraryEntryId', movie.id)
+
+    assert.lengthOf(moviesWatched, 1)
+    assert.isNull(moviesWatched[0].duration)
+
+    await user.refresh()
+    assert.equal(user.watchedTime, 0)
   })
 
   test('authenticated users cannot mark unreleased library movies as watched', async ({

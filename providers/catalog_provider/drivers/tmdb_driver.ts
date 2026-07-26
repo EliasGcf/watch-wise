@@ -94,7 +94,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       posterPath,
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.release_date,
-      duration: response.data.runtime,
+      duration: response.data.runtime > 0 ? response.data.runtime : null,
       summary: response.data.overview,
     }
   }
@@ -168,7 +168,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       episode: episode.episode_number,
       name: episode.name,
       releasedAt: episode.air_date,
-      duration: episode.runtime,
+      duration: episode.runtime > 0 ? episode.runtime : null,
       summary: episode.overview,
       isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
     }))
@@ -199,7 +199,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       episode: response.data.episode_number,
       name: response.data.name,
       releasedAt: response.data.air_date,
-      duration: response.data.runtime,
+      duration: response.data.runtime > 0 ? response.data.runtime : null,
       summary: response.data.overview,
       isSpecial: response.data.season_number === 0,
     }
