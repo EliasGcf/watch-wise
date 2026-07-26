@@ -24,7 +24,7 @@ export type FindResult = {
   bannerUrl: string
   posterPath: string
   posterUrl: string
-} & ({ type: 'movie'; duration: number | null } | { type: 'serie' })
+} & ({ type: 'movie'; duration: number } | { type: 'serie' })
 
 export type Movie = Extract<FindResult, { type: 'movie' }>
 export type Serie = Extract<FindResult, { type: 'serie' }>
@@ -35,7 +35,7 @@ export type CatalogEpisode = {
   episode: number
   name: string
   releasedAt: string
-  duration: number | null
+  duration: number
   summary: string
   isSpecial: boolean
 }

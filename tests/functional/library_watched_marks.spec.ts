@@ -113,43 +113,6 @@ test.group('Library movie watched records', (group) => {
     assert.equal(user.watchedTime, 170)
   })
 
-  test('watched movies with unknown runtime are excluded from watched time', async ({
-    assert,
-    browserContext,
-    visit,
-  }) => {
-    const user = await User.create({
-      fullName: 'Unknown Runtime Viewer',
-      email: 'unknown-runtime-watched@example.com',
-      password: 'secret123',
-    })
-    const movie = await Movie.create({
-      userId: user.id,
-      provider: 'tmdb',
-      providerId: 'movie-unknown-runtime',
-      name: 'Unknown Runtime Heat',
-      bannerPath: '/movie-unknown-runtime.jpg',
-      posterPath: '/movie-unknown-runtime-poster.jpg',
-      releasedAt: DateTime.fromISO('2001-01-01'),
-      summary: 'A movie without a known runtime.',
-    })
-
-    await browserContext.loginAs(user)
-
-    const libraryPage = await visit('/app/library')
-    await libraryPage.getByRole('button', { name: 'Mark Unknown Runtime Heat as watched' }).click()
-
-    const moviesWatched = await WatchedMovie.query()
-      .where('userId', user.id)
-      .where('libraryEntryId', movie.id)
-
-    assert.lengthOf(moviesWatched, 1)
-    assert.isNull(moviesWatched[0].duration)
-
-    await user.refresh()
-    assert.equal(user.watchedTime, 0)
-  })
-
   test('authenticated users cannot mark unreleased library movies as watched', async ({
     assert,
     browserContext,

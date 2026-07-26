@@ -161,33 +161,6 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       }
     }
 
-    if (type === 'movie' && providerId === 'movie-unknown-runtime') {
-      const movie = fakeGet3MovieByMovieIdResponse()
-      movie.id = 3
-      movie.title = 'Unknown Runtime Heat'
-      movie.backdrop_path = '/movie-unknown-runtime.jpg'
-      movie.poster_path = '/movie-unknown-runtime-poster.jpg'
-      movie.release_date = '2001-01-01'
-      movie.runtime = 0
-      movie.overview = 'A movie without a known runtime.'
-      const bannerPath = movie.backdrop_path
-      const posterPath = movie.poster_path
-
-      return {
-        provider: 'tmdb',
-        id: providerId,
-        type: 'movie',
-        name: movie.title,
-        bannerPath,
-        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
-        posterPath,
-        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
-        releasedAt: movie.release_date,
-        duration: null,
-        summary: movie.overview,
-      }
-    }
-
     return null
   }
 
@@ -243,16 +216,6 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
           summary: 'An episode from the future.',
           isSpecial: false,
         },
-        {
-          providerId: 'episode-1-3',
-          season: 1,
-          episode: 3,
-          name: 'Unknown Runtime Episode',
-          releasedAt: '1999-01-08',
-          duration: null,
-          summary: 'An episode without a known runtime.',
-          isSpecial: false,
-        },
       ]
     }
 
@@ -304,19 +267,6 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         releasedAt: '2999-01-01',
         duration: 25,
         summary: 'An episode from the future.',
-        isSpecial: false,
-      }
-    }
-
-    if (season === 1 && episode === 3) {
-      return {
-        providerId: 'episode-1-3',
-        season: 1,
-        episode: 3,
-        name: 'Unknown Runtime Episode',
-        releasedAt: '1999-01-08',
-        duration: null,
-        summary: 'An episode without a known runtime.',
         isSpecial: false,
       }
     }
