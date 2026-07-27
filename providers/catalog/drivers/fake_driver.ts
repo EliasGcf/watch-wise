@@ -4,15 +4,16 @@ import {
   fakeGet3TvBySeriesIdResponse,
 } from '#generated/tmdb/@faker-js/faker.gen'
 import type {
-  CatalogEpisode,
-  CatalogSeason,
+  Episode,
   CatalogProvider,
   CatalogSearchResult,
   FindResult,
   FakeCatalogProviderConfig,
   ItemType,
-} from '#providers/catalog_provider/types'
-import { CatalogProviderError } from '#providers/catalog_provider/types'
+  Movie,
+  Serie,
+} from '#providers/catalog/types'
+import { CatalogProviderError } from '#providers/catalog/types'
 
 export default class FakeCatalogProviderDriver implements CatalogProvider {
   constructor(private config: FakeCatalogProviderConfig) {}
@@ -82,7 +83,13 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
   }
 
   async find(type: ItemType, providerId: string): Promise<FindResult | null> {
-    if (type === 'movie' && providerId === 'movie-1') {
+    if (type === 'movie') return this.findMovieById(providerId)
+
+    return this.findSerieById(providerId)
+  }
+
+  async findMovieById(providerId: string): Promise<Movie | null> {
+    if (providerId === 'movie-1') {
       const movie = fakeGet3MovieByMovieIdResponse()
       movie.id = 1
       movie.title = 'Heat'
@@ -109,32 +116,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       }
     }
 
-    if (type === 'serie' && providerId === 'series-1') {
-      const series = fakeGet3TvBySeriesIdResponse()
-      series.id = 1
-      series.name = 'Heat Vision and Jack'
-      series.backdrop_path = '/series-1.jpg'
-      series.poster_path = '/series-1-poster.jpg'
-      series.first_air_date = '1999-01-01'
-      series.overview = 'A pilot about a super-intelligent astronaut.'
-      const bannerPath = series.backdrop_path
-      const posterPath = series.poster_path
-
-      return {
-        provider: 'tmdb',
-        id: providerId,
-        type: 'serie',
-        name: series.name,
-        bannerPath,
-        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
-        posterPath,
-        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
-        releasedAt: series.first_air_date,
-        summary: series.overview,
-      }
-    }
-
-    if (type === 'movie' && providerId === 'movie-2') {
+    if (providerId === 'movie-2') {
       const movie = fakeGet3MovieByMovieIdResponse()
       movie.id = 2
       movie.title = 'Unknown Heat'
@@ -164,16 +146,39 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     return null
   }
 
-  async seasons(providerId: string): Promise<CatalogSeason[]> {
-    if (providerId !== 'series-1' && providerId !== 'series-1-changed') return []
+  async findSerieById(providerId: string): Promise<Serie | null> {
+    if (providerId !== 'series-1' && providerId !== 'series-1-changed') return null
 
-    return [
-      { season: 0, name: 'Specials' },
-      { season: 1, name: 'Season 1' },
-    ]
+    const series = fakeGet3TvBySeriesIdResponse()
+    series.id = 1
+    series.name = 'Heat Vision and Jack'
+    series.backdrop_path = '/series-1.jpg'
+    series.poster_path = '/series-1-poster.jpg'
+    series.first_air_date = '1999-01-01'
+    series.overview = 'A pilot about a super-intelligent astronaut.'
+    const bannerPath = series.backdrop_path
+    const posterPath = series.poster_path
+
+    return {
+      provider: 'tmdb',
+      id: providerId,
+      type: 'serie',
+      name: series.name,
+      bannerPath,
+      bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
+      posterPath,
+      posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
+      releasedAt: series.first_air_date,
+      summary: series.overview,
+      episodesCount: 3,
+      seasons: [
+        { name: 'Specials', number: 0 },
+        { name: 'Season 1', number: 1 },
+      ],
+    }
   }
 
-  async episodes(providerId: string, season: number): Promise<CatalogEpisode[]> {
+  async episodes(providerId: string, season: number): Promise<Episode[]> {
     if (providerId !== 'series-1' && providerId !== 'series-1-changed') return []
 
     const firstEpisodeName = providerId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'
@@ -222,11 +227,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     return []
   }
 
-  async findEpisode(
-    serieId: string,
-    season: number,
-    episode: number
-  ): Promise<CatalogEpisode | null> {
+  async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
     if (serieId !== 'series-1' && serieId !== 'series-1-changed') return null
 
     const firstEpisodeName = serieId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'

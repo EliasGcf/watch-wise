@@ -12,13 +12,13 @@ import { client } from '~/client'
 import type { InertiaProps } from '~/types'
 import { type Data } from '@generated/data'
 
-type SeriesSeasons = Data.Serie.Variants['withSeasons']['seasons']
+type SeriesSeasons = Data.Serie.Variants['withCatalog']['catalog']['seasons']
 
-type SeasonEpisode = Data.Serie.Variants['forEpisodes']['episodes'][number]
+type SeasonEpisode = Data.Catalog.Episode
 
-export default function SeriesShow({
-  serie,
-}: InertiaProps<{ serie: Data.Serie.Variants['withSeasons'] }>) {
+type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
+
+export default function SeriesShow({ serie }: Props) {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
       <a
@@ -51,7 +51,7 @@ export default function SeriesShow({
           <CardDescription>Open a season to load its episodes.</CardDescription>
         </CardHeader>
         <CardContent>
-          <SeasonAccordion serie={serie} seasons={serie.seasons} />
+          <SeasonAccordion serie={serie} seasons={serie.catalog.seasons} />
         </CardContent>
       </Card>
     </div>
@@ -64,13 +64,13 @@ function SeasonAccordion({ serie, seasons }: { serie: Data.Serie; seasons: Serie
   return (
     <Accordion value={openSeasons} onValueChange={setOpenSeasons}>
       {seasons.map((season) => (
-        <AccordionItem key={season.season} value={String(season.season)}>
+        <AccordionItem key={season.number} value={String(season.number)}>
           <AccordionTrigger>{season.name}</AccordionTrigger>
           <AccordionContent>
             <SeasonEpisodes
               serie={serie}
-              season={season.season}
-              isOpen={openSeasons.includes(String(season.season))}
+              season={season.number}
+              isOpen={openSeasons.includes(String(season.number))}
             />
           </AccordionContent>
         </AccordionItem>
@@ -102,7 +102,7 @@ function SeasonEpisodes({
           params: { id: serie.id, season },
         })
 
-        if (isCurrent) setEpisodes(response.data.episodes)
+        if (isCurrent) setEpisodes(response.data)
       } catch {
         if (isCurrent) setError('Episodes could not be loaded.')
       }

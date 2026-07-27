@@ -1,5 +1,5 @@
 import env from '#start/env'
-import type { CatalogProviderConfig } from '#providers/catalog_provider/types'
+import type { CatalogProviderConfig } from '#providers/catalog/types'
 
 const catalogProviderConfig: CatalogProviderConfig = {
   default: env.get('CATALOG_PROVIDER_DRIVER'),

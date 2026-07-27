@@ -1,9 +1,9 @@
-import { type CatalogProviderManager } from '#providers/catalog_provider/manager'
+import { type CatalogProviderManager } from '#providers/catalog/manager'
 import {
   CatalogProviderError,
   type CatalogSearchResult,
   type FindResult,
-} from '#providers/catalog_provider/types'
+} from '#providers/catalog/types'
 import app from '@adonisjs/core/services/app'
 
 let catalog!: CatalogProviderManager

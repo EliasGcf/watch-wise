@@ -1,17 +1,16 @@
 import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import type {
-  CatalogEpisode,
+  Episode,
   CatalogProvider,
-  CatalogSeason,
   CatalogSearchResult,
   TmdbCatalogProviderConfig,
   ItemType,
   FindResult,
   Movie,
   Serie,
-} from '#providers/catalog_provider/types'
-import { CatalogProviderError } from '#providers/catalog_provider/types'
+} from '#providers/catalog/types'
+import { CatalogProviderError } from '#providers/catalog/types'
 
 export default class TmdbCatalogProviderDriver implements CatalogProvider {
   constructor(
@@ -110,7 +109,8 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       throw new CatalogProviderError('TMDB serie details request failed', { cause: response.error })
     }
 
-    if (!response.data?.id) return null
+    if (!response.data) return null
+
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
 
@@ -125,29 +125,15 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.first_air_date,
       summary: response.data.overview,
+      episodesCount: response.data.number_of_episodes,
+      seasons: response.data.seasons.map((season) => ({
+        name: season.name,
+        number: season.season_number,
+      })),
     }
   }
 
-  async seasons(providerId: string): Promise<CatalogSeason[]> {
-    const series = await this.tmdb.tv.series.details({
-      throwOnError: false,
-      path: { series_id: Number(providerId) },
-      query: { language: 'en-US' },
-    })
-
-    if (series.error) {
-      throw new CatalogProviderError('TMDB serie details request failed', { cause: series.error })
-    }
-
-    if (!series.data?.seasons) return []
-
-    return series.data.seasons.map((season) => ({
-      season: season.season_number,
-      name: season.name,
-    }))
-  }
-
-  async episodes(providerId: string, season: number): Promise<CatalogEpisode[]> {
+  async episodes(providerId: string, season: number): Promise<Episode[]> {
     const response = await this.tmdb.tv.season.details({
       throwOnError: false,
       path: { series_id: Number(providerId), season_number: season },
@@ -174,11 +160,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }))
   }
 
-  async findEpisode(
-    serieId: string,
-    season: number,
-    episode: number
-  ): Promise<CatalogEpisode | null> {
+  async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
     const response = await this.tmdb.tv.episode.details({
       throwOnError: false,
       path: { series_id: Number(serieId), season_number: season, episode_number: episode },

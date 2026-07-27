@@ -61,34 +61,32 @@ test.group('Library series episodes', (group) => {
     const page = await visit(`/api/library/series/${serie.id}/seasons/1/episodes`)
     const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
 
-    assert.deepEqual(data, {
-      episodes: [
-        {
-          providerId: 'episode-1-1',
-          season: 1,
-          episode: 1,
-          name: 'Pilot',
-          releasedAt: '1999-01-01',
-          duration: 24,
-          summary: 'Jack Austin meets his talking motorcycle.',
-          isReleased: true,
-          isSpecial: false,
-          watched: null,
-        },
-        {
-          providerId: 'episode-1-2',
-          season: 1,
-          episode: 2,
-          name: 'Future Episode',
-          releasedAt: '2999-01-01',
-          duration: 25,
-          summary: 'An episode from the future.',
-          isReleased: false,
-          isSpecial: false,
-          watched: null,
-        },
-      ],
-    })
+    assert.deepEqual(data, [
+      {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        name: 'Pilot',
+        releasedAt: '1999-01-01',
+        duration: 24,
+        summary: 'Jack Austin meets his talking motorcycle.',
+        isReleased: true,
+        isSpecial: false,
+        watched: null,
+      },
+      {
+        providerId: 'episode-1-2',
+        season: 1,
+        episode: 2,
+        name: 'Future Episode',
+        releasedAt: '2999-01-01',
+        duration: 25,
+        summary: 'An episode from the future.',
+        isReleased: false,
+        isSpecial: false,
+        watched: null,
+      },
+    ])
   })
 
   test('authenticated users can mark a released episode once and then unmark it', async ({
@@ -152,8 +150,8 @@ test.group('Library series episodes', (group) => {
       .get(`/api/library/series/${serie.id}/seasons/1/episodes`)
       .loginAs(user)
     detailsResponse.assertOk()
-    const body = detailsResponse.body().data
-    assert.deepInclude(body.episodes[0], {
+    const episodes = detailsResponse.body().data
+    assert.deepInclude(episodes[0], {
       season: 1,
       episode: 1,
       watched: {

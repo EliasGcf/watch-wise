@@ -1,12 +1,12 @@
-import FakeCatalogProviderDriver from '#providers/catalog_provider/drivers/fake_driver'
-import TmdbCatalogProviderDriver from '#providers/catalog_provider/drivers/tmdb_driver'
+import FakeCatalogProviderDriver from '#providers/catalog/drivers/fake_driver'
+import TmdbCatalogProviderDriver from '#providers/catalog/drivers/tmdb_driver'
 import {
   CatalogProvider,
   CatalogProviderError,
   type ItemType,
   type CatalogProviderConfig,
   type CatalogDriver,
-} from '#providers/catalog_provider/types'
+} from '#providers/catalog/types'
 
 export class CatalogProviderManager extends CatalogProvider {
   #drivers = new Map<CatalogDriver, CatalogProvider>()
@@ -54,8 +54,12 @@ export class CatalogProviderManager extends CatalogProvider {
     return this.use().find(type, providerId)
   }
 
-  seasons(providerId: string) {
-    return this.use().seasons(providerId)
+  findMovieById(providerId: string) {
+    return this.use().findMovieById(providerId)
+  }
+
+  findSerieById(providerId: string) {
+    return this.use().findSerieById(providerId)
   }
 
   episodes(providerId: string, season: number) {

@@ -1,5 +1,5 @@
-import { CatalogProviderManager } from '#providers/catalog_provider/manager'
-import type { CatalogProviderConfig } from '#providers/catalog_provider/types'
+import { CatalogProviderManager } from '#providers/catalog/manager'
+import type { CatalogProviderConfig } from '#providers/catalog/types'
 import type { ApplicationService } from '@adonisjs/core/types'
 
 declare module '@adonisjs/core/types' {
@@ -8,13 +8,12 @@ declare module '@adonisjs/core/types' {
   }
 }
 
-export default class CatalogProviderProvider {
+export default class CatalogProvider {
   constructor(protected app: ApplicationService) {}
 
   register() {
     this.app.container.singleton(CatalogProviderManager, () => {
       const config = this.app.config.get<CatalogProviderConfig>('catalog_provider')
-
       return new CatalogProviderManager(config)
     })
 

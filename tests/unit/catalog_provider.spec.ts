@@ -1,7 +1,7 @@
 import { createClient } from '#generated/tmdb/client/index'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
-import FakeCatalogProviderDriver from '#providers/catalog_provider/drivers/fake_driver'
-import TmdbCatalogProviderDriver from '#providers/catalog_provider/drivers/tmdb_driver'
+import FakeCatalogProviderDriver from '#providers/catalog/drivers/fake_driver'
+import TmdbCatalogProviderDriver from '#providers/catalog/drivers/tmdb_driver'
 import { CatalogProviderError } from '#services/catalog_provider'
 import { test } from '@japa/runner'
 
