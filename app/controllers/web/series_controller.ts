@@ -7,7 +7,7 @@ export default class SeriesController {
     const serie = await Serie.query()
       .where('id', params.id)
       .where('userId', auth.user!.id)
-      .preload('watchedEpisodes')
+      .withCount('watchedEpisodes')
       .firstOrFail()
 
     return inertia.render('library/series/show', {

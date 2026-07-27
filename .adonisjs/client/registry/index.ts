@@ -12,12 +12,6 @@ const routes = {
     tokens: [{"old":"/api/hello","type":0,"val":"api","end":""},{"old":"/api/hello","type":0,"val":"hello","end":""}],
     types: placeholder as Registry['api.hello']['types'],
   },
-  'api.library.movies': {
-    methods: ["GET","HEAD"],
-    pattern: '/api/library/movies',
-    tokens: [{"old":"/api/library/movies","type":0,"val":"api","end":""},{"old":"/api/library/movies","type":0,"val":"library","end":""},{"old":"/api/library/movies","type":0,"val":"movies","end":""}],
-    types: placeholder as Registry['api.library.movies']['types'],
-  },
   'api.library.movies.watch': {
     methods: ["POST"],
     pattern: '/api/library/movies/:id/watch',
@@ -29,12 +23,6 @@ const routes = {
     pattern: '/api/library/movies/:id/watch',
     tokens: [{"old":"/api/library/movies/:id/watch","type":0,"val":"api","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"library","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"movies","end":""},{"old":"/api/library/movies/:id/watch","type":1,"val":"id","end":""},{"old":"/api/library/movies/:id/watch","type":0,"val":"watch","end":""}],
     types: placeholder as Registry['api.library.movies.unwatch']['types'],
-  },
-  'api.library.series': {
-    methods: ["GET","HEAD"],
-    pattern: '/api/library/series',
-    tokens: [{"old":"/api/library/series","type":0,"val":"api","end":""},{"old":"/api/library/series","type":0,"val":"library","end":""},{"old":"/api/library/series","type":0,"val":"series","end":""}],
-    types: placeholder as Registry['api.library.series']['types'],
   },
   'api.library.series.seasons.episodes': {
     methods: ["GET","HEAD"],

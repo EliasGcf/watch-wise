@@ -20,7 +20,7 @@ test.group('Library entries', (group) => {
     const movie = await Movie.create({
       userId: user.id,
       provider: 'tmdb',
-      providerId: 'movie-paths',
+      providerId: 'movie-1',
       name: 'Path Movie',
       bannerPath: '/movie-paths.jpg',
       posterPath: '/movie-paths-poster.jpg',

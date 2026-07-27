@@ -36,52 +36,21 @@ test.group('Library series episodes', (group) => {
     await detailsPage.assertTextContains('body', 'Season 1')
   })
 
-  test('authenticated users can see root episode progress counts for series', async ({
-    assert,
-    client,
-  }) => {
+  test('series listing api is not exposed', async ({ client }) => {
     const user = await User.create({
       fullName: 'Progress Viewer',
       email: 'progress-viewer@example.com',
       password: 'secret123',
     })
-    const serie = await Serie.create({
-      userId: user.id,
-      provider: 'tmdb',
-      providerId: 'series-1',
-      name: 'Heat Vision and Jack',
-      bannerPath: '/series-1.jpg',
-      posterPath: '/series-1-poster.jpg',
-      releasedAt: DateTime.fromISO('1999-01-01'),
-      summary: 'A pilot about a super-intelligent astronaut.',
-    })
 
-    let response = await client.get('/api/library/series').loginAs(user)
-    response.assertOk()
-    assert.include(response.body().data[0], {
-      id: serie.id,
-      episodesCount: 3,
-      watchedEpisodesCount: 0,
-    })
+    const response = await client.get('/api/library/series').loginAs(user)
 
-    await client
-      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
-      .loginAs(user)
-      .withCsrfToken()
-
-    response = await client.get('/api/library/series').loginAs(user)
-    response.assertOk()
-    assert.include(response.body().data[0], {
-      id: serie.id,
-      episodesCount: 3,
-      watchedEpisodesCount: 1,
-    })
+    response.assertNotFound()
   })
 
   test('authenticated users load provider-sourced episodes for a single season', async ({
     assert,
-    browserContext,
-    visit,
+    client,
   }) => {
     const user = await User.create({
       fullName: 'Jordan Series',
@@ -99,9 +68,11 @@ test.group('Library series episodes', (group) => {
       summary: 'A pilot about a super-intelligent astronaut.',
     })
 
-    await browserContext.loginAs(user)
-    const page = await visit(`/api/library/series/${serie.id}/seasons/1/episodes`)
-    const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
+    const response = await client
+      .get(`/api/library/series/${serie.id}/seasons/1/episodes`)
+      .loginAs(user)
+    response.assertOk()
+    const { data } = response.body()
 
     assert.deepEqual(data, [
       {
@@ -133,7 +104,9 @@ test.group('Library series episodes', (group) => {
 
   test('authenticated users can mark a released episode once and then unmark it', async ({
     assert,
+    browserContext,
     client,
+    visit,
   }) => {
     const user = await User.create({
       fullName: 'Taylor Series',
@@ -150,6 +123,7 @@ test.group('Library series episodes', (group) => {
       releasedAt: DateTime.fromISO('1999-01-01'),
       summary: 'A pilot about a super-intelligent astronaut.',
     })
+    assert.equal(serie.progress, 0)
 
     await client
       .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
@@ -175,7 +149,13 @@ test.group('Library series episodes', (group) => {
     assert.isTrue(watchedMarks[0].watchedAt <= DateTime.now())
 
     await user.refresh()
+    await serie.refresh()
     assert.equal(user.watchedTime, 24)
+    assert.equal(serie.progress, 33)
+
+    await browserContext.loginAs(user)
+    const libraryPage = await visit('/app/library')
+    await libraryPage.assertTextContains('body', '33%')
 
     await serie.merge({ providerId: 'series-1-changed' }).save()
     const persistedSnapshot = await WatchedEpisode.query()
@@ -212,7 +192,9 @@ test.group('Library series episodes', (group) => {
     )
 
     await user.refresh()
+    await serie.refresh()
     assert.equal(user.watchedTime, 0)
+    assert.equal(serie.progress, 0)
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({

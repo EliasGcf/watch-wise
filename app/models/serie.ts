@@ -11,6 +11,7 @@ export default class Serie extends LibraryItem {
   static table = LibraryItem.table
 
   declare type: 'serie'
+  declare progress: number
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
@@ -48,13 +49,14 @@ export default class Serie extends LibraryItem {
   }
 
   @beforeCreate()
-  static assignType(serie: Serie) {
+  static beforeCreate(serie: Serie) {
+    serie.progress = 0
     serie.type = 'serie'
   }
 
   @beforeFind()
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Serie>) {
-    query.where('type', 'serie')
+    query.where('type', 'serie').orderBy('createdAt', 'desc')
   }
 }

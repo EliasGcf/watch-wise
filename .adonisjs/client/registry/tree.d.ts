@@ -5,11 +5,11 @@ export interface ApiDefinition {
   api: {
     hello: typeof routes['api.hello']
     library: {
-      movies: typeof routes['api.library.movies'] & {
+      movies: {
         watch: typeof routes['api.library.movies.watch']
         unwatch: typeof routes['api.library.movies.unwatch']
       }
-      series: typeof routes['api.library.series'] & {
+      series: {
         seasons: {
           episodes: typeof routes['api.library.series.seasons.episodes']
         }

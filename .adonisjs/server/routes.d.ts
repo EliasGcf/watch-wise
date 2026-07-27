@@ -5,10 +5,8 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'api.hello': { paramsTuple?: []; params?: {} }
-    'api.library.movies': { paramsTuple?: []; params?: {} }
     'api.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
-    'api.library.series': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'api.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
@@ -26,8 +24,6 @@ export type ScannedRoutes = {
   }
   GET: {
     'api.hello': { paramsTuple?: []; params?: {} }
-    'api.library.movies': { paramsTuple?: []; params?: {} }
-    'api.library.series': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }
@@ -38,8 +34,6 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'api.hello': { paramsTuple?: []; params?: {} }
-    'api.library.movies': { paramsTuple?: []; params?: {} }
-    'api.library.series': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.new_account.create': { paramsTuple?: []; params?: {} }

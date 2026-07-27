@@ -7,8 +7,6 @@ export default class SerieTransformer extends BaseTransformer<Serie> {
   toObject() {
     return {
       ...this.pick(this.resource, [...this.resource.$columns, 'bannerUrl', 'posterUrl']),
-      episodesCount: Number(this.resource.$extras.episodesCount ?? 0),
-      watchedEpisodesCount: Number(this.resource.$extras.watchedEpisodesCount ?? 0),
     }
   }
 
@@ -21,8 +19,6 @@ export default class SerieTransformer extends BaseTransformer<Serie> {
 
     return {
       ...this.toObject(),
-      episodesCount: catalogSerie.episodesCount,
-      watchedEpisodesCount: this.resource.watchedEpisodes?.length ?? 0,
       catalog: CatalogSerieTransformer.transform(catalogSerie),
     }
   }

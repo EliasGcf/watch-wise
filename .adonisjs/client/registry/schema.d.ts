@@ -19,18 +19,6 @@ export interface Registry {
       errorResponse: unknown
     }
   }
-  'api.library.movies': {
-    methods: ["GET","HEAD"]
-    pattern: '/api/library/movies'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['index']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['index']>>>
-    }
-  }
   'api.library.movies.watch': {
     methods: ["POST"]
     pattern: '/api/library/movies/:id/watch'
@@ -53,18 +41,6 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['unwatch']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['unwatch']>>>
-    }
-  }
-  'api.library.series': {
-    methods: ["GET","HEAD"]
-    pattern: '/api/library/series'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
     }
   }
   'api.library.series.seasons.episodes': {

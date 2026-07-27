@@ -8,14 +8,12 @@ const group = router.group(() => {
 
   router
     .group(() => {
-      router.get('library/movies', [controllers.api.Movies, 'index']).as('library.movies')
       router
         .post('library/movies/:id/watch', [controllers.api.Movies, 'watch'])
         .as('library.movies.watch')
       router
         .delete('library/movies/:id/watch', [controllers.api.Movies, 'unwatch'])
         .as('library.movies.unwatch')
-      router.get('library/series', [controllers.api.Series, 'index']).as('library.series')
       router
         .get('library/series/:id/seasons/:season/episodes', [controllers.api.Series, 'episodes'])
         .as('library.series.seasons.episodes')
