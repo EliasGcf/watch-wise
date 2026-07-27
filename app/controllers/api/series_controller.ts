@@ -1,5 +1,6 @@
 import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
+import { loadSeriesEpisodeCounts } from '#services/series_episode_counts'
 import CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -7,7 +8,12 @@ import { DateTime } from 'luxon'
 
 export default class SeriesController {
   async index({ auth, serialize }: HttpContext) {
-    const series = await Serie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
+    const series = await Serie.query()
+      .where('userId', auth.user!.id)
+      .preload('watchedEpisodes')
+      .orderBy('createdAt', 'desc')
+    await loadSeriesEpisodeCounts(series)
+
     return serialize(SerieTransformer.transform(series))
   }
 
@@ -15,7 +21,9 @@ export default class SeriesController {
     const serie = await Serie.query()
       .where('id', params.id)
       .where('userId', auth.user!.id)
+      .preload('watchedEpisodes')
       .firstOrFail()
+    await loadSeriesEpisodeCounts(serie)
 
     return serialize(SerieTransformer.transform(serie))
   }
@@ -51,6 +59,8 @@ export default class SeriesController {
     }
 
     await serie.watchEpisode(episode)
+    await serie.load('watchedEpisodes')
+    await loadSeriesEpisodeCounts(serie)
 
     session.flash('success', `${episode.name} was marked as watched.`)
     return serialize(SerieTransformer.transform(serie))
@@ -60,6 +70,8 @@ export default class SeriesController {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     await serie.unwatchEpisode(Number(params.season), Number(params.episode))
+    await serie.load('watchedEpisodes')
+    await loadSeriesEpisodeCounts(serie)
 
     session.flash('success', 'Episode is no longer marked as watched.')
     return serialize(SerieTransformer.transform(serie))

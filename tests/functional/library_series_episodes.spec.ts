@@ -36,6 +36,48 @@ test.group('Library series episodes', (group) => {
     await detailsPage.assertTextContains('body', 'Season 1')
   })
 
+  test('authenticated users can see root episode progress counts for series', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Progress Viewer',
+      email: 'progress-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    let response = await client.get('/api/library/series').loginAs(user)
+    response.assertOk()
+    assert.include(response.body().data[0], {
+      id: serie.id,
+      episodesCount: 3,
+      watchedEpisodesCount: 0,
+    })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    response = await client.get('/api/library/series').loginAs(user)
+    response.assertOk()
+    assert.include(response.body().data[0], {
+      id: serie.id,
+      episodesCount: 3,
+      watchedEpisodesCount: 1,
+    })
+  })
+
   test('authenticated users load provider-sourced episodes for a single season', async ({
     assert,
     browserContext,
