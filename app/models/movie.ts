@@ -10,6 +10,7 @@ export default class Movie extends LibraryItem {
   static table = LibraryItem.table
 
   declare type: 'movie'
+  declare progress: null
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
