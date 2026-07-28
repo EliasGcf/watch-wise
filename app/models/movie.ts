@@ -1,14 +1,6 @@
-import { events } from '#generated/events'
 import { WatchedMovie } from '#models/watched_mark'
 import User from '#models/user'
-import {
-  beforeCreate,
-  beforeDelete,
-  beforeFetch,
-  beforeFind,
-  belongsTo,
-  hasOne,
-} from '@adonisjs/lucid/orm'
+import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasOne } from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
@@ -40,11 +32,6 @@ export default class Movie extends LibraryItem {
   @beforeCreate()
   static assignType(movie: Movie) {
     movie.type = 'movie'
-  }
-
-  @beforeDelete()
-  static async dispatchLibraryEntryRemoved(movie: Movie) {
-    await events.LibraryEntryRemoved.dispatch(movie)
   }
 
   @beforeFind()

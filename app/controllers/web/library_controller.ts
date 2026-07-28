@@ -60,12 +60,10 @@ export default class LibraryController {
 
   async destroy({ auth, params, response, session }: HttpContext) {
     const entry = await LibraryItem.findByOrFail({ id: params.id, userId: auth.user!.id })
-    const EntryModel = entry.type === 'movie' ? Movie : Serie
-    const concreteEntry = await EntryModel.findOrFail(entry.id)
 
     await db.transaction(async (trx) => {
-      concreteEntry.useTransaction(trx)
-      await concreteEntry.delete()
+      entry.useTransaction(trx)
+      await entry.delete()
     })
 
     session.flash('success', `${entry.name} was removed from your library.`)
