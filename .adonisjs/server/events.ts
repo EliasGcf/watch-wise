@@ -5,12 +5,14 @@
 
 import EpisodeUnwatched from '#events/episode_unwatched'
 import EpisodeWatched from '#events/episode_watched'
+import LibraryEntryRemoved from '#events/library_entry_removed'
 import MovieUnwatched from '#events/movie_unwatched'
 import MovieWatched from '#events/movie_watched'
 
 export const events = {
   EpisodeUnwatched: EpisodeUnwatched,
   EpisodeWatched: EpisodeWatched,
+  LibraryEntryRemoved: LibraryEntryRemoved,
   MovieUnwatched: MovieUnwatched,
   MovieWatched: MovieWatched,
 }

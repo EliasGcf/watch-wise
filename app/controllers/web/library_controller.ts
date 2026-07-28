@@ -6,6 +6,7 @@ import MovieTransformer from '#transformers/movie_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 export default class LibraryController {
@@ -59,8 +60,13 @@ export default class LibraryController {
 
   async destroy({ auth, params, response, session }: HttpContext) {
     const entry = await LibraryItem.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const EntryModel = entry.type === 'movie' ? Movie : Serie
+    const concreteEntry = await EntryModel.findOrFail(entry.id)
 
-    await entry.delete()
+    await db.transaction(async (trx) => {
+      concreteEntry.useTransaction(trx)
+      await concreteEntry.delete()
+    })
 
     session.flash('success', `${entry.name} was removed from your library.`)
     return response.redirect().back()

@@ -22,6 +22,15 @@ const dbConfig = defineConfig({
         filename: env.get('DATABASE_NAME', app.tmpPath('db.sqlite3')),
       },
 
+      pool: {
+        afterCreate(
+          connection: { run: (sql: string, callback: (error: Error | null) => void) => void },
+          done: (error: Error | null, connection: unknown) => void
+        ) {
+          connection.run('PRAGMA foreign_keys = ON', (error) => done(error, connection))
+        },
+      },
+
       /**
        * Required by Knex for SQLite defaults.
        */
