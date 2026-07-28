@@ -172,8 +172,8 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       summary: series.overview,
       episodesCount: 3,
       seasons: [
-        { name: 'Specials', number: 0 },
-        { name: 'Season 1', number: 1 },
+        { name: 'Specials', number: 0, episodesCount: 1 },
+        { name: 'Season 1', number: 1, episodesCount: 2 },
       ],
     }
   }

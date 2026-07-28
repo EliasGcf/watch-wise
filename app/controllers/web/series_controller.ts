@@ -4,7 +4,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SeriesController {
   async show({ auth, inertia, params }: HttpContext) {
-    const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const serie = await Serie.query()
+      .where('id', params.id)
+      .where('userId', auth.user!.id)
+      .preload('watchedEpisodes')
+      .firstOrFail()
 
     return inertia.render('library/series/show', {
       serie: SerieTransformer.transform(serie).useVariant('withCatalog'),

@@ -11,6 +11,7 @@ import type CatalogSerieTransformer from '#transformers/catalog/serie_transforme
 import type MovieTransformer from '#transformers/movie_transformer'
 import type SerieTransformer from '#transformers/serie_transformer'
 import type UserTransformer from '#transformers/user_transformer'
+import type WatchedEpisodeTransformer from '#transformers/watched_episode_transformer'
 import type InertiaMiddleware from '#middleware/inertia_middleware'
 
 export namespace Data {
@@ -35,6 +36,10 @@ export namespace Data {
   export type User = InferData<UserTransformer>
   export namespace User {
     export type Variants = InferVariants<UserTransformer>
+  }
+  export type WatchedEpisode = InferData<WatchedEpisodeTransformer>
+  export namespace WatchedEpisode {
+    export type Variants = InferVariants<WatchedEpisodeTransformer>
   }
   export type SharedProps = InferSharedProps<InertiaMiddleware>
 }

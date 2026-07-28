@@ -26,7 +26,11 @@ export type FindResult = {
   posterUrl: string
 } & (
   | { type: 'movie'; duration: number }
-  | { type: 'serie'; episodesCount: number; seasons: Array<{ name: string; number: number }> }
+  | {
+      type: 'serie'
+      episodesCount: number
+      seasons: Array<{ name: string; number: number; episodesCount: number }>
+    }
 )
 
 export type Movie = Extract<FindResult, { type: 'movie' }>

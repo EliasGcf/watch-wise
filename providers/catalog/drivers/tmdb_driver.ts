@@ -129,6 +129,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       seasons: response.data.seasons.map((season) => ({
         name: season.name,
         number: season.season_number,
+        episodesCount: season.episode_count,
       })),
     }
   }

@@ -11,8 +11,8 @@ import { DateTime } from 'luxon'
 export default class LibraryController {
   async index({ inertia, auth }: HttpContext) {
     const [series, movies] = await Promise.all([
-      Serie.query().where('userId', auth.user!.id).withCount('watchedEpisodes'),
-      Movie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc'),
+      Serie.query().where('userId', auth.user!.id),
+      Movie.query().where('userId', auth.user!.id),
     ])
 
     return inertia.render('library/index', {

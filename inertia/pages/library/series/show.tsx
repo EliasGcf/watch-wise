@@ -15,6 +15,7 @@ import { type Data } from '@generated/data'
 type SeriesSeasons = Data.Serie.Variants['withCatalog']['catalog']['seasons']
 
 type SeasonEpisode = Data.Catalog.Episode
+type WatchedEpisodeProgress = { season: number; episode: number }
 
 type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
@@ -60,33 +61,99 @@ export default function SeriesShow({ serie }: Props) {
 
 function SeasonAccordion({ serie, seasons }: { serie: Data.Serie; seasons: SeriesSeasons }) {
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
+  const [watchedEpisodes, setWatchedEpisodes] = useState<WatchedEpisodeProgress[]>(
+    serie.watchedEpisodes ?? []
+  )
+
+  function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
+    setWatchedEpisodes((current) => {
+      if (
+        current.some(
+          (watched) => watched.season === episode.season && watched.episode === episode.episode
+        )
+      ) {
+        return current
+      }
+
+      return [...current, episode]
+    })
+  }
+
+  function untrackWatchedEpisode(episode: WatchedEpisodeProgress) {
+    setWatchedEpisodes((current) =>
+      current.filter(
+        (watched) => watched.season !== episode.season || watched.episode !== episode.episode
+      )
+    )
+  }
 
   return (
     <Accordion value={openSeasons} onValueChange={setOpenSeasons}>
-      {seasons.map((season) => (
-        <AccordionItem key={season.number} value={String(season.number)}>
-          <AccordionTrigger>{season.name}</AccordionTrigger>
-          <AccordionContent>
-            <SeasonEpisodes
-              serie={serie}
-              season={season.number}
-              isOpen={openSeasons.includes(String(season.number))}
-            />
-          </AccordionContent>
-        </AccordionItem>
-      ))}
+      {seasons.map((season) => {
+        const watchedCount = countWatchedEpisodes(watchedEpisodes, season.number)
+        const progress = calculateSeasonProgress(watchedCount, season.episodesCount)
+
+        return (
+          <AccordionItem key={season.number} value={String(season.number)}>
+            <AccordionTrigger>
+              <div className="flex w-full flex-col gap-2 pr-4">
+                <div className="flex items-center justify-between gap-3">
+                  <span>{season.name}</span>
+                  <span className="text-xs font-normal text-muted-foreground">
+                    {watchedCount} / {season.episodesCount} watched
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                  <span className="w-9 text-right text-xs font-normal text-muted-foreground">
+                    {progress}%
+                  </span>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <SeasonEpisodes
+                serie={serie}
+                season={season.number}
+                isOpen={openSeasons.includes(String(season.number))}
+                onWatched={trackWatchedEpisode}
+                onUnwatched={untrackWatchedEpisode}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        )
+      })}
     </Accordion>
   )
+}
+
+function countWatchedEpisodes(watchedEpisodes: WatchedEpisodeProgress[], season: number) {
+  return watchedEpisodes.filter((watched) => watched.season === season).length
+}
+
+function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
+  if (episodesCount === 0) return 0
+
+  return Math.min(100, Math.max(0, Math.round((watchedCount / episodesCount) * 100)))
 }
 
 function SeasonEpisodes({
   serie,
   season,
   isOpen,
+  onWatched,
+  onUnwatched,
 }: {
   serie: Data.Serie
   season: number
   isOpen: boolean
+  onWatched: (episode: WatchedEpisodeProgress) => void
+  onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
   const [episodes, setEpisodes] = useState<SeasonEpisode[] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -122,13 +189,29 @@ function SeasonEpisodes({
   return (
     <div className="flex flex-col gap-3">
       {episodes.map((episode) => (
-        <EpisodeCard key={episode.providerId} serie={serie} episode={episode} />
+        <EpisodeCard
+          key={episode.providerId}
+          serie={serie}
+          episode={episode}
+          onWatched={onWatched}
+          onUnwatched={onUnwatched}
+        />
       ))}
     </div>
   )
 }
 
-function EpisodeCard({ serie, episode }: { serie: Data.Serie; episode: SeasonEpisode }) {
+function EpisodeCard({
+  serie,
+  episode,
+  onWatched,
+  onUnwatched,
+}: {
+  serie: Data.Serie
+  episode: SeasonEpisode
+  onWatched: (episode: WatchedEpisodeProgress) => void
+  onUnwatched: (episode: WatchedEpisodeProgress) => void
+}) {
   const [watched, setWatched] = useState(episode.watched)
   const currentEpisode = { ...episode, watched }
 
@@ -154,13 +237,19 @@ function EpisodeCard({ serie, episode }: { serie: Data.Serie; episode: SeasonEpi
           <EpisodeUnwatchButton
             serie={serie}
             episode={currentEpisode}
-            onUnwatched={() => setWatched(null)}
+            onUnwatched={() => {
+              setWatched(null)
+              onUnwatched(episode)
+            }}
           />
         ) : (
           <EpisodeWatchButton
             serie={serie}
             episode={currentEpisode}
-            onWatched={() => setWatched({ watchedAt: new Date().toISOString() })}
+            onWatched={() => {
+              setWatched({ watchedAt: new Date().toISOString() })
+              onWatched(episode)
+            }}
           />
         )}
       </CardContent>

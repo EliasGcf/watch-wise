@@ -3,7 +3,7 @@ import { WatchedEpisode } from '#models/watched_mark'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
 test.group('Library series episodes', (group) => {
   group.each.setup(() => testUtils.db().truncate())
@@ -139,6 +139,7 @@ test.group('Library series episodes', (group) => {
       .where('libraryEntryId', serie.id)
 
     assert.lengthOf(watchedMarks, 1)
+    assert.equal(serie.state, 'not_started')
     assert.include(watchedMarks[0].serialize(), {
       providerId: 'episode-1-1',
       type: 'episode',
@@ -152,6 +153,7 @@ test.group('Library series episodes', (group) => {
     await serie.refresh()
     assert.equal(user.watchedTime, 24)
     assert.equal(serie.progress, 33)
+    assert.equal(serie.state, 'in_progress')
 
     await browserContext.loginAs(user)
     const libraryPage = await visit('/app/library')
@@ -195,6 +197,94 @@ test.group('Library series episodes', (group) => {
     await serie.refresh()
     assert.equal(user.watchedTime, 0)
     assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
+  })
+
+  test('series details page receives watched episodes for season progress', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Season Progress',
+      email: 'season-progress@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const response = await client.get(`/app/library/series/${serie.id}`).loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.deepInclude(page.serie.watchedEpisodes[0], {
+      providerId: 'episode-1-1',
+      season: 1,
+      episode: 1,
+      duration: 24,
+    })
+  })
+
+  test('series progress becomes completed when all provider-counted episodes are watched', async ({
+    assert,
+    client,
+  }) => {
+    const testNow = DateTime.fromISO('3000-01-01').toMillis()
+    Settings.now = () => testNow
+
+    const user = await User.create({
+      fullName: 'Completed Series',
+      email: 'completed-series@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    try {
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/2/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      await serie.refresh()
+      assert.equal(serie.progress, 100)
+      assert.equal(serie.state, 'completed')
+    } finally {
+      Settings.now = Date.now
+    }
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({
@@ -226,5 +316,9 @@ test.group('Library series episodes', (group) => {
       await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
+
+    await serie.refresh()
+    assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
   })
 })
