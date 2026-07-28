@@ -6,20 +6,6 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class SeriesController {
-  async index({ auth, serialize }: HttpContext) {
-    const series = await Serie.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc')
-    return serialize(SerieTransformer.transform(series))
-  }
-
-  async show({ auth, params, serialize }: HttpContext) {
-    const serie = await Serie.query()
-      .where('id', params.id)
-      .where('userId', auth.user!.id)
-      .firstOrFail()
-
-    return serialize(SerieTransformer.transform(serie))
-  }
-
   async episodes({ auth, params, serialize }: HttpContext) {
     const serie = await Serie.query()
       .where('id', params.id)
@@ -51,6 +37,7 @@ export default class SeriesController {
     }
 
     await serie.watchEpisode(episode)
+    await serie.load('watchedEpisodes')
 
     session.flash('success', `${episode.name} was marked as watched.`)
     return serialize(SerieTransformer.transform(serie))
@@ -60,6 +47,7 @@ export default class SeriesController {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     await serie.unwatchEpisode(Number(params.season), Number(params.episode))
+    await serie.load('watchedEpisodes')
 
     session.flash('success', 'Episode is no longer marked as watched.')
     return serialize(SerieTransformer.transform(serie))

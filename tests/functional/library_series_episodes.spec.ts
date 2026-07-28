@@ -3,7 +3,7 @@ import { WatchedEpisode } from '#models/watched_mark'
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 
 test.group('Library series episodes', (group) => {
   group.each.setup(() => testUtils.db().truncate())
@@ -36,10 +36,21 @@ test.group('Library series episodes', (group) => {
     await detailsPage.assertTextContains('body', 'Season 1')
   })
 
+  test('series listing api is not exposed', async ({ client }) => {
+    const user = await User.create({
+      fullName: 'Progress Viewer',
+      email: 'progress-viewer@example.com',
+      password: 'secret123',
+    })
+
+    const response = await client.get('/api/library/series').loginAs(user)
+
+    response.assertNotFound()
+  })
+
   test('authenticated users load provider-sourced episodes for a single season', async ({
     assert,
-    browserContext,
-    visit,
+    client,
   }) => {
     const user = await User.create({
       fullName: 'Jordan Series',
@@ -57,9 +68,11 @@ test.group('Library series episodes', (group) => {
       summary: 'A pilot about a super-intelligent astronaut.',
     })
 
-    await browserContext.loginAs(user)
-    const page = await visit(`/api/library/series/${serie.id}/seasons/1/episodes`)
-    const { data } = JSON.parse((await page.locator('body').textContent()) ?? '{}')
+    const response = await client
+      .get(`/api/library/series/${serie.id}/seasons/1/episodes`)
+      .loginAs(user)
+    response.assertOk()
+    const { data } = response.body()
 
     assert.deepEqual(data, [
       {
@@ -91,7 +104,9 @@ test.group('Library series episodes', (group) => {
 
   test('authenticated users can mark a released episode once and then unmark it', async ({
     assert,
+    browserContext,
     client,
+    visit,
   }) => {
     const user = await User.create({
       fullName: 'Taylor Series',
@@ -108,6 +123,7 @@ test.group('Library series episodes', (group) => {
       releasedAt: DateTime.fromISO('1999-01-01'),
       summary: 'A pilot about a super-intelligent astronaut.',
     })
+    assert.equal(serie.progress, 0)
 
     await client
       .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
@@ -123,6 +139,7 @@ test.group('Library series episodes', (group) => {
       .where('libraryEntryId', serie.id)
 
     assert.lengthOf(watchedMarks, 1)
+    assert.equal(serie.state, 'not_started')
     assert.include(watchedMarks[0].serialize(), {
       providerId: 'episode-1-1',
       type: 'episode',
@@ -133,7 +150,14 @@ test.group('Library series episodes', (group) => {
     assert.isTrue(watchedMarks[0].watchedAt <= DateTime.now())
 
     await user.refresh()
+    await serie.refresh()
     assert.equal(user.watchedTime, 24)
+    assert.equal(serie.progress, 50)
+    assert.equal(serie.state, 'in_progress')
+
+    await browserContext.loginAs(user)
+    const libraryPage = await visit('/app/library')
+    await libraryPage.assertTextContains('body', '50%')
 
     await serie.merge({ providerId: 'series-1-changed' }).save()
     const persistedSnapshot = await WatchedEpisode.query()
@@ -170,7 +194,138 @@ test.group('Library series episodes', (group) => {
     )
 
     await user.refresh()
+    await serie.refresh()
     assert.equal(user.watchedTime, 0)
+    assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
+  })
+
+  test('series details page receives watched episodes for season progress', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Season Progress',
+      email: 'season-progress@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const response = await client.get(`/app/library/series/${serie.id}`).loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.deepInclude(page.serie.watchedEpisodes[0], {
+      providerId: 'episode-1-1',
+      season: 1,
+      episode: 1,
+      duration: 24,
+    })
+  })
+
+  test('series progress becomes completed when all provider-counted episodes are watched', async ({
+    assert,
+    client,
+  }) => {
+    const testNow = DateTime.fromISO('3000-01-01').toMillis()
+    Settings.now = () => testNow
+
+    const user = await User.create({
+      fullName: 'Completed Series',
+      email: 'completed-series@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    try {
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/2/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      await serie.refresh()
+      assert.equal(serie.progress, 100)
+      assert.equal(serie.state, 'completed')
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('special episodes can be watched without changing series progress', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Special Viewer',
+      email: 'special-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const watchedMarks = await WatchedEpisode.query()
+      .where('userId', user.id)
+      .where('libraryEntryId', serie.id)
+
+    assert.lengthOf(watchedMarks, 1)
+    assert.include(watchedMarks[0].serialize(), {
+      providerId: 'episode-0-1',
+      type: 'episode',
+      season: 0,
+      episode: 1,
+      duration: 28,
+    })
+
+    await user.refresh()
+    await serie.refresh()
+    assert.equal(user.watchedTime, 28)
+    assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({
@@ -202,5 +357,9 @@ test.group('Library series episodes', (group) => {
       await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
+
+    await serie.refresh()
+    assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
   })
 })

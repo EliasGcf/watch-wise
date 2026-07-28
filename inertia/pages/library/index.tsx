@@ -1,53 +1,22 @@
 import { Form } from '@adonisjs/inertia/react'
-import { useEffect, useState } from 'react'
+import { type Data } from '@generated/data'
+import { useState } from 'react'
 import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { type InertiaProps } from '~/types'
 
-type MovieEntry = Awaited<ReturnType<typeof client.api.api.library.movies>>['data'][number]
-type SeriesEntry = Awaited<ReturnType<typeof client.api.api.library.series>>['data'][number]
+type Movie = Data.Movie
+type Serie = Data.Serie
 
-export default function LibraryIndex({ user }: InertiaProps) {
-  const [movies, setMovies] = useState<MovieEntry[]>([])
-  const [series, setSeries] = useState<SeriesEntry[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+type Props = InertiaProps & {
+  series: Serie[]
+  movies: Movie[]
+}
 
-  useEffect(() => {
-    let isCurrent = true
-
-    async function loadLibrary() {
-      setIsLoading(true)
-      setError(null)
-
-      try {
-        const [moviesResponse, seriesResponse] = await Promise.all([
-          client.api.api.library.movies({}),
-          client.api.api.library.series({}),
-        ])
-
-        if (!isCurrent) return
-
-        setMovies(moviesResponse.data)
-        setSeries(seriesResponse.data)
-      } catch {
-        if (!isCurrent) return
-        setError('Library could not be loaded. Try again later.')
-      } finally {
-        if (isCurrent) setIsLoading(false)
-      }
-    }
-
-    void loadLibrary()
-
-    return () => {
-      isCurrent = false
-    }
-  }, [])
-
-  const isEmpty = !isLoading && movies.length === 0 && series.length === 0
+export default function LibraryIndex({ user, series, movies }: Props) {
+  const isEmpty = movies.length === 0 && series.length === 0
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
@@ -66,42 +35,16 @@ export default function LibraryIndex({ user }: InertiaProps) {
         )}
       </Card>
 
-      {error && (
-        <Card>
-          <CardContent>
-            <p className="text-muted-foreground">{error}</p>
-          </CardContent>
-        </Card>
-      )}
-
-      {isLoading && (
-        <Card>
-          <CardContent>
-            <p className="text-muted-foreground">Loading your library...</p>
-          </CardContent>
-        </Card>
-      )}
-
-      {!isLoading && (
-        <>
-          <LibrarySection
-            title="Movies"
-            entries={movies}
-            emptyMessage="No movies in your library yet."
-            onRemoveEntry={(entry) =>
-              setMovies((current) => current.filter((movie) => movie.id !== entry.id))
-            }
-          />
-          <LibrarySection
-            title="Series"
-            entries={series}
-            emptyMessage="No series in your library yet."
-            onRemoveEntry={(entry) =>
-              setSeries((current) => current.filter((serie) => serie.id !== entry.id))
-            }
-          />
-        </>
-      )}
+      <LibrarySection
+        title="Movies"
+        entries={movies}
+        emptyMessage="No movies in your library yet."
+      />
+      <LibrarySection
+        title="Series"
+        entries={series}
+        emptyMessage="No series in your library yet."
+      />
 
       {isEmpty && (
         <Card>
@@ -127,12 +70,10 @@ function LibrarySection({
   title,
   entries,
   emptyMessage,
-  onRemoveEntry,
 }: {
   title: string
-  entries: Array<MovieEntry | SeriesEntry>
+  entries: Array<Movie | Serie>
   emptyMessage: string
-  onRemoveEntry: (entry: MovieEntry | SeriesEntry) => void
 }) {
   return (
     <section className="flex flex-col gap-3" aria-label={title}>
@@ -150,11 +91,7 @@ function LibrarySection({
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {entries.map((entry) => (
-            <LibraryCard
-              key={`${entry.type}-${entry.id}`}
-              entry={entry}
-              onRemoveEntry={onRemoveEntry}
-            />
+            <LibraryCard key={`${entry.type}-${entry.id}`} entry={entry} />
           ))}
         </div>
       )}
@@ -162,13 +99,7 @@ function LibrarySection({
   )
 }
 
-function LibraryCard({
-  entry,
-  onRemoveEntry,
-}: {
-  entry: MovieEntry | SeriesEntry
-  onRemoveEntry: (entry: MovieEntry | SeriesEntry) => void
-}) {
+function LibraryCard({ entry }: { entry: Movie | Serie }) {
   return (
     <Card>
       {entry.bannerUrl && (
@@ -188,7 +119,8 @@ function LibraryCard({
         <p className="text-xs text-muted-foreground">
           {entry.provider} ID: {entry.providerId}
         </p>
-        <RemoveLibraryEntryForm entry={entry} onRemoveEntry={onRemoveEntry} />
+        {entry.type === 'serie' && <SeriesProgress serie={entry} />}
+        <RemoveLibraryEntryForm entry={entry} />
         {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
         {entry.type === 'serie' && <SeriesDetailsLink serie={entry} />}
       </CardContent>
@@ -196,7 +128,21 @@ function LibraryCard({
   )
 }
 
-function SeriesDetailsLink({ serie }: { serie: SeriesEntry }) {
+function SeriesProgress({ serie }: { serie: Serie }) {
+  return (
+    <div className="flex flex-col gap-1" aria-label={`${serie.name} progress`}>
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span>Progress</span>
+        <span>{serie.progress}%</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-secondary">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${serie.progress}%` }} />
+      </div>
+    </div>
+  )
+}
+
+function SeriesDetailsLink({ serie }: { serie: Serie }) {
   return (
     <a
       href={`/app/library/series/${serie.id}`}
@@ -207,19 +153,9 @@ function SeriesDetailsLink({ serie }: { serie: SeriesEntry }) {
   )
 }
 
-function RemoveLibraryEntryForm({
-  entry,
-  onRemoveEntry,
-}: {
-  entry: MovieEntry | SeriesEntry
-  onRemoveEntry: (entry: MovieEntry | SeriesEntry) => void
-}) {
+function RemoveLibraryEntryForm({ entry }: { entry: Movie | Serie }) {
   return (
-    <Form
-      action={`/app/library/${entry.id}`}
-      method="delete"
-      onSuccess={() => onRemoveEntry(entry)}
-    >
+    <Form action={`/app/library/${entry.id}`} method="delete">
       <Button
         type="submit"
         variant="destructive"
@@ -232,7 +168,7 @@ function RemoveLibraryEntryForm({
   )
 }
 
-function MovieWatchedForm({ movie }: { movie: MovieEntry }) {
+function MovieWatchedForm({ movie }: { movie: Movie }) {
   const [isWatched, setIsWatched] = useState(Boolean(movie.watched))
 
   async function watchMovie() {

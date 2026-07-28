@@ -2,13 +2,23 @@ import LibraryItem from '#models/library_item'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
+import MovieTransformer from '#transformers/movie_transformer'
+import SerieTransformer from '#transformers/serie_transformer'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
 export default class LibraryController {
-  async index({ inertia }: HttpContext) {
-    return inertia.render('library/index', {})
+  async index({ inertia, auth }: HttpContext) {
+    const [series, movies] = await Promise.all([
+      Serie.query().where('userId', auth.user!.id),
+      Movie.query().where('userId', auth.user!.id),
+    ])
+
+    return inertia.render('library/index', {
+      series: SerieTransformer.transform(series),
+      movies: MovieTransformer.transform(movies),
+    })
   }
 
   async store({ auth, request, response, session }: HttpContext) {

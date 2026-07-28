@@ -60,6 +60,9 @@ export class WatchedEpisode extends WatchedMark {
 
   declare type: 'episode'
 
+  declare season: number
+  declare episode: number
+
   @belongsTo(() => Serie, { foreignKey: 'libraryEntryId' })
   declare serie: BelongsTo<typeof Serie>
 

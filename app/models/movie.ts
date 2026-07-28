@@ -10,6 +10,7 @@ export default class Movie extends LibraryItem {
   static table = LibraryItem.table
 
   declare type: 'movie'
+  declare progress: null
 
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>
@@ -36,6 +37,6 @@ export default class Movie extends LibraryItem {
   @beforeFind()
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Movie>) {
-    query.where('type', 'movie').preload('watched')
+    query.where('type', 'movie').preload('watched').orderBy('createdAt', 'desc')
   }
 }

@@ -170,10 +170,10 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: series.first_air_date,
       summary: series.overview,
-      episodesCount: 3,
+      episodesCount: 2,
       seasons: [
-        { name: 'Specials', number: 0 },
-        { name: 'Season 1', number: 1 },
+        { name: 'Specials', number: 0, episodesCount: 1 },
+        { name: 'Season 1', number: 1, episodesCount: 2 },
       ],
     }
   }

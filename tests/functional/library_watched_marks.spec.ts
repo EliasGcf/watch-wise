@@ -126,7 +126,7 @@ test.group('Library movie watched records', (group) => {
     const movie = await Movie.create({
       userId: user.id,
       provider: 'tmdb',
-      providerId: 'movie-future',
+      providerId: 'movie-1',
       name: 'Future Heat',
       bannerPath: '/movie-future.jpg',
       posterPath: '/movie-future-poster.jpg',

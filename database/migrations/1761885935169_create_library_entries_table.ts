@@ -22,6 +22,9 @@ export default class extends BaseSchema {
       table.date('released_at').nullable()
       table.text('summary').nullable()
 
+      // Series only
+      table.integer('progress').unsigned().nullable()
+
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
 

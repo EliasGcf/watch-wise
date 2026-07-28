@@ -6,14 +6,25 @@
 /// <reference path="./manifest.d.ts" />
 import type { InferData, InferVariants } from '@adonisjs/core/types/transformers'
 import type { InferSharedProps } from '@adonisjs/inertia/types'
+import type CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
+import type CatalogSerieTransformer from '#transformers/catalog/serie_transformer'
 import type MovieTransformer from '#transformers/movie_transformer'
 import type SerieTransformer from '#transformers/serie_transformer'
 import type UserTransformer from '#transformers/user_transformer'
-import type CatalogSerieTransformer from '#transformers/catalog/serie_transformer'
-import type CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
+import type WatchedEpisodeTransformer from '#transformers/watched_episode_transformer'
 import type InertiaMiddleware from '#middleware/inertia_middleware'
 
 export namespace Data {
+  export namespace Catalog {
+    export type Episode = InferData<CatalogEpisodeTransformer>
+    export namespace Episode {
+      export type Variants = InferVariants<CatalogEpisodeTransformer>
+    }
+    export type Serie = InferData<CatalogSerieTransformer>
+    export namespace Serie {
+      export type Variants = InferVariants<CatalogSerieTransformer>
+    }
+  }
   export type Movie = InferData<MovieTransformer>
   export namespace Movie {
     export type Variants = InferVariants<MovieTransformer>
@@ -26,15 +37,9 @@ export namespace Data {
   export namespace User {
     export type Variants = InferVariants<UserTransformer>
   }
-  export namespace Catalog {
-    export type Serie = InferData<CatalogSerieTransformer>
-    export namespace Serie {
-      export type Variants = InferVariants<CatalogSerieTransformer>
-    }
-    export type Episode = InferData<CatalogEpisodeTransformer>
-    export namespace Episode {
-      export type Variants = InferVariants<CatalogEpisodeTransformer>
-    }
+  export type WatchedEpisode = InferData<WatchedEpisodeTransformer>
+  export namespace WatchedEpisode {
+    export type Variants = InferVariants<WatchedEpisodeTransformer>
   }
   export type SharedProps = InferSharedProps<InertiaMiddleware>
 }
