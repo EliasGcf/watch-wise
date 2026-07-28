@@ -1,6 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
+import type { Database } from 'sqlite3'
 
 const dbConfig = defineConfig({
   /**
@@ -24,8 +25,8 @@ const dbConfig = defineConfig({
 
       pool: {
         afterCreate(
-          connection: { run: (sql: string, callback: (error: Error | null) => void) => void },
-          done: (error: Error | null, connection: unknown) => void
+          connection: Database,
+          done: (error: Error | null, connection: Database) => void
         ) {
           connection.run('PRAGMA foreign_keys = ON', (error) => done(error, connection))
         },

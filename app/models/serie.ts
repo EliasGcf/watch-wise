@@ -1,11 +1,9 @@
 import LibraryItem from '#models/library_item'
-import { events } from '#generated/events'
 import User from '#models/user'
 import { WatchedEpisode } from '#models/watched_mark'
 import type { Episode } from '#providers/catalog/types'
 import {
   beforeCreate,
-  beforeDelete,
   beforeFetch,
   beforeFind,
   belongsTo,
@@ -66,11 +64,6 @@ export default class Serie extends LibraryItem {
   static beforeCreate(serie: Serie) {
     serie.progress = 0
     serie.type = 'serie'
-  }
-
-  @beforeDelete()
-  static async dispatchLibraryEntryRemoved(serie: Serie) {
-    await events.LibraryEntryRemoved.dispatch(serie)
   }
 
   @beforeFind()

@@ -2,9 +2,15 @@ import { type WatchedEpisode } from '#models/watched_mark'
 import { BaseEvent } from '@adonisjs/core/events'
 
 export default class EpisodeWatched extends BaseEvent {
-  readonly action = 'increment'
+  get userId() {
+    return this.watched.userId
+  }
 
-  get duration() {
+  get $trx() {
+    return this.watched.$trx
+  }
+
+  duration() {
     return this.watched.duration
   }
 
