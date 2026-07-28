@@ -24,6 +24,7 @@ export default class UpdateSeriesProgress {
     const watchedEpisodesCount = await WatchedEpisode.query(queryOptions)
       .where('userId', event.watched.userId)
       .where('libraryEntryId', event.watched.libraryEntryId)
+      .whereNot('season', 0)
       .count('* as total')
       .firstOrFail()
 

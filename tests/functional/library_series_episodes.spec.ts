@@ -152,12 +152,12 @@ test.group('Library series episodes', (group) => {
     await user.refresh()
     await serie.refresh()
     assert.equal(user.watchedTime, 24)
-    assert.equal(serie.progress, 33)
+    assert.equal(serie.progress, 50)
     assert.equal(serie.state, 'in_progress')
 
     await browserContext.loginAs(user)
     const libraryPage = await visit('/app/library')
-    await libraryPage.assertTextContains('body', '33%')
+    await libraryPage.assertTextContains('body', '50%')
 
     await serie.merge({ providerId: 'series-1-changed' }).save()
     const persistedSnapshot = await WatchedEpisode.query()
@@ -267,10 +267,6 @@ test.group('Library series episodes', (group) => {
 
     try {
       await client
-        .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
-        .loginAs(user)
-        .withCsrfToken()
-      await client
         .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
         .loginAs(user)
         .withCsrfToken()
@@ -285,6 +281,51 @@ test.group('Library series episodes', (group) => {
     } finally {
       Settings.now = Date.now
     }
+  })
+
+  test('special episodes can be watched without changing series progress', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Special Viewer',
+      email: 'special-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const watchedMarks = await WatchedEpisode.query()
+      .where('userId', user.id)
+      .where('libraryEntryId', serie.id)
+
+    assert.lengthOf(watchedMarks, 1)
+    assert.include(watchedMarks[0].serialize(), {
+      providerId: 'episode-0-1',
+      type: 'episode',
+      season: 0,
+      episode: 1,
+      duration: 28,
+    })
+
+    await user.refresh()
+    await serie.refresh()
+    assert.equal(user.watchedTime, 28)
+    assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({
