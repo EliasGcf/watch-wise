@@ -6,7 +6,10 @@
 export const controllers = {
   api: {
     Movies: () => import('#controllers/api/movies_controller'),
-    Series: () => import('#controllers/api/series_controller'),
+    series: {
+      Seasons: () => import('#controllers/api/series/seasons_controller'),
+      Episodes: () => import('#controllers/api/series/episodes_controller'),
+    },
   },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),

@@ -15,24 +15,27 @@ const group = router.group(() => {
         .delete('library/movies/:id/watch', [controllers.api.Movies, 'unwatch'])
         .as('library.movies.unwatch')
       router
-        .get('library/series/:id/seasons/:season/episodes', [controllers.api.Series, 'episodes'])
+        .get('library/series/:id/seasons/:season/episodes', [
+          controllers.api.series.Episodes,
+          'index',
+        ])
         .as('library.series.seasons.episodes')
       router
-        .post('library/series/:id/seasons/:season/watch', [controllers.api.Series, 'watchSeason'])
+        .post('library/series/:id/seasons/:season/watch', [controllers.api.series.Seasons, 'watch'])
         .as('library.series.seasons.watch')
       router
-        .post('library/series/:id/watch', [controllers.api.Series, 'watchSeries'])
+        .post('library/series/:id/watch', [controllers.api.series.Seasons, 'watchAll'])
         .as('library.series.watch')
       router
         .post('library/series/:id/seasons/:season/episodes/:episode/watch', [
-          controllers.api.Series,
-          'watchEpisode',
+          controllers.api.series.Episodes,
+          'watch',
         ])
         .as('library.series.episodes.watch')
       router
         .delete('library/series/:id/seasons/:season/episodes/:episode/watch', [
-          controllers.api.Series,
-          'unwatchEpisode',
+          controllers.api.series.Episodes,
+          'unwatch',
         ])
         .as('library.series.episodes.unwatch')
     })

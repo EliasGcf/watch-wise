@@ -51,8 +51,8 @@ export interface Registry {
       paramsTuple: [ParamValue, ParamValue]
       params: { id: ParamValue; season: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['index']>>>
     }
   }
   'api.library.series.seasons.watch': {
@@ -63,8 +63,8 @@ export interface Registry {
       paramsTuple: [ParamValue, ParamValue]
       params: { id: ParamValue; season: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeason']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeason']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/seasons_controller').default['watch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/seasons_controller').default['watch']>>>
     }
   }
   'api.library.series.watch': {
@@ -75,8 +75,8 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeries']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeries']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/seasons_controller').default['watchAll']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/seasons_controller').default['watchAll']>>>
     }
   }
   'api.library.series.episodes.watch': {
@@ -87,8 +87,8 @@ export interface Registry {
       paramsTuple: [ParamValue, ParamValue, ParamValue]
       params: { id: ParamValue; season: ParamValue; episode: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchEpisode']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchEpisode']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watch']>>>
     }
   }
   'api.library.series.episodes.unwatch': {
@@ -99,8 +99,8 @@ export interface Registry {
       paramsTuple: [ParamValue, ParamValue, ParamValue]
       params: { id: ParamValue; season: ParamValue; episode: ParamValue }
       query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['unwatchEpisode']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['unwatchEpisode']>>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['unwatch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['unwatch']>>>
     }
   }
   'app.home': {
