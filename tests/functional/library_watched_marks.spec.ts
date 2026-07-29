@@ -4,6 +4,7 @@ import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
+import type { Page } from 'playwright'
 
 test.group('Library movie watched records', (group) => {
   group.each.setup(() => testUtils.db().truncate())
@@ -32,7 +33,11 @@ test.group('Library movie watched records', (group) => {
     await browserContext.loginAs(user)
 
     const libraryPage = await visit('/app/library')
-    await libraryPage.getByRole('button', { name: 'Mark Heat as watched' }).click()
+    await delayMovieWatchApi(libraryPage)
+    const markButton = libraryPage.getByRole('button', { name: 'Mark Heat as watched' })
+    await markButton.click()
+    await libraryPage.assertDisabled(markButton)
+    await libraryPage.assertTextContains('body', 'Marking...')
 
     const markedPage = await visit('/app/library')
     await markedPage.assertTextContains('body', 'Watched')
@@ -56,7 +61,11 @@ test.group('Library movie watched records', (group) => {
     await user.refresh()
     assert.equal(user.watchedTime, 170)
 
-    await markedPage.getByRole('button', { name: 'Unmark Heat as watched' }).click()
+    await delayMovieWatchApi(markedPage)
+    const unmarkButton = markedPage.getByRole('button', { name: 'Unmark Heat as watched' })
+    await unmarkButton.click()
+    await markedPage.assertDisabled(unmarkButton)
+    await markedPage.assertTextContains('body', 'Unmarking...')
     await markedPage.assertTextContains('body', 'Mark as watched')
 
     assert.lengthOf(
@@ -138,6 +147,7 @@ test.group('Library movie watched records', (group) => {
 
     const page = await visit('/app/library')
     await page.getByRole('button', { name: 'Mark Future Heat as watched' }).click()
+    await page.assertTextContains('body', 'Movie could not be marked as watched.')
 
     assert.lengthOf(
       await WatchedMovie.query().where('userId', user.id).where('libraryEntryId', movie.id),
@@ -225,3 +235,10 @@ test.group('Library movie watched records', (group) => {
     assert.equal(otherUser.watchedTime, 0)
   })
 })
+
+async function delayMovieWatchApi(page: Page) {
+  await page.route('**/api/library/movies/*/watch', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    await route.continue()
+  })
+}
