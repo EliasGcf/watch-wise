@@ -5,8 +5,8 @@ import SerieTransformer from '#transformers/serie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
 
-export default class SeriesController {
-  async episodes({ auth, params, serialize }: HttpContext) {
+export default class EpisodesController {
+  async index({ auth, params, serialize }: HttpContext) {
     const serie = await Serie.query()
       .where('id', params.id)
       .where('userId', auth.user!.id)
@@ -18,7 +18,7 @@ export default class SeriesController {
     return serialize(CatalogEpisodeTransformer.transform(episodes, serie.watchedEpisodes))
   }
 
-  async watchEpisode({ auth, params, response, session, serialize }: HttpContext) {
+  async watch({ auth, params, response, session, serialize }: HttpContext) {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
     const episode = await catalog.findEpisode(
       serie.providerId,
@@ -43,7 +43,7 @@ export default class SeriesController {
     return serialize(SerieTransformer.transform(serie))
   }
 
-  async unwatchEpisode({ auth, params, session, serialize }: HttpContext) {
+  async unwatch({ auth, params, session, serialize }: HttpContext) {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     await serie.unwatchEpisode(Number(params.season), Number(params.episode))
