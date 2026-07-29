@@ -14,7 +14,6 @@ export class LibraryEntrySchema extends BaseModel {
     'id',
     'name',
     'posterPath',
-    'progress',
     'provider',
     'providerId',
     'releasedAt',
@@ -34,8 +33,6 @@ export class LibraryEntrySchema extends BaseModel {
   declare name: string
   @column()
   declare posterPath: string | null
-  @column()
-  declare progress: number | null
   @column()
   declare provider: string
   @column()

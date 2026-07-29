@@ -4,6 +4,5 @@
  */
 
 export const listeners = {
-  UpdateSeriesProgress: () => import('#listeners/update_series_progress'),
   UpdateUserWatchedTime: () => import('#listeners/update_user_watched_time'),
 }

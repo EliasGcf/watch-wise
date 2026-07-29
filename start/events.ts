@@ -6,14 +6,8 @@ emitter.listen(events.MovieWatched, [listeners.UpdateUserWatchedTime])
 
 emitter.listen(events.MovieUnwatched, [listeners.UpdateUserWatchedTime])
 
-emitter.listen(events.EpisodeWatched, [
-  listeners.UpdateUserWatchedTime,
-  listeners.UpdateSeriesProgress,
-])
+emitter.listen(events.EpisodeWatched, [listeners.UpdateUserWatchedTime])
 
-emitter.listen(events.EpisodeUnwatched, [
-  listeners.UpdateUserWatchedTime,
-  listeners.UpdateSeriesProgress,
-])
+emitter.listen(events.EpisodeUnwatched, [listeners.UpdateUserWatchedTime])
 
 emitter.listen(events.LibraryEntryRemoved, [listeners.UpdateUserWatchedTime])

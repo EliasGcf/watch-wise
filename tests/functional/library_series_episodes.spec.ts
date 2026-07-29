@@ -123,8 +123,6 @@ test.group('Library series episodes', (group) => {
       releasedAt: DateTime.fromISO('1999-01-01'),
       summary: 'A pilot about a super-intelligent astronaut.',
     })
-    assert.equal(serie.progress, 0)
-
     await client
       .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
       .loginAs(user)
@@ -139,7 +137,6 @@ test.group('Library series episodes', (group) => {
       .where('libraryEntryId', serie.id)
 
     assert.lengthOf(watchedMarks, 1)
-    assert.equal(serie.state, 'not_started')
     assert.include(watchedMarks[0].serialize(), {
       providerId: 'episode-1-1',
       type: 'episode',
@@ -150,10 +147,7 @@ test.group('Library series episodes', (group) => {
     assert.isTrue(watchedMarks[0].watchedAt <= DateTime.now())
 
     await user.refresh()
-    await serie.refresh()
     assert.equal(user.watchedTime, 24)
-    assert.equal(serie.progress, 50)
-    assert.equal(serie.state, 'in_progress')
 
     await browserContext.loginAs(user)
     const libraryPage = await visit('/app/library')
@@ -194,10 +188,35 @@ test.group('Library series episodes', (group) => {
     )
 
     await user.refresh()
-    await serie.refresh()
     assert.equal(user.watchedTime, 0)
-    assert.equal(serie.progress, 0)
-    assert.equal(serie.state, 'not_started')
+  })
+
+  test('series progress is derived from watched marks when serialized', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Derived Progress',
+      email: 'derived-progress@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    response.assertOk()
+    assert.equal(response.body().data.progress, 50)
   })
 
   test('series details page receives watched episodes for season progress', async ({
@@ -292,9 +311,7 @@ test.group('Library series episodes', (group) => {
       assert.equal(watchedMarks[0].watchedAt.toISO(), watchedAt.toISO())
 
       await user.refresh()
-      await serie.refresh()
       assert.equal(user.watchedTime, 24)
-      assert.equal(serie.progress, 50)
     } finally {
       Settings.now = Date.now
     }
@@ -346,9 +363,7 @@ test.group('Library series episodes', (group) => {
       assert.equal(watchedMarks[0].watchedAt.toISO(), watchedAt.toISO())
 
       await user.refresh()
-      await serie.refresh()
       assert.equal(user.watchedTime, 28)
-      assert.equal(serie.progress, 0)
     } finally {
       Settings.now = Date.now
     }
@@ -426,9 +441,7 @@ test.group('Library series episodes', (group) => {
       )
 
       await user.refresh()
-      await serie.refresh()
       assert.equal(user.watchedTime, 52)
-      assert.equal(serie.progress, 50)
     } finally {
       Settings.now = Date.now
     }
@@ -525,9 +538,7 @@ test.group('Library series episodes', (group) => {
       )
 
       await user.refresh()
-      await serie.refresh()
       assert.equal(user.watchedTime, 152)
-      assert.equal(serie.progress, 100)
     } finally {
       Settings.now = Date.now
     }
@@ -604,10 +615,8 @@ test.group('Library series episodes', (group) => {
     assert.lengthOf(await WatchedEpisode.query().where('libraryEntryId', serie.id), 0)
     await owner.refresh()
     await otherUser.refresh()
-    await serie.refresh()
     assert.equal(owner.watchedTime, 0)
     assert.equal(otherUser.watchedTime, 0)
-    assert.equal(serie.progress, 0)
   })
 
   test('authenticated users cannot unmark another user series episode as watched', async ({
@@ -651,13 +660,11 @@ test.group('Library series episodes', (group) => {
     )
     await owner.refresh()
     await otherUser.refresh()
-    await serie.refresh()
     assert.equal(owner.watchedTime, 24)
     assert.equal(otherUser.watchedTime, 0)
-    assert.equal(serie.progress, 50)
   })
 
-  test('series progress becomes completed when all provider-counted episodes are watched', async ({
+  test('serialized series progress becomes completed when all provider-counted episodes are watched', async ({
     assert,
     client,
   }) => {
@@ -685,14 +692,13 @@ test.group('Library series episodes', (group) => {
         .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
         .loginAs(user)
         .withCsrfToken()
-      await client
+      const response = await client
         .post(`/api/library/series/${serie.id}/seasons/1/episodes/2/watch`)
         .loginAs(user)
         .withCsrfToken()
 
-      await serie.refresh()
-      assert.equal(serie.progress, 100)
-      assert.equal(serie.state, 'completed')
+      response.assertOk()
+      assert.equal(response.body().data.progress, 100)
     } finally {
       Settings.now = Date.now
     }
@@ -739,10 +745,7 @@ test.group('Library series episodes', (group) => {
     })
 
     await user.refresh()
-    await serie.refresh()
     assert.equal(user.watchedTime, 28)
-    assert.equal(serie.progress, 0)
-    assert.equal(serie.state, 'not_started')
 
     await browserContext.loginAs(user)
     const detailsPage = await visit(`/app/library/series/${serie.id}`)
@@ -760,10 +763,7 @@ test.group('Library series episodes', (group) => {
     )
 
     await user.refresh()
-    await serie.refresh()
     assert.equal(user.watchedTime, 0)
-    assert.equal(serie.progress, 0)
-    assert.equal(serie.state, 'not_started')
   })
 
   test('authenticated users cannot mark unreleased episodes as watched', async ({
@@ -795,9 +795,5 @@ test.group('Library series episodes', (group) => {
       await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
       0
     )
-
-    await serie.refresh()
-    assert.equal(serie.progress, 0)
-    assert.equal(serie.state, 'not_started')
   })
 })

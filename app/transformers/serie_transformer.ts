@@ -1,13 +1,17 @@
 import type Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
+import { calculateSerieProgress } from '#services/series_progress'
 import CatalogSerieTransformer from '#transformers/catalog/serie_transformer'
 import WatchedEpisodeTransformer from '#transformers/watched_episode_transformer'
 import { BaseTransformer } from '@adonisjs/core/transformers'
 
 export default class SerieTransformer extends BaseTransformer<Serie> {
-  toObject() {
+  async toObject() {
+    const progress = await calculateSerieProgress(this.resource)
+
     return {
       ...this.pick(this.resource, [...this.resource.$columns, 'bannerUrl', 'posterUrl']),
+      progress,
       watchedEpisodes: WatchedEpisodeTransformer.transform(
         this.whenLoaded(this.resource.watchedEpisodes)
       ),
@@ -22,7 +26,7 @@ export default class SerieTransformer extends BaseTransformer<Serie> {
     }
 
     return {
-      ...this.toObject(),
+      ...(await this.toObject()),
       catalog: CatalogSerieTransformer.transform(catalogSerie),
     }
   }
