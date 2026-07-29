@@ -1,6 +1,7 @@
 import { LibraryEntrySchema } from '#database/schema'
+import { events } from '#generated/events'
 import { catalog } from '#services/catalog_provider'
-import { beforeSave, computed } from '@adonisjs/lucid/orm'
+import { beforeDelete, beforeSave, computed } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export default class LibraryItem extends LibraryEntrySchema {
@@ -30,5 +31,10 @@ export default class LibraryItem extends LibraryEntrySchema {
     if (libraryItem.$dirty.posterPath) {
       libraryItem.posterPath = libraryItem.posterPath.replace(/^\/+/, '')
     }
+  }
+
+  @beforeDelete()
+  static async dispatchLibraryEntryRemoved(entry: LibraryItem) {
+    await events.LibraryEntryRemoved.dispatch(entry)
   }
 }

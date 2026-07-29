@@ -6,11 +6,12 @@ type Event =
   | InstanceType<typeof events.MovieUnwatched>
   | InstanceType<typeof events.EpisodeWatched>
   | InstanceType<typeof events.EpisodeUnwatched>
+  | InstanceType<typeof events.LibraryEntryRemoved>
 
 export default class UpdateUserWatchedTime {
   async handle(event: Event) {
-    await User.query(event.watched.$trx ? { client: event.watched.$trx } : undefined)
-      .where('id', event.watched.userId)
-      .increment('watchedTime', event.duration)
+    await User.query(event.$trx ? { client: event.$trx } : undefined)
+      .where('id', event.userId)
+      .increment('watchedTime', await event.duration())
   }
 }

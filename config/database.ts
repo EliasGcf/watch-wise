@@ -1,6 +1,7 @@
 import app from '@adonisjs/core/services/app'
 import env from '#start/env'
 import { defineConfig } from '@adonisjs/lucid'
+import type { Database } from 'sqlite3'
 
 const dbConfig = defineConfig({
   /**
@@ -20,6 +21,15 @@ const dbConfig = defineConfig({
          * Database file location.
          */
         filename: env.get('DATABASE_NAME', app.tmpPath('db.sqlite3')),
+      },
+
+      pool: {
+        afterCreate(
+          connection: Database,
+          done: (error: Error | null, connection: Database) => void
+        ) {
+          connection.run('PRAGMA foreign_keys = ON', (error) => done(error, connection))
+        },
       },
 
       /**

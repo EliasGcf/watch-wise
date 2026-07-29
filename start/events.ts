@@ -15,3 +15,5 @@ emitter.listen(events.EpisodeUnwatched, [
   listeners.UpdateUserWatchedTime,
   listeners.UpdateSeriesProgress,
 ])
+
+emitter.listen(events.LibraryEntryRemoved, [listeners.UpdateUserWatchedTime])
