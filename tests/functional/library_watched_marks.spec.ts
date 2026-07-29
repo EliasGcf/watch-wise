@@ -144,4 +144,81 @@ test.group('Library movie watched records', (group) => {
       0
     )
   })
+
+  test('authenticated users cannot mark another user movie as watched', async ({ assert, client }) => {
+    const owner = await User.create({
+      fullName: 'Owner Movie',
+      email: 'owner-movie-watch@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Movie',
+      email: 'other-movie-watch@example.com',
+      password: 'secret123',
+    })
+    const movie = await Movie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+
+    const response = await client
+      .post(`/api/library/movies/${movie.id}/watch`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+
+    response.assertNotFound()
+    assert.lengthOf(await WatchedMovie.query().where('libraryEntryId', movie.id), 0)
+    await owner.refresh()
+    await otherUser.refresh()
+    assert.equal(owner.watchedTime, 0)
+    assert.equal(otherUser.watchedTime, 0)
+  })
+
+  test('authenticated users cannot unmark another user movie as watched', async ({
+    assert,
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Unwatch',
+      email: 'owner-movie-unwatch@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Unwatch',
+      email: 'other-movie-unwatch@example.com',
+      password: 'secret123',
+    })
+    const movie = await Movie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+    await client.post(`/api/library/movies/${movie.id}/watch`).loginAs(owner).withCsrfToken()
+
+    const response = await client
+      .delete(`/api/library/movies/${movie.id}/watch`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+
+    response.assertNotFound()
+    assert.lengthOf(
+      await WatchedMovie.query().where('userId', owner.id).where('libraryEntryId', movie.id),
+      1
+    )
+    await owner.refresh()
+    await otherUser.refresh()
+    assert.equal(owner.watchedTime, 170)
+    assert.equal(otherUser.watchedTime, 0)
+  })
 })
