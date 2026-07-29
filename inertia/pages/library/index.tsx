@@ -19,21 +19,35 @@ export default function LibraryIndex({ user, series, movies }: Props) {
   const isEmpty = movies.length === 0 && series.length === 0
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
-      <Card>
-        <CardHeader>
-          <CardTitle>Your library</CardTitle>
-          <CardDescription>Movies and series you have chosen to follow.</CardDescription>
-        </CardHeader>
+    <div className="flex flex-col gap-8">
+      <section className="grid gap-5 lg:grid-cols-[1fr_18rem]">
+        <div className="flex flex-col justify-end gap-3 rounded-xl border bg-card p-5">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Your library</p>
+          <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
+            Movies and series you have chosen to follow.
+          </h1>
+          <a
+            href="/app/catalog/search"
+            className={buttonVariants({ className: 'mt-2 w-full sm:w-fit' })}
+          >
+            Search the catalog
+          </a>
+        </div>
+
         {user && (
-          <CardContent>
-            <p className="text-2xl font-semibold">{formatWatchedTime(user.watchedTime)}</p>
-            <p className="text-sm text-muted-foreground">
-              Watched Time from known movie and episode runtimes.
-            </p>
-          </CardContent>
+          <Card className="border-primary/20">
+            <CardHeader>
+              <CardDescription>Watched Time</CardDescription>
+              <CardTitle className="text-4xl">{formatWatchedTime(user.watchedTime)}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground">
+                Watched Time from known movie and episode runtimes.
+              </p>
+            </CardContent>
+          </Card>
         )}
-      </Card>
+      </section>
 
       <LibrarySection
         title="Movies"
@@ -77,7 +91,7 @@ function LibrarySection({
 }) {
   return (
     <section className="flex flex-col gap-3" aria-label={title}>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between border-b pb-3">
         <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
         <Badge variant="outline">{entries.length}</Badge>
       </div>
@@ -89,7 +103,7 @@ function LibrarySection({
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {entries.map((entry) => (
             <LibraryCard key={`${entry.type}-${entry.id}`} entry={entry} />
           ))}
@@ -101,29 +115,43 @@ function LibrarySection({
 
 function LibraryCard({ entry }: { entry: Movie | Serie }) {
   return (
-    <Card>
-      {entry.bannerUrl && (
-        <img src={entry.bannerUrl} alt="" className="aspect-video w-full object-cover" />
-      )}
-      <CardHeader>
-        <div className="flex flex-col gap-2">
-          <CardTitle>{entry.name}</CardTitle>
-          <div className="flex flex-wrap gap-2">
-            <Badge variant="secondary">{entry.type}</Badge>
-            {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
+    <Card className="grid gap-0 sm:grid-cols-[12rem_1fr]">
+      <div className="bg-muted">
+        {entry.bannerUrl ? (
+          <img
+            src={entry.bannerUrl}
+            alt=""
+            className="aspect-video h-full w-full object-cover sm:aspect-auto"
+          />
+        ) : (
+          <div className="flex aspect-video h-full items-center justify-center text-xs uppercase tracking-[0.2em] text-muted-foreground sm:aspect-auto">
+            {entry.type}
           </div>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3">
-        {entry.summary && <p className="line-clamp-4 text-muted-foreground">{entry.summary}</p>}
-        <p className="text-xs text-muted-foreground">
-          {entry.provider} ID: {entry.providerId}
-        </p>
-        {entry.type === 'serie' && <SeriesProgress serie={entry} />}
-        <RemoveLibraryEntryForm entry={entry} />
-        {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
-        {entry.type === 'serie' && <SeriesDetailsLink serie={entry} />}
-      </CardContent>
+        )}
+      </div>
+      <div className="flex min-w-0 flex-col py-4">
+        <CardHeader>
+          <div className="flex flex-col gap-2">
+            <CardTitle>{entry.name}</CardTitle>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="secondary">{entry.type}</Badge>
+              {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col gap-3">
+          {entry.summary && <p className="line-clamp-3 text-muted-foreground">{entry.summary}</p>}
+          {entry.type === 'serie' && <SeriesProgress serie={entry} />}
+          <p className="mt-auto text-xs text-muted-foreground">
+            {entry.provider} ID: {entry.providerId}
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
+            {entry.type === 'serie' && <SeriesDetailsLink serie={entry} />}
+            <RemoveLibraryEntryForm entry={entry} />
+          </div>
+        </CardContent>
+      </div>
     </Card>
   )
 }
