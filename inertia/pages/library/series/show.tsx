@@ -238,19 +238,20 @@ function SeasonEpisodes({
     const response = await client.api.api.library.series.seasons.watch({
       params: { id: serie.id, season },
     })
-    const watchedEpisodes = response.data.watchedEpisodes ?? []
+    const bulkWatchedEpisodes = response.data.watchedEpisodes ?? []
 
-    onBulkWatched(watchedEpisodes)
-    setEpisodes((current) =>
-      current?.map((episode) => {
-        const watchedEpisode = watchedEpisodes.find(
-          (watched) => watched.season === episode.season && watched.episode === episode.episode
-        )
+    onBulkWatched(bulkWatchedEpisodes)
+    setEpisodes(
+      (current) =>
+        current?.map((episode) => {
+          const watchedEpisode = bulkWatchedEpisodes.find(
+            (watched) => watched.season === episode.season && watched.episode === episode.episode
+          )
 
-        return watchedEpisode
-          ? { ...episode, watched: { watchedAt: watchedEpisode.watchedAt ?? null } }
-          : episode
-      }) ?? null
+          return watchedEpisode
+            ? { ...episode, watched: { watchedAt: watchedEpisode.watchedAt ?? null } }
+            : episode
+        }) ?? null
     )
   }
 

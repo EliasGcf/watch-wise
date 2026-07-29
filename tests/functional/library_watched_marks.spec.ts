@@ -145,7 +145,10 @@ test.group('Library movie watched records', (group) => {
     )
   })
 
-  test('authenticated users cannot mark another user movie as watched', async ({ assert, client }) => {
+  test('authenticated users cannot mark another user movie as watched', async ({
+    assert,
+    client,
+  }) => {
     const owner = await User.create({
       fullName: 'Owner Movie',
       email: 'owner-movie-watch@example.com',
