@@ -65,5 +65,5 @@ An episode outside the regular season sequence that can be watched but does not 
 _Avoid_: Bonus content, extra episode
 
 **Watched Time**:
-The sum of known runtimes for watched movies and episodes.
-_Avoid_: Estimated watch time, total time spent
+The sum of runtimes for watched movies and episodes.
+_Avoid_: Estimated watch time, total time spent, unknown runtime
