@@ -1,5 +1,6 @@
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
+import { LoaderCircle } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
@@ -181,6 +182,7 @@ function MovieWatchedForm({ movie }: { movie: Movie }) {
       disabled={isPending}
       onClick={() => unwatchMovie.mutate({ params: { id: movie.id } })}
     >
+      {unwatchMovie.isPending && <LoaderCircle className="animate-spin" />}
       {unwatchMovie.isPending ? 'Unmarking...' : 'Unmark as watched'}
     </Button>
   ) : (
@@ -191,6 +193,7 @@ function MovieWatchedForm({ movie }: { movie: Movie }) {
       disabled={isPending}
       onClick={() => watchMovie.mutate({ params: { id: movie.id } })}
     >
+      {watchMovie.isPending && <LoaderCircle className="animate-spin" />}
       {watchMovie.isPending ? 'Marking...' : 'Mark as watched'}
     </Button>
   )

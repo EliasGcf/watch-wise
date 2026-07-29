@@ -37,6 +37,7 @@ test.group('Library movie watched records', (group) => {
     const markButton = libraryPage.getByRole('button', { name: 'Mark Heat as watched' })
     await markButton.click()
     await libraryPage.assertDisabled(markButton)
+    await libraryPage.assertTextContains('body', 'Marking...')
 
     const markedPage = await visit('/app/library')
     await markedPage.assertTextContains('body', 'Watched')
@@ -64,6 +65,7 @@ test.group('Library movie watched records', (group) => {
     const unmarkButton = markedPage.getByRole('button', { name: 'Unmark Heat as watched' })
     await unmarkButton.click()
     await markedPage.assertDisabled(unmarkButton)
+    await markedPage.assertTextContains('body', 'Unmarking...')
     await markedPage.assertTextContains('body', 'Mark as watched')
 
     assert.lengthOf(
