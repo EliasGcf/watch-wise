@@ -49,6 +49,38 @@ export default class Serie extends LibraryItem {
     )
   }
 
+  async watchEpisodes(this: Serie, episodes: Episode[]) {
+    if (episodes.length === 0) return
+
+    const watchedAt = DateTime.now()
+    const watchedEpisodes = await this.related('watchedEpisodes')
+      .query()
+      .where('userId', this.userId)
+      .whereIn(
+        ['season', 'episode'],
+        episodes.map((episode) => [episode.season, episode.episode])
+      )
+    const missingEpisodes = episodes.filter(
+      (episode) =>
+        !watchedEpisodes.some(
+          (watched) => watched.season === episode.season && watched.episode === episode.episode
+        )
+    )
+
+    if (missingEpisodes.length === 0) return
+
+    await this.related('watchedEpisodes').createMany(
+      missingEpisodes.map((episode) => ({
+        userId: this.userId,
+        season: episode.season,
+        episode: episode.episode,
+        providerId: episode.providerId,
+        duration: episode.duration,
+        watchedAt,
+      }))
+    )
+  }
+
   async unwatchEpisode(this: Serie, season: number, episode: number) {
     const watchedEpisode = await this.related('watchedEpisodes')
       .query()

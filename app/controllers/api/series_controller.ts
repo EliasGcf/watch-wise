@@ -3,6 +3,7 @@ import { catalog } from '#services/catalog_provider'
 import CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
+import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 export default class SeriesController {
@@ -43,6 +44,41 @@ export default class SeriesController {
     return serialize(SerieTransformer.transform(serie))
   }
 
+  async watchSeason({ auth, params, serialize }: HttpContext) {
+    const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const episodes = await catalog.episodes(serie.providerId, Number(params.season))
+
+    await db.transaction(async (trx) => {
+      serie.useTransaction(trx)
+      await serie.watchEpisodes(episodes.filter(isReleasedRegularEpisode))
+    })
+    await serie.load('watchedEpisodes')
+
+    return serialize(SerieTransformer.transform(serie))
+  }
+
+  async watchSeries({ auth, params, serialize }: HttpContext) {
+    const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const catalogSerie = await catalog.findSerieById(serie.providerId)
+
+    if (!catalogSerie) {
+      throw new Error(`Serie with providerId ${serie.providerId} not found in catalog`)
+    }
+
+    const seasons = catalogSerie.seasons.filter((season) => season.number !== 0)
+    const episodesBySeason = await Promise.all(
+      seasons.map((season) => catalog.episodes(serie.providerId, season.number))
+    )
+
+    await db.transaction(async (trx) => {
+      serie.useTransaction(trx)
+      await serie.watchEpisodes(episodesBySeason.flat().filter(isReleasedRegularEpisode))
+    })
+    await serie.load('watchedEpisodes')
+
+    return serialize(SerieTransformer.transform(serie))
+  }
+
   async unwatchEpisode({ auth, params, session, serialize }: HttpContext) {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
@@ -52,4 +88,8 @@ export default class SeriesController {
     session.flash('success', 'Episode is no longer marked as watched.')
     return serialize(SerieTransformer.transform(serie))
   }
+}
+
+function isReleasedRegularEpisode(episode: { releasedAt: string; isSpecial: boolean }) {
+  return !episode.isSpecial && DateTime.fromISO(episode.releasedAt) <= DateTime.now()
 }

@@ -15,11 +15,50 @@ import { type Data } from '@generated/data'
 type SeriesSeasons = Data.Serie.Variants['withCatalog']['catalog']['seasons']
 
 type SeasonEpisode = Data.Catalog.Episode
-type WatchedEpisodeProgress = { season: number; episode: number }
+type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: string | null }
 
 type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
 export default function SeriesShow({ serie }: Props) {
+  const [watchedEpisodes, setWatchedEpisodes] = useState<WatchedEpisodeProgress[]>(
+    serie.watchedEpisodes ?? []
+  )
+
+  function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
+    trackWatchedEpisodes([episode])
+  }
+
+  function trackWatchedEpisodes(episodes: WatchedEpisodeProgress[]) {
+    setWatchedEpisodes((current) => {
+      const next = [...current]
+
+      for (const episode of episodes) {
+        if (
+          !next.some(
+            (watched) => watched.season === episode.season && watched.episode === episode.episode
+          )
+        ) {
+          next.push(episode)
+        }
+      }
+
+      return next
+    })
+  }
+
+  function untrackWatchedEpisode(episode: WatchedEpisodeProgress) {
+    setWatchedEpisodes((current) =>
+      current.filter(
+        (watched) => watched.season !== episode.season || watched.episode !== episode.episode
+      )
+    )
+  }
+
+  async function watchSeries() {
+    const response = await client.api.api.library.series.watch({ params: { id: serie.id } })
+    trackWatchedEpisodes(response.data.watchedEpisodes ?? [])
+  }
+
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
       <a
@@ -34,10 +73,17 @@ export default function SeriesShow({ serie }: Props) {
           <img src={serie.bannerUrl} alt="" className="aspect-video w-full object-cover" />
         )}
         <CardHeader>
-          <CardTitle>{serie.name}</CardTitle>
-          <CardDescription>
-            {serie.provider} ID: {serie.providerId}
-          </CardDescription>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <CardTitle>{serie.name}</CardTitle>
+              <CardDescription>
+                {serie.provider} ID: {serie.providerId}
+              </CardDescription>
+            </div>
+            <Button type="button" onClick={() => void watchSeries()}>
+              Mark series as watched
+            </Button>
+          </div>
         </CardHeader>
         {serie.summary && (
           <CardContent>
@@ -52,40 +98,36 @@ export default function SeriesShow({ serie }: Props) {
           <CardDescription>Open a season to load its episodes.</CardDescription>
         </CardHeader>
         <CardContent>
-          <SeasonAccordion serie={serie} seasons={serie.catalog.seasons} />
+          <SeasonAccordion
+            serie={serie}
+            seasons={serie.catalog.seasons}
+            watchedEpisodes={watchedEpisodes}
+            onWatched={trackWatchedEpisode}
+            onBulkWatched={trackWatchedEpisodes}
+            onUnwatched={untrackWatchedEpisode}
+          />
         </CardContent>
       </Card>
     </div>
   )
 }
 
-function SeasonAccordion({ serie, seasons }: { serie: Data.Serie; seasons: SeriesSeasons }) {
+function SeasonAccordion({
+  serie,
+  seasons,
+  watchedEpisodes,
+  onWatched,
+  onBulkWatched,
+  onUnwatched,
+}: {
+  serie: Data.Serie
+  seasons: SeriesSeasons
+  watchedEpisodes: WatchedEpisodeProgress[]
+  onWatched: (episode: WatchedEpisodeProgress) => void
+  onBulkWatched: (episodes: WatchedEpisodeProgress[]) => void
+  onUnwatched: (episode: WatchedEpisodeProgress) => void
+}) {
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
-  const [watchedEpisodes, setWatchedEpisodes] = useState<WatchedEpisodeProgress[]>(
-    serie.watchedEpisodes ?? []
-  )
-
-  function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
-    setWatchedEpisodes((current) => {
-      if (
-        current.some(
-          (watched) => watched.season === episode.season && watched.episode === episode.episode
-        )
-      ) {
-        return current
-      }
-
-      return [...current, episode]
-    })
-  }
-
-  function untrackWatchedEpisode(episode: WatchedEpisodeProgress) {
-    setWatchedEpisodes((current) =>
-      current.filter(
-        (watched) => watched.season !== episode.season || watched.episode !== episode.episode
-      )
-    )
-  }
 
   return (
     <Accordion value={openSeasons} onValueChange={setOpenSeasons}>
@@ -121,8 +163,10 @@ function SeasonAccordion({ serie, seasons }: { serie: Data.Serie; seasons: Serie
                 serie={serie}
                 season={season.number}
                 isOpen={openSeasons.includes(String(season.number))}
-                onWatched={trackWatchedEpisode}
-                onUnwatched={untrackWatchedEpisode}
+                watchedEpisodes={watchedEpisodes}
+                onWatched={onWatched}
+                onBulkWatched={onBulkWatched}
+                onUnwatched={onUnwatched}
               />
             </AccordionContent>
           </AccordionItem>
@@ -146,13 +190,17 @@ function SeasonEpisodes({
   serie,
   season,
   isOpen,
+  watchedEpisodes,
   onWatched,
+  onBulkWatched,
   onUnwatched,
 }: {
   serie: Data.Serie
   season: number
   isOpen: boolean
+  watchedEpisodes: WatchedEpisodeProgress[]
   onWatched: (episode: WatchedEpisodeProgress) => void
+  onBulkWatched: (episodes: WatchedEpisodeProgress[]) => void
   onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
   const [episodes, setEpisodes] = useState<SeasonEpisode[] | null>(null)
@@ -186,13 +234,37 @@ function SeasonEpisodes({
   if (error) return <p className="text-muted-foreground">{error}</p>
   if (!episodes) return <p className="text-muted-foreground">Loading episodes...</p>
 
+  async function watchSeason() {
+    const response = await client.api.api.library.series.seasons.watch({
+      params: { id: serie.id, season },
+    })
+    const watchedEpisodes = response.data.watchedEpisodes ?? []
+
+    onBulkWatched(watchedEpisodes)
+    setEpisodes((current) =>
+      current?.map((episode) => {
+        const watchedEpisode = watchedEpisodes.find(
+          (watched) => watched.season === episode.season && watched.episode === episode.episode
+        )
+
+        return watchedEpisode
+          ? { ...episode, watched: { watchedAt: watchedEpisode.watchedAt ?? null } }
+          : episode
+      }) ?? null
+    )
+  }
+
   return (
     <div className="flex flex-col gap-3">
+      <Button type="button" variant="outline" onClick={() => void watchSeason()}>
+        Mark season as watched
+      </Button>
       {episodes.map((episode) => (
         <EpisodeCard
           key={episode.providerId}
           serie={serie}
           episode={episode}
+          watchedEpisodes={watchedEpisodes}
           onWatched={onWatched}
           onUnwatched={onUnwatched}
         />
@@ -204,15 +276,30 @@ function SeasonEpisodes({
 function EpisodeCard({
   serie,
   episode,
+  watchedEpisodes,
   onWatched,
   onUnwatched,
 }: {
   serie: Data.Serie
   episode: SeasonEpisode
+  watchedEpisodes: WatchedEpisodeProgress[]
   onWatched: (episode: WatchedEpisodeProgress) => void
   onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
-  const [watched, setWatched] = useState(episode.watched)
+  const watched = watchedEpisodes.some(
+    (watchedEpisode) =>
+      watchedEpisode.season === episode.season && watchedEpisode.episode === episode.episode
+  )
+    ? {
+        watchedAt:
+          watchedEpisodes.find(
+            (watchedEpisode) =>
+              watchedEpisode.season === episode.season && watchedEpisode.episode === episode.episode
+          )?.watchedAt ??
+          episode.watched?.watchedAt ??
+          null,
+      }
+    : null
   const currentEpisode = { ...episode, watched }
 
   return (
@@ -238,7 +325,6 @@ function EpisodeCard({
             serie={serie}
             episode={currentEpisode}
             onUnwatched={() => {
-              setWatched(null)
               onUnwatched(episode)
             }}
           />
@@ -247,7 +333,6 @@ function EpisodeCard({
             serie={serie}
             episode={currentEpisode}
             onWatched={() => {
-              setWatched({ watchedAt: new Date().toISOString() })
               onWatched(episode)
             }}
           />

@@ -242,6 +242,223 @@ test.group('Library series episodes', (group) => {
     })
   })
 
+  test('authenticated users can bulk mark a season as watched without unreleased episodes', async ({
+    assert,
+    client,
+  }) => {
+    const watchedAt = DateTime.fromISO('2000-01-01T12:34:56Z')
+    Settings.now = () => watchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Bulk Season Viewer',
+      email: 'bulk-season-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    try {
+      const response = await client
+        .post(`/api/library/series/${serie.id}/seasons/1/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+
+      assert.lengthOf(watchedMarks, 1)
+      assert.notInclude(
+        watchedMarks.map((mark) => mark.episode),
+        2
+      )
+      assert.include(watchedMarks[0].serialize(), {
+        providerId: 'episode-1-1',
+        type: 'episode',
+        season: 1,
+        episode: 1,
+        duration: 24,
+      })
+      assert.equal(watchedMarks[0].watchedAt.toISO(), watchedAt.toISO())
+
+      await user.refresh()
+      await serie.refresh()
+      assert.equal(user.watchedTime, 24)
+      assert.equal(serie.progress, 50)
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('authenticated users can bulk mark an entire series as watched without unreleased episodes', async ({
+    assert,
+    client,
+  }) => {
+    const watchedAt = DateTime.fromISO('2000-01-01T08:00:00Z')
+    Settings.now = () => watchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Bulk Series Viewer',
+      email: 'bulk-series-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    try {
+      const response = await client
+        .post(`/api/library/series/${serie.id}/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+        .orderBy('season')
+        .orderBy('episode')
+
+      assert.lengthOf(watchedMarks, 1)
+      assert.notInclude(
+        watchedMarks.map((mark) => mark.episode),
+        2
+      )
+      assert.include(watchedMarks[0].serialize(), {
+        providerId: 'episode-1-1',
+        type: 'episode',
+        season: 1,
+        episode: 1,
+        duration: 24,
+      })
+      assert.equal(watchedMarks[0].watchedAt.toISO(), watchedAt.toISO())
+
+      await user.refresh()
+      await serie.refresh()
+      assert.equal(user.watchedTime, 24)
+      assert.equal(serie.progress, 50)
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('bulk marking preserves existing watched marks, uses one watched date for new marks, and updates watched time', async ({
+    assert,
+    client,
+  }) => {
+    const originalWatchedAt = DateTime.fromISO('2001-02-03T04:05:06Z')
+    const bulkWatchedAt = DateTime.fromISO('3000-01-01T09:10:11Z')
+    Settings.now = () => originalWatchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Bulk Preserve Viewer',
+      email: 'bulk-preserve-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    try {
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      await serie.merge({ providerId: 'series-1-changed' }).save()
+      Settings.now = () => bulkWatchedAt.toMillis()
+
+      const response = await client
+        .post(`/api/library/series/${serie.id}/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+        .orderBy('season')
+        .orderBy('episode')
+
+      assert.lengthOf(watchedMarks, 3)
+
+      const existingMark = watchedMarks[0]
+      assert.include(existingMark.serialize(), {
+        providerId: 'episode-0-1',
+        season: 0,
+        episode: 1,
+        duration: 28,
+      })
+      assert.equal(existingMark.watchedAt.toISO(), originalWatchedAt.toISO())
+
+      const newMarks = watchedMarks.slice(1)
+      assert.deepEqual(
+        newMarks.map((mark) => mark.serialize()),
+        [
+          {
+            id: newMarks[0].id,
+            userId: user.id,
+            libraryEntryId: serie.id,
+            providerId: 'episode-1-1',
+            type: 'episode',
+            season: 1,
+            episode: 1,
+            duration: 99,
+            watchedAt: bulkWatchedAt.toISO(),
+            createdAt: newMarks[0].createdAt.toISO(),
+            updatedAt: newMarks[0].updatedAt?.toISO() ?? null,
+          },
+          {
+            id: newMarks[1].id,
+            userId: user.id,
+            libraryEntryId: serie.id,
+            providerId: 'episode-1-2',
+            type: 'episode',
+            season: 1,
+            episode: 2,
+            duration: 25,
+            watchedAt: bulkWatchedAt.toISO(),
+            createdAt: newMarks[1].createdAt.toISO(),
+            updatedAt: newMarks[1].updatedAt?.toISO() ?? null,
+          },
+        ]
+      )
+
+      await user.refresh()
+      await serie.refresh()
+      assert.equal(user.watchedTime, 152)
+      assert.equal(serie.progress, 100)
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
   test('authenticated users cannot view another user series details or episodes', async ({
     client,
   }) => {

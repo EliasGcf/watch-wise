@@ -55,6 +55,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['episodes']>>>
     }
   }
+  'api.library.series.seasons.watch': {
+    methods: ["POST"]
+    pattern: '/api/library/series/:id/seasons/:season/watch'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; season: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeason']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeason']>>>
+    }
+  }
+  'api.library.series.watch': {
+    methods: ["POST"]
+    pattern: '/api/library/series/:id/watch'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeries']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['watchSeries']>>>
+    }
+  }
   'api.library.series.episodes.watch': {
     methods: ["POST"]
     pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch'

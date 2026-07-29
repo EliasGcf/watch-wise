@@ -12,7 +12,9 @@ export interface ApiDefinition {
       series: {
         seasons: {
           episodes: typeof routes['api.library.series.seasons.episodes']
+          watch: typeof routes['api.library.series.seasons.watch']
         }
+        watch: typeof routes['api.library.series.watch']
         episodes: {
           watch: typeof routes['api.library.series.episodes.watch']
           unwatch: typeof routes['api.library.series.episodes.unwatch']

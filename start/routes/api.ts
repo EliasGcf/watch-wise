@@ -18,6 +18,12 @@ const group = router.group(() => {
         .get('library/series/:id/seasons/:season/episodes', [controllers.api.Series, 'episodes'])
         .as('library.series.seasons.episodes')
       router
+        .post('library/series/:id/seasons/:season/watch', [controllers.api.Series, 'watchSeason'])
+        .as('library.series.seasons.watch')
+      router
+        .post('library/series/:id/watch', [controllers.api.Series, 'watchSeries'])
+        .as('library.series.watch')
+      router
         .post('library/series/:id/seasons/:season/episodes/:episode/watch', [
           controllers.api.Series,
           'watchEpisode',

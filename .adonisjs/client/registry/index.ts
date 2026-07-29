@@ -30,6 +30,18 @@ const routes = {
     tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes","type":0,"val":"episodes","end":""}],
     types: placeholder as Registry['api.library.series.seasons.episodes']['types'],
   },
+  'api.library.series.seasons.watch': {
+    methods: ["POST"],
+    pattern: '/api/library/series/:id/seasons/:season/watch',
+    tokens: [{"old":"/api/library/series/:id/seasons/:season/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/watch","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/watch","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/watch","type":0,"val":"watch","end":""}],
+    types: placeholder as Registry['api.library.series.seasons.watch']['types'],
+  },
+  'api.library.series.watch': {
+    methods: ["POST"],
+    pattern: '/api/library/series/:id/watch',
+    tokens: [{"old":"/api/library/series/:id/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/watch","type":0,"val":"watch","end":""}],
+    types: placeholder as Registry['api.library.series.watch']['types'],
+  },
   'api.library.series.episodes.watch': {
     methods: ["POST"],
     pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch',
