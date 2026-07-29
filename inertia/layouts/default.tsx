@@ -1,5 +1,5 @@
 import { type Data } from '@generated/data'
-import { Form } from '@adonisjs/inertia/react'
+import { Form, Link } from '@adonisjs/inertia/react'
 import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
 import { type ReactElement, useEffect } from 'react'
@@ -40,9 +40,9 @@ function AppShell({ children, url }: { children: ReactElement<Data.SharedProps>;
       <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <div className="flex items-center justify-between gap-4">
-            <a href="/app" className="text-lg font-semibold tracking-tight">
+            <Link href="/app" className="text-lg font-semibold tracking-tight">
               Watch Wise
-            </a>
+            </Link>
             <span className="hidden text-xs uppercase tracking-[0.25em] text-muted-foreground sm:inline">
               Library tracker
             </span>
@@ -82,7 +82,7 @@ function NavLink({
   children: string
 }) {
   return (
-    <a
+    <Link
       href={href}
       aria-current={current ? 'page' : undefined}
       className={cn(
@@ -91,6 +91,6 @@ function NavLink({
       )}
     >
       {children}
-    </a>
+    </Link>
   )
 }

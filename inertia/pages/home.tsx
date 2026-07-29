@@ -1,3 +1,4 @@
+import { Link } from '@adonisjs/inertia/react'
 import { buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { type InertiaProps } from '~/types'
@@ -38,18 +39,18 @@ export default function Home({ user, moviesCount, seriesCount, recentLibraryEntr
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <a
+              <Link
                 href="/app/catalog/search"
                 className={buttonVariants({ className: 'w-full sm:w-auto' })}
               >
                 Search the catalog
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/app/library"
                 className={buttonVariants({ variant: 'outline', className: 'w-full sm:w-auto' })}
               >
                 View library
-              </a>
+              </Link>
             </div>
           </CardContent>
         </Card>

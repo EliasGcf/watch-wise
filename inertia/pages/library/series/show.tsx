@@ -1,3 +1,4 @@
+import { Link } from '@adonisjs/inertia/react'
 import { useEffect, useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import {
@@ -68,12 +69,12 @@ export default function SeriesShow({ serie }: Props) {
 
   return (
     <div className="flex flex-col gap-6">
-      <a
+      <Link
         href="/app/library"
         className={buttonVariants({ variant: 'outline', className: 'self-start' })}
       >
         Back to library
-      </a>
+      </Link>
 
       <Card className="overflow-hidden border-primary/20">
         <div className="grid lg:grid-cols-[1.2fr_1fr]">

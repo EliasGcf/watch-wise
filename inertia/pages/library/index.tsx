@@ -1,4 +1,4 @@
-import { Form } from '@adonisjs/inertia/react'
+import { Form, Link } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import { LoaderCircle } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
@@ -26,12 +26,12 @@ export default function LibraryIndex({ user, series, movies }: Props) {
           <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Movies and series you have chosen to follow.
           </h1>
-          <a
+          <Link
             href="/app/catalog/search"
             className={buttonVariants({ className: 'mt-2 w-full sm:w-fit' })}
           >
             Search the catalog
-          </a>
+          </Link>
         </div>
 
         {user && (
@@ -172,12 +172,12 @@ function SeriesProgress({ serie }: { serie: Serie }) {
 
 function SeriesDetailsLink({ serie }: { serie: Serie }) {
   return (
-    <a
+    <Link
       href={`/app/library/series/${serie.id}`}
       className={buttonVariants({ variant: 'outline', className: 'w-full' })}
     >
       View seasons
-    </a>
+    </Link>
   )
 }
 
