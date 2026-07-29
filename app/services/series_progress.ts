@@ -1,4 +1,4 @@
-import Serie from '#models/serie'
+import type Serie from '#models/serie'
 import { WatchedEpisode } from '#models/watched_mark'
 import { catalog } from '#services/catalog_provider'
 

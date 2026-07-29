@@ -3,8 +3,6 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
 const group = router.group(() => {
-  router.on('/').renderInertia('home', {}).as('home')
-
   router
     .group(() => {
       router.get('signup', [controllers.web.NewAccount, 'create'])
@@ -17,6 +15,7 @@ const group = router.group(() => {
 
   router
     .group(() => {
+      router.get('/', [controllers.web.Home, 'index']).as('home')
       router.post('logout', [controllers.web.Session, 'destroy'])
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index']).as('catalog.search')
       router.get('library', [controllers.web.Library, 'index'])

@@ -103,18 +103,6 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['unwatch']>>>
     }
   }
-  'app.home': {
-    methods: ["GET","HEAD"]
-    pattern: '/app'
-    types: {
-      body: {}
-      paramsTuple: []
-      params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-    }
-  }
   'app.new_account.create': {
     methods: ["GET","HEAD"]
     pattern: '/app/signup'
@@ -161,6 +149,18 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['store']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['store']>>>
+    }
+  }
+  'app.home': {
+    methods: ["GET","HEAD"]
+    pattern: '/app'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/home_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/home_controller').default['index']>>>
     }
   }
   'app.session.destroy': {

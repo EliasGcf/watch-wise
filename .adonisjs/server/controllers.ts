@@ -13,6 +13,7 @@ export const controllers = {
   },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
+    Home: () => import('#controllers/web/home_controller'),
     Library: () => import('#controllers/web/library_controller'),
     NewAccount: () => import('#controllers/web/new_account_controller'),
     Series: () => import('#controllers/web/series_controller'),

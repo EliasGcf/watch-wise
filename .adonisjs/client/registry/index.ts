@@ -54,12 +54,6 @@ const routes = {
     tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"episodes","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"episode","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"watch","end":""}],
     types: placeholder as Registry['api.library.series.episodes.unwatch']['types'],
   },
-  'app.home': {
-    methods: ["GET","HEAD"],
-    pattern: '/app',
-    tokens: [{"old":"/app","type":0,"val":"app","end":""}],
-    types: placeholder as Registry['app.home']['types'],
-  },
   'app.new_account.create': {
     methods: ["GET","HEAD"],
     pattern: '/app/signup',
@@ -83,6 +77,12 @@ const routes = {
     pattern: '/app/login',
     tokens: [{"old":"/app/login","type":0,"val":"app","end":""},{"old":"/app/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['app.session.store']['types'],
+  },
+  'app.home': {
+    methods: ["GET","HEAD"],
+    pattern: '/app',
+    tokens: [{"old":"/app","type":0,"val":"app","end":""}],
+    types: placeholder as Registry['app.home']['types'],
   },
   'app.session.destroy': {
     methods: ["POST"],
