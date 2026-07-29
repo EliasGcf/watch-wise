@@ -7,8 +7,8 @@ export const controllers = {
   api: {
     Movies: () => import('#controllers/api/movies_controller'),
     series: {
-      Seasons: () => import('#controllers/api/series/seasons_controller'),
       Episodes: () => import('#controllers/api/series/episodes_controller'),
+      Seasons: () => import('#controllers/api/series/seasons_controller'),
     },
   },
   web: {
