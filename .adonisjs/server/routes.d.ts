@@ -8,6 +8,8 @@ export type ScannedRoutes = {
     'api.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
+    'api.library.series.seasons.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
+    'api.library.series.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'app.home': { paramsTuple?: []; params?: {} }
@@ -44,6 +46,8 @@ export type ScannedRoutes = {
   }
   POST: {
     'api.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.library.series.seasons.watch': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
+    'api.library.series.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
     'app.session.store': { paramsTuple?: []; params?: {} }

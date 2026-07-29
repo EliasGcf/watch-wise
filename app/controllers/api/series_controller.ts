@@ -50,7 +50,7 @@ export default class SeriesController {
 
     await db.transaction(async (trx) => {
       serie.useTransaction(trx)
-      await serie.watchEpisodes(episodes.filter(isReleasedRegularEpisode))
+      await serie.watchEpisodes(episodes.filter(isReleasedEpisode))
     })
     await serie.load('watchedEpisodes')
 
@@ -65,14 +65,13 @@ export default class SeriesController {
       throw new Error(`Serie with providerId ${serie.providerId} not found in catalog`)
     }
 
-    const seasons = catalogSerie.seasons.filter((season) => season.number !== 0)
     const episodesBySeason = await Promise.all(
-      seasons.map((season) => catalog.episodes(serie.providerId, season.number))
+      catalogSerie.seasons.map((season) => catalog.episodes(serie.providerId, season.number))
     )
 
     await db.transaction(async (trx) => {
       serie.useTransaction(trx)
-      await serie.watchEpisodes(episodesBySeason.flat().filter(isReleasedRegularEpisode))
+      await serie.watchEpisodes(episodesBySeason.flat().filter(isReleasedEpisode))
     })
     await serie.load('watchedEpisodes')
 
@@ -90,6 +89,6 @@ export default class SeriesController {
   }
 }
 
-function isReleasedRegularEpisode(episode: { releasedAt: string; isSpecial: boolean }) {
-  return !episode.isSpecial && DateTime.fromISO(episode.releasedAt) <= DateTime.now()
+function isReleasedEpisode(episode: { releasedAt: string }) {
+  return DateTime.fromISO(episode.releasedAt) <= DateTime.now()
 }
