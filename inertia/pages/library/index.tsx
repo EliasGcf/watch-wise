@@ -1,11 +1,10 @@
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
-import { useState } from 'react'
-import { client } from '~/client'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { type InertiaProps } from '~/types'
+import { useUnwatchMovieMutation, useWatchMovieMutation } from './use_movie_watched_mutations'
 
 type Movie = Data.Movie
 type Serie = Data.Serie
@@ -169,36 +168,30 @@ function RemoveLibraryEntryForm({ entry }: { entry: Movie | Serie }) {
 }
 
 function MovieWatchedForm({ movie }: { movie: Movie }) {
-  const [isWatched, setIsWatched] = useState(Boolean(movie.watched))
+  const watchMovie = useWatchMovieMutation()
+  const unwatchMovie = useUnwatchMovieMutation()
+  const isPending = watchMovie.isPending || unwatchMovie.isPending
 
-  async function watchMovie() {
-    await client.api.api.library.movies.watch({ params: { id: movie.id } })
-    setIsWatched(true)
-  }
-
-  async function unwatchMovie() {
-    await client.api.api.library.movies.unwatch({ params: { id: movie.id } })
-    setIsWatched(false)
-  }
-
-  return isWatched ? (
+  return movie.watched ? (
     <Button
       type="button"
       variant="outline"
       className="w-full"
       aria-label={`Unmark ${movie.name} as watched`}
-      onClick={() => void unwatchMovie()}
+      disabled={isPending}
+      onClick={() => unwatchMovie.mutate({ params: { id: movie.id } })}
     >
-      Unmark as watched
+      {unwatchMovie.isPending ? 'Unmarking...' : 'Unmark as watched'}
     </Button>
   ) : (
     <Button
       type="button"
       className="w-full"
       aria-label={`Mark ${movie.name} as watched`}
-      onClick={() => void watchMovie()}
+      disabled={isPending}
+      onClick={() => watchMovie.mutate({ params: { id: movie.id } })}
     >
-      Mark as watched
+      {watchMovie.isPending ? 'Marking...' : 'Mark as watched'}
     </Button>
   )
 }
