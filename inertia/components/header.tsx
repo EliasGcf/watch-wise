@@ -1,8 +1,11 @@
 import { Form, Link } from '@adonisjs/inertia/react'
+import { usePage } from '@inertiajs/react'
 import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 
-export function Header({ url }: { url: string }) {
+export function Header() {
+  const { url } = usePage()
+
   return (
     <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">

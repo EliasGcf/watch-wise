@@ -26,16 +26,16 @@ export default function Layout({ children }: Props) {
 
   return (
     <>
-      {user ? <AppShell url={url}>{children}</AppShell> : <main>{children}</main>}
+      {user ? <AppShell>{children}</AppShell> : <main>{children}</main>}
       <Toaster position="top-center" richColors />
     </>
   )
 }
 
-function AppShell({ children, url }: { children: ReactElement<Data.SharedProps>; url: string }) {
+function AppShell({ children }: { children: ReactElement<Data.SharedProps> }) {
   return (
     <div className="min-h-screen bg-background">
-      <Header url={url} />
+      <Header />
 
       <main className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 lg:py-10">{children}</main>
     </div>
