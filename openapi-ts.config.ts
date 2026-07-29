@@ -4,11 +4,6 @@ import { defineConfig, OperationPath } from '@hey-api/openapi-ts'
 export default defineConfig({
   input: './public/tmdb-api.json',
   output: './.adonisjs/server/tmdb',
-  parser: {
-    transforms: {
-      propertiesRequiredByDefault: true,
-    },
-  },
   plugins: [
     {
       name: '@hey-api/sdk',

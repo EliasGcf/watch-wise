@@ -23,7 +23,7 @@ export default class extends BaseSchema {
       table.string('provider_id').notNullable()
 
       table.enum('type', ['movie', 'episode']).notNullable()
-      table.integer('duration').unsigned().notNullable()
+      table.integer('duration').unsigned().nullable()
 
       // Series only
       table.integer('season').unsigned().nullable()

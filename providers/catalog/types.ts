@@ -6,26 +6,26 @@ export type CatalogSearchResult = {
   provider: CatalogDriver
   id: string
   name: string
-  releasedAt: string
-  summary: string
-  bannerPath: string
-  bannerUrl: string
-  posterPath: string
-  posterUrl: string
+  releasedAt: string | null
+  summary: string | null
+  bannerPath: string | null
+  bannerUrl: string | null
+  posterPath: string | null
+  posterUrl: string | null
 } & ({ type: 'movie' } | { type: 'serie' })
 
 export type FindResult = {
   provider: CatalogDriver
   id: string
   name: string
-  releasedAt: string
-  summary: string
-  bannerPath: string
-  bannerUrl: string
-  posterPath: string
-  posterUrl: string
+  releasedAt: string | null
+  summary: string | null
+  bannerPath: string | null
+  bannerUrl: string | null
+  posterPath: string | null
+  posterUrl: string | null
 } & (
-  | { type: 'movie'; duration: number }
+  | { type: 'movie'; duration: number | null }
   | {
       type: 'serie'
       episodesCount: number
@@ -41,9 +41,9 @@ export type Episode = {
   season: number
   episode: number
   name: string
-  releasedAt: string
-  duration: number
-  summary: string
+  releasedAt: string | null
+  duration: number | null
+  summary: string | null
   isSpecial: boolean
 }
 

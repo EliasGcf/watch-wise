@@ -18,7 +18,7 @@ export default class Movie extends LibraryItem {
   @hasOne(() => WatchedMovie, { foreignKey: 'libraryEntryId' })
   declare watched: HasOne<typeof WatchedMovie>
 
-  async watch(this: Movie, duration: number) {
+  async watch(this: Movie, duration: number | null) {
     await this.related('watched').firstOrCreate(
       { userId: this.userId },
       { providerId: this.providerId, duration, watchedAt: DateTime.now() }

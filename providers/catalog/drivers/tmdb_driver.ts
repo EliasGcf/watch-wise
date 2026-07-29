@@ -42,8 +42,10 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
       const type = result.media_type === 'movie' ? 'movie' : 'serie'
       const name = result.media_type === 'movie' ? result.title : result.name
+      const releasedAt = result.release_date
       const bannerPath = result.backdrop_path
       const posterPath = result.poster_path
+      if (!result.id || !name) return []
 
       return [
         {
@@ -51,12 +53,12 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
           id: String(result.id),
           type,
           name: name,
-          bannerPath,
+          bannerPath: bannerPath ?? null,
           bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
-          posterPath,
+          posterPath: posterPath ?? null,
           posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
-          releasedAt: result.release_date,
-          summary: result.overview,
+          releasedAt: releasedAt ?? null,
+          summary: result.overview ?? null,
         },
       ]
     })
@@ -82,19 +84,20 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     if (!response.data?.id) return null
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
+    if (!response.data.title) return null
 
     return {
       provider: 'tmdb',
       id: String(response.data.id),
       type: 'movie',
       name: response.data.title,
-      bannerPath,
+      bannerPath: bannerPath ?? null,
       bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
-      posterPath,
+      posterPath: posterPath ?? null,
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
-      releasedAt: response.data.release_date,
-      duration: response.data.runtime,
-      summary: response.data.overview,
+      releasedAt: response.data.release_date ?? null,
+      duration: response.data.runtime ?? null,
+      summary: response.data.overview ?? null,
     }
   }
 
@@ -113,26 +116,34 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
+    const seasons = response.data.seasons?.flatMap((season) => {
+      if (season.season_number === undefined || season.episode_count === undefined) return []
+
+      return [
+        {
+          name: season.name ?? `Season ${season.season_number}`,
+          number: season.season_number,
+          episodesCount: season.episode_count,
+        },
+      ]
+    }) ?? []
+    if (!response.data.id || !response.data.name) return null
 
     return {
       provider: 'tmdb',
       id: String(response.data.id),
       type: 'serie',
       name: response.data.name,
-      bannerPath,
+      bannerPath: bannerPath ?? null,
       bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
-      posterPath,
+      posterPath: posterPath ?? null,
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
-      releasedAt: response.data.first_air_date,
-      summary: response.data.overview,
-      episodesCount: response.data.seasons
-        .filter((season) => season.season_number !== 0)
-        .reduce((total, season) => total + season.episode_count, 0),
-      seasons: response.data.seasons.map((season) => ({
-        name: season.name,
-        number: season.season_number,
-        episodesCount: season.episode_count,
-      })),
+      releasedAt: response.data.first_air_date ?? null,
+      summary: response.data.overview ?? null,
+      episodesCount: seasons
+        .filter((season) => season.number !== 0)
+        .reduce((total, season) => total + season.episodesCount, 0),
+      seasons,
     }
   }
 
@@ -151,16 +162,28 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     if (!response.data?.episodes) return []
 
-    return response.data.episodes.map((episode) => ({
-      providerId: String(episode.id),
-      season: episode.season_number,
-      episode: episode.episode_number,
-      name: episode.name,
-      releasedAt: episode.air_date,
-      duration: episode.runtime ?? 0,
-      summary: episode.overview,
-      isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
-    }))
+    return response.data.episodes.flatMap((episode) => {
+      if (
+        !episode.id ||
+        episode.season_number === undefined ||
+        episode.episode_number === undefined
+      ) {
+        return []
+      }
+
+      return [
+        {
+          providerId: String(episode.id),
+          season: episode.season_number,
+          episode: episode.episode_number,
+          name: episode.name ?? `Episode ${episode.episode_number}`,
+          releasedAt: episode.air_date ?? null,
+          duration: episode.runtime ?? null,
+          summary: episode.overview ?? null,
+          isSpecial: episode.season_number === 0 || episode.episode_type === 'special',
+        },
+      ]
+    })
   }
 
   async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
@@ -177,20 +200,28 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
 
     if (!response.data?.id) return null
+    if (
+      response.data.season_number === undefined ||
+      response.data.episode_number === undefined
+    ) {
+      return null
+    }
 
     return {
       providerId: String(response.data.id),
       season: response.data.season_number,
       episode: response.data.episode_number,
-      name: response.data.name,
-      releasedAt: response.data.air_date,
-      duration: response.data.runtime,
-      summary: response.data.overview,
+      name: response.data.name ?? `Episode ${response.data.episode_number}`,
+      releasedAt: response.data.air_date ?? null,
+      duration: response.data.runtime ?? null,
+      summary: response.data.overview ?? null,
       isSpecial: response.data.season_number === 0,
     }
   }
 }
 
-function makeImageUrl(baseImageUrl: string, path: string) {
+function makeImageUrl(baseImageUrl: string, path?: string) {
+  if (!path) return null
+
   return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
 }

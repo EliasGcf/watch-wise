@@ -25,7 +25,7 @@ export class LibraryEntrySchema extends BaseModel {
   ] as const
   $columns = LibraryEntrySchema.$columns
   @column()
-  declare bannerPath: string
+  declare bannerPath: string | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column({ isPrimary: true })
@@ -33,7 +33,7 @@ export class LibraryEntrySchema extends BaseModel {
   @column()
   declare name: string
   @column()
-  declare posterPath: string
+  declare posterPath: string | null
   @column()
   declare progress: number | null
   @column()
@@ -97,7 +97,7 @@ export class WatchedMarkSchema extends BaseModel {
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
-  declare duration: number
+  declare duration: number | null
   @column()
   declare episode: number | null
   @column({ isPrimary: true })

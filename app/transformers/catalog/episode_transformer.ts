@@ -18,7 +18,9 @@ export default class CatalogEpisodeTransformer extends BaseTransformer<Episode> 
 
     return {
       ...this.resource,
-      isReleased: DateTime.fromISO(this.resource.releasedAt) <= DateTime.now(),
+      isReleased: this.resource.releasedAt
+        ? DateTime.fromISO(this.resource.releasedAt) <= DateTime.now()
+        : false,
       watched: watched ? { watchedAt: watched.watchedAt.toISO() } : null,
     }
   }

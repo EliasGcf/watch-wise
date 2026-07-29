@@ -12,12 +12,12 @@ type CatalogSearchResult = {
   id: string
   type: 'movie' | 'serie'
   name: string
-  bannerPath: string
-  bannerUrl: string
-  posterPath: string
-  posterUrl: string
-  releasedAt: string
-  summary: string
+  bannerPath: string | null
+  bannerUrl: string | null
+  posterPath: string | null
+  posterUrl: string | null
+  releasedAt: string | null
+  summary: string | null
 }
 
 type Props = {

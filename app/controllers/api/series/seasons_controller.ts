@@ -41,6 +41,6 @@ export default class SeasonsController {
   }
 }
 
-function isReleasedEpisode(episode: { releasedAt: string }) {
-  return DateTime.fromISO(episode.releasedAt) <= DateTime.now()
+function isReleasedEpisode(episode: { releasedAt: string | null }) {
+  return episode.releasedAt ? DateTime.fromISO(episode.releasedAt) <= DateTime.now() : false
 }

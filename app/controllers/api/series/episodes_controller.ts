@@ -31,7 +31,7 @@ export default class EpisodesController {
       return response.notFound({ error: 'Episode could not be found in the catalog.' })
     }
 
-    if (DateTime.fromISO(episode.releasedAt) > DateTime.now()) {
+    if (!episode.releasedAt || DateTime.fromISO(episode.releasedAt) > DateTime.now()) {
       session.flash('error', `${episode.name} has not been released yet.`)
       return response.unprocessableEntity({ error: `${episode.name} has not been released yet.` })
     }

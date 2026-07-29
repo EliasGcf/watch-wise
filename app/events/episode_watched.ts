@@ -11,7 +11,7 @@ export default class EpisodeWatched extends BaseEvent {
   }
 
   duration() {
-    return this.watched.duration
+    return this.watched.duration ?? 0
   }
 
   constructor(public watched: WatchedEpisode) {

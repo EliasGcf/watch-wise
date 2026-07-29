@@ -310,7 +310,8 @@ function EpisodeCard({
           <div className="flex flex-col gap-1">
             <CardTitle className="text-base">{episode.name}</CardTitle>
             <CardDescription>
-              Season {episode.season}, episode {episode.episode} · {episode.duration} min
+              Season {episode.season}, episode {episode.episode}
+              {episode.duration ? ` · ${episode.duration} min` : ''}
             </CardDescription>
           </div>
           <div className="flex flex-wrap justify-end gap-2">

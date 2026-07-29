@@ -24,9 +24,9 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     }
 
     const response = fakeGet3SearchMultiResponse()
-    response.results = [
+    const results = [
       {
-        ...response.results[0],
+        ...(response.results?.[0] ?? {}),
         id: 1,
         media_type: 'movie',
         title: 'Heat',
@@ -37,7 +37,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         overview: 'A professional thief and a relentless detective collide.',
       },
       {
-        ...response.results[1],
+        ...(response.results?.[1] ?? {}),
         id: 1,
         media_type: 'tv',
         title: 'Heat Vision and Jack',
@@ -48,7 +48,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         overview: 'A pilot about a super-intelligent astronaut.',
       },
       {
-        ...response.results[2],
+        ...(response.results?.[2] ?? {}),
         id: 2,
         media_type: 'movie',
         title: 'Unknown Heat',
@@ -59,18 +59,21 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         overview: 'A fake generated movie result.',
       },
     ]
+    response.results = results
 
-    return response.results.flatMap((result) => {
+    return results.flatMap((result) => {
       if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
       const bannerPath = result.backdrop_path
       const posterPath = result.poster_path
+      const name = result.media_type === 'movie' ? result.title : result.name
+      if (!result.id || !name) return []
 
       return [
         {
           provider: 'tmdb',
           id: result.media_type === 'movie' ? `movie-${result.id}` : `series-${result.id}`,
           type: result.media_type === 'movie' ? 'movie' : 'serie',
-          name: result.media_type === 'movie' ? result.title : result.name,
+          name,
           bannerPath,
           bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
           posterPath,
@@ -100,6 +103,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       movie.overview = 'A professional thief and a relentless detective collide.'
       const bannerPath = movie.backdrop_path
       const posterPath = movie.poster_path
+      if (!movie.title) return null
 
       return {
         provider: 'tmdb',
@@ -127,6 +131,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       movie.overview = 'A fake generated movie result.'
       const bannerPath = movie.backdrop_path
       const posterPath = movie.poster_path
+      if (!movie.title) return null
 
       return {
         provider: 'tmdb',
@@ -158,6 +163,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     series.overview = 'A pilot about a super-intelligent astronaut.'
     const bannerPath = series.backdrop_path
     const posterPath = series.poster_path
+    if (!series.name) return null
 
     return {
       provider: 'tmdb',
@@ -276,6 +282,8 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
   }
 }
 
-function makeImageUrl(baseImageUrl: string, path: string) {
+function makeImageUrl(baseImageUrl: string, path?: string) {
+  if (!path) return null
+
   return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
 }
