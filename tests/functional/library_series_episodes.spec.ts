@@ -242,6 +242,130 @@ test.group('Library series episodes', (group) => {
     })
   })
 
+  test('authenticated users cannot view another user series details or episodes', async ({
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Series View',
+      email: 'owner-series-view@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Series View',
+      email: 'other-series-view@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(owner)
+      .withCsrfToken()
+
+    const detailsResponse = await client.get(`/app/library/series/${serie.id}`).loginAs(otherUser)
+    const episodesResponse = await client
+      .get(`/api/library/series/${serie.id}/seasons/1/episodes`)
+      .loginAs(otherUser)
+
+    detailsResponse.assertNotFound()
+    episodesResponse.assertNotFound()
+  })
+
+  test('authenticated users cannot mark another user series episode as watched', async ({
+    assert,
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Episode Watch',
+      email: 'owner-episode-watch@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Episode Watch',
+      email: 'other-episode-watch@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+
+    response.assertNotFound()
+    assert.lengthOf(await WatchedEpisode.query().where('libraryEntryId', serie.id), 0)
+    await owner.refresh()
+    await otherUser.refresh()
+    await serie.refresh()
+    assert.equal(owner.watchedTime, 0)
+    assert.equal(otherUser.watchedTime, 0)
+    assert.equal(serie.progress, 0)
+  })
+
+  test('authenticated users cannot unmark another user series episode as watched', async ({
+    assert,
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Episode Unwatch',
+      email: 'owner-episode-unwatch@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Episode Unwatch',
+      email: 'other-episode-unwatch@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(owner)
+      .withCsrfToken()
+
+    const response = await client
+      .delete(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+
+    response.assertNotFound()
+    assert.lengthOf(
+      await WatchedEpisode.query().where('userId', owner.id).where('libraryEntryId', serie.id),
+      1
+    )
+    await owner.refresh()
+    await otherUser.refresh()
+    await serie.refresh()
+    assert.equal(owner.watchedTime, 24)
+    assert.equal(otherUser.watchedTime, 0)
+    assert.equal(serie.progress, 50)
+  })
+
   test('series progress becomes completed when all provider-counted episodes are watched', async ({
     assert,
     client,

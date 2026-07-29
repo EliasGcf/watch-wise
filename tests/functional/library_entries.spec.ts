@@ -68,6 +68,110 @@ test.group('Library entries', (group) => {
     assert.lengthOf(await Movie.query().where('userId', user.id), 0)
   })
 
+  test('authenticated users cannot view another user library entries or watched time', async ({
+    assert,
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Viewer',
+      email: 'owner-library-view@example.com',
+      password: 'secret123',
+    })
+    const viewer = await User.create({
+      fullName: 'Other Viewer',
+      email: 'other-library-view@example.com',
+      password: 'secret123',
+    })
+    const movie = await Movie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+    const serie = await Serie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+    await client.post(`/api/library/movies/${movie.id}/watch`).loginAs(owner).withCsrfToken()
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(owner)
+      .withCsrfToken()
+
+    const response = await client.get('/app/library').loginAs(viewer)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.deepEqual(page.movies, [])
+    assert.deepEqual(page.series, [])
+    assert.equal(page.user.watchedTime, 0)
+  })
+
+  test('authenticated users cannot remove another user library entries by id', async ({
+    assert,
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Removal',
+      email: 'owner-library-removal@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Removal',
+      email: 'other-library-removal@example.com',
+      password: 'secret123',
+    })
+    const movie = await Movie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+    const serie = await Serie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    const movieResponse = await client
+      .delete(`/app/library/${movie.id}`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+    const serieResponse = await client
+      .delete(`/app/library/${serie.id}`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+
+    movieResponse.assertNotFound()
+    serieResponse.assertNotFound()
+    assert.lengthOf(await Movie.query().where('userId', owner.id).where('id', movie.id), 1)
+    assert.lengthOf(await Serie.query().where('userId', owner.id).where('id', serie.id), 1)
+  })
+
   test('removing a watched movie library entry removes its watched mark and watched time', async ({
     assert,
     browserContext,

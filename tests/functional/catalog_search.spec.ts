@@ -134,6 +134,76 @@ test.group('Catalog search', (group) => {
     assert.lengthOf(await user.related('movies').query().where('providerId', 'movie-1'), 1)
   })
 
+  test('duplicate checks do not treat another user library entry as current user library entry', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const existingUser = await User.create({
+      fullName: 'Existing Viewer',
+      email: 'existing-library@example.com',
+      password: 'secret123',
+    })
+    const addingUser = await User.create({
+      fullName: 'Adding Viewer',
+      email: 'adding-library@example.com',
+      password: 'secret123',
+    })
+
+    await existingUser.related('movies').create({
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: null,
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+
+    await browserContext.loginAs(addingUser)
+
+    const searchPage = await visit('/app/catalog/search?q=heat')
+    await searchPage.getByRole('button', { name: 'Add to library' }).first().click()
+
+    assert.lengthOf(await existingUser.related('movies').query().where('providerId', 'movie-1'), 1)
+    assert.lengthOf(await addingUser.related('movies').query().where('providerId', 'movie-1'), 1)
+  })
+
+  test('series duplicate checks do not treat another user library entry as current user library entry', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const existingUser = await User.create({
+      fullName: 'Existing Series Viewer',
+      email: 'existing-series-library@example.com',
+      password: 'secret123',
+    })
+    const addingUser = await User.create({
+      fullName: 'Adding Series Viewer',
+      email: 'adding-series-library@example.com',
+      password: 'secret123',
+    })
+
+    await existingUser.related('series').create({
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: null,
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await browserContext.loginAs(addingUser)
+
+    const searchPage = await visit('/app/catalog/search?q=heat')
+    await searchPage.getByRole('button', { name: 'Add to library' }).nth(1).click()
+
+    assert.lengthOf(await existingUser.related('series').query().where('providerId', 'series-1'), 1)
+    assert.lengthOf(await addingUser.related('series').query().where('providerId', 'series-1'), 1)
+  })
+
   test('authenticated users can add generated catalog titles to their library', async ({
     assert,
     browserContext,
