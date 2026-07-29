@@ -23,7 +23,6 @@ export interface ApiDefinition {
     }
   }
   app: {
-    home: typeof routes['app.home']
     newAccount: {
       create: typeof routes['app.new_account.create']
       store: typeof routes['app.new_account.store']
@@ -33,6 +32,7 @@ export interface ApiDefinition {
       store: typeof routes['app.session.store']
       destroy: typeof routes['app.session.destroy']
     }
+    home: typeof routes['app.home']
     catalog: {
       search: typeof routes['app.catalog.search']
     }

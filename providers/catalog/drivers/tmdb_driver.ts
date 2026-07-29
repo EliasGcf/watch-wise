@@ -116,17 +116,18 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
-    const seasons = response.data.seasons?.flatMap((season) => {
-      if (season.season_number === undefined || season.episode_count === undefined) return []
+    const seasons =
+      response.data.seasons?.flatMap((season) => {
+        if (season.season_number === undefined || season.episode_count === undefined) return []
 
-      return [
-        {
-          name: season.name ?? `Season ${season.season_number}`,
-          number: season.season_number,
-          episodesCount: season.episode_count,
-        },
-      ]
-    }) ?? []
+        return [
+          {
+            name: season.name ?? `Season ${season.season_number}`,
+            number: season.season_number,
+            episodesCount: season.episode_count,
+          },
+        ]
+      }) ?? []
     if (!response.data.id || !response.data.name) return null
 
     return {
@@ -200,10 +201,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
 
     if (!response.data?.id) return null
-    if (
-      response.data.season_number === undefined ||
-      response.data.episode_number === undefined
-    ) {
+    if (response.data.season_number === undefined || response.data.episode_number === undefined) {
       return null
     }
 

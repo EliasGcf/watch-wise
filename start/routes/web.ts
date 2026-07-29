@@ -2,8 +2,6 @@ import { controllers } from '#generated/controllers'
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
-const HomeController = () => import('#controllers/web/home_controller')
-
 const group = router.group(() => {
   router
     .group(() => {
@@ -17,7 +15,7 @@ const group = router.group(() => {
 
   router
     .group(() => {
-      router.get('/', [HomeController, 'index']).as('home')
+      router.get('/', [controllers.web.Home, 'index']).as('home')
       router.post('logout', [controllers.web.Session, 'destroy'])
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index']).as('catalog.search')
       router.get('library', [controllers.web.Library, 'index'])
