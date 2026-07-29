@@ -407,9 +407,11 @@ test.group('Library series episodes', (group) => {
     }
   })
 
-  test('special episodes can be watched without changing series progress', async ({
+  test('special episodes can be watched and unwatched without changing series progress', async ({
     assert,
+    browserContext,
     client,
+    visit,
   }) => {
     const user = await User.create({
       fullName: 'Special Viewer',
@@ -448,6 +450,27 @@ test.group('Library series episodes', (group) => {
     await user.refresh()
     await serie.refresh()
     assert.equal(user.watchedTime, 28)
+    assert.equal(serie.progress, 0)
+    assert.equal(serie.state, 'not_started')
+
+    await browserContext.loginAs(user)
+    const detailsPage = await visit(`/app/library/series/${serie.id}`)
+    await detailsPage.assertTextContains('body', '1 / 1 watched')
+    await detailsPage.assertTextContains('body', '0 / 2 watched')
+
+    await client
+      .delete(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    assert.lengthOf(
+      await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
+      0
+    )
+
+    await user.refresh()
+    await serie.refresh()
+    assert.equal(user.watchedTime, 0)
     assert.equal(serie.progress, 0)
     assert.equal(serie.state, 'not_started')
   })
