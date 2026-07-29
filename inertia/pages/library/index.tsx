@@ -3,9 +3,9 @@ import { type Data } from '@generated/data'
 import { LoaderCircle } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
+import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { type InertiaProps } from '~/types'
-import { useUnwatchMovieMutation, useWatchMovieMutation } from './use_movie_watched_mutations'
 
 type Movie = Data.Movie
 type Serie = Data.Serie
