@@ -1,4 +1,4 @@
-import { Form } from '@adonisjs/inertia/react'
+import { Form, Link } from '@adonisjs/inertia/react'
 import { Button } from '~/components/ui/button'
 import {
   Card,
@@ -58,7 +58,7 @@ export default function Login() {
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            Don&apos;t have an account? <a href="/app/signup">Sign up</a>
+            Don&apos;t have an account? <Link href="/app/signup">Sign up</Link>
           </p>
         </CardFooter>
       </Card>

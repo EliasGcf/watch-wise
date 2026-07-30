@@ -2,11 +2,13 @@ import { type Data } from '@generated/data'
 import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
 import { type ReactElement, useEffect } from 'react'
+import { Header } from '~/components/header'
 
 type Props = { children: ReactElement<Data.SharedProps> }
 
 export default function Layout({ children }: Props) {
   const { url } = usePage()
+  const user = children.props.user
 
   useEffect(() => {
     toast.dismiss()
@@ -24,8 +26,18 @@ export default function Layout({ children }: Props) {
 
   return (
     <>
-      <main>{children}</main>
+      {user ? <AppShell>{children}</AppShell> : <main>{children}</main>}
       <Toaster position="top-center" richColors />
     </>
+  )
+}
+
+function AppShell({ children }: { children: ReactElement<Data.SharedProps> }) {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+
+      <main className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 lg:py-10">{children}</main>
+    </div>
   )
 }

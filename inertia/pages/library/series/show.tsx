@@ -1,3 +1,4 @@
+import { Link } from '@adonisjs/inertia/react'
 import { useEffect, useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import {
@@ -67,37 +68,40 @@ export default function SeriesShow({ serie }: Props) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-6 py-10">
-      <a
+    <div className="flex flex-col gap-6">
+      <Link
         href="/app/library"
         className={buttonVariants({ variant: 'outline', className: 'self-start' })}
       >
         Back to library
-      </a>
+      </Link>
 
-      <Card>
-        {serie.bannerUrl && (
-          <img src={serie.bannerUrl} alt="" className="aspect-video w-full object-cover" />
-        )}
-        <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <CardTitle>{serie.name}</CardTitle>
+      <Card className="overflow-hidden border-primary/20">
+        <div className="grid lg:grid-cols-[1.2fr_1fr]">
+          {serie.bannerUrl && (
+            <img src={serie.bannerUrl} alt="" className="h-full min-h-64 w-full object-cover" />
+          )}
+          <div className="flex flex-col justify-center gap-4 py-5">
+            <CardHeader>
               <CardDescription>
                 {serie.provider} ID: {serie.providerId}
               </CardDescription>
-            </div>
-            <Button type="button" disabled={isWatchingSeries} onClick={() => void watchSeries()}>
-              {isWatchingSeries && <LoaderCircle className="animate-spin" />}
-              {isWatchingSeries ? 'Marking series...' : 'Mark series as watched'}
-            </Button>
+              <CardTitle className="text-4xl tracking-tight sm:text-5xl">{serie.name}</CardTitle>
+            </CardHeader>
+            {serie.summary && (
+              <CardContent>
+                <p className="text-muted-foreground">{serie.summary}</p>
+              </CardContent>
+            )}
+            <CardContent className="flex flex-col gap-4">
+              <SeriesProgress value={serie.progress} />
+              <Button type="button" disabled={isWatchingSeries} onClick={() => void watchSeries()}>
+                {isWatchingSeries && <LoaderCircle className="animate-spin" />}
+                {isWatchingSeries ? 'Marking series...' : 'Mark series as watched'}
+              </Button>
+            </CardContent>
           </div>
-        </CardHeader>
-        {serie.summary && (
-          <CardContent>
-            <p className="text-muted-foreground">{serie.summary}</p>
-          </CardContent>
-        )}
+        </div>
       </Card>
 
       <Card>
@@ -116,6 +120,20 @@ export default function SeriesShow({ serie }: Props) {
           />
         </CardContent>
       </Card>
+    </div>
+  )
+}
+
+function SeriesProgress({ value }: { value: number }) {
+  return (
+    <div className="flex flex-col gap-1" aria-label="Series progress">
+      <div className="flex items-center justify-between text-xs text-muted-foreground">
+        <span>Progress</span>
+        <span>{value}%</span>
+      </div>
+      <div className="h-2 overflow-hidden rounded-full bg-secondary">
+        <div className="h-full rounded-full bg-primary" style={{ width: `${value}%` }} />
+      </div>
     </div>
   )
 }
@@ -324,7 +342,7 @@ function EpisodeCard({
   const currentEpisode = { ...episode, watched }
 
   return (
-    <Card>
+    <Card size="sm">
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <div className="flex flex-col gap-1">
