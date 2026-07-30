@@ -306,7 +306,7 @@ function EpisodeSkeletonList() {
         <Skeleton className="h-8 w-36" />
       </div>
       {[1, 2, 3].map((item) => (
-        <div key={item} className="grid gap-3 border-t py-4 sm:grid-cols-[2.5rem_1fr_9rem]">
+        <div key={item} className="grid gap-3 border-t py-4 sm:grid-cols-[2.5rem_1fr_10rem]">
           <Skeleton className="mx-auto size-5" />
           <div className="flex flex-col gap-2">
             <Skeleton className="h-3 w-20" />
@@ -359,22 +359,23 @@ function EpisodeRow({
   return (
     <article
       className={cn(
-        'grid gap-3 border-t py-4 first:border-t-0 sm:grid-cols-[2.5rem_1fr_9rem] sm:items-center',
+        'grid gap-3 border-t py-4 first:border-t-0 sm:grid-cols-[2.5rem_1fr_10rem] sm:items-center',
         watched && 'bg-primary/5 opacity-70'
       )}
     >
-      <div className="flex items-center gap-3 sm:justify-center">
-        <Checkbox
-          checked={Boolean(watched)}
-          disabled={!episode.isReleased || isPending}
-          aria-label={
-            watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
-          }
-          className="size-5 rounded-full"
-          onCheckedChange={(checked) => void toggleWatched(checked)}
-        />
-        {isPending && (
-          <LoaderCircle className="animate-spin text-muted-foreground" aria-hidden="true" />
+      <div className="flex h-full items-center sm:justify-center">
+        {isPending ? (
+          <LoaderCircle className="size-5 animate-spin text-muted-foreground" aria-hidden="true" />
+        ) : (
+          <Checkbox
+            checked={Boolean(watched)}
+            disabled={!episode.isReleased}
+            aria-label={
+              watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
+            }
+            className="size-5 rounded-full"
+            onCheckedChange={(checked) => void toggleWatched(checked)}
+          />
         )}
       </div>
 
@@ -385,7 +386,7 @@ function EpisodeRow({
           </p>
           {episode.duration && (
             <span className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground">
-              <Clock3 aria-hidden="true" />
+              <Clock3 className="size-3" aria-hidden="true" />
               {episode.duration} min
             </span>
           )}
@@ -398,7 +399,7 @@ function EpisodeRow({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:flex-col sm:items-end sm:text-right">
+      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:flex-col sm:items-end sm:pr-3 sm:text-right">
         {episode.isReleased ? (
           <span>{watched ? 'Watched' : 'Ready to watch'}</span>
         ) : (
