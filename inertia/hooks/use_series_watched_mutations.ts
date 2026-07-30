@@ -1,7 +1,9 @@
+import { router } from '@inertiajs/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '~/client'
 
-async function refreshLibrary(queryClient: ReturnType<typeof useQueryClient>) {
+async function refreshSeries(queryClient: ReturnType<typeof useQueryClient>) {
+  router.reload({ only: ['serie'] })
   await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
 }
 
@@ -11,7 +13,7 @@ export function useWatchSeriesMutation() {
   return useMutation(
     api.api.library.series.watch.mutationOptions({
       onSuccess: async () => {
-        await refreshLibrary(queryClient)
+        await refreshSeries(queryClient)
       },
     })
   )
@@ -28,7 +30,7 @@ export function useWatchSeasonMutation() {
             params: variables.params,
           })
         )
-        await refreshLibrary(queryClient)
+        await refreshSeries(queryClient)
       },
     })
   )
@@ -45,7 +47,7 @@ export function useWatchEpisodeMutation() {
             params: { id: variables.params.id, season: variables.params.season },
           })
         )
-        await refreshLibrary(queryClient)
+        await refreshSeries(queryClient)
       },
     })
   )
@@ -62,7 +64,7 @@ export function useUnwatchEpisodeMutation() {
             params: { id: variables.params.id, season: variables.params.season },
           })
         )
-        await refreshLibrary(queryClient)
+        await refreshSeries(queryClient)
       },
     })
   )
