@@ -36,6 +36,7 @@ export default function SeriesShow({ serie }: Props) {
     serie.watchedEpisodes ?? []
   )
   const watchSeriesMutation = useWatchSeriesMutation()
+  const seriesWatched = serie.progress >= 100
 
   function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
     trackWatchedEpisodes([episode])
@@ -108,13 +109,17 @@ export default function SeriesShow({ serie }: Props) {
               <Button
                 type="button"
                 className="w-full sm:w-fit"
-                disabled={watchSeriesMutation.isPending}
+                disabled={watchSeriesMutation.isPending || seriesWatched}
                 onClick={() => void watchSeries()}
               >
                 {watchSeriesMutation.isPending && (
                   <LoaderCircle data-icon="inline-start" className="animate-spin" />
                 )}
-                {watchSeriesMutation.isPending ? 'Marking series...' : 'Mark released episodes'}
+                {watchSeriesMutation.isPending
+                  ? 'Marking series...'
+                  : seriesWatched
+                    ? 'Released episodes marked'
+                    : 'Mark released episodes'}
               </Button>
             </CardContent>
           </div>
@@ -184,7 +189,7 @@ function SeasonAccordion({
             className="rounded-xl border bg-muted/10 px-3"
           >
             <AccordionTrigger className="items-center py-3 hover:no-underline">
-              <div className="grid w-full gap-3 pr-4 sm:grid-cols-[1fr_8rem] sm:items-center">
+              <div className="grid w-full gap-3 pr-4 sm:grid-cols-[1fr_3rem] sm:items-center">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                     <span className="font-medium">{season.name}</span>
@@ -265,6 +270,13 @@ function SeasonEpisodes({
   }
 
   const episodes = episodesQuery.data.data
+  const hasUnwatchedReleasedEpisode = episodes.some(
+    (episode) =>
+      episode.isReleased &&
+      !watchedEpisodes.some(
+        (watched) => watched.season === episode.season && watched.episode === episode.episode
+      )
+  )
 
   return (
     <div className="flex flex-col gap-4 rounded-xl border bg-muted/20 p-3 sm:p-4">
@@ -281,13 +293,17 @@ function SeasonEpisodes({
           type="button"
           variant="outline"
           className="w-full sm:w-fit"
-          disabled={watchSeasonMutation.isPending}
+          disabled={watchSeasonMutation.isPending || !hasUnwatchedReleasedEpisode}
           onClick={() => void watchSeason()}
         >
           {watchSeasonMutation.isPending && (
             <LoaderCircle data-icon="inline-start" className="animate-spin" />
           )}
-          {watchSeasonMutation.isPending ? 'Marking season...' : 'Mark released season'}
+          {watchSeasonMutation.isPending
+            ? 'Marking season...'
+            : hasUnwatchedReleasedEpisode
+              ? 'Mark released season'
+              : 'Released season marked'}
         </Button>
       </div>
 
