@@ -83,7 +83,7 @@ export default function SeriesShow({ serie }: Props) {
         Back to library
       </Link>
 
-      <Card className="overflow-hidden border-primary/20 bg-card/80">
+      <Card className="overflow-hidden border-primary/20 bg-card/80 py-0">
         <div className="grid lg:grid-cols-[1.15fr_1fr]">
           {serie.bannerUrl && (
             <div className="relative min-h-64 bg-muted">
