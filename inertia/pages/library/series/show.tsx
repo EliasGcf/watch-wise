@@ -184,12 +184,8 @@ function SeasonAccordion({
             value={String(season.number)}
             className="rounded-xl border bg-muted/10 px-3 not-last:border-b-0"
           >
-            <AccordionTrigger className="py-3 hover:no-underline">
-              <div className="grid w-full gap-3 pr-4 sm:grid-cols-[3.5rem_1fr_8rem] sm:items-center">
-                <div className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                  {season.number === 0 ? 'SP' : `S${season.number}`}
-                </div>
-
+            <AccordionTrigger className="items-center py-3 hover:no-underline">
+              <div className="grid w-full gap-3 pr-4 sm:grid-cols-[1fr_8rem] sm:items-center">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                     <span className="font-medium">{season.name}</span>
