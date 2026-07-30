@@ -176,7 +176,6 @@ function SeasonAccordion({
       {seasons.map((season) => {
         const watchedCount = countWatchedEpisodes(watchedEpisodes, season.number)
         const progress = calculateSeasonProgress(watchedCount, season.episodesCount)
-        const status = getSeasonStatus(watchedCount, season.episodesCount)
 
         return (
           <AccordionItem
@@ -200,12 +199,7 @@ function SeasonAccordion({
                   />
                 </div>
 
-                <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:text-right">
-                  {status === 'completed' && <Badge>Complete</Badge>}
-                  {status === 'in_progress' && <Badge variant="secondary">In progress</Badge>}
-                  {status === 'empty' && (
-                    <span className="text-xs text-muted-foreground">No episodes</span>
-                  )}
+                <div className="flex items-center sm:justify-end sm:text-right">
                   <span className="font-mono text-xs font-normal text-muted-foreground">
                     {progress}%
                   </span>
@@ -238,14 +232,6 @@ function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
   if (episodesCount === 0) return 0
 
   return Math.min(100, Math.max(0, Math.round((watchedCount / episodesCount) * 100)))
-}
-
-function getSeasonStatus(watchedCount: number, episodesCount: number) {
-  if (episodesCount === 0) return 'empty'
-  if (watchedCount >= episodesCount) return 'completed'
-  if (watchedCount > 0) return 'in_progress'
-
-  return 'not_started'
 }
 
 function SeasonEpisodes({
