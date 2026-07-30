@@ -380,18 +380,17 @@ function EpisodeRow({
       </div>
 
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 leading-none">
+          <p className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
             S{episode.season} · E{episode.episode}
           </p>
           {episode.duration && (
-            <span className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground">
-              <Clock3 className="size-3" aria-hidden="true" />
+            <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
+              <Clock3 className="size-3 shrink-0" aria-hidden="true" />
               {episode.duration} min
             </span>
           )}
           {episode.isSpecial && <Badge variant="outline">Special</Badge>}
-          {watched && <Badge>Watched</Badge>}
         </div>
         <h3 className="mt-1 text-base font-medium tracking-tight">{episode.name}</h3>
         {episode.summary && (
@@ -400,8 +399,10 @@ function EpisodeRow({
       </div>
 
       <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:flex-col sm:items-end sm:pr-3 sm:text-right">
-        {episode.isReleased ? (
-          <span>{watched ? 'Watched' : 'Ready to watch'}</span>
+        {watched ? (
+          <Badge>Watched</Badge>
+        ) : episode.isReleased ? (
+          <span>Ready to watch</span>
         ) : (
           <span>Not released yet</span>
         )}
