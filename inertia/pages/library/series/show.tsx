@@ -359,8 +359,8 @@ function EpisodeRow({
   return (
     <article
       className={cn(
-        'grid gap-3 border-t py-4 first:border-t-0 sm:grid-cols-[2.5rem_1fr_10rem] sm:items-center',
-        watched && 'bg-primary/5 opacity-70'
+        'grid gap-3 border-t py-4 first:border-t-0 last:pb-0 sm:grid-cols-[2.5rem_1fr_10rem] sm:items-center',
+        watched && 'opacity-80'
       )}
     >
       <div className="flex h-full items-center sm:justify-center">
@@ -379,22 +379,22 @@ function EpisodeRow({
         )}
       </div>
 
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 leading-none">
-          <p className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
-            S{episode.season} · E{episode.episode}
-          </p>
+      <div className="min-w-0 space-y-2">
+        <div className="flex flex-wrap items-center gap-x-4 leading-none">
+          <span className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
+            S{episode.season}·E{episode.episode}
+          </span>
           {episode.duration && (
             <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
-              <Clock3 className="size-3 shrink-0" aria-hidden="true" />
+              <Clock3 className="size-3.5" aria-hidden="true" />
               {episode.duration} min
             </span>
           )}
           {episode.isSpecial && <Badge variant="outline">Special</Badge>}
         </div>
-        <h3 className="mt-1 text-base font-medium tracking-tight">{episode.name}</h3>
+        <h3 className="text-base font-medium tracking-tight">{episode.name}</h3>
         {episode.summary && (
-          <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{episode.summary}</p>
+          <p className="line-clamp-2 text-sm text-muted-foreground">{episode.summary}</p>
         )}
       </div>
 
