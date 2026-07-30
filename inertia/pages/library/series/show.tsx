@@ -1,5 +1,5 @@
 import { Link } from '@adonisjs/inertia/react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LoaderCircle } from 'lucide-react'
 import {
   Accordion,
@@ -10,7 +10,13 @@ import {
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
-import { client } from '~/client'
+import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
+import {
+  useUnwatchEpisodeMutation,
+  useWatchEpisodeMutation,
+  useWatchSeasonMutation,
+  useWatchSeriesMutation,
+} from '~/hooks/use_series_watched_mutations'
 import type { InertiaProps } from '~/types'
 import { type Data } from '@generated/data'
 
@@ -25,7 +31,7 @@ export default function SeriesShow({ serie }: Props) {
   const [watchedEpisodes, setWatchedEpisodes] = useState<WatchedEpisodeProgress[]>(
     serie.watchedEpisodes ?? []
   )
-  const [isWatchingSeries, setIsWatchingSeries] = useState(false)
+  const watchSeriesMutation = useWatchSeriesMutation()
 
   function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
     trackWatchedEpisodes([episode])
@@ -58,13 +64,8 @@ export default function SeriesShow({ serie }: Props) {
   }
 
   async function watchSeries() {
-    setIsWatchingSeries(true)
-    try {
-      const response = await client.api.api.library.series.watch({ params: { id: serie.id } })
-      trackWatchedEpisodes(response.data.watchedEpisodes ?? [])
-    } finally {
-      setIsWatchingSeries(false)
-    }
+    const response = await watchSeriesMutation.mutateAsync({ params: { id: serie.id } })
+    trackWatchedEpisodes(response.data.watchedEpisodes ?? [])
   }
 
   return (
@@ -95,9 +96,13 @@ export default function SeriesShow({ serie }: Props) {
             )}
             <CardContent className="flex flex-col gap-4">
               <SeriesProgress value={serie.progress} />
-              <Button type="button" disabled={isWatchingSeries} onClick={() => void watchSeries()}>
-                {isWatchingSeries && <LoaderCircle className="animate-spin" />}
-                {isWatchingSeries ? 'Marking series...' : 'Mark series as watched'}
+              <Button
+                type="button"
+                disabled={watchSeriesMutation.isPending}
+                onClick={() => void watchSeries()}
+              >
+                {watchSeriesMutation.isPending && <LoaderCircle className="animate-spin" />}
+                {watchSeriesMutation.isPending ? 'Marking series...' : 'Mark series as watched'}
               </Button>
             </CardContent>
           </div>
@@ -229,74 +234,31 @@ function SeasonEpisodes({
   onBulkWatched: (episodes: WatchedEpisodeProgress[]) => void
   onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
-  const [episodes, setEpisodes] = useState<SeasonEpisode[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [isWatchingSeason, setIsWatchingSeason] = useState(false)
-
-  useEffect(() => {
-    if (!isOpen || episodes || error) return
-
-    let isCurrent = true
-
-    async function loadEpisodes() {
-      try {
-        const response = await client.api.api.library.series.seasons.episodes({
-          params: { id: serie.id, season },
-        })
-
-        if (isCurrent) setEpisodes(response.data)
-      } catch {
-        if (isCurrent) setError('Episodes could not be loaded.')
-      }
-    }
-
-    void loadEpisodes()
-
-    return () => {
-      isCurrent = false
-    }
-  }, [episodes, error, isOpen, season, serie.id])
+  const episodesQuery = useSeriesEpisodesQuery({ serieId: serie.id, season, enabled: isOpen })
+  const watchSeasonMutation = useWatchSeasonMutation()
 
   if (!isOpen) return null
-  if (error) return <p className="text-muted-foreground">{error}</p>
-  if (!episodes) return <p className="text-muted-foreground">Loading episodes...</p>
+  if (episodesQuery.isError)
+    return <p className="text-muted-foreground">Episodes could not be loaded.</p>
+  if (!episodesQuery.data) return <p className="text-muted-foreground">Loading episodes...</p>
 
   async function watchSeason() {
-    setIsWatchingSeason(true)
-    try {
-      const response = await client.api.api.library.series.seasons.watch({
-        params: { id: serie.id, season },
-      })
-      const bulkWatchedEpisodes = response.data.watchedEpisodes ?? []
-
-      onBulkWatched(bulkWatchedEpisodes)
-      setEpisodes(
-        (current) =>
-          current?.map((episode) => {
-            const watchedEpisode = bulkWatchedEpisodes.find(
-              (watched) => watched.season === episode.season && watched.episode === episode.episode
-            )
-
-            return watchedEpisode
-              ? { ...episode, watched: { watchedAt: watchedEpisode.watchedAt ?? null } }
-              : episode
-          }) ?? null
-      )
-    } finally {
-      setIsWatchingSeason(false)
-    }
+    const response = await watchSeasonMutation.mutateAsync({ params: { id: serie.id, season } })
+    onBulkWatched(response.data.watchedEpisodes ?? [])
   }
+
+  const episodes = episodesQuery.data.data
 
   return (
     <div className="flex flex-col gap-3">
       <Button
         type="button"
         variant="outline"
-        disabled={isWatchingSeason}
+        disabled={watchSeasonMutation.isPending}
         onClick={() => void watchSeason()}
       >
-        {isWatchingSeason && <LoaderCircle className="animate-spin" />}
-        {isWatchingSeason ? 'Marking season...' : 'Mark season as watched'}
+        {watchSeasonMutation.isPending && <LoaderCircle className="animate-spin" />}
+        {watchSeasonMutation.isPending ? 'Marking season...' : 'Mark season as watched'}
       </Button>
       {episodes.map((episode) => (
         <EpisodeCard
@@ -391,7 +353,7 @@ function EpisodeWatchButton({
   episode: SeasonEpisode
   onWatched: () => void
 }) {
-  const [isWatching, setIsWatching] = useState(false)
+  const watchEpisodeMutation = useWatchEpisodeMutation()
 
   if (!episode.isReleased) {
     return (
@@ -402,15 +364,10 @@ function EpisodeWatchButton({
   }
 
   async function watchEpisode() {
-    setIsWatching(true)
-    try {
-      await client.api.api.library.series.episodes.watch({
-        params: { id: serie.id, season: episode.season, episode: episode.episode },
-      })
-      onWatched()
-    } finally {
-      setIsWatching(false)
-    }
+    await watchEpisodeMutation.mutateAsync({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+    })
+    onWatched()
   }
 
   return (
@@ -418,11 +375,11 @@ function EpisodeWatchButton({
       type="button"
       className="w-full"
       aria-label={`Mark ${episode.name} as watched`}
-      disabled={isWatching}
+      disabled={watchEpisodeMutation.isPending}
       onClick={() => void watchEpisode()}
     >
-      {isWatching && <LoaderCircle className="animate-spin" />}
-      {isWatching ? 'Marking...' : 'Mark as watched'}
+      {watchEpisodeMutation.isPending && <LoaderCircle className="animate-spin" />}
+      {watchEpisodeMutation.isPending ? 'Marking...' : 'Mark as watched'}
     </Button>
   )
 }
@@ -436,18 +393,13 @@ function EpisodeUnwatchButton({
   episode: SeasonEpisode
   onUnwatched: () => void
 }) {
-  const [isUnwatching, setIsUnwatching] = useState(false)
+  const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
 
   async function unwatchEpisode() {
-    setIsUnwatching(true)
-    try {
-      await client.api.api.library.series.episodes.unwatch({
-        params: { id: serie.id, season: episode.season, episode: episode.episode },
-      })
-      onUnwatched()
-    } finally {
-      setIsUnwatching(false)
-    }
+    await unwatchEpisodeMutation.mutateAsync({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+    })
+    onUnwatched()
   }
 
   return (
@@ -456,11 +408,11 @@ function EpisodeUnwatchButton({
       variant="outline"
       className="w-full"
       aria-label={`Unmark ${episode.name} as watched`}
-      disabled={isUnwatching}
+      disabled={unwatchEpisodeMutation.isPending}
       onClick={() => void unwatchEpisode()}
     >
-      {isUnwatching && <LoaderCircle className="animate-spin" />}
-      {isUnwatching ? 'Unmarking...' : 'Unmark as watched'}
+      {unwatchEpisodeMutation.isPending && <LoaderCircle className="animate-spin" />}
+      {unwatchEpisodeMutation.isPending ? 'Unmarking...' : 'Unmark as watched'}
     </Button>
   )
 }

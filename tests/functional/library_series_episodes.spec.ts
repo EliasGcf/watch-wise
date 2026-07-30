@@ -6,7 +6,7 @@ import { test } from '@japa/runner'
 import { DateTime, Settings } from 'luxon'
 
 test.group('Library series episodes', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+  group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
 
   test('authenticated users can open a series details page and view provider-sourced seasons', async ({
     browserContext,

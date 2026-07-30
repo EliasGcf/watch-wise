@@ -7,7 +7,7 @@ import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 
 test.group('Library entries', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+  group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
 
   test('library entries save image paths relative to the configured image base URL', async ({
     assert,

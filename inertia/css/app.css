@@ -92,6 +92,6 @@
     cursor: pointer;
     }
   html {
-    @apply font-sans;
+    @apply font-sans scrollbar-gutter-stable;
     }
 }

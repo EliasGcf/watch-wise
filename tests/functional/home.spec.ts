@@ -6,7 +6,7 @@ import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 
 test.group('Home', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+  group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
 
   test('authenticated users with an empty library see useful next actions on /app', async ({
     browserContext,

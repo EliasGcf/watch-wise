@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 import type { Page } from 'playwright'
 
 test.group('Library movie watched records', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+  group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
 
   test('authenticated users can mark a library movie as watched once and then unmark it', async ({
     assert,
