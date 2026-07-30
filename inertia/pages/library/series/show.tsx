@@ -1,6 +1,6 @@
 import { Link } from '@adonisjs/inertia/react'
 import { useState } from 'react'
-import { LoaderCircle } from 'lucide-react'
+import { Clock3, LoaderCircle } from 'lucide-react'
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +10,9 @@ import {
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { Checkbox } from '~/components/ui/checkbox'
+import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
+import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
 import {
   useUnwatchEpisodeMutation,
@@ -17,6 +20,7 @@ import {
   useWatchSeasonMutation,
   useWatchSeriesMutation,
 } from '~/hooks/use_series_watched_mutations'
+import { cn } from '~/lib/utils'
 import type { InertiaProps } from '~/types'
 import { type Data } from '@generated/data'
 
@@ -32,6 +36,8 @@ export default function SeriesShow({ serie }: Props) {
     serie.watchedEpisodes ?? []
   )
   const watchSeriesMutation = useWatchSeriesMutation()
+  const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
+  const seriesMarked = seriesEpisodesCount > 0 && watchedEpisodes.length >= seriesEpisodesCount
 
   function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
     trackWatchedEpisodes([episode])
@@ -77,32 +83,44 @@ export default function SeriesShow({ serie }: Props) {
         Back to library
       </Link>
 
-      <Card className="overflow-hidden border-primary/20">
-        <div className="grid lg:grid-cols-[1.2fr_1fr]">
+      <Card className="overflow-hidden border-primary/20 bg-card/80 py-0">
+        <div className="grid lg:grid-cols-[1.15fr_1fr]">
           {serie.bannerUrl && (
-            <img src={serie.bannerUrl} alt="" className="h-full min-h-64 w-full object-cover" />
+            <div className="relative min-h-64 bg-muted">
+              <img src={serie.bannerUrl} alt="" className="h-full w-full object-cover opacity-80" />
+              <div className="absolute inset-0 bg-linear-to-t from-background/70 to-transparent" />
+            </div>
           )}
           <div className="flex flex-col justify-center gap-4 py-5">
             <CardHeader>
-              <CardDescription>
+              <CardDescription className="font-mono text-xs uppercase tracking-[0.22em]">
                 {serie.provider} ID: {serie.providerId}
               </CardDescription>
-              <CardTitle className="text-4xl tracking-tight sm:text-5xl">{serie.name}</CardTitle>
+              <CardTitle className="max-w-xl text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">
+                {serie.name}
+              </CardTitle>
             </CardHeader>
             {serie.summary && (
               <CardContent>
-                <p className="text-muted-foreground">{serie.summary}</p>
+                <p className="max-w-2xl text-muted-foreground">{serie.summary}</p>
               </CardContent>
             )}
             <CardContent className="flex flex-col gap-4">
               <SeriesProgress value={serie.progress} />
               <Button
                 type="button"
-                disabled={watchSeriesMutation.isPending}
+                className="w-full sm:w-fit"
+                disabled={watchSeriesMutation.isPending || seriesMarked}
                 onClick={() => void watchSeries()}
               >
-                {watchSeriesMutation.isPending && <LoaderCircle className="animate-spin" />}
-                {watchSeriesMutation.isPending ? 'Marking series...' : 'Mark series as watched'}
+                {watchSeriesMutation.isPending && (
+                  <LoaderCircle data-icon="inline-start" className="animate-spin" />
+                )}
+                {watchSeriesMutation.isPending
+                  ? 'Marking...'
+                  : seriesMarked
+                    ? 'All marked'
+                    : 'Mark all episodes'}
               </Button>
             </CardContent>
           </div>
@@ -112,7 +130,7 @@ export default function SeriesShow({ serie }: Props) {
       <Card>
         <CardHeader>
           <CardTitle>Seasons</CardTitle>
-          <CardDescription>Open a season to load its episodes.</CardDescription>
+          <CardDescription>Open a season and work through it like a watchlist.</CardDescription>
         </CardHeader>
         <CardContent>
           <SeasonAccordion
@@ -131,15 +149,14 @@ export default function SeriesShow({ serie }: Props) {
 
 function SeriesProgress({ value }: { value: number }) {
   return (
-    <div className="flex flex-col gap-1" aria-label="Series progress">
-      <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>Progress</span>
-        <span>{value}%</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-secondary">
-        <div className="h-full rounded-full bg-primary" style={{ width: `${value}%` }} />
-      </div>
-    </div>
+    <Progress value={value} aria-label="Series progress" className="gap-2">
+      <ProgressLabel className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+        Series progress
+      </ProgressLabel>
+      <ProgressValue className="font-mono text-xs text-muted-foreground">
+        {() => `${value}%`}
+      </ProgressValue>
+    </Progress>
   )
 }
 
@@ -161,29 +178,35 @@ function SeasonAccordion({
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
 
   return (
-    <Accordion value={openSeasons} onValueChange={setOpenSeasons}>
+    <Accordion value={openSeasons} onValueChange={setOpenSeasons} className="gap-3">
       {seasons.map((season) => {
         const watchedCount = countWatchedEpisodes(watchedEpisodes, season.number)
         const progress = calculateSeasonProgress(watchedCount, season.episodesCount)
 
         return (
-          <AccordionItem key={season.number} value={String(season.number)}>
-            <AccordionTrigger>
-              <div className="flex w-full flex-col gap-2 pr-4">
-                <div className="flex items-center justify-between gap-3">
-                  <span>{season.name}</span>
-                  <span className="text-xs font-normal text-muted-foreground">
-                    {watchedCount} / {season.episodesCount} watched
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="h-2 flex-1 overflow-hidden rounded-full bg-secondary">
-                    <div
-                      className="h-full rounded-full bg-primary"
-                      style={{ width: `${progress}%` }}
-                    />
+          <AccordionItem
+            key={season.number}
+            value={String(season.number)}
+            className="rounded-xl border bg-muted/10 px-3"
+          >
+            <AccordionTrigger className="items-center py-3 hover:no-underline">
+              <div className="grid w-full gap-3 pr-4 sm:grid-cols-[1fr_3rem] sm:items-center">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <span className="font-medium">{season.name}</span>
+                    <span className="font-mono text-xs font-normal text-muted-foreground">
+                      {watchedCount} / {season.episodesCount} watched
+                    </span>
                   </div>
-                  <span className="w-9 text-right text-xs font-normal text-muted-foreground">
+                  <Progress
+                    value={progress}
+                    aria-label={`${season.name} progress`}
+                    className="mt-2 gap-0"
+                  />
+                </div>
+
+                <div className="flex items-center sm:justify-end sm:text-right">
+                  <span className="font-mono text-xs font-normal text-muted-foreground">
                     {progress}%
                   </span>
                 </div>
@@ -209,6 +232,10 @@ function SeasonAccordion({
 
 function countWatchedEpisodes(watchedEpisodes: WatchedEpisodeProgress[], season: number) {
   return watchedEpisodes.filter((watched) => watched.season === season).length
+}
+
+function countSeriesEpisodes(seasons: SeriesSeasons) {
+  return seasons.reduce((total, season) => total + season.episodesCount, 0)
 }
 
 function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
@@ -239,8 +266,8 @@ function SeasonEpisodes({
 
   if (!isOpen) return null
   if (episodesQuery.isError)
-    return <p className="text-muted-foreground">Episodes could not be loaded.</p>
-  if (!episodesQuery.data) return <p className="text-muted-foreground">Loading episodes...</p>
+    return <p className="text-sm text-muted-foreground">Episodes could not be loaded.</p>
+  if (!episodesQuery.data) return <EpisodeSkeletonList />
 
   async function watchSeason() {
     const response = await watchSeasonMutation.mutateAsync({ params: { id: serie.id, season } })
@@ -248,33 +275,84 @@ function SeasonEpisodes({
   }
 
   const episodes = episodesQuery.data.data
+  const hasUnwatchedReleasedEpisode = episodes.some(
+    (episode) =>
+      episode.isReleased &&
+      !watchedEpisodes.some(
+        (watched) => watched.season === episode.season && watched.episode === episode.episode
+      )
+  )
 
   return (
-    <div className="flex flex-col gap-3">
-      <Button
-        type="button"
-        variant="outline"
-        disabled={watchSeasonMutation.isPending}
-        onClick={() => void watchSeason()}
-      >
-        {watchSeasonMutation.isPending && <LoaderCircle className="animate-spin" />}
-        {watchSeasonMutation.isPending ? 'Marking season...' : 'Mark season as watched'}
-      </Button>
-      {episodes.map((episode) => (
-        <EpisodeCard
-          key={episode.providerId}
-          serie={serie}
-          episode={episode}
-          watchedEpisodes={watchedEpisodes}
-          onWatched={onWatched}
-          onUnwatched={onUnwatched}
-        />
+    <div className="flex flex-col gap-4 rounded-xl border bg-muted/20 p-3 sm:p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            Season tape
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Mark episodes from the line, then keep watching where it breaks.
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full sm:w-fit"
+          disabled={watchSeasonMutation.isPending || !hasUnwatchedReleasedEpisode}
+          onClick={() => void watchSeason()}
+        >
+          {watchSeasonMutation.isPending && (
+            <LoaderCircle data-icon="inline-start" className="animate-spin" />
+          )}
+          {watchSeasonMutation.isPending
+            ? 'Marking...'
+            : hasUnwatchedReleasedEpisode
+              ? 'Mark season'
+              : 'Season marked'}
+        </Button>
+      </div>
+
+      <div className="flex flex-col">
+        {episodes.map((episode) => (
+          <EpisodeRow
+            key={episode.providerId}
+            serie={serie}
+            episode={episode}
+            watchedEpisodes={watchedEpisodes}
+            onWatched={onWatched}
+            onUnwatched={onUnwatched}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function EpisodeSkeletonList() {
+  return (
+    <div className="flex flex-col gap-3 rounded-xl border bg-muted/20 p-3 sm:p-4">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-3 w-24" />
+          <Skeleton className="h-4 w-56 max-w-full" />
+        </div>
+        <Skeleton className="h-8 w-36" />
+      </div>
+      {[1, 2, 3].map((item) => (
+        <div key={item} className="grid gap-3 border-t py-4 sm:grid-cols-[2.5rem_1fr_10rem]">
+          <Skeleton className="mx-auto size-5" />
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-4 w-64 max-w-full" />
+          </div>
+          <Skeleton className="h-8 w-28" />
+        </div>
       ))}
     </div>
   )
 }
 
-function EpisodeCard({
+function EpisodeRow({
   serie,
   episode,
   watchedEpisodes,
@@ -287,132 +365,88 @@ function EpisodeCard({
   onWatched: (episode: WatchedEpisodeProgress) => void
   onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
-  const watched = watchedEpisodes.some(
-    (watchedEpisode) =>
-      watchedEpisode.season === episode.season && watchedEpisode.episode === episode.episode
+  const watchedEpisode = watchedEpisodes.find(
+    (watched) => watched.season === episode.season && watched.episode === episode.episode
   )
-    ? {
-        watchedAt:
-          watchedEpisodes.find(
-            (watchedEpisode) =>
-              watchedEpisode.season === episode.season && watchedEpisode.episode === episode.episode
-          )?.watchedAt ??
-          episode.watched?.watchedAt ??
-          null,
-      }
-    : null
-  const currentEpisode = { ...episode, watched }
-
-  return (
-    <Card size="sm">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex flex-col gap-1">
-            <CardTitle className="text-base">{episode.name}</CardTitle>
-            <CardDescription>
-              Season {episode.season}, episode {episode.episode}
-              {episode.duration ? ` · ${episode.duration} min` : ''}
-            </CardDescription>
-          </div>
-          <div className="flex flex-wrap justify-end gap-2">
-            {episode.isSpecial && <Badge variant="outline">Special</Badge>}
-            {watched && <Badge>Watched</Badge>}
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-3">
-        {episode.summary && <p className="text-muted-foreground">{episode.summary}</p>}
-        {watched ? (
-          <EpisodeUnwatchButton
-            serie={serie}
-            episode={currentEpisode}
-            onUnwatched={() => {
-              onUnwatched(episode)
-            }}
-          />
-        ) : (
-          <EpisodeWatchButton
-            serie={serie}
-            episode={currentEpisode}
-            onWatched={() => {
-              onWatched(episode)
-            }}
-          />
-        )}
-      </CardContent>
-    </Card>
-  )
-}
-
-function EpisodeWatchButton({
-  serie,
-  episode,
-  onWatched,
-}: {
-  serie: Data.Serie
-  episode: SeasonEpisode
-  onWatched: () => void
-}) {
+  const watchedAt = watchedEpisode?.watchedAt ?? episode.watched?.watchedAt ?? null
+  const watched = watchedEpisode ? { watchedAt } : null
   const watchEpisodeMutation = useWatchEpisodeMutation()
-
-  if (!episode.isReleased) {
-    return (
-      <Button type="button" className="w-full" disabled>
-        Not released yet
-      </Button>
-    )
-  }
-
-  async function watchEpisode() {
-    await watchEpisodeMutation.mutateAsync({
-      params: { id: serie.id, season: episode.season, episode: episode.episode },
-    })
-    onWatched()
-  }
-
-  return (
-    <Button
-      type="button"
-      className="w-full"
-      aria-label={`Mark ${episode.name} as watched`}
-      disabled={watchEpisodeMutation.isPending}
-      onClick={() => void watchEpisode()}
-    >
-      {watchEpisodeMutation.isPending && <LoaderCircle className="animate-spin" />}
-      {watchEpisodeMutation.isPending ? 'Marking...' : 'Mark as watched'}
-    </Button>
-  )
-}
-
-function EpisodeUnwatchButton({
-  serie,
-  episode,
-  onUnwatched,
-}: {
-  serie: Data.Serie
-  episode: SeasonEpisode
-  onUnwatched: () => void
-}) {
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
+  const isPending = watchEpisodeMutation.isPending || unwatchEpisodeMutation.isPending
 
-  async function unwatchEpisode() {
+  async function toggleWatched(checked: boolean) {
+    if (checked) {
+      await watchEpisodeMutation.mutateAsync({
+        params: { id: serie.id, season: episode.season, episode: episode.episode },
+      })
+      onWatched(episode)
+      return
+    }
+
     await unwatchEpisodeMutation.mutateAsync({
       params: { id: serie.id, season: episode.season, episode: episode.episode },
     })
-    onUnwatched()
+    onUnwatched(episode)
   }
 
   return (
-    <Button
-      type="button"
-      variant="outline"
-      className="w-full"
-      aria-label={`Unmark ${episode.name} as watched`}
-      disabled={unwatchEpisodeMutation.isPending}
-      onClick={() => void unwatchEpisode()}
+    <article
+      className={cn(
+        'grid gap-3 border-t py-4 first:border-t-0 last:pb-0 sm:grid-cols-[2.5rem_1fr_10rem] sm:items-center',
+        watched && 'opacity-80'
+      )}
     >
-      {unwatchEpisodeMutation.isPending && <LoaderCircle className="animate-spin" />}
-      {unwatchEpisodeMutation.isPending ? 'Unmarking...' : 'Unmark as watched'}
-    </Button>
+      <div className="flex h-full items-center sm:justify-center">
+        {isPending ? (
+          <LoaderCircle className="size-5 animate-spin text-muted-foreground" aria-hidden="true" />
+        ) : (
+          <Checkbox
+            checked={Boolean(watched)}
+            disabled={!episode.isReleased}
+            aria-label={
+              watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
+            }
+            className="size-5 rounded-full"
+            onCheckedChange={(checked) => void toggleWatched(checked)}
+          />
+        )}
+      </div>
+
+      <div className="min-w-0 space-y-2">
+        <div className="flex flex-wrap items-center gap-x-4 leading-none">
+          <span className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
+            S{episode.season}·E{episode.episode}
+          </span>
+          {episode.duration && (
+            <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
+              <Clock3 className="size-3.5" aria-hidden="true" />
+              {episode.duration} min
+            </span>
+          )}
+          {episode.isSpecial && <Badge variant="outline">Special</Badge>}
+        </div>
+        <h3 className="text-base font-medium tracking-tight">{episode.name}</h3>
+        {episode.summary && (
+          <p className="line-clamp-2 text-sm text-muted-foreground">{episode.summary}</p>
+        )}
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:flex-col sm:items-end sm:pr-3 sm:text-right">
+        {watched ? (
+          <Badge>Watched</Badge>
+        ) : episode.isReleased ? (
+          <span>Ready to watch</span>
+        ) : (
+          <span>Not released yet</span>
+        )}
+        {watchedAt && <span className="font-mono text-xs">{formatWatchedAt(watchedAt)}</span>}
+      </div>
+    </article>
+  )
+}
+
+function formatWatchedAt(value: string) {
+  return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(
+    new Date(value)
   )
 }
