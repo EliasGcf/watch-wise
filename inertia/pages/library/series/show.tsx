@@ -1,6 +1,6 @@
 import { Link } from '@adonisjs/inertia/react'
 import { useState } from 'react'
-import { CheckCircle2, Circle, Clock3, LoaderCircle } from 'lucide-react'
+import { Clock3, LoaderCircle } from 'lucide-react'
 import {
   Accordion,
   AccordionContent,
@@ -10,6 +10,7 @@ import {
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { Checkbox } from '~/components/ui/checkbox'
 import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
@@ -19,6 +20,7 @@ import {
   useWatchSeasonMutation,
   useWatchSeriesMutation,
 } from '~/hooks/use_series_watched_mutations'
+import { cn } from '~/lib/utils'
 import type { InertiaProps } from '~/types'
 import { type Data } from '@generated/data'
 
@@ -304,8 +306,8 @@ function EpisodeSkeletonList() {
         <Skeleton className="h-8 w-36" />
       </div>
       {[1, 2, 3].map((item) => (
-        <div key={item} className="grid gap-3 border-t py-4 sm:grid-cols-[2rem_1fr_auto]">
-          <Skeleton className="size-6 rounded-full" />
+        <div key={item} className="grid gap-3 border-t py-4 sm:grid-cols-[2.5rem_1fr_9rem]">
+          <Skeleton className="mx-auto size-5" />
           <div className="flex flex-col gap-2">
             <Skeleton className="h-3 w-20" />
             <Skeleton className="h-4 w-64 max-w-full" />
@@ -333,35 +335,53 @@ function EpisodeRow({
   const watchedEpisode = watchedEpisodes.find(
     (watched) => watched.season === episode.season && watched.episode === episode.episode
   )
-  const watched = watchedEpisode
-    ? {
-        watchedAt: watchedEpisode.watchedAt ?? episode.watched?.watchedAt ?? null,
-      }
-    : null
-  const currentEpisode = { ...episode, watched }
+  const watchedAt = watchedEpisode?.watchedAt ?? episode.watched?.watchedAt ?? null
+  const watched = watchedEpisode ? { watchedAt } : null
+  const watchEpisodeMutation = useWatchEpisodeMutation()
+  const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
+  const isPending = watchEpisodeMutation.isPending || unwatchEpisodeMutation.isPending
+
+  async function toggleWatched(checked: boolean) {
+    if (checked) {
+      await watchEpisodeMutation.mutateAsync({
+        params: { id: serie.id, season: episode.season, episode: episode.episode },
+      })
+      onWatched(episode)
+      return
+    }
+
+    await unwatchEpisodeMutation.mutateAsync({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+    })
+    onUnwatched(episode)
+  }
 
   return (
-    <article className="grid gap-3 border-t py-4 first:border-t-0 sm:grid-cols-[2rem_1fr_auto] sm:items-start">
-      <div className="flex items-center gap-3 sm:block">
-        <span
-          className={
-            watched
-              ? 'flex size-7 items-center justify-center rounded-full bg-primary text-primary-foreground'
-              : 'flex size-7 items-center justify-center rounded-full border bg-background text-muted-foreground'
+    <article
+      className={cn(
+        'grid gap-3 border-t py-4 first:border-t-0 sm:grid-cols-[2.5rem_1fr_9rem] sm:items-center',
+        watched && 'bg-primary/5 opacity-70'
+      )}
+    >
+      <div className="flex items-center gap-3 sm:justify-center">
+        <Checkbox
+          checked={Boolean(watched)}
+          disabled={!episode.isReleased || isPending}
+          aria-label={
+            watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
           }
-          aria-hidden="true"
-        >
-          {watched ? <CheckCircle2 /> : <Circle />}
-        </span>
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground sm:hidden">
-          S{episode.season} E{episode.episode}
-        </p>
+          className="size-5 rounded-full"
+          onCheckedChange={(checked) => void toggleWatched(checked)}
+        />
+        {isPending && (
+          <LoaderCircle className="animate-spin text-muted-foreground" aria-hidden="true" />
+        )}
       </div>
 
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="hidden font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground sm:block">
-            S{episode.season} E{episode.episode}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+            S{episode.season} · E{episode.episode}
           </p>
           {episode.duration && (
             <span className="inline-flex items-center gap-1 font-mono text-xs text-muted-foreground">
@@ -378,106 +398,20 @@ function EpisodeRow({
         )}
       </div>
 
-      <div className="sm:justify-self-end">
-        {watched ? (
-          <EpisodeUnwatchButton
-            serie={serie}
-            episode={currentEpisode}
-            onUnwatched={() => {
-              onUnwatched(episode)
-            }}
-          />
+      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground sm:flex-col sm:items-end sm:text-right">
+        {episode.isReleased ? (
+          <span>{watched ? 'Watched' : 'Ready to watch'}</span>
         ) : (
-          <EpisodeWatchButton
-            serie={serie}
-            episode={currentEpisode}
-            onWatched={() => {
-              onWatched(episode)
-            }}
-          />
+          <span>Not released yet</span>
         )}
+        {watchedAt && <span className="font-mono text-xs">{formatWatchedAt(watchedAt)}</span>}
       </div>
     </article>
   )
 }
 
-function EpisodeWatchButton({
-  serie,
-  episode,
-  onWatched,
-}: {
-  serie: Data.Serie
-  episode: SeasonEpisode
-  onWatched: () => void
-}) {
-  const watchEpisodeMutation = useWatchEpisodeMutation()
-
-  if (!episode.isReleased) {
-    return (
-      <Button type="button" className="w-full" disabled>
-        Not released yet
-      </Button>
-    )
-  }
-
-  async function watchEpisode() {
-    await watchEpisodeMutation.mutateAsync({
-      params: { id: serie.id, season: episode.season, episode: episode.episode },
-    })
-    onWatched()
-  }
-
-  return (
-    <Button
-      type="button"
-      size="sm"
-      className="w-full sm:w-fit"
-      aria-label={`Mark ${episode.name} as watched`}
-      aria-pressed="false"
-      disabled={watchEpisodeMutation.isPending}
-      onClick={() => void watchEpisode()}
-    >
-      {watchEpisodeMutation.isPending && (
-        <LoaderCircle data-icon="inline-start" className="animate-spin" />
-      )}
-      {watchEpisodeMutation.isPending ? 'Marking...' : 'Mark watched'}
-    </Button>
-  )
-}
-
-function EpisodeUnwatchButton({
-  serie,
-  episode,
-  onUnwatched,
-}: {
-  serie: Data.Serie
-  episode: SeasonEpisode
-  onUnwatched: () => void
-}) {
-  const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
-
-  async function unwatchEpisode() {
-    await unwatchEpisodeMutation.mutateAsync({
-      params: { id: serie.id, season: episode.season, episode: episode.episode },
-    })
-    onUnwatched()
-  }
-
-  return (
-    <Button
-      type="button"
-      variant="outline"
-      size="sm"
-      className="w-full sm:w-fit"
-      aria-label={`Unmark ${episode.name} as watched`}
-      aria-pressed="true"
-      disabled={unwatchEpisodeMutation.isPending}
-      onClick={() => void unwatchEpisode()}
-    >
-      {unwatchEpisodeMutation.isPending && (
-        <LoaderCircle data-icon="inline-start" className="animate-spin" />
-      )}
-      {unwatchEpisodeMutation.isPending ? 'Unmarking...' : 'Watched'}
-    </Button>
+function formatWatchedAt(value: string) {
+  return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(
+    new Date(value)
   )
 }
