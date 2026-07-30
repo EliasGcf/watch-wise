@@ -36,7 +36,8 @@ export default function SeriesShow({ serie }: Props) {
     serie.watchedEpisodes ?? []
   )
   const watchSeriesMutation = useWatchSeriesMutation()
-  const seriesWatched = serie.progress >= 100
+  const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
+  const seriesMarked = seriesEpisodesCount > 0 && watchedEpisodes.length >= seriesEpisodesCount
 
   function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
     trackWatchedEpisodes([episode])
@@ -109,17 +110,17 @@ export default function SeriesShow({ serie }: Props) {
               <Button
                 type="button"
                 className="w-full sm:w-fit"
-                disabled={watchSeriesMutation.isPending || seriesWatched}
+                disabled={watchSeriesMutation.isPending || seriesMarked}
                 onClick={() => void watchSeries()}
               >
                 {watchSeriesMutation.isPending && (
                   <LoaderCircle data-icon="inline-start" className="animate-spin" />
                 )}
                 {watchSeriesMutation.isPending
-                  ? 'Marking series...'
-                  : seriesWatched
-                    ? 'Released episodes marked'
-                    : 'Mark released episodes'}
+                  ? 'Marking...'
+                  : seriesMarked
+                    ? 'All marked'
+                    : 'Mark all episodes'}
               </Button>
             </CardContent>
           </div>
@@ -233,6 +234,10 @@ function countWatchedEpisodes(watchedEpisodes: WatchedEpisodeProgress[], season:
   return watchedEpisodes.filter((watched) => watched.season === season).length
 }
 
+function countSeriesEpisodes(seasons: SeriesSeasons) {
+  return seasons.reduce((total, season) => total + season.episodesCount, 0)
+}
+
 function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
   if (episodesCount === 0) return 0
 
@@ -300,10 +305,10 @@ function SeasonEpisodes({
             <LoaderCircle data-icon="inline-start" className="animate-spin" />
           )}
           {watchSeasonMutation.isPending
-            ? 'Marking season...'
+            ? 'Marking...'
             : hasUnwatchedReleasedEpisode
-              ? 'Mark released season'
-              : 'Released season marked'}
+              ? 'Mark season'
+              : 'Season marked'}
         </Button>
       </div>
 
