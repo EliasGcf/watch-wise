@@ -447,36 +447,6 @@ test.group('Library series episodes', (group) => {
     }
   })
 
-  test('series bulk mark button disables after marking released episodes', async ({
-    browserContext,
-    visit,
-  }) => {
-    const user = await User.create({
-      fullName: 'Bulk Button Viewer',
-      email: 'bulk-button-viewer@example.com',
-      password: 'secret123',
-    })
-    const serie = await Serie.create({
-      userId: user.id,
-      provider: 'tmdb',
-      providerId: 'series-1',
-      name: 'Heat Vision and Jack',
-      bannerPath: '/series-1.jpg',
-      posterPath: '/series-1-poster.jpg',
-      releasedAt: DateTime.fromISO('1999-01-01'),
-      summary: 'A pilot about a super-intelligent astronaut.',
-    })
-
-    await browserContext.loginAs(user)
-    const detailsPage = await visit(`/app/library/series/${serie.id}`)
-    const markAllButton = detailsPage.getByRole('button', { name: 'Mark all episodes' })
-
-    await markAllButton.click()
-
-    await detailsPage.assertTextContains('body', 'All marked')
-    await detailsPage.assertDisabled(detailsPage.getByRole('button', { name: 'All marked' }))
-  })
-
   test('bulk marking preserves existing watched marks, uses one watched date for new marks, and updates watched time', async ({
     assert,
     client,

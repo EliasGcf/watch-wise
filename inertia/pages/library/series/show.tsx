@@ -35,12 +35,9 @@ export default function SeriesShow({ serie }: Props) {
   const [watchedEpisodes, setWatchedEpisodes] = useState<WatchedEpisodeProgress[]>(
     serie.watchedEpisodes ?? []
   )
-  const [releasedSeriesMarked, setReleasedSeriesMarked] = useState(false)
   const watchSeriesMutation = useWatchSeriesMutation()
   const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
-  const seriesMarked =
-    releasedSeriesMarked ||
-    (seriesEpisodesCount > 0 && watchedEpisodes.length >= seriesEpisodesCount)
+  const seriesMarked = seriesEpisodesCount > 0 && watchedEpisodes.length >= seriesEpisodesCount
 
   function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
     trackWatchedEpisodes([episode])
@@ -65,7 +62,6 @@ export default function SeriesShow({ serie }: Props) {
   }
 
   function untrackWatchedEpisode(episode: WatchedEpisodeProgress) {
-    setReleasedSeriesMarked(false)
     setWatchedEpisodes((current) =>
       current.filter(
         (watched) => watched.season !== episode.season || watched.episode !== episode.episode
@@ -76,7 +72,6 @@ export default function SeriesShow({ serie }: Props) {
   async function watchSeries() {
     const response = await watchSeriesMutation.mutateAsync({ params: { id: serie.id } })
     trackWatchedEpisodes(response.data.watchedEpisodes ?? [])
-    setReleasedSeriesMarked(true)
   }
 
   return (
