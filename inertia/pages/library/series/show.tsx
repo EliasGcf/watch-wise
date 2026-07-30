@@ -172,26 +172,48 @@ function SeasonAccordion({
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
 
   return (
-    <Accordion value={openSeasons} onValueChange={setOpenSeasons}>
+    <Accordion value={openSeasons} onValueChange={setOpenSeasons} className="gap-3">
       {seasons.map((season) => {
         const watchedCount = countWatchedEpisodes(watchedEpisodes, season.number)
         const progress = calculateSeasonProgress(watchedCount, season.episodesCount)
+        const status = getSeasonStatus(watchedCount, season.episodesCount)
 
         return (
-          <AccordionItem key={season.number} value={String(season.number)}>
-            <AccordionTrigger>
-              <div className="flex w-full flex-col gap-2 pr-4">
-                <div className="flex items-center justify-between gap-3">
-                  <span>{season.name}</span>
+          <AccordionItem
+            key={season.number}
+            value={String(season.number)}
+            className="rounded-xl border bg-muted/10 px-3 not-last:border-b-0"
+          >
+            <AccordionTrigger className="py-3 hover:no-underline">
+              <div className="grid w-full gap-3 pr-4 sm:grid-cols-[3.5rem_1fr_8rem] sm:items-center">
+                <div className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                  {season.number === 0 ? 'SP' : `S${season.number}`}
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                    <span className="font-medium">{season.name}</span>
+                    <span className="font-mono text-xs font-normal text-muted-foreground">
+                      {watchedCount} / {season.episodesCount} watched
+                    </span>
+                  </div>
+                  <Progress
+                    value={progress}
+                    aria-label={`${season.name} progress`}
+                    className="mt-2 gap-0"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:text-right">
+                  {status === 'completed' && <Badge>Complete</Badge>}
+                  {status === 'in_progress' && <Badge variant="secondary">In progress</Badge>}
+                  {status === 'empty' && (
+                    <span className="text-xs text-muted-foreground">No episodes</span>
+                  )}
                   <span className="font-mono text-xs font-normal text-muted-foreground">
-                    {watchedCount} / {season.episodesCount} watched
+                    {progress}%
                   </span>
                 </div>
-                <Progress value={progress} aria-label={`${season.name} progress`}>
-                  <ProgressValue className="font-mono text-xs font-normal text-muted-foreground">
-                    {() => `${progress}%`}
-                  </ProgressValue>
-                </Progress>
               </div>
             </AccordionTrigger>
             <AccordionContent>
@@ -220,6 +242,14 @@ function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
   if (episodesCount === 0) return 0
 
   return Math.min(100, Math.max(0, Math.round((watchedCount / episodesCount) * 100)))
+}
+
+function getSeasonStatus(watchedCount: number, episodesCount: number) {
+  if (episodesCount === 0) return 'empty'
+  if (watchedCount >= episodesCount) return 'completed'
+  if (watchedCount > 0) return 'in_progress'
+
+  return 'not_started'
 }
 
 function SeasonEpisodes({
