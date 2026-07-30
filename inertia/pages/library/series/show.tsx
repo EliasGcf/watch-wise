@@ -181,7 +181,7 @@ function SeasonAccordion({
           <AccordionItem
             key={season.number}
             value={String(season.number)}
-            className="rounded-xl border bg-muted/10 px-3 not-last:border-b-0"
+            className="rounded-xl border bg-muted/10 px-3"
           >
             <AccordionTrigger className="items-center py-3 hover:no-underline">
               <div className="grid w-full gap-3 pr-4 sm:grid-cols-[1fr_8rem] sm:items-center">
