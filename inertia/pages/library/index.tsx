@@ -115,16 +115,16 @@ function LibrarySection({
 
 function LibraryCard({ entry }: { entry: Movie | Serie }) {
   return (
-    <Card className="grid gap-0 sm:grid-cols-[12rem_1fr]">
+    <Card className="grid gap-0 py-0 sm:grid-cols-[12rem_1fr]">
       <div className="bg-muted">
-        {entry.bannerUrl ? (
+        {entry.posterUrl ? (
           <img
-            src={entry.bannerUrl}
+            src={entry.posterUrl}
             alt=""
-            className="aspect-video h-full w-full object-cover sm:aspect-auto"
+            className="aspect-[2/3] h-full w-full object-cover sm:aspect-auto"
           />
         ) : (
-          <div className="flex aspect-video h-full items-center justify-center text-xs uppercase tracking-[0.2em] text-muted-foreground sm:aspect-auto">
+          <div className="flex aspect-[2/3] h-full items-center justify-center text-xs uppercase tracking-[0.2em] text-muted-foreground sm:aspect-auto">
             {entry.type}
           </div>
         )}
@@ -133,18 +133,19 @@ function LibraryCard({ entry }: { entry: Movie | Serie }) {
         <CardHeader>
           <div className="flex flex-col gap-2">
             <CardTitle>{entry.name}</CardTitle>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary">{entry.type}</Badge>
-              {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
-            </div>
+            {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
           </div>
         </CardHeader>
         <CardContent className="flex flex-1 flex-col gap-3">
           {entry.summary && <p className="line-clamp-3 text-muted-foreground">{entry.summary}</p>}
-          {entry.type === 'serie' && <SeriesProgress serie={entry} />}
-          <p className="mt-auto text-xs text-muted-foreground">
-            {entry.provider} ID: {entry.providerId}
-          </p>
+          {entry.type === 'serie' ? (
+            <div className="mt-auto flex flex-col gap-2">
+              <ProviderId entry={entry} />
+              <SeriesProgress serie={entry} />
+            </div>
+          ) : (
+            <ProviderId entry={entry} className="mt-auto" />
+          )}
           <div className="grid gap-2 sm:grid-cols-2">
             {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
             {entry.type === 'serie' && <SeriesDetailsLink serie={entry} />}
@@ -153,6 +154,14 @@ function LibraryCard({ entry }: { entry: Movie | Serie }) {
         </CardContent>
       </div>
     </Card>
+  )
+}
+
+function ProviderId({ entry, className }: { entry: Movie | Serie; className?: string }) {
+  return (
+    <p className={`${className ?? ''} text-xs text-muted-foreground`}>
+      {entry.provider} ID: {entry.providerId}
+    </p>
   )
 }
 
