@@ -1,3 +1,4 @@
+.agents/
 node_modules
 .git
 tmp
@@ -12,3 +13,9 @@ mise.toml
 tests/
 Dockerfile
 build/
+AGENTS.md
+CONTEXT.md
+openapi-ts.config.ts
+prettier.config.js
+README.md
+skills-lock.json
