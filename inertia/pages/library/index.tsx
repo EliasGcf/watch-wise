@@ -5,18 +5,22 @@ import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
+import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
 
 type Movie = Data.Movie
 type Serie = Data.Serie
 
 type Props = InertiaProps & {
+  query: string
   series: Serie[]
   movies: Movie[]
 }
 
-export default function LibraryIndex({ user, series, movies }: Props) {
+export default function LibraryIndex({ user, query, series, movies }: Props) {
   const isEmpty = movies.length === 0 && series.length === 0
+  const isSearching = query.length > 0
 
   return (
     <div className="flex flex-col gap-8">
@@ -49,21 +53,44 @@ export default function LibraryIndex({ user, series, movies }: Props) {
         )}
       </section>
 
+      <Form action="/app/library" method="get">
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="library-query">Search your library</FieldLabel>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                id="library-query"
+                name="q"
+                type="search"
+                defaultValue={query}
+                placeholder="Search saved movies and series"
+                className="h-11 text-base"
+              />
+              <Button type="submit" className="h-11 sm:w-auto">
+                Search
+              </Button>
+            </div>
+          </Field>
+        </FieldGroup>
+      </Form>
+
       <LibrarySection
         title="Movies"
         entries={movies}
-        emptyMessage="No movies in your library yet."
+        emptyMessage={isSearching ? 'No movies match your search.' : 'No movies in your library yet.'}
       />
       <LibrarySection
         title="Series"
         entries={series}
-        emptyMessage="No series in your library yet."
+        emptyMessage={isSearching ? 'No series match your search.' : 'No series in your library yet.'}
       />
 
       {isEmpty && (
         <Card>
           <CardContent>
-            <p className="text-muted-foreground">Your library is empty.</p>
+            <p className="text-muted-foreground">
+              {isSearching ? 'No library entries match your search.' : 'Your library is empty.'}
+            </p>
           </CardContent>
         </Card>
       )}
