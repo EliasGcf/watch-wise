@@ -1,10 +1,12 @@
 import { Form } from '@adonisjs/inertia/react'
 import dayjs from 'dayjs'
+import { LoaderCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
+import { useAddLibraryEntryMutation } from '~/hooks/use_add_library_entry_mutation'
 
 type CatalogSearchResult = {
   provider: string
@@ -98,6 +100,8 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
 
 function CatalogResultCard({ result }: { result: CatalogSearchResult }) {
   const label = result.type === 'serie' ? 'Series' : 'Movie'
+  const addLibraryEntry = useAddLibraryEntryMutation()
+  const canAddToLibrary = result.provider === 'tmdb'
 
   return (
     <Card className="grid gap-0 py-0 transition-colors hover:border-primary/30 sm:grid-cols-[9rem_1fr]">
@@ -132,14 +136,21 @@ function CatalogResultCard({ result }: { result: CatalogSearchResult }) {
           ) : (
             <p className="text-muted-foreground">No summary available.</p>
           )}
-          <Form route="app.library.store" className="mt-auto">
-            <input type="hidden" name="provider" value={result.provider} />
-            <input type="hidden" name="providerId" value={result.id} />
-            <input type="hidden" name="type" value={result.type} />
-            <Button type="submit" className="w-full">
-              Add to library
-            </Button>
-          </Form>
+          <Button
+            type="button"
+            className="mt-auto w-full"
+            disabled={!canAddToLibrary || addLibraryEntry.isPending}
+            onClick={() => {
+              if (!canAddToLibrary) return
+
+              addLibraryEntry.mutate({
+                body: { provider: 'tmdb', providerId: result.id, type: result.type },
+              })
+            }}
+          >
+            {addLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
+            {addLibraryEntry.isPending ? 'Adding...' : 'Add to library'}
+          </Button>
         </CardContent>
       </div>
     </Card>

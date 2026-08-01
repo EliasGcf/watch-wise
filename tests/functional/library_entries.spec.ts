@@ -63,6 +63,7 @@ test.group('Library entries', (group) => {
     const libraryPage = await visit('/app/library')
     await libraryPage.assertTextContains('body', 'Heat')
     await libraryPage.getByRole('button', { name: 'Remove Heat from library' }).click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No movies in your library yet.')
 
     assert.lengthOf(await Movie.query().where('userId', user.id), 0)
@@ -217,11 +218,11 @@ test.group('Library entries', (group) => {
     })
 
     const movieResponse = await client
-      .delete(`/app/library/${movie.id}`)
+      .delete(`/api/library/${movie.id}`)
       .loginAs(otherUser)
       .withCsrfToken()
     const serieResponse = await client
-      .delete(`/app/library/${serie.id}`)
+      .delete(`/api/library/${serie.id}`)
       .loginAs(otherUser)
       .withCsrfToken()
 
@@ -260,6 +261,7 @@ test.group('Library entries', (group) => {
     await browserContext.loginAs(user)
     const libraryPage = await visit('/app/library')
     await libraryPage.getByRole('button', { name: 'Remove Heat from library' }).click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No movies in your library yet.')
 
     assert.lengthOf(
@@ -298,6 +300,7 @@ test.group('Library entries', (group) => {
     await libraryPage
       .getByRole('button', { name: 'Remove Heat Vision and Jack from library' })
       .click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No series in your library yet.')
 
     assert.lengthOf(await Serie.query().where('userId', user.id), 0)
@@ -337,6 +340,7 @@ test.group('Library entries', (group) => {
     await libraryPage
       .getByRole('button', { name: 'Remove Heat Vision and Jack from library' })
       .click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No series in your library yet.')
 
     assert.lengthOf(
@@ -387,6 +391,7 @@ test.group('Library entries', (group) => {
 
     const libraryPage = await visit('/app/library')
     await libraryPage.getByRole('button', { name: 'Remove Heat from library' }).click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No movies in your library yet.')
 
     assert.lengthOf(await Movie.query().where('userId', removingUser.id), 0)
@@ -442,6 +447,7 @@ test.group('Library entries', (group) => {
     await browserContext.loginAs(removingUser)
     const libraryPage = await visit('/app/library')
     await libraryPage.getByRole('button', { name: 'Remove Heat from library' }).click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No movies in your library yet.')
 
     assert.lengthOf(
@@ -513,6 +519,7 @@ test.group('Library entries', (group) => {
     await libraryPage
       .getByRole('button', { name: 'Remove Heat Vision and Jack from library' })
       .click()
+    await libraryPage.assertTextContains('body', 'Title was removed from your library.')
     await libraryPage.assertTextContains('body', 'No series in your library yet.')
 
     assert.lengthOf(await Serie.query().where('userId', removingUser.id), 0)

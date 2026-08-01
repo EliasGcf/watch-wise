@@ -8,6 +8,8 @@ const group = router.group(() => {
 
   router
     .group(() => {
+      router.post('library', [controllers.api.Library, 'store']).as('library.store')
+      router.delete('library/:id', [controllers.api.Library, 'destroy']).as('library.destroy')
       router
         .post('library/movies/:id/watch', [controllers.api.Movies, 'watch'])
         .as('library.movies.watch')
