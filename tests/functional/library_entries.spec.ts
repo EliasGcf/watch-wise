@@ -122,6 +122,65 @@ test.group('Library entries', (group) => {
     assert.equal(page.user.watchedTime, 0)
   })
 
+  test('authenticated users can search their own library entries', async ({ assert, client }) => {
+    const user = await User.create({
+      fullName: 'Library Searcher',
+      email: 'library-searcher@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Searcher',
+      email: 'other-searcher@example.com',
+      password: 'secret123',
+    })
+    await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+    await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Severance',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('2022-02-18'),
+      summary: 'Work and life are surgically divided.',
+    })
+    await Movie.create({
+      userId: otherUser.id,
+      provider: 'tmdb',
+      providerId: 'movie-2',
+      name: 'Heat Wave',
+      bannerPath: '/movie-2.jpg',
+      posterPath: '/movie-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1991-08-13'),
+      summary: null,
+    })
+
+    const response = await client.get('/app/library?q=heat').loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.equal(page.query, 'heat')
+    assert.deepEqual(
+      page.movies.map((movie: { name: string }) => movie.name),
+      ['Heat']
+    )
+    assert.deepEqual(page.series, [])
+  })
+
   test('authenticated users cannot remove another user library entries by id', async ({
     assert,
     client,
