@@ -115,7 +115,7 @@ function LibrarySection({
 
 function LibraryCard({ entry }: { entry: Movie | Serie }) {
   return (
-    <Card className="grid gap-0 py-0 sm:grid-cols-[12rem_1fr]">
+    <Card className="grid gap-0 py-0 sm:grid-cols-[9rem_1fr]">
       <div className="bg-muted">
         {entry.posterUrl ? (
           <img
@@ -129,8 +129,8 @@ function LibraryCard({ entry }: { entry: Movie | Serie }) {
           </div>
         )}
       </div>
-      <div className="flex min-w-0 flex-col py-4">
-        <CardHeader>
+      <div className="flex min-w-0 flex-col py-3">
+        <CardHeader className="pb-2">
           <div className="flex flex-col gap-2">
             <CardTitle>{entry.name}</CardTitle>
             {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
