@@ -24,6 +24,7 @@ export default defineConfig({
   },
 
   server: {
+    allowedHosts: true,
     watch: {
       ignored: ['**/storage/**', '**/tmp/**'],
     },
