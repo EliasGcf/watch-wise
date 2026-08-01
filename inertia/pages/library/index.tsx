@@ -7,6 +7,7 @@ import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movi
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
+import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
 import { type InertiaProps } from '~/types'
 
 type Movie = Data.Movie
@@ -19,7 +20,6 @@ type Props = InertiaProps & {
 }
 
 export default function LibraryIndex({ user, query, series, movies }: Props) {
-  const isEmpty = movies.length === 0 && series.length === 0
   const isSearching = query.length > 0
 
   return (
@@ -84,16 +84,6 @@ export default function LibraryIndex({ user, query, series, movies }: Props) {
         entries={series}
         emptyMessage={isSearching ? 'No series match your search.' : 'No series in your library yet.'}
       />
-
-      {isEmpty && (
-        <Card>
-          <CardContent>
-            <p className="text-muted-foreground">
-              {isSearching ? 'No library entries match your search.' : 'Your library is empty.'}
-            </p>
-          </CardContent>
-        </Card>
-      )}
     </div>
   )
 }
@@ -160,7 +150,6 @@ function LibraryCard({ entry }: { entry: Movie | Serie }) {
         <CardHeader className="pb-2">
           <div className="flex flex-col gap-2">
             <CardTitle>{entry.name}</CardTitle>
-            {entry.type === 'movie' && entry.watched && <Badge>Watched</Badge>}
           </div>
         </CardHeader>
         <CardContent className="flex flex-1 flex-col gap-3">
@@ -171,7 +160,10 @@ function LibraryCard({ entry }: { entry: Movie | Serie }) {
               <SeriesProgress serie={entry} />
             </div>
           ) : (
-            <ProviderId entry={entry} className="mt-auto" />
+            <div className="mt-auto flex items-center justify-between gap-3">
+              <ProviderId entry={entry} />
+              <Badge className={entry.watched ? '' : 'invisible'}>Watched</Badge>
+            </div>
           )}
           <div className="grid gap-2 sm:grid-cols-2">
             {entry.type === 'movie' && <MovieWatchedForm movie={entry} />}
@@ -218,17 +210,20 @@ function SeriesDetailsLink({ serie }: { serie: Serie }) {
 }
 
 function RemoveLibraryEntryForm({ entry }: { entry: Movie | Serie }) {
+  const removeLibraryEntry = useRemoveLibraryEntryMutation()
+
   return (
-    <Form action={`/app/library/${entry.id}`} method="delete">
-      <Button
-        type="submit"
-        variant="destructive"
-        className="w-full"
-        aria-label={`Remove ${entry.name} from library`}
-      >
-        Remove from library
-      </Button>
-    </Form>
+    <Button
+      type="button"
+      variant="destructive"
+      className="w-full"
+      aria-label={`Remove ${entry.name} from library`}
+      disabled={removeLibraryEntry.isPending}
+      onClick={() => removeLibraryEntry.mutate({ params: { id: entry.id } })}
+    >
+      {removeLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
+      {removeLibraryEntry.isPending ? 'Removing...' : 'Remove from library'}
+    </Button>
   )
 }
 

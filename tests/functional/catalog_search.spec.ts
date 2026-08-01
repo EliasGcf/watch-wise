@@ -64,6 +64,8 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add to library' }).first().click()
+    await searchPage.assertTextContains('body', 'Title was added to your library.')
+    await searchPage.assertPath('/app/catalog/search')
 
     const libraryPage = await visit('/app/library')
 
@@ -94,6 +96,8 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add to library' }).nth(1).click()
+    await searchPage.assertTextContains('body', 'Title was added to your library.')
+    await searchPage.assertPath('/app/catalog/search')
 
     const libraryPage = await visit('/app/library')
 
@@ -111,8 +115,7 @@ test.group('Catalog search', (group) => {
 
   test('users cannot create duplicate library entries for the same provider title', async ({
     assert,
-    browserContext,
-    visit,
+    client,
   }) => {
     const user = await User.create({
       fullName: 'Jamie Viewer',
@@ -120,17 +123,12 @@ test.group('Catalog search', (group) => {
       password: 'secret123',
     })
 
-    await browserContext.loginAs(user)
+    const payload = { provider: 'tmdb', providerId: 'movie-1', type: 'movie' }
+    const firstResponse = await client.post('/api/library').loginAs(user).withCsrfToken().json(payload)
+    const secondResponse = await client.post('/api/library').loginAs(user).withCsrfToken().json(payload)
 
-    const firstSearchPage = await visit('/app/catalog/search?q=heat')
-    await firstSearchPage.getByRole('button', { name: 'Add to library' }).first().click()
-
-    const secondSearchPage = await visit('/app/catalog/search?q=heat')
-    await secondSearchPage.getByRole('button', { name: 'Add to library' }).first().click()
-
-    const libraryPage = await visit('/app/library')
-
-    await libraryPage.assertTextContains('body', 'Heat')
+    firstResponse.assertCreated()
+    secondResponse.assertConflict()
     assert.lengthOf(await user.related('movies').query().where('providerId', 'movie-1'), 1)
   })
 
@@ -164,6 +162,7 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add to library' }).first().click()
+    await searchPage.assertTextContains('body', 'Title was added to your library.')
 
     assert.lengthOf(await existingUser.related('movies').query().where('providerId', 'movie-1'), 1)
     assert.lengthOf(await addingUser.related('movies').query().where('providerId', 'movie-1'), 1)
@@ -199,6 +198,7 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add to library' }).nth(1).click()
+    await searchPage.assertTextContains('body', 'Title was added to your library.')
 
     assert.lengthOf(await existingUser.related('series').query().where('providerId', 'series-1'), 1)
     assert.lengthOf(await addingUser.related('series').query().where('providerId', 'series-1'), 1)
@@ -219,6 +219,8 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add to library' }).nth(2).click()
+    await searchPage.assertTextContains('body', 'Title was added to your library.')
+    await searchPage.assertPath('/app/catalog/search')
 
     const libraryPage = await visit('/app/library')
 

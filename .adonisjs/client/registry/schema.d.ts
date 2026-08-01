@@ -19,6 +19,30 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'api.library.store': {
+    methods: ["POST"]
+    pattern: '/api/library'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'api.library.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/library/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['destroy']>>>
+    }
+  }
   'api.library.movies.watch': {
     methods: ["POST"]
     pattern: '/api/library/movies/:id/watch'
@@ -199,18 +223,6 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
     }
   }
-  'app.library.store': {
-    methods: ["POST"]
-    pattern: '/app/library'
-    types: {
-      body: ExtractBody<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
-      paramsTuple: []
-      params: {}
-      query: ExtractQuery<InferInput<(typeof import('#validators/library_entry').addLibraryEntryValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
-    }
-  }
   'app.library.series.show': {
     methods: ["GET","HEAD"]
     pattern: '/app/library/series/:id'
@@ -221,18 +233,6 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
-    }
-  }
-  'app.library.destroy': {
-    methods: ["DELETE"]
-    pattern: '/app/library/:id'
-    types: {
-      body: {}
-      paramsTuple: [ParamValue]
-      params: { id: ParamValue }
-      query: {}
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['destroy']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['destroy']>>>
     }
   }
 }
