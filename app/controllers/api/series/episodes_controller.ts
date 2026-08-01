@@ -18,7 +18,7 @@ export default class EpisodesController {
     return serialize(CatalogEpisodeTransformer.transform(episodes, serie.watchedEpisodes))
   }
 
-  async watch({ auth, params, response, session, serialize }: HttpContext) {
+  async watch({ auth, params, response, serialize }: HttpContext) {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
     const episode = await catalog.findEpisode(
       serie.providerId,
@@ -27,29 +27,25 @@ export default class EpisodesController {
     )
 
     if (!episode) {
-      session.flash('error', 'Episode could not be found in the catalog.')
       return response.notFound({ error: 'Episode could not be found in the catalog.' })
     }
 
     if (!episode.releasedAt || DateTime.fromISO(episode.releasedAt) > DateTime.now()) {
-      session.flash('error', `${episode.name} has not been released yet.`)
       return response.unprocessableEntity({ error: `${episode.name} has not been released yet.` })
     }
 
     await serie.watchEpisode(episode)
     await serie.load('watchedEpisodes')
 
-    session.flash('success', `${episode.name} was marked as watched.`)
     return serialize(SerieTransformer.transform(serie))
   }
 
-  async unwatch({ auth, params, session, serialize }: HttpContext) {
+  async unwatch({ auth, params, serialize }: HttpContext) {
     const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
 
     await serie.unwatchEpisode(Number(params.season), Number(params.episode))
     await serie.load('watchedEpisodes')
 
-    session.flash('success', 'Episode is no longer marked as watched.')
     return serialize(SerieTransformer.transform(serie))
   }
 }

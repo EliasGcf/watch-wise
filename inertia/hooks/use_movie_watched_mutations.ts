@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { api } from '~/client'
 
 async function refreshLibrary(queryClient: ReturnType<typeof useQueryClient>) {
-  router.reload({ only: ['user', 'movies'] })
+  await new Promise<void>((resolve) => router.reload({ only: ['user', 'movies'], onFinish: () => resolve() }))
   await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
 }
 
