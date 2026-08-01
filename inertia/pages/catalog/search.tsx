@@ -37,7 +37,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
           </p>
         </div>
 
-        <form action="/app/catalog/search" method="get">
+        <Form action="/app/catalog/search" method="get">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="catalog-query">Search the catalog</FieldLabel>
@@ -56,7 +56,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
               </div>
             </Field>
           </FieldGroup>
-        </form>
+        </Form>
       </section>
 
       {limitation && (
