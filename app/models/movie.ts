@@ -25,7 +25,8 @@ export default class Movie extends LibraryItem {
   }
 
   async unwatch(this: Movie) {
-    await this.watched.delete()
+    const watched = await this.related('watched').query().where('userId', this.userId).first()
+    await watched?.delete()
   }
 
   @beforeCreate()
