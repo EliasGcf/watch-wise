@@ -5,7 +5,11 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class SeriesController {
   async index({ auth, inertia, request }: HttpContext) {
     const query = String(request.input('q', '')).trim()
-    const series = await Serie.search({ name: query }).where('userId', auth.user!.id)
+
+    const series = await auth
+      .user!.related('series')
+      .query()
+      .apply((scopes) => scopes.search({ name: query }))
 
     return inertia.render('library/series/index', {
       query,
