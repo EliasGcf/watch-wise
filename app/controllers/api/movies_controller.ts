@@ -16,7 +16,6 @@ export default class MoviesController {
     }
 
     await movie.watch(catalogMovie.duration)
-    await movie.load('watched')
     return serialize(MovieTransformer.transform(movie))
   }
 
