@@ -8,7 +8,7 @@ export default class LibraryController {
   async index({ inertia, auth, request }: HttpContext) {
     const query = String(request.input('q', '')).trim()
 
-    const [series, movies, seriesCount, moviesCount] = await Promise.all([
+    const [series, movies, [seriesCount], [moviesCount]] = await Promise.all([
       Serie.search({ name: query }).where('userId', auth.user!.id).limit(4),
       Movie.search({ name: query }).where('userId', auth.user!.id).preload('watched').limit(4),
       Serie.search({ name: query }).where('userId', auth.user!.id).count('* as total'),
@@ -19,8 +19,8 @@ export default class LibraryController {
       query,
       series: SerieTransformer.transform(series),
       movies: MovieTransformer.transform(movies),
-      seriesCount: Number(seriesCount[0].$extras.total),
-      moviesCount: Number(moviesCount[0].$extras.total),
+      seriesCount: Number(seriesCount.$extras.total),
+      moviesCount: Number(moviesCount.$extras.total),
     })
   }
 }
