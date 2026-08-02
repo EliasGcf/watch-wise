@@ -223,6 +223,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
     }
   }
+  'app.library.movies.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library/movies'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['index']>>>
+    }
+  }
+  'app.library.series.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/library/series'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>>
+    }
+  }
   'app.library.series.show': {
     methods: ["GET","HEAD"]
     pattern: '/app/library/series/:id'

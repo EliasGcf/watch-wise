@@ -40,7 +40,11 @@ export interface ApiDefinition {
     }
     library: {
       index: typeof routes['app.library.index']
+      movies: {
+        index: typeof routes['app.library.movies.index']
+      }
       series: {
+        index: typeof routes['app.library.series.index']
         show: typeof routes['app.library.series.show']
       }
     }

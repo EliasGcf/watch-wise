@@ -16,6 +16,7 @@ export const controllers = {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
     Home: () => import('#controllers/web/home_controller'),
     Library: () => import('#controllers/web/library_controller'),
+    Movies: () => import('#controllers/web/movies_controller'),
     NewAccount: () => import('#controllers/web/new_account_controller'),
     Series: () => import('#controllers/web/series_controller'),
     Session: () => import('#controllers/web/session_controller'),

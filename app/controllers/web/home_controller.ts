@@ -1,12 +1,13 @@
-import LibraryItem from '#models/library_item'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HomeController {
   async index({ auth, inertia }: HttpContext) {
+    const user = auth.user!
+
     const [moviesCount, seriesCount, recentLibraryEntries] = await Promise.all([
-      LibraryItem.query().where('userId', auth.user!.id).where('type', 'movie').count('* as total'),
-      LibraryItem.query().where('userId', auth.user!.id).where('type', 'serie').count('* as total'),
-      LibraryItem.query().where('userId', auth.user!.id).orderBy('createdAt', 'desc').limit(3),
+      user.related('movies').query().count('* as total'),
+      user.related('series').query().count('* as total'),
+      user.related('libraryEntries').query().orderBy('createdAt', 'desc').limit(3),
     ])
 
     return inertia.render('home', {

@@ -1,7 +1,7 @@
 import { LibraryEntrySchema } from '#database/schema'
 import { events } from '#generated/events'
 import { catalog } from '#services/catalog_provider'
-import { beforeDelete, beforeSave, computed } from '@adonisjs/lucid/orm'
+import { beforeDelete, beforeSave, computed, scope } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export default class LibraryItem extends LibraryEntrySchema {
@@ -25,6 +25,12 @@ export default class LibraryItem extends LibraryEntrySchema {
 
     return new URL(this.posterPath, catalog.config().baseImageUrl).toString()
   }
+
+  static search = scope((query, params: { name: string }) => {
+    const name = params.name.trim().toLowerCase()
+
+    if (name) query.whereRaw('lower(name) like ?', [`%${name}%`])
+  })
 
   @beforeSave()
   static fixPaths(libraryItem: LibraryItem) {

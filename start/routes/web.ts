@@ -19,6 +19,8 @@ const group = router.group(() => {
       router.post('logout', [controllers.web.Session, 'destroy'])
       router.get('catalog/search', [controllers.web.CatalogSearch, 'index']).as('catalog.search')
       router.get('library', [controllers.web.Library, 'index'])
+      router.get('library/movies', [controllers.web.Movies, 'index']).as('library.movies.index')
+      router.get('library/series', [controllers.web.Series, 'index']).as('library.series.index')
       router.get('library/series/:id', [controllers.web.Series, 'show']).as('library.series.show')
     })
     .use(middleware.auth())

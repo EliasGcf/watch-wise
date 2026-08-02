@@ -22,6 +22,8 @@ export type ScannedRoutes = {
     'app.session.destroy': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.movies.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
@@ -32,6 +34,8 @@ export type ScannedRoutes = {
     'app.home': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.movies.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
@@ -42,6 +46,8 @@ export type ScannedRoutes = {
     'app.home': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
+    'app.library.movies.index': { paramsTuple?: []; params?: {} }
+    'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
