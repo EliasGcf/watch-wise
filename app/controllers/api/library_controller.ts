@@ -1,6 +1,3 @@
-import LibraryItem from '#models/library_item'
-import Movie from '#models/movie'
-import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -10,9 +7,10 @@ import { DateTime } from 'luxon'
 export default class LibraryController {
   async store({ auth, request, response }: HttpContext) {
     const payload = await request.validateUsing(addLibraryEntryValidator)
-    const EntryModel = payload.type === 'movie' ? Movie : Serie
-    const existingEntry = await EntryModel.query()
-      .where('userId', auth.user!.id)
+    const user = auth.user!
+    const relation = payload.type === 'movie' ? user.related('movies') : user.related('series')
+    const existingEntry = await relation
+      .query()
       .where('provider', payload.provider)
       .where('providerId', payload.providerId)
       .first()
@@ -27,8 +25,7 @@ export default class LibraryController {
       return response.notFound({ error: 'Catalog title could not be found.' })
     }
 
-    const entry = await EntryModel.create({
-      userId: auth.user!.id,
+    const entry = await relation.create({
       provider: item.provider,
       providerId: item.id,
       name: item.name,
@@ -42,7 +39,11 @@ export default class LibraryController {
   }
 
   async destroy({ auth, params, response }: HttpContext) {
-    const entry = await LibraryItem.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const entry = await auth
+      .user!.related('libraryEntries')
+      .query()
+      .where('id', params.id)
+      .firstOrFail()
 
     await db.transaction(async (trx) => {
       entry.useTransaction(trx)

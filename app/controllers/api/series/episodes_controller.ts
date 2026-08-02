@@ -1,4 +1,3 @@
-import Serie from '#models/serie'
 import { catalog } from '#services/catalog_provider'
 import CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
@@ -7,9 +6,11 @@ import { DateTime } from 'luxon'
 
 export default class EpisodesController {
   async index({ auth, params, serialize }: HttpContext) {
-    const serie = await Serie.query()
+    const serie = await auth
+      .user!
+      .related('series')
+      .query()
       .where('id', params.id)
-      .where('userId', auth.user!.id)
       .preload('watchedEpisodes', (query) => query.where('season', Number(params.season)))
       .firstOrFail()
 
@@ -19,7 +20,7 @@ export default class EpisodesController {
   }
 
   async watch({ auth, params, response, serialize }: HttpContext) {
-    const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const serie = await auth.user!.related('series').query().where('id', params.id).firstOrFail()
     const episode = await catalog.findEpisode(
       serie.providerId,
       Number(params.season),
@@ -41,7 +42,7 @@ export default class EpisodesController {
   }
 
   async unwatch({ auth, params, serialize }: HttpContext) {
-    const serie = await Serie.findByOrFail({ id: params.id, userId: auth.user!.id })
+    const serie = await auth.user!.related('series').query().where('id', params.id).firstOrFail()
 
     await serie.unwatchEpisode(Number(params.season), Number(params.episode))
     await serie.load('watchedEpisodes')

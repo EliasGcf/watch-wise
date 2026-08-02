@@ -5,7 +5,8 @@ export default class MoviesController {
   async index({ auth, inertia, request }: HttpContext) {
     const query = String(request.input('q', '')).trim()
     const movies = await auth
-      .user!.related('movies')
+      .user!
+      .related('movies')
       .query()
       .apply((scopes) => scopes.search({ name: query }))
       .preload('watched')

@@ -1,4 +1,3 @@
-import Serie from '#models/serie'
 import SerieTransformer from '#transformers/serie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -7,7 +6,8 @@ export default class SeriesController {
     const query = String(request.input('q', '')).trim()
 
     const series = await auth
-      .user!.related('series')
+      .user!
+      .related('series')
       .query()
       .apply((scopes) => scopes.search({ name: query }))
 
@@ -18,9 +18,11 @@ export default class SeriesController {
   }
 
   async show({ auth, inertia, params }: HttpContext) {
-    const serie = await Serie.query()
+    const serie = await auth
+      .user!
+      .related('series')
+      .query()
       .where('id', params.id)
-      .where('userId', auth.user!.id)
       .preload('watchedEpisodes')
       .firstOrFail()
 
