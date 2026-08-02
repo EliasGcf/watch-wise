@@ -114,6 +114,18 @@ const routes = {
     tokens: [{"old":"/app/library","type":0,"val":"app","end":""},{"old":"/app/library","type":0,"val":"library","end":""}],
     types: placeholder as Registry['app.library.index']['types'],
   },
+  'app.library.movies.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/library/movies',
+    tokens: [{"old":"/app/library/movies","type":0,"val":"app","end":""},{"old":"/app/library/movies","type":0,"val":"library","end":""},{"old":"/app/library/movies","type":0,"val":"movies","end":""}],
+    types: placeholder as Registry['app.library.movies.index']['types'],
+  },
+  'app.library.series.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/library/series',
+    tokens: [{"old":"/app/library/series","type":0,"val":"app","end":""},{"old":"/app/library/series","type":0,"val":"library","end":""},{"old":"/app/library/series","type":0,"val":"series","end":""}],
+    types: placeholder as Registry['app.library.series.index']['types'],
+  },
   'app.library.series.show': {
     methods: ["GET","HEAD"],
     pattern: '/app/library/series/:id',

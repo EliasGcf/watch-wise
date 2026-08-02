@@ -36,6 +36,6 @@ export default class Movie extends LibraryItem {
   @beforeFind()
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Movie>) {
-    query.where('type', 'movie').preload('watched').orderBy('createdAt', 'desc')
+    query.where('type', 'movie').orderBy('createdAt', 'desc')
   }
 }

@@ -182,6 +182,176 @@ test.group('Library entries', (group) => {
     assert.deepEqual(page.series, [])
   })
 
+  test('library summary limits movies and series to four entries with total counts', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Library Limiter',
+      email: 'library-limiter@example.com',
+      password: 'secret123',
+    })
+
+    for (let index = 1; index <= 5; index++) {
+      await Movie.create({
+        userId: user.id,
+        provider: 'tmdb',
+        providerId: `movie-${index}`,
+        name: `Movie ${index}`,
+        bannerPath: `/movie-${index}.jpg`,
+        posterPath: `/movie-${index}-poster.jpg`,
+        releasedAt: DateTime.fromISO('1995-12-15'),
+        summary: null,
+      })
+      await Serie.create({
+        userId: user.id,
+        provider: `tmdb-${index}`,
+        providerId: 'series-1',
+        name: `Series ${index}`,
+        bannerPath: `/series-${index}.jpg`,
+        posterPath: `/series-${index}-poster.jpg`,
+        releasedAt: DateTime.fromISO('2022-02-18'),
+        summary: null,
+      })
+    }
+
+    const response = await client.get('/app/library').loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.lengthOf(page.movies, 4)
+    assert.lengthOf(page.series, 4)
+    assert.equal(page.moviesCount, 5)
+    assert.equal(page.seriesCount, 5)
+  })
+
+  test('authenticated users can search their dedicated movie library page', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Movie Searcher',
+      email: 'movie-searcher@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Movie Searcher',
+      email: 'other-movie-searcher@example.com',
+      password: 'secret123',
+    })
+    await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: null,
+    })
+    await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-2',
+      name: 'Thief',
+      bannerPath: '/movie-2.jpg',
+      posterPath: '/movie-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1981-03-27'),
+      summary: null,
+    })
+    await Movie.create({
+      userId: otherUser.id,
+      provider: 'tmdb',
+      providerId: 'movie-3',
+      name: 'Heat Wave',
+      bannerPath: '/movie-3.jpg',
+      posterPath: '/movie-3-poster.jpg',
+      releasedAt: DateTime.fromISO('1991-08-13'),
+      summary: null,
+    })
+
+    const response = await client.get('/app/library/movies?q=heat').loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.equal(page.query, 'heat')
+    assert.deepEqual(
+      page.movies.map((movie: { name: string }) => movie.name),
+      ['Heat']
+    )
+  })
+
+  test('authenticated users can search their dedicated series library page', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Series Searcher',
+      email: 'series-searcher@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Series Searcher',
+      email: 'other-series-searcher@example.com',
+      password: 'secret123',
+    })
+    await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Severance',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('2022-02-18'),
+      summary: null,
+    })
+    await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'The Bear',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('2022-06-23'),
+      summary: null,
+    })
+    await Serie.create({
+      userId: otherUser.id,
+      provider: 'tmdb',
+      providerId: 'series-3',
+      name: 'Severance Room',
+      bannerPath: '/series-3.jpg',
+      posterPath: '/series-3-poster.jpg',
+      releasedAt: DateTime.fromISO('2020-01-01'),
+      summary: null,
+    })
+
+    const response = await client.get('/app/library/series?q=severance').loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.equal(page.query, 'severance')
+    assert.deepEqual(
+      page.series.map((serie: { name: string }) => serie.name),
+      ['Severance']
+    )
+  })
+
   test('authenticated users cannot remove another user library entries by id', async ({
     assert,
     client,

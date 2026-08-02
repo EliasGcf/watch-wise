@@ -10,9 +10,7 @@ export function useRemoveLibraryEntryMutation() {
     api.api.library.destroy.mutationOptions({
       onSuccess: async () => {
         toast.success('Title was removed from your library.')
-        await new Promise<void>((resolve) =>
-          router.reload({ only: ['user', 'movies', 'series'], onFinish: () => resolve() })
-        )
+        await new Promise<void>((resolve) => router.reload({ onFinish: () => resolve() }))
         await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
       },
       onError: () => toast.error('Title could not be removed from your library.'),

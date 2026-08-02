@@ -20,5 +20,8 @@ declare module '@adonisjs/inertia/types' {
     'home': ExtractProps<(typeof import('../../inertia/pages/home.tsx'))['default']>
     'library/index': ExtractProps<(typeof import('../../inertia/pages/library/index.tsx'))['default']>
     'library/series/show': ExtractProps<(typeof import('../../inertia/pages/library/series/show.tsx'))['default']>
+    'library/components/library_cards': ExtractProps<(typeof import('../../inertia/pages/library/components/library_cards.tsx'))['default']>
+    'library/movies': ExtractProps<(typeof import('../../inertia/pages/library/movies.tsx'))['default']>
+    'library/series/index': ExtractProps<(typeof import('../../inertia/pages/library/series/index.tsx'))['default']>
   }
 }
