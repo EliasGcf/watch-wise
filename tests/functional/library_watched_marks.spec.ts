@@ -35,9 +35,11 @@ test.group('Library movie watched records', (group) => {
     const libraryPage = await visit('/app/library')
     await delayMovieWatchApi(libraryPage)
     const markButton = libraryPage.getByRole('button', { name: 'Mark Heat as watched' })
+    const markedResponse = libraryPage.waitForResponse('**/api/library/movies/*/watch')
     await markButton.click()
     await libraryPage.assertDisabled(markButton)
     await libraryPage.assertTextContains('body', 'Marking...')
+    await markedResponse
 
     const markedPage = await visit('/app/library')
     await markedPage.assertTextContains('body', 'Watched')
@@ -63,9 +65,11 @@ test.group('Library movie watched records', (group) => {
 
     await delayMovieWatchApi(markedPage)
     const unmarkButton = markedPage.getByRole('button', { name: 'Unmark Heat as watched' })
+    const unmarkedResponse = markedPage.waitForResponse('**/api/library/movies/*/watch')
     await unmarkButton.click()
     await markedPage.assertDisabled(unmarkButton)
     await markedPage.assertTextContains('body', 'Unmarking...')
+    await unmarkedResponse
     await markedPage.assertTextContains('body', 'Mark as watched')
 
     assert.lengthOf(
