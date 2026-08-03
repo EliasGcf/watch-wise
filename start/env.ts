@@ -28,6 +28,9 @@ export default await Env.create(new URL('../', import.meta.url), {
   // Database
   DATABASE_NAME: Env.schema.string.optional(),
 
+  // Cache
+  CACHE_ENABLED: Env.schema.boolean.optional(),
+
   // Catalog Provider
   CATALOG_PROVIDER_DRIVER: Env.schema.enum(['fake', 'tmdb'] as const),
   TMDB_ACCESS_TOKEN: Env.schema.string.optionalWhen(process.env.CATALOG_PROVIDER_DRIVER === 'fake'),

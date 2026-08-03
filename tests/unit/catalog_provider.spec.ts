@@ -187,6 +187,45 @@ test.group('Catalog provider', (group) => {
     assert.deepEqual(await driver.search('heat'), await driver.search('heat'))
     assert.equal(calls, 1)
   })
+
+  test('bypasses TMDB cache when disabled', async ({ assert }) => {
+    let calls = 0
+    const tmdb = new TmdbSdk({
+      client: createClient({
+        baseUrl: 'https://api.themoviedb.org',
+        fetch: async () => {
+          calls += 1
+
+          return new Response(
+            JSON.stringify({
+              results: [
+                {
+                  id: calls,
+                  media_type: 'movie',
+                  title: 'Heat',
+                  release_date: '1995-12-15',
+                },
+              ],
+            }),
+            { status: 200, headers: { 'content-type': 'application/json' } }
+          )
+        },
+      }),
+    })
+    const driver = new TmdbCatalogProviderDriver(
+      {
+        baseImageUrl: 'https://image.tmdb.org/t/p/original/',
+        accessToken: 'test-token',
+        cacheEnabled: false,
+      },
+      tmdb
+    )
+
+    await driver.search('heat')
+    await driver.search('heat')
+
+    assert.equal(calls, 2)
+  })
 })
 
 function makeTmdbSdk(response: Response) {

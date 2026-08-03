@@ -31,6 +31,8 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
   }
 
   private async getOrSet<T>(key: string, factory: () => Promise<T>) {
+    if (this.config.cacheEnabled === false) return factory()
+
     try {
       return await this.cache.getOrSet({ key, ttl: cacheTtl, factory })
     } catch (error) {
