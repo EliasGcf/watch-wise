@@ -3,9 +3,14 @@ import { TmdbSdk } from '#generated/tmdb/sdk.gen'
 import FakeCatalogProviderDriver from '#providers/catalog/drivers/fake_driver'
 import TmdbCatalogProviderDriver from '#providers/catalog/drivers/tmdb_driver'
 import { CatalogProviderError } from '#services/catalog_provider'
+import cache from '@adonisjs/cache/services/main'
 import { test } from '@japa/runner'
 
-test.group('Catalog provider', () => {
+test.group('Catalog provider', (group) => {
+  group.each.setup(() => {
+    return () => cache.namespace('tmdb').clear()
+  })
+
   test('maps TMDB multi search to movie and series titles only', async ({ assert }) => {
     const tmdb = makeTmdbSdk(
       new Response(
@@ -148,6 +153,78 @@ test.group('Catalog provider', () => {
         summary: 'A professional thief and a relentless detective collide.',
       }
     )
+  })
+
+  test('caches TMDB search results by query', async ({ assert }) => {
+    let calls = 0
+    const tmdb = new TmdbSdk({
+      client: createClient({
+        baseUrl: 'https://api.themoviedb.org',
+        fetch: async () => {
+          calls += 1
+
+          return new Response(
+            JSON.stringify({
+              results: [
+                {
+                  id: calls,
+                  media_type: 'movie',
+                  title: 'Heat',
+                  release_date: '1995-12-15',
+                },
+              ],
+            }),
+            { status: 200, headers: { 'content-type': 'application/json' } }
+          )
+        },
+      }),
+    })
+    const driver = new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+      tmdb
+    )
+
+    assert.deepEqual(await driver.search('heat'), await driver.search('heat'))
+    assert.equal(calls, 1)
+  })
+
+  test('bypasses TMDB cache when disabled', async ({ assert }) => {
+    let calls = 0
+    const tmdb = new TmdbSdk({
+      client: createClient({
+        baseUrl: 'https://api.themoviedb.org',
+        fetch: async () => {
+          calls += 1
+
+          return new Response(
+            JSON.stringify({
+              results: [
+                {
+                  id: calls,
+                  media_type: 'movie',
+                  title: 'Heat',
+                  release_date: '1995-12-15',
+                },
+              ],
+            }),
+            { status: 200, headers: { 'content-type': 'application/json' } }
+          )
+        },
+      }),
+    })
+    const driver = new TmdbCatalogProviderDriver(
+      {
+        baseImageUrl: 'https://image.tmdb.org/t/p/original/',
+        accessToken: 'test-token',
+        cacheEnabled: false,
+      },
+      tmdb
+    )
+
+    await driver.search('heat')
+    await driver.search('heat')
+
+    assert.equal(calls, 2)
   })
 })
 

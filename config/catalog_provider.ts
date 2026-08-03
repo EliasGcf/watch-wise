@@ -11,6 +11,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
     tmdb: {
       baseImageUrl: 'https://image.tmdb.org/t/p/original/',
       accessToken: env.get('TMDB_ACCESS_TOKEN'),
+      cacheEnabled: env.get('CACHE_ENABLED', true),
     },
   },
 }

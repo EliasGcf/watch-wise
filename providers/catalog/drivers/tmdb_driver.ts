@@ -1,5 +1,6 @@
 import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
+import cache from '@adonisjs/cache/services/main'
 import type {
   Episode,
   CatalogProvider,
@@ -12,7 +13,11 @@ import type {
 } from '#providers/catalog/types'
 import { CatalogProviderError } from '#providers/catalog/types'
 
+const cacheTtl = '24h'
+
 export default class TmdbCatalogProviderDriver implements CatalogProvider {
+  private namespacedCache?: ReturnType<typeof cache.namespace>
+
   constructor(
     private config: TmdbCatalogProviderConfig,
     private tmdb: TmdbSdk = new TmdbSdk()
@@ -21,7 +26,57 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     tmdbClient.setConfig({ headers: { Authorization: `Bearer ${this.config.accessToken}` } })
   }
 
+  private get cache() {
+    return (this.namespacedCache ??= cache.namespace('tmdb'))
+  }
+
+  private async getOrSet<T>(key: string, factory: () => Promise<T>) {
+    if (this.config.cacheEnabled === false) return factory()
+
+    try {
+      return await this.cache.getOrSet({ key, ttl: cacheTtl, factory })
+    } catch (error) {
+      if (error instanceof Error && error.cause instanceof CatalogProviderError) {
+        throw error.cause
+      }
+
+      throw error
+    }
+  }
+
   async search(query: string): Promise<CatalogSearchResult[]> {
+    return this.getOrSet(`search:${query}`, () => this.fetchSearch(query))
+  }
+
+  async find(type: ItemType, providerId: string): Promise<FindResult | null> {
+    return this.getOrSet(`find:${type}:${providerId}`, async () => {
+      if (type === 'movie') return this.findMovieById(providerId)
+
+      return this.findSerieById(providerId)
+    })
+  }
+
+  async findMovieById(providerId: string): Promise<Movie | null> {
+    return this.getOrSet(`findMovieById:${providerId}`, () => this.fetchMovieById(providerId))
+  }
+
+  async findSerieById(providerId: string): Promise<Serie | null> {
+    return this.getOrSet(`findSerieById:${providerId}`, () => this.fetchSerieById(providerId))
+  }
+
+  async episodes(providerId: string, season: number): Promise<Episode[]> {
+    return this.getOrSet(`episodes:${providerId}:${season}`, () =>
+      this.fetchEpisodes(providerId, season)
+    )
+  }
+
+  async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
+    return this.getOrSet(`findEpisode:${serieId}:${season}:${episode}`, () =>
+      this.fetchEpisode(serieId, season, episode)
+    )
+  }
+
+  private async fetchSearch(query: string): Promise<CatalogSearchResult[]> {
     const response = await this.tmdb.search.multi({
       throwOnError: false,
       query: {
@@ -64,13 +119,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     })
   }
 
-  async find(type: ItemType, providerId: string): Promise<FindResult | null> {
-    if (type === 'movie') return this.findMovieById(providerId)
-
-    return this.findSerieById(providerId)
-  }
-
-  async findMovieById(providerId: string): Promise<Movie | null> {
+  private async fetchMovieById(providerId: string): Promise<Movie | null> {
     const response = await this.tmdb.movie.details({
       throwOnError: false,
       path: { movie_id: Number(providerId) },
@@ -101,7 +150,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
   }
 
-  async findSerieById(providerId: string): Promise<Serie | null> {
+  private async fetchSerieById(providerId: string): Promise<Serie | null> {
     const response = await this.tmdb.tv.series.details({
       throwOnError: false,
       path: { series_id: Number(providerId) },
@@ -148,7 +197,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
   }
 
-  async episodes(providerId: string, season: number): Promise<Episode[]> {
+  private async fetchEpisodes(providerId: string, season: number): Promise<Episode[]> {
     const response = await this.tmdb.tv.season.details({
       throwOnError: false,
       path: { series_id: Number(providerId), season_number: season },
@@ -187,7 +236,11 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     })
   }
 
-  async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
+  private async fetchEpisode(
+    serieId: string,
+    season: number,
+    episode: number
+  ): Promise<Episode | null> {
     const response = await this.tmdb.tv.episode.details({
       throwOnError: false,
       path: { series_id: Number(serieId), season_number: season, episode_number: episode },

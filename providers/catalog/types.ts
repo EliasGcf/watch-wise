@@ -61,6 +61,7 @@ export class CatalogProviderError extends Error {}
 export type TmdbCatalogProviderConfig = {
   baseImageUrl: `${string}/`
   accessToken?: string
+  cacheEnabled?: boolean
 }
 
 export type FakeCatalogProviderConfig = {
