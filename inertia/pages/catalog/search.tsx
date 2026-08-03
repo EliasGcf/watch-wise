@@ -118,7 +118,9 @@ function CatalogResultCard({ result }: { result: CatalogSearchResult }) {
           </div>
         )}
         <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-background/95 via-background/70 to-transparent p-3 pt-10 text-xs">
-          <span className="rounded-full bg-background/90 px-2 py-1 font-medium shadow-sm">{label}</span>
+          <span className="rounded-full bg-background/90 px-2 py-1 font-medium shadow-sm">
+            {label}
+          </span>
           {result.releasedAt && (
             <span className="rounded-full bg-background/90 px-2 py-1 font-medium shadow-sm">
               {dayjs(result.releasedAt).year()}

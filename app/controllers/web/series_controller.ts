@@ -6,8 +6,7 @@ export default class SeriesController {
     const query = String(request.input('q', '')).trim()
 
     const series = await auth
-      .user!
-      .related('series')
+      .user!.related('series')
       .query()
       .apply((scopes) => scopes.search({ name: query }))
 
@@ -19,8 +18,7 @@ export default class SeriesController {
 
   async show({ auth, inertia, params }: HttpContext) {
     const serie = await auth
-      .user!
-      .related('series')
+      .user!.related('series')
       .query()
       .where('id', params.id)
       .preload('watchedEpisodes')

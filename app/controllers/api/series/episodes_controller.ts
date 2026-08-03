@@ -7,8 +7,7 @@ import { DateTime } from 'luxon'
 export default class EpisodesController {
   async index({ auth, params, serialize }: HttpContext) {
     const serie = await auth
-      .user!
-      .related('series')
+      .user!.related('series')
       .query()
       .where('id', params.id)
       .preload('watchedEpisodes', (query) => query.where('season', Number(params.season)))

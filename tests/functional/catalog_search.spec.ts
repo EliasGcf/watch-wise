@@ -124,8 +124,16 @@ test.group('Catalog search', (group) => {
     })
 
     const payload = { provider: 'tmdb', providerId: 'movie-1', type: 'movie' }
-    const firstResponse = await client.post('/api/library').loginAs(user).withCsrfToken().json(payload)
-    const secondResponse = await client.post('/api/library').loginAs(user).withCsrfToken().json(payload)
+    const firstResponse = await client
+      .post('/api/library')
+      .loginAs(user)
+      .withCsrfToken()
+      .json(payload)
+    const secondResponse = await client
+      .post('/api/library')
+      .loginAs(user)
+      .withCsrfToken()
+      .json(payload)
 
     firstResponse.assertCreated()
     secondResponse.assertConflict()

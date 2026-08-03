@@ -3,7 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '~/client'
 
 async function refreshSeries(queryClient: ReturnType<typeof useQueryClient>) {
-  await new Promise<void>((resolve) => router.reload({ only: ['serie'], onFinish: () => resolve() }))
+  await new Promise<void>((resolve) =>
+    router.reload({ only: ['serie'], onFinish: () => resolve() })
+  )
   await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
 }
 
