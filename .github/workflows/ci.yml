@@ -16,6 +16,8 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
+      - run: bunx playwright install --with-deps chromium
+
       - parallel:
           - name: Lint
             run: bun run lint
