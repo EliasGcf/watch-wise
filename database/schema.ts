@@ -7,6 +7,17 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class CacheSchema extends BaseModel {
+  static $columns = ['expiresAt', 'key', 'value'] as const
+  $columns = CacheSchema.$columns
+  @column.dateTime()
+  declare expiresAt: DateTime | null
+  @column({ isPrimary: true })
+  declare key: string
+  @column()
+  declare value: string | null
+}
+
 export class LibraryEntrySchema extends BaseModel {
   static $columns = [
     'bannerPath',
