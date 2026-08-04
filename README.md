@@ -35,6 +35,22 @@ cp .env.example .env
 
 The `.env.example` file starts with the fake catalog provider only as a safe default. For development and real execution, use TMDB instead.
 
+Required environment variables from `start/env.ts`:
+
+| Variable                  | Required when                            |
+| ------------------------- | ---------------------------------------- |
+| `NODE_ENV`                | Always                                   |
+| `PORT`                    | Always                                   |
+| `HOST`                    | Always                                   |
+| `LOG_LEVEL`               | Always                                   |
+| `APP_KEY`                 | Always                                   |
+| `APP_URL`                 | Always                                   |
+| `SESSION_DRIVER`          | Always                                   |
+| `CATALOG_PROVIDER_DRIVER` | Always                                   |
+| `TMDB_ACCESS_TOKEN`       | Only when `CATALOG_PROVIDER_DRIVER=tmdb` |
+
+`DATABASE_NAME` and `CACHE_ENABLED` are optional; the app has defaults when they are not set.
+
 Prepare the database:
 
 ```bash
@@ -63,6 +79,18 @@ The fake provider is intended for tests and controlled scenarios only:
 ```env
 CATALOG_PROVIDER_DRIVER=fake
 ```
+
+## Docker Environment
+
+The Docker image provides defaults for `NODE_ENV`, `HOST`, `PORT`, `LOG_LEVEL`, `APP_URL`, `SESSION_DRIVER`, `DATABASE_NAME`, and `CATALOG_PROVIDER_DRIVER`. The Docker default catalog provider is TMDB, and the default database path is `data/db.sqlite3`.
+
+You still need to pass secrets and provider credentials at runtime:
+
+```bash
+docker run -p 3333:3333 -e APP_KEY=your_app_key -e TMDB_ACCESS_TOKEN=your_token watch-wise
+```
+
+Any Docker default can be overridden with `-e`, for example `-e PORT=8080`.
 
 ## Useful Commands
 
