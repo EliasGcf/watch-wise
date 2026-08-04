@@ -4,6 +4,8 @@ Watch Wise is a personal watch-tracking app for movies and series. It lets a use
 
 The app keeps the catalog separate from the user's library: external providers supply searchable movie and series data, while Watch Wise stores the user's saved entries, watched marks, and derived progress.
 
+![Watch Wise library](.github/library.png)
+
 ## Stack
 
 - AdonisJS 7
