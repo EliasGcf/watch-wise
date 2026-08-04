@@ -99,7 +99,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
 }
 
 function CatalogResultCard({ result }: { result: CatalogSearchResult }) {
-  const label = result.type === 'serie' ? 'Series' : 'Movie'
+  const label = result.type === 'serie' ? 'Serie' : 'Movie'
   const addLibraryEntry = useAddLibraryEntryMutation()
   const canAddToLibrary = result.provider === 'tmdb'
 
