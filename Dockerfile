@@ -36,8 +36,7 @@ ENV CATALOG_PROVIDER_DRIVER=tmdb
 # copy source files. This project runs TypeScript directly with Bun.
 COPY --from=prod-deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app ./
-COPY --chown=1000:1000 --from=build /usr/src/app/data ./data
-RUN mkdir -p data && chown -R 1000:1000 data
+RUN mkdir -p data && chown -R 1000:1000 /usr/src/app
 
 # run the app
 USER 1000:1000
