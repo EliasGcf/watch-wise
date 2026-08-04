@@ -105,15 +105,15 @@ function CatalogResultCard({ result }: { result: CatalogSearchResult }) {
 
   return (
     <Card className="grid gap-0 py-0 transition-colors hover:border-primary/30 sm:grid-cols-[9rem_1fr]">
-      <div className="relative bg-muted">
+      <div className="relative aspect-[2/3] bg-muted">
         {result.posterUrl ? (
           <img
             src={result.posterUrl}
             alt=""
-            className="aspect-[2/3] h-full w-full object-cover sm:aspect-auto"
+            className="h-full w-full object-cover"
           />
         ) : (
-          <div className="flex aspect-[2/3] h-full items-center justify-center text-xs uppercase tracking-[0.2em] text-muted-foreground sm:aspect-auto">
+          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
             {label}
           </div>
         )}
