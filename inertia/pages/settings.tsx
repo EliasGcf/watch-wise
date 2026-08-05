@@ -35,9 +35,7 @@ export default function Settings({ settings, providerAvailability }: Props) {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Settings
-        </h1>
+        <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Settings</h1>
         <p className="max-w-2xl text-muted-foreground">
           Manage how Watch Wise behaves for your library and connected services.
         </p>
