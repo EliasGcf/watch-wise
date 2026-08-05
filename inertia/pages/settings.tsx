@@ -47,9 +47,6 @@ export default function Settings({ integrations }: Props) {
           <h2 id="settings-services" className="text-2xl font-semibold tracking-tight">
             Connected services
           </h2>
-          <p className="max-w-2xl text-sm text-muted-foreground">
-            Choose what external services may do after a movie or episode is marked watched.
-          </p>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
