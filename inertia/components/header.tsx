@@ -28,7 +28,7 @@ export function Header() {
           <NavLink href="/app/catalog/search" current={url.startsWith('/app/catalog')}>
             Catalog
           </NavLink>
-          <NavLink href="/settings" current={url.startsWith('/settings')}>
+          <NavLink href="/app/settings" current={url.startsWith('/app/settings')}>
             Settings
           </NavLink>
           <Form action="/app/logout" method="post">

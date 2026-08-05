@@ -283,9 +283,9 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
     }
   }
-  'settings': {
+  'app.settings': {
     methods: ["GET","HEAD"]
-    pattern: '/settings'
+    pattern: '/app/settings'
     types: {
       body: {}
       paramsTuple: []

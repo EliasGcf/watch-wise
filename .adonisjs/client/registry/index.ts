@@ -144,11 +144,11 @@ const routes = {
     tokens: [{"old":"/app/library/series/:id","type":0,"val":"app","end":""},{"old":"/app/library/series/:id","type":0,"val":"library","end":""},{"old":"/app/library/series/:id","type":0,"val":"series","end":""},{"old":"/app/library/series/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['app.library.series.show']['types'],
   },
-  'settings': {
+  'app.settings': {
     methods: ["GET","HEAD"],
-    pattern: '/settings',
-    tokens: [{"old":"/settings","type":0,"val":"settings","end":""}],
-    types: placeholder as Registry['settings']['types'],
+    pattern: '/app/settings',
+    tokens: [{"old":"/app/settings","type":0,"val":"app","end":""},{"old":"/app/settings","type":0,"val":"settings","end":""}],
+    types: placeholder as Registry['app.settings']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

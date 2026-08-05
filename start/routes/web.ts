@@ -22,10 +22,9 @@ const group = router.group(() => {
       router.get('library/movies', [controllers.web.Movies, 'index']).as('library.movies.index')
       router.get('library/series', [controllers.web.Series, 'index']).as('library.series.index')
       router.get('library/series/:id', [controllers.web.Series, 'show']).as('library.series.show')
+      router.get('settings', [controllers.web.Settings, 'index']).as('settings')
     })
     .use(middleware.auth())
 })
 
 group.as('app').prefix('/app')
-
-router.get('/settings', [controllers.web.Settings, 'index']).as('settings').use(middleware.auth())

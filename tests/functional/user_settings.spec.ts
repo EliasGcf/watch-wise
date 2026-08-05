@@ -156,7 +156,7 @@ test.group('User settings', (group) => {
     app.config.set('sonarr_provider.default', 'fake')
     app.config.set('radarr_provider.default', 'fake')
 
-    const response = await client.get('/settings').withInertia().loginAs(user)
+    const response = await client.get('/app/settings').withInertia().loginAs(user)
 
     response.assertOk()
     response.assertInertiaComponent('settings')
@@ -183,7 +183,7 @@ test.group('User settings', (group) => {
     app.config.set('sonarr_provider.default', undefined)
     app.config.set('radarr_provider.default', undefined)
 
-    const response = await client.get('/settings').withInertia().loginAs(user)
+    const response = await client.get('/app/settings').withInertia().loginAs(user)
 
     response.assertOk()
     response.assertInertiaComponent('settings')
