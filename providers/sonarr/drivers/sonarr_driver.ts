@@ -15,4 +15,8 @@ export default class SonarrProviderDriver extends SonarrProvider {
 
     sonarrClient.setConfig({ baseUrl: config.baseUrl, headers: { 'X-Api-Key': config.apiKey } })
   }
+
+  async hello() {
+    return 'hello'
+  }
 }
