@@ -33,7 +33,6 @@ export default function Settings({ integrations }: Props) {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Watch Wise</p>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
           Settings
         </h1>
