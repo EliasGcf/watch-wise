@@ -1,8 +1,7 @@
 import { UserSettingSchema } from '#database/schema'
 import User from '#models/user'
-import type { RadarrProviderConfig } from '#providers/radarr/types'
-import type { SonarrProviderConfig } from '#providers/sonarr/types'
-import app from '@adonisjs/core/services/app'
+import { isRadarrAvailable } from '#services/radarr_provider'
+import { isSonarrAvailable } from '#services/sonarr_provider'
 import { belongsTo } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 
@@ -18,12 +17,4 @@ export default class UserSettings extends UserSettingSchema {
       deleteRadarrMovieFiles: Boolean(this.deleteRadarrMovieFiles) && isRadarrAvailable(),
     }
   }
-}
-
-export function isSonarrAvailable() {
-  return Boolean(app.config.get<SonarrProviderConfig>('sonarr_provider').default)
-}
-
-export function isRadarrAvailable() {
-  return Boolean(app.config.get<RadarrProviderConfig>('radarr_provider').default)
 }

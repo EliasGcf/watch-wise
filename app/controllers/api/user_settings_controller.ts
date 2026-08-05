@@ -1,4 +1,5 @@
-import { isRadarrAvailable, isSonarrAvailable } from '#models/user_settings'
+import { isRadarrAvailable } from '#services/radarr_provider'
+import { isSonarrAvailable } from '#services/sonarr_provider'
 import UserSettingsTransformer from '#transformers/user_settings_transformer'
 import { updateUserSettingsValidator } from '#validators/user_settings'
 import type { HttpContext } from '@adonisjs/core/http'

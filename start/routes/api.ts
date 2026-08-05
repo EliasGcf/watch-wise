@@ -3,16 +3,14 @@ import router from '@adonisjs/core/services/router'
 
 import { controllers } from '#generated/controllers'
 
-const UserSettingsController = () => import('#controllers/api/user_settings_controller')
-
 const group = router.group(() => {
   router.get('hello', () => ({ message: 'Hello from Watch Wise' })).as('hello')
 
   router
     .group(() => {
       router.post('library', [controllers.api.Library, 'store']).as('library.store')
-      router.get('user/settings', [UserSettingsController, 'show']).as('user.settings.show')
-      router.patch('user/settings', [UserSettingsController, 'update']).as('user.settings.update')
+      router.get('user/settings', [controllers.api.UserSettings, 'show']).as('user.settings.show')
+      router.patch('user/settings', [controllers.api.UserSettings, 'update']).as('user.settings.update')
       router.delete('library/:id', [controllers.api.Library, 'destroy']).as('library.destroy')
       router
         .post('library/movies/:id/watch', [controllers.api.Movies, 'watch'])

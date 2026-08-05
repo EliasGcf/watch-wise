@@ -9,3 +9,5 @@
 /// <reference path="../../config/catalog_provider.ts" />
 /// <reference path="../../config/hash.ts" />
 /// <reference path="../../config/logger.ts" />
+/// <reference path="../../config/radarr_provider.ts" />
+/// <reference path="../../config/sonarr_provider.ts" />
