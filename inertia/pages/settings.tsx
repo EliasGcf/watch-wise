@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { Badge } from '~/components/ui/badge'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
-import { Field, FieldDescription, FieldLabel } from '~/components/ui/field'
+import { Field, FieldContent, FieldDescription, FieldLabel } from '~/components/ui/field'
 import { api } from '~/client'
 import { type InertiaProps } from '~/types'
 
@@ -16,9 +16,12 @@ type Props = InertiaProps<{
   }
 }>
 
+type PendingIntegration = 'sonarr' | 'radarr' | null
+
 export default function Settings({ integrations }: Props) {
   const [sonarrChecked, setSonarrChecked] = useState(integrations.sonarr.deleteEpisodeFiles)
   const [radarrChecked, setRadarrChecked] = useState(integrations.radarr.deleteMovieFiles)
+  const [pendingIntegration, setPendingIntegration] = useState<PendingIntegration>(null)
 
   const updateSettings = useMutation(
     api.api.user.settings.update.mutationOptions({
@@ -44,19 +47,25 @@ export default function Settings({ integrations }: Props) {
         <IntegrationCard
           name="Sonarr"
           available={integrations.sonarr.available}
+          description="Episode cleanup for watched entries."
           unavailableMessage="Sonarr is unavailable because no Sonarr provider is configured."
         >
           <ProviderToggle
             id="delete-sonarr-episode-files"
-            label="Delete episode files after watching"
-            description="When an episode is marked watched, Watch Wise asks Sonarr to delete the managed media file."
+            label="Delete watched episode files"
+            description="After you mark an episode watched, remove its Sonarr-managed file."
             checked={sonarrChecked}
-            pending={updateSettings.isPending}
+            disabled={updateSettings.isPending}
+            pending={pendingIntegration === 'sonarr'}
             onChange={(checked) => {
               setSonarrChecked(checked)
+              setPendingIntegration('sonarr')
               updateSettings.mutate(
                 { body: { deleteSonarrEpisodeFiles: checked } },
-                { onError: () => setSonarrChecked(!checked) }
+                {
+                  onError: () => setSonarrChecked(!checked),
+                  onSettled: () => setPendingIntegration(null),
+                }
               )
             }}
           />
@@ -65,19 +74,25 @@ export default function Settings({ integrations }: Props) {
         <IntegrationCard
           name="Radarr"
           available={integrations.radarr.available}
+          description="Movie cleanup for completed watches."
           unavailableMessage="Radarr is unavailable because no Radarr provider is configured."
         >
           <ProviderToggle
             id="delete-radarr-movie-files"
-            label="Delete movie files after watching"
-            description="When a movie is marked watched, Watch Wise asks Radarr to delete the managed media file."
+            label="Delete watched movie files"
+            description="After you mark a movie watched, remove its Radarr-managed file."
             checked={radarrChecked}
-            pending={updateSettings.isPending}
+            disabled={updateSettings.isPending}
+            pending={pendingIntegration === 'radarr'}
             onChange={(checked) => {
               setRadarrChecked(checked)
+              setPendingIntegration('radarr')
               updateSettings.mutate(
                 { body: { deleteRadarrMovieFiles: checked } },
-                { onError: () => setRadarrChecked(!checked) }
+                {
+                  onError: () => setRadarrChecked(!checked),
+                  onSettled: () => setPendingIntegration(null),
+                }
               )
             }}
           />
@@ -90,11 +105,13 @@ export default function Settings({ integrations }: Props) {
 function IntegrationCard({
   name,
   available,
+  description,
   unavailableMessage,
   children,
 }: {
   name: string
   available: boolean
+  description: string
   unavailableMessage: string
   children: ReactNode
 }) {
@@ -107,9 +124,7 @@ function IntegrationCard({
             {available ? 'Available' : 'Unavailable'}
           </Badge>
         </div>
-        <CardDescription>
-          {available ? 'Provider actions are ready to use.' : unavailableMessage}
-        </CardDescription>
+        <CardDescription>{available ? description : unavailableMessage}</CardDescription>
       </CardHeader>
       {available && <CardContent>{children}</CardContent>}
     </Card>
@@ -121,6 +136,7 @@ function ProviderToggle({
   label,
   description,
   checked,
+  disabled,
   pending,
   onChange,
 }: {
@@ -128,21 +144,23 @@ function ProviderToggle({
   label: string
   description: string
   checked: boolean
+  disabled: boolean
   pending: boolean
   onChange: (checked: boolean) => void
 }) {
   return (
-    <Field orientation="horizontal">
-      <Checkbox id={id} checked={checked} disabled={pending} onCheckedChange={onChange} />
-      <div className="grid gap-1.5 leading-none">
-        <FieldLabel htmlFor={id}>{label}</FieldLabel>
-        <FieldDescription>{description}</FieldDescription>
-        {pending && (
-          <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
-            <LoaderCircle className="size-3 animate-spin" /> Saving...
-          </span>
+    <Field orientation="horizontal" className="items-start gap-3">
+      <div className="mt-0.5 flex size-4 shrink-0 items-center justify-center">
+        {pending ? (
+          <LoaderCircle className="size-4 animate-spin text-muted-foreground" aria-label="Saving" />
+        ) : (
+          <Checkbox id={id} checked={checked} disabled={disabled} onCheckedChange={onChange} />
         )}
       </div>
+      <FieldContent>
+        <FieldLabel htmlFor={id}>{label}</FieldLabel>
+        <FieldDescription>{description}</FieldDescription>
+      </FieldContent>
     </Field>
   )
 }
