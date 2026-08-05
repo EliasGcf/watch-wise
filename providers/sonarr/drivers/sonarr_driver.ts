@@ -26,12 +26,12 @@ export default class SonarrProviderDriver extends SonarrProvider {
       throw new SonarrProviderError('Sonarr series request failed', { cause: seriesResponse.error })
     }
 
-    const series = (seriesResponse.data ?? []).find((item) => String(item.tmdbId) === providerId)
+    const serie = (seriesResponse.data ?? []).find((item) => String(item.tmdbId) === providerId)
 
-    if (!series?.id) return
+    if (!serie?.id) return
 
     const episodesResponse = await this.sonarr.getApiV3Episode({
-      query: { seriesId: series.id, seasonNumber: season, includeEpisodeFile: true },
+      query: { seriesId: serie.id, seasonNumber: season, includeEpisodeFile: true },
     })
 
     if (episodesResponse.error) {
