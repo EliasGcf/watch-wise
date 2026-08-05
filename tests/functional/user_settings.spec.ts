@@ -161,9 +161,13 @@ test.group('User settings', (group) => {
     response.assertOk()
     response.assertInertiaComponent('settings')
     response.assertInertiaPropsContains({
-      integrations: {
-        sonarr: { available: true, deleteEpisodeFiles: false },
-        radarr: { available: true, deleteMovieFiles: false },
+      settings: {
+        deleteSonarrEpisodeFiles: false,
+        deleteRadarrMovieFiles: false,
+      },
+      providerAvailability: {
+        sonarr: true,
+        radarr: true,
       },
     })
   })
@@ -188,9 +192,13 @@ test.group('User settings', (group) => {
     response.assertOk()
     response.assertInertiaComponent('settings')
     response.assertInertiaPropsContains({
-      integrations: {
-        sonarr: { available: false, deleteEpisodeFiles: true },
-        radarr: { available: false, deleteMovieFiles: true },
+      settings: {
+        deleteSonarrEpisodeFiles: true,
+        deleteRadarrMovieFiles: true,
+      },
+      providerAvailability: {
+        sonarr: false,
+        radarr: false,
       },
     })
   })

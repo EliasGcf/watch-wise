@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { type Data } from '@generated/data'
 import { LoaderCircle } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { toast } from 'sonner'
@@ -10,17 +11,18 @@ import { api } from '~/client'
 import { type InertiaProps } from '~/types'
 
 type Props = InertiaProps<{
-  integrations: {
-    sonarr: { available: boolean; deleteEpisodeFiles: boolean }
-    radarr: { available: boolean; deleteMovieFiles: boolean }
+  settings: Data.UserSettings
+  providerAvailability: {
+    sonarr: boolean
+    radarr: boolean
   }
 }>
 
 type PendingIntegration = 'sonarr' | 'radarr' | null
 
-export default function Settings({ integrations }: Props) {
-  const [sonarrChecked, setSonarrChecked] = useState(integrations.sonarr.deleteEpisodeFiles)
-  const [radarrChecked, setRadarrChecked] = useState(integrations.radarr.deleteMovieFiles)
+export default function Settings({ settings, providerAvailability }: Props) {
+  const [sonarrChecked, setSonarrChecked] = useState(settings.deleteSonarrEpisodeFiles)
+  const [radarrChecked, setRadarrChecked] = useState(settings.deleteRadarrMovieFiles)
   const [pendingIntegration, setPendingIntegration] = useState<PendingIntegration>(null)
 
   const updateSettings = useMutation(
@@ -52,7 +54,7 @@ export default function Settings({ integrations }: Props) {
         <div className="grid gap-4 lg:grid-cols-2">
           <IntegrationCard
             name="Sonarr"
-            available={integrations.sonarr.available}
+            available={providerAvailability.sonarr}
             description="Episode cleanup for watched entries."
             unavailableMessage="Sonarr is unavailable because no Sonarr provider is configured."
           >
@@ -79,7 +81,7 @@ export default function Settings({ integrations }: Props) {
 
           <IntegrationCard
             name="Radarr"
-            available={integrations.radarr.available}
+            available={providerAvailability.radarr}
             description="Movie cleanup for completed watches."
             unavailableMessage="Radarr is unavailable because no Radarr provider is configured."
           >
