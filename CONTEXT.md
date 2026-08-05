@@ -8,12 +8,24 @@ Watch Wise lets people track the movies and series they choose to follow and wat
 The person who owns a library and tracks watched movies and episodes.
 _Avoid_: Account, profile
 
+**User Settings**:
+A user's saved preferences for optional Watch Wise behavior, including provider actions.
+_Avoid_: Global configuration, environment configuration
+
 **Catalog**:
 The searchable universe of movies and series available from a catalog provider.
 _Avoid_: User catalog, personal catalog
 
+**Provider**:
+An external connection Watch Wise uses to read or manage data outside the app, such as catalog data or media files.
+_Avoid_: Internal service, owned data source
+
+**Provider Action**:
+An optional user-enabled behavior Watch Wise performs through a provider after a watchable item changes state.
+_Avoid_: Required tracking behavior, catalog action
+
 **Catalog Provider**:
-An external source that supplies searchable movie and series data. TMDB is the initial catalog provider.
+A provider that supplies searchable movie and series data. TMDB is the initial catalog provider.
 _Avoid_: Internal catalog, content owner
 
 **Library**:
@@ -43,6 +55,10 @@ _Avoid_: Progress source of truth, manual progress
 **Watchable Item**:
 A released movie or episode that can be marked as watched by a user.
 _Avoid_: Watched series, watched season
+
+**Media File**:
+A provider-managed file for a movie or episode that may be removed after the watchable item is marked as watched.
+_Avoid_: Local file, catalog file
 
 **Watched Mark**:
 A user's unique record within a library entry that a watchable item has been watched at least once, including when it was marked as watched and the immutable watched-item snapshot needed for history and metrics.
