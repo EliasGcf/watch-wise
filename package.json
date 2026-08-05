@@ -15,7 +15,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit && tsc --noEmit --project inertia/tsconfig.json",
     "vite:build": "bun --bun vite build",
-    "generate:tmpd-sdk": "bunx --bun @hey-api/openapi-ts",
+    "generate:sdk": "bunx --bun @hey-api/openapi-ts",
     "db:reset": "bun --bun ace migration:fresh --seed"
   },
   "imports": {

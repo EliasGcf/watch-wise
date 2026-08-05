@@ -34,4 +34,12 @@ export default await Env.create(new URL('../', import.meta.url), {
   // Catalog Provider
   CATALOG_PROVIDER_DRIVER: Env.schema.enum(['fake', 'tmdb'] as const),
   TMDB_ACCESS_TOKEN: Env.schema.string.optionalWhen(process.env.CATALOG_PROVIDER_DRIVER === 'fake'),
+
+  // Sonarr Provider
+  SONARR_PROVIDER_DRIVER: Env.schema.enum.optional(['fake', 'sonarr'] as const),
+  SONARR_URL: Env.schema.string.optionalWhen(process.env.SONARR_PROVIDER_DRIVER !== 'sonarr', {
+    format: 'url',
+    tld: false,
+  }),
+  SONARR_API_KEY: Env.schema.string.optionalWhen(process.env.SONARR_PROVIDER_DRIVER !== 'sonarr'),
 })
