@@ -1,20 +1,48 @@
 /* eslint-disable @unicorn/filename-case */
 import { defineConfig, OperationPath } from '@hey-api/openapi-ts'
 
-export default defineConfig({
-  input: './public/tmdb-api.json',
-  output: './.adonisjs/server/tmdb',
-  plugins: [
-    {
-      name: '@hey-api/sdk',
-      operations: {
-        containerName: 'tmdbSdk',
-        strategy: 'single',
-        nesting: (operation) => {
-          return OperationPath.fromOperationId({ delimiters: /[-_]/ })(operation)
+export default defineConfig([
+  {
+    input: './public/tmdb-api.json',
+    output: './.adonisjs/server/tmdb',
+    plugins: [
+      {
+        name: '@hey-api/sdk',
+        operations: {
+          containerName: 'tmdbSdk',
+          strategy: 'single',
+          nesting: (operation) => {
+            return OperationPath.fromOperationId({ delimiters: /[-_]/ })(operation)
+          },
         },
       },
-    },
-    '@faker-js/faker',
-  ],
-})
+      '@faker-js/faker',
+    ],
+  },
+  {
+    input: './public/sonarr-api.json',
+    output: './.adonisjs/server/sonarr',
+    plugins: [
+      {
+        name: '@hey-api/sdk',
+        operations: {
+          containerName: 'sonarrSdk',
+          strategy: 'single',
+        },
+      },
+    ],
+  },
+  {
+    input: './public/radarr-api.json',
+    output: './.adonisjs/server/radarr',
+    plugins: [
+      {
+        name: '@hey-api/sdk',
+        operations: {
+          containerName: 'radarrSdk',
+          strategy: 'single',
+        },
+      },
+    ],
+  },
+])
