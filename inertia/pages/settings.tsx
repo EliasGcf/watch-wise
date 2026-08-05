@@ -111,13 +111,7 @@ function IntegrationCard({
           {available ? 'Provider actions are ready to use.' : unavailableMessage}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        {available ? (
-          children
-        ) : (
-          <p className="text-sm text-muted-foreground">{unavailableMessage}</p>
-        )}
-      </CardContent>
+      {available && <CardContent>{children}</CardContent>}
     </Card>
   )
 }
