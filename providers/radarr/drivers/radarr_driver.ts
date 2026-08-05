@@ -1,5 +1,4 @@
 import { client as radarrClient } from '#generated/radarr/client.gen'
-import { RadarrSdk } from '#generated/radarr/sdk.gen'
 import {
   RadarrProvider,
   RadarrProviderError,
@@ -7,7 +6,7 @@ import {
 } from '#providers/radarr/types'
 
 export default class RadarrProviderDriver extends RadarrProvider {
-  constructor(config: RadarrProviderDriverConfig, radarr: RadarrSdk = new RadarrSdk()) {
+  constructor(config: RadarrProviderDriverConfig) {
     super()
 
     if (!config.baseUrl) throw new RadarrProviderError('Radarr base URL is required.')

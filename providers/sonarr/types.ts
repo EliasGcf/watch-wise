@@ -1,6 +1,12 @@
 export type SonarrDriver = 'fake' | 'sonarr'
 
-export abstract class SonarrProvider {}
+export abstract class SonarrProvider {
+  abstract deleteEpisodeFileByCatalogProviderId(
+    providerId: string,
+    season: number,
+    episode: number
+  ): Promise<void>
+}
 
 export class SonarrProviderError extends Error {}
 
