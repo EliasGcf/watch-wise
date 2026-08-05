@@ -31,6 +31,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'api.user.settings.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/user/settings'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/user_settings_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/user_settings_controller').default['show']>>>
+    }
+  }
+  'api.user.settings.update': {
+    methods: ["PATCH"]
+    pattern: '/api/user/settings'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user_settings').updateUserSettingsValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user_settings').updateUserSettingsValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/user_settings_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/user_settings_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'api.library.destroy': {
     methods: ["DELETE"]
     pattern: '/api/library/:id'

@@ -18,6 +18,18 @@ const routes = {
     tokens: [{"old":"/api/library","type":0,"val":"api","end":""},{"old":"/api/library","type":0,"val":"library","end":""}],
     types: placeholder as Registry['api.library.store']['types'],
   },
+  'api.user.settings.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/user/settings',
+    tokens: [{"old":"/api/user/settings","type":0,"val":"api","end":""},{"old":"/api/user/settings","type":0,"val":"user","end":""},{"old":"/api/user/settings","type":0,"val":"settings","end":""}],
+    types: placeholder as Registry['api.user.settings.show']['types'],
+  },
+  'api.user.settings.update': {
+    methods: ["PATCH"],
+    pattern: '/api/user/settings',
+    tokens: [{"old":"/api/user/settings","type":0,"val":"api","end":""},{"old":"/api/user/settings","type":0,"val":"user","end":""},{"old":"/api/user/settings","type":0,"val":"settings","end":""}],
+    types: placeholder as Registry['api.user.settings.update']['types'],
+  },
   'api.library.destroy': {
     methods: ["DELETE"],
     pattern: '/api/library/:id',

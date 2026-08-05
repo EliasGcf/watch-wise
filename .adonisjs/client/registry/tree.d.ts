@@ -23,6 +23,12 @@ export interface ApiDefinition {
         }
       }
     }
+    user: {
+      settings: {
+        show: typeof routes['api.user.settings.show']
+        update: typeof routes['api.user.settings.update']
+      }
+    }
   }
   app: {
     newAccount: {

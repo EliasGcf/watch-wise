@@ -9,6 +9,10 @@ const group = router.group(() => {
   router
     .group(() => {
       router.post('library', [controllers.api.Library, 'store']).as('library.store')
+      router.get('user/settings', [controllers.api.UserSettings, 'show']).as('user.settings.show')
+      router
+        .patch('user/settings', [controllers.api.UserSettings, 'update'])
+        .as('user.settings.update')
       router.delete('library/:id', [controllers.api.Library, 'destroy']).as('library.destroy')
       router
         .post('library/movies/:id/watch', [controllers.api.Movies, 'watch'])
