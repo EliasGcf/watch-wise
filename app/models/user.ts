@@ -6,8 +6,8 @@ import UserSettings from '#models/user_settings'
 import hash from '@adonisjs/core/services/hash'
 import { compose } from '@adonisjs/core/helpers'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
-import { computed, hasMany } from '@adonisjs/lucid/orm'
-import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 
 export default class User extends compose(UserSchema, withAuthFinder(hash)) {
   @hasMany(() => LibraryItem)
@@ -18,6 +18,9 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
 
   @hasMany(() => Serie)
   declare series: HasMany<typeof Serie>
+
+  @hasOne(() => UserSettings)
+  declare userSettings: HasOne<typeof UserSettings>
 
   async settings() {
     return UserSettings.firstOrCreate(
