@@ -67,7 +67,7 @@ test.group('User settings', (group) => {
       },
     })
 
-    const settings = await user.settings()
+    const settings = await user.getSettings()
     assert.isTrue(Boolean(settings.deleteSonarrEpisodeFiles))
     assert.isFalse(Boolean(settings.deleteRadarrMovieFiles))
   })
@@ -98,7 +98,7 @@ test.group('User settings', (group) => {
       message: 'Radarr is not available.',
     })
 
-    const settings = await user.settings()
+    const settings = await user.getSettings()
     assert.isFalse(Boolean(settings.deleteSonarrEpisodeFiles))
     assert.isFalse(Boolean(settings.deleteRadarrMovieFiles))
   })
@@ -132,7 +132,7 @@ test.group('User settings', (group) => {
       },
     })
 
-    const settings = await user.settings()
+    const settings = await user.getSettings()
     assert.isTrue(Boolean(settings.deleteSonarrEpisodeFiles))
     assert.isTrue(Boolean(settings.deleteRadarrMovieFiles))
   })

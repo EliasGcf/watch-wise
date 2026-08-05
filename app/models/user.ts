@@ -20,9 +20,9 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
   declare series: HasMany<typeof Serie>
 
   @hasOne(() => UserSettings)
-  declare userSettings: HasOne<typeof UserSettings>
+  declare settings: HasOne<typeof UserSettings>
 
-  async settings() {
+  async getSettings() {
     return UserSettings.firstOrCreate(
       { userId: this.id },
       { userId: this.id, deleteSonarrEpisodeFiles: false, deleteRadarrMovieFiles: false }

@@ -5,7 +5,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UserSettingsController {
   async show({ auth, serialize }: HttpContext) {
-    return serialize(UserSettingsTransformer.transform(await auth.user!.settings()))
+    return serialize(UserSettingsTransformer.transform(await auth.user!.getSettings()))
   }
 
   async update({ auth, request, response, serialize }: HttpContext) {
@@ -22,7 +22,7 @@ export default class UserSettingsController {
 
     if (errors.length > 0) return response.unprocessableEntity({ errors })
 
-    const settings = await auth.user!.settings()
+    const settings = await auth.user!.getSettings()
     settings.merge(payload)
     await settings.save()
 
