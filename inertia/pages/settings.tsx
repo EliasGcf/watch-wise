@@ -33,70 +33,81 @@ export default function Settings({ integrations }: Props) {
   return (
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-3">
-        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Settings</p>
+        <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Watch Wise</p>
         <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Provider actions for your library.
+          Settings
         </h1>
         <p className="max-w-2xl text-muted-foreground">
-          Choose what Watch Wise should do through connected providers after you mark items as
-          watched.
+          Manage how Watch Wise behaves for your library and connected services.
         </p>
       </section>
 
-      <section className="grid gap-4 lg:grid-cols-2" aria-label="Integrations">
-        <IntegrationCard
-          name="Sonarr"
-          available={integrations.sonarr.available}
-          description="Episode cleanup for watched entries."
-          unavailableMessage="Sonarr is unavailable because no Sonarr provider is configured."
-        >
-          <ProviderToggle
-            id="delete-sonarr-episode-files"
-            label="Delete watched episode files"
-            description="After you mark an episode watched, remove its Sonarr-managed file."
-            checked={sonarrChecked}
-            disabled={updateSettings.isPending}
-            pending={pendingIntegration === 'sonarr'}
-            onChange={(checked) => {
-              setSonarrChecked(checked)
-              setPendingIntegration('sonarr')
-              updateSettings.mutate(
-                { body: { deleteSonarrEpisodeFiles: checked } },
-                {
-                  onError: () => setSonarrChecked(!checked),
-                  onSettled: () => setPendingIntegration(null),
-                }
-              )
-            }}
-          />
-        </IntegrationCard>
+      <section className="flex flex-col gap-4" aria-labelledby="settings-services">
+        <div className="flex flex-col gap-1 border-b pb-3">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Services</p>
+          <h2 id="settings-services" className="text-2xl font-semibold tracking-tight">
+            Connected services
+          </h2>
+          <p className="max-w-2xl text-sm text-muted-foreground">
+            Choose what external services may do after a movie or episode is marked watched.
+          </p>
+        </div>
 
-        <IntegrationCard
-          name="Radarr"
-          available={integrations.radarr.available}
-          description="Movie cleanup for completed watches."
-          unavailableMessage="Radarr is unavailable because no Radarr provider is configured."
-        >
-          <ProviderToggle
-            id="delete-radarr-movie-files"
-            label="Delete watched movie files"
-            description="After you mark a movie watched, remove its Radarr-managed file."
-            checked={radarrChecked}
-            disabled={updateSettings.isPending}
-            pending={pendingIntegration === 'radarr'}
-            onChange={(checked) => {
-              setRadarrChecked(checked)
-              setPendingIntegration('radarr')
-              updateSettings.mutate(
-                { body: { deleteRadarrMovieFiles: checked } },
-                {
-                  onError: () => setRadarrChecked(!checked),
-                  onSettled: () => setPendingIntegration(null),
-                }
-              )
-            }}
-          />
-        </IntegrationCard>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <IntegrationCard
+            name="Sonarr"
+            available={integrations.sonarr.available}
+            description="Episode cleanup for watched entries."
+            unavailableMessage="Sonarr is unavailable because no Sonarr provider is configured."
+          >
+            <ProviderToggle
+              id="delete-sonarr-episode-files"
+              label="Delete watched episode files"
+              description="After you mark an episode watched, remove its Sonarr-managed file."
+              checked={sonarrChecked}
+              disabled={updateSettings.isPending}
+              pending={pendingIntegration === 'sonarr'}
+              onChange={(checked) => {
+                setSonarrChecked(checked)
+                setPendingIntegration('sonarr')
+                updateSettings.mutate(
+                  { body: { deleteSonarrEpisodeFiles: checked } },
+                  {
+                    onError: () => setSonarrChecked(!checked),
+                    onSettled: () => setPendingIntegration(null),
+                  }
+                )
+              }}
+            />
+          </IntegrationCard>
+
+          <IntegrationCard
+            name="Radarr"
+            available={integrations.radarr.available}
+            description="Movie cleanup for completed watches."
+            unavailableMessage="Radarr is unavailable because no Radarr provider is configured."
+          >
+            <ProviderToggle
+              id="delete-radarr-movie-files"
+              label="Delete watched movie files"
+              description="After you mark a movie watched, remove its Radarr-managed file."
+              checked={radarrChecked}
+              disabled={updateSettings.isPending}
+              pending={pendingIntegration === 'radarr'}
+              onChange={(checked) => {
+                setRadarrChecked(checked)
+                setPendingIntegration('radarr')
+                updateSettings.mutate(
+                  { body: { deleteRadarrMovieFiles: checked } },
+                  {
+                    onError: () => setRadarrChecked(!checked),
+                    onSettled: () => setPendingIntegration(null),
+                  }
+                )
+              }}
+            />
+          </IntegrationCard>
+        </div>
       </section>
     </div>
   )
