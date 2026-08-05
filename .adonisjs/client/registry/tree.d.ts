@@ -54,5 +54,6 @@ export interface ApiDefinition {
         show: typeof routes['app.library.series.show']
       }
     }
+    settings: typeof routes['app.settings']
   }
 }

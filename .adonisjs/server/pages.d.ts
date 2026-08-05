@@ -23,5 +23,6 @@ declare module '@adonisjs/inertia/types' {
     'library/movies': ExtractProps<(typeof import('../../inertia/pages/library/movies.tsx'))['default']>
     'library/series/index': ExtractProps<(typeof import('../../inertia/pages/library/series/index.tsx'))['default']>
     'library/series/show': ExtractProps<(typeof import('../../inertia/pages/library/series/show.tsx'))['default']>
+    'settings': ExtractProps<(typeof import('../../inertia/pages/settings.tsx'))['default']>
   }
 }

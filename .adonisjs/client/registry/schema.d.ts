@@ -283,4 +283,16 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['show']>>>
     }
   }
+  'app.settings': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/settings'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/settings_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/settings_controller').default['index']>>>
+    }
+  }
 }
