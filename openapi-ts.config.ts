@@ -32,4 +32,17 @@ export default defineConfig([
       },
     ],
   },
+  {
+    input: './public/radarr-api.json',
+    output: './.adonisjs/server/radarr',
+    plugins: [
+      {
+        name: '@hey-api/sdk',
+        operations: {
+          containerName: 'radarrSdk',
+          strategy: 'single',
+        },
+      },
+    ],
+  },
 ])

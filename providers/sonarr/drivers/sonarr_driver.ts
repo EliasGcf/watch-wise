@@ -7,10 +7,7 @@ import {
 } from '#providers/sonarr/types'
 
 export default class SonarrProviderDriver extends SonarrProvider {
-  constructor(
-    config: SonarrProviderDriverConfig,
-    private sonarr: SonarrSdk = new SonarrSdk()
-  ) {
+  constructor(config: SonarrProviderDriverConfig, sonarr: SonarrSdk = new SonarrSdk()) {
     super()
 
     if (!config.baseUrl) throw new SonarrProviderError('Sonarr base URL is required.')

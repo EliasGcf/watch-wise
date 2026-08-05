@@ -42,4 +42,12 @@ export default await Env.create(new URL('../', import.meta.url), {
     tld: false,
   }),
   SONARR_API_KEY: Env.schema.string.optionalWhen(process.env.SONARR_PROVIDER_DRIVER !== 'sonarr'),
+
+  // Radarr Provider
+  RADARR_PROVIDER_DRIVER: Env.schema.enum.optional(['fake', 'radarr'] as const),
+  RADARR_URL: Env.schema.string.optionalWhen(process.env.RADARR_PROVIDER_DRIVER !== 'radarr', {
+    format: 'url',
+    tld: false,
+  }),
+  RADARR_API_KEY: Env.schema.string.optionalWhen(process.env.RADARR_PROVIDER_DRIVER !== 'radarr'),
 })
