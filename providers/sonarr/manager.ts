@@ -50,4 +50,8 @@ export class SonarrProviderManager extends SonarrProvider {
 
     throw new SonarrProviderError(`Unsupported Sonarr provider driver "${name}"`)
   }
+
+  deleteEpisodeFileByCatalogProviderId(providerId: string, season: number, episode: number) {
+    return this.use().deleteEpisodeFileByCatalogProviderId(providerId, season, episode)
+  }
 }
