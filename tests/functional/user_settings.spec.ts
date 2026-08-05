@@ -39,7 +39,10 @@ test.group('User settings', (group) => {
     assert.lengthOf(await UserSettings.query().where('userId', user.id), 1)
   })
 
-  test('authenticated users can persist available provider-action settings', async ({ assert, client }) => {
+  test('authenticated users can persist available provider-action settings', async ({
+    assert,
+    client,
+  }) => {
     const user = await User.create({
       fullName: 'Persist Settings',
       email: 'persist-settings@example.com',
@@ -72,7 +75,10 @@ test.group('User settings', (group) => {
     assert.isFalse(Boolean(settings.deleteRadarrMovieFiles))
   })
 
-  test('settings updates reject enabling unavailable provider actions', async ({ assert, client }) => {
+  test('settings updates reject enabling unavailable provider actions', async ({
+    assert,
+    client,
+  }) => {
     const user = await User.create({
       fullName: 'Blocked Settings',
       email: 'blocked-settings@example.com',
@@ -103,7 +109,10 @@ test.group('User settings', (group) => {
     assert.isFalse(Boolean(settings.deleteRadarrMovieFiles))
   })
 
-  test('unavailable provider actions keep saved values but are inactive', async ({ assert, client }) => {
+  test('unavailable provider actions keep saved values but are inactive', async ({
+    assert,
+    client,
+  }) => {
     const user = await User.create({
       fullName: 'Inactive Settings',
       email: 'inactive-settings@example.com',
