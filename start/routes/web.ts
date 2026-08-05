@@ -27,3 +27,5 @@ const group = router.group(() => {
 })
 
 group.as('app').prefix('/app')
+
+router.get('/settings', [controllers.web.Settings, 'index']).as('settings').use(middleware.auth())

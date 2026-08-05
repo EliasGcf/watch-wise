@@ -27,6 +27,7 @@ export type ScannedRoutes = {
     'app.library.movies.index': { paramsTuple?: []; params?: {} }
     'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'settings': { paramsTuple?: []; params?: {} }
   }
   GET: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -40,6 +41,7 @@ export type ScannedRoutes = {
     'app.library.movies.index': { paramsTuple?: []; params?: {} }
     'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'settings': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
     'api.hello': { paramsTuple?: []; params?: {} }
@@ -53,6 +55,7 @@ export type ScannedRoutes = {
     'app.library.movies.index': { paramsTuple?: []; params?: {} }
     'app.library.series.index': { paramsTuple?: []; params?: {} }
     'app.library.series.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'settings': { paramsTuple?: []; params?: {} }
   }
   POST: {
     'api.library.store': { paramsTuple?: []; params?: {} }

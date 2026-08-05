@@ -28,6 +28,9 @@ export function Header() {
           <NavLink href="/app/catalog/search" current={url.startsWith('/app/catalog')}>
             Catalog
           </NavLink>
+          <NavLink href="/settings" current={url.startsWith('/settings')}>
+            Settings
+          </NavLink>
           <Form action="/app/logout" method="post">
             <button className={buttonVariants({ variant: 'ghost', size: 'sm' })} type="submit">
               Logout

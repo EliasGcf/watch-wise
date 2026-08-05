@@ -55,4 +55,5 @@ export interface ApiDefinition {
       }
     }
   }
+  settings: typeof routes['settings']
 }

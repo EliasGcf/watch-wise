@@ -145,4 +145,53 @@ test.group('User settings', (group) => {
     assert.isTrue(Boolean(settings.deleteSonarrEpisodeFiles))
     assert.isTrue(Boolean(settings.deleteRadarrMovieFiles))
   })
+
+  test('authenticated users can visit settings with available integrations', async ({ client }) => {
+    const user = await User.create({
+      fullName: 'Available Integrations',
+      email: 'available-integrations@example.com',
+      password: 'secret123',
+    })
+
+    app.config.set('sonarr_provider.default', 'fake')
+    app.config.set('radarr_provider.default', 'fake')
+
+    const response = await client.get('/settings').withInertia().loginAs(user)
+
+    response.assertOk()
+    response.assertInertiaComponent('settings')
+    response.assertInertiaPropsContains({
+      integrations: {
+        sonarr: { available: true, deleteEpisodeFiles: false },
+        radarr: { available: true, deleteMovieFiles: false },
+      },
+    })
+  })
+
+  test('settings page explains unavailable integrations', async ({ client }) => {
+    const user = await User.create({
+      fullName: 'Unavailable Integrations',
+      email: 'unavailable-integrations@example.com',
+      password: 'secret123',
+    })
+    await UserSettings.create({
+      userId: user.id,
+      deleteSonarrEpisodeFiles: true,
+      deleteRadarrMovieFiles: true,
+    })
+
+    app.config.set('sonarr_provider.default', undefined)
+    app.config.set('radarr_provider.default', undefined)
+
+    const response = await client.get('/settings').withInertia().loginAs(user)
+
+    response.assertOk()
+    response.assertInertiaComponent('settings')
+    response.assertInertiaPropsContains({
+      integrations: {
+        sonarr: { available: false, deleteEpisodeFiles: true },
+        radarr: { available: false, deleteMovieFiles: true },
+      },
+    })
+  })
 })
