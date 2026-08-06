@@ -85,6 +85,110 @@ test.group('Sonarr episode file deletion', (group) => {
     assert.lengthOf(calls, 1)
   })
 
+  test('deletes Sonarr episode files for new season bulk watched marks', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const { user, serie } = await makeUserWithSerie()
+    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    response.assertOk()
+    await flushProviderAction()
+    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
+  })
+
+  test('deletes Sonarr episode files for new series bulk watched marks', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const { user, serie } = await makeUserWithSerie()
+    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    response.assertOk()
+    await flushProviderAction()
+    assert.deepEqual(calls, [
+      { providerId: 'series-1', season: 0, episode: 1 },
+      { providerId: 'series-1', season: 1, episode: 1 },
+    ])
+  })
+
+  test('bulk marking does not retry Sonarr deletion for already watched episodes', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const { user, serie } = await makeUserWithSerie()
+    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+    await client
+      .post(`/api/library/series/${serie.id}/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    await flushProviderAction()
+    assert.deepEqual(calls, [
+      { providerId: 'series-1', season: 0, episode: 1 },
+      { providerId: 'series-1', season: 1, episode: 1 },
+    ])
+  })
+
+  test('bulk marking does not delete when the setting is disabled', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const { user, serie } = await makeUserWithSerie()
+
+    await client
+      .post(`/api/library/series/${serie.id}/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    await flushProviderAction()
+    assert.deepEqual(calls, [])
+  })
+
+  test('bulk marking does not delete when Sonarr is unavailable', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const sonarrDriver = app.config.get('sonarr_provider.default')
+    app.config.set('sonarr_provider.default', undefined)
+    cleanup(() => app.config.set('sonarr_provider.default', sonarrDriver))
+    const { user, serie } = await makeUserWithSerie()
+    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
+
+    await client
+      .post(`/api/library/series/${serie.id}/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    await flushProviderAction()
+    assert.deepEqual(calls, [])
+  })
+
   test('provider failures do not fail watched marking or watched time', async ({
     assert,
     cleanup,
