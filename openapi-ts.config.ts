@@ -30,6 +30,7 @@ export default defineConfig([
           strategy: 'single',
         },
       },
+      '@faker-js/faker',
     ],
   },
   {

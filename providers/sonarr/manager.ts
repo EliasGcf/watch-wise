@@ -15,6 +15,8 @@ export class SonarrProviderManager extends SonarrProvider {
   }
 
   use(name: SonarrDriver = this.enabledDriver()) {
+    if (name === 'fake') return this.createDriver(name)
+
     const cachedDriver = this.#drivers.get(name)
 
     if (cachedDriver) return cachedDriver
@@ -41,7 +43,7 @@ export class SonarrProviderManager extends SonarrProvider {
 
   private createDriver(name: SonarrDriver) {
     if (name === 'fake') {
-      return new FakeSonarrProviderDriver()
+      return new FakeSonarrProviderDriver(this._config.drivers.fake)
     }
 
     if (name === 'sonarr') {

@@ -1,3 +1,5 @@
+import type { EpisodeResource, SeriesResource } from '#generated/sonarr/types.gen'
+
 export type SonarrDriver = 'fake' | 'sonarr'
 
 export abstract class SonarrProvider {
@@ -10,7 +12,19 @@ export abstract class SonarrProvider {
 
 export class SonarrProviderError extends Error {}
 
-export type FakeSonarrProviderConfig = Record<string, never>
+export type DeletedSonarrEpisodeFile = {
+  providerId: string
+  season: number
+  episode: number
+  episodeFileId: number
+}
+
+export type FakeSonarrProviderConfig = {
+  series?: SeriesResource[]
+  episodes?: EpisodeResource[]
+  deletedEpisodeFiles?: DeletedSonarrEpisodeFile[]
+  failDeletion?: boolean
+}
 
 export type SonarrProviderDriverConfig = {
   baseUrl?: string

@@ -4,5 +4,6 @@
  */
 
 export const listeners = {
+  DeleteSonarrEpisodeFile: () => import('#listeners/delete_sonarr_episode_file'),
   UpdateUserWatchedTime: () => import('#listeners/update_user_watched_time'),
 }
