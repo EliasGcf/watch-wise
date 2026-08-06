@@ -139,10 +139,7 @@ test.group('Sonarr episode file deletion', (group) => {
       .post(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
       .loginAs(user)
       .withCsrfToken()
-    await client
-      .post(`/api/library/series/${serie.id}/watch`)
-      .loginAs(user)
-      .withCsrfToken()
+    await client.post(`/api/library/series/${serie.id}/watch`).loginAs(user).withCsrfToken()
 
     await flushProviderAction()
     assert.deepEqual(calls, [
@@ -159,10 +156,7 @@ test.group('Sonarr episode file deletion', (group) => {
     const calls = spyOnSonarrDeletion(cleanup)
     const { user, serie } = await makeUserWithSerie()
 
-    await client
-      .post(`/api/library/series/${serie.id}/watch`)
-      .loginAs(user)
-      .withCsrfToken()
+    await client.post(`/api/library/series/${serie.id}/watch`).loginAs(user).withCsrfToken()
 
     await flushProviderAction()
     assert.deepEqual(calls, [])
@@ -180,10 +174,7 @@ test.group('Sonarr episode file deletion', (group) => {
     const { user, serie } = await makeUserWithSerie()
     await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
 
-    await client
-      .post(`/api/library/series/${serie.id}/watch`)
-      .loginAs(user)
-      .withCsrfToken()
+    await client.post(`/api/library/series/${serie.id}/watch`).loginAs(user).withCsrfToken()
 
     await flushProviderAction()
     assert.deepEqual(calls, [])
