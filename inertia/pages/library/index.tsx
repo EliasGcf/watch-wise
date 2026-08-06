@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/com
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
+import { formatWatchedTime } from '~/lib/utils'
 import { LibraryGrid } from './components/library_cards'
 
 type Movie = Data.Movie
@@ -101,15 +102,6 @@ export default function LibraryIndex({
       />
     </div>
   )
-}
-
-function formatWatchedTime(minutes: number) {
-  const hours = Math.floor(minutes / 60)
-  const remainingMinutes = minutes % 60
-
-  if (hours === 0) return `${remainingMinutes}m`
-  if (remainingMinutes === 0) return `${hours}h`
-  return `${hours}h ${remainingMinutes}m`
 }
 
 function LibrarySection({

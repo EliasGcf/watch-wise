@@ -2,6 +2,7 @@ import { Link } from '@adonisjs/inertia/react'
 import { buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { type InertiaProps } from '~/types'
+import { formatWatchedTime } from '~/lib/utils'
 
 type Props = InertiaProps<{
   moviesCount: number
@@ -115,13 +116,4 @@ function Metric({ label, value }: { label: string; value: string | number }) {
       <dd className="mt-1 text-3xl font-semibold tracking-tight">{value}</dd>
     </div>
   )
-}
-
-function formatWatchedTime(minutes: number) {
-  const hours = Math.floor(minutes / 60)
-  const remainingMinutes = minutes % 60
-
-  if (hours === 0) return `${remainingMinutes}m`
-  if (remainingMinutes === 0) return `${hours}h`
-  return `${hours}h ${remainingMinutes}m`
 }
