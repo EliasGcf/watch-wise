@@ -17,20 +17,17 @@ export default class DeleteSonarrEpisodeFile {
   }
 
   async deleteEpisodeFile(event: Event) {
-    let catalogProviderId = event.watched.providerId
+    const settings = await UserSettings.findBy('userId', event.userId)
+    if (!settings?.activeProviderActions.deleteSonarrEpisodeFiles) return
+
+    const serie = await Serie.query()
+      .where('id', event.watched.libraryEntryId)
+      .where('userId', event.userId)
+      .firstOrFail()
 
     try {
-      const settings = await UserSettings.findBy('userId', event.userId)
-      if (!settings?.activeProviderActions.deleteSonarrEpisodeFiles) return
-
-      const serie = await Serie.query()
-        .where('id', event.watched.libraryEntryId)
-        .where('userId', event.userId)
-        .firstOrFail()
-      catalogProviderId = serie.providerId
-
       await sonarr.deleteEpisodeFileByCatalogProviderId(
-        catalogProviderId,
+        serie.providerId,
         event.watched.season,
         event.watched.episode
       )
@@ -40,7 +37,7 @@ export default class DeleteSonarrEpisodeFile {
           err: error,
           userId: event.userId,
           libraryEntryId: event.watched.libraryEntryId,
-          catalogProviderId,
+          catalogProviderId: serie.providerId,
           season: event.watched.season,
           episode: event.watched.episode,
         },
