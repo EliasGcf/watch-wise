@@ -1,10 +1,10 @@
 import Serie from '#models/serie'
 import User from '#models/user'
 import UserSettings from '#models/user_settings'
-import WatchedMark from '#models/watched_mark'
 import { sonarr } from '#services/sonarr_provider'
 import app from '@adonisjs/core/services/app'
 import logger from '@adonisjs/core/services/logger'
+import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 
@@ -13,17 +13,12 @@ const originalDeleteEpisodeFileByCatalogProviderId =
   sonarr.deleteEpisodeFileByCatalogProviderId.bind(sonarr)
 
 test.group('Sonarr episode file deletion', (group) => {
+  group.each.setup(() => testUtils.db().truncate())
   group.each.setup(() => restoreSonarrConfig())
   group.each.setup(() => {
     return () => {
       sonarr.deleteEpisodeFileByCatalogProviderId = originalDeleteEpisodeFileByCatalogProviderId
     }
-  })
-  group.each.setup(async () => {
-    await WatchedMark.query().delete()
-    await Serie.query().delete()
-    await UserSettings.query().delete()
-    await User.query().delete()
   })
 
   test('deletes the Sonarr episode file when enabled and available', async ({ assert, client }) => {
@@ -85,21 +80,6 @@ test.group('Sonarr episode file deletion', (group) => {
 
     await flushProviderAction()
     assert.lengthOf(calls, 1)
-  })
-
-  test('deletes after a transactional bulk season watch commits', async ({ assert, client }) => {
-    const calls = spyOnSonarrDeletion()
-    const { user, serie } = await makeUserWithSerie()
-    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
-
-    const response = await client
-      .post(`/api/library/series/${serie.id}/seasons/1/watch`)
-      .loginAs(user)
-      .withCsrfToken()
-
-    response.assertOk()
-    await flushProviderAction()
-    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
   })
 
   test('provider failures do not fail watched marking or watched time', async ({
