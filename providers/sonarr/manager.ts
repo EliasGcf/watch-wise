@@ -43,7 +43,7 @@ export class SonarrProviderManager extends SonarrProvider {
 
   private createDriver(name: SonarrDriver) {
     if (name === 'fake') {
-      return new FakeSonarrProviderDriver(this._config.drivers.fake)
+      return new FakeSonarrProviderDriver()
     }
 
     if (name === 'sonarr') {
