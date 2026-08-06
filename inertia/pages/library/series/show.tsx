@@ -235,7 +235,9 @@ function countWatchedEpisodes(watchedEpisodes: WatchedEpisodeProgress[], season:
 }
 
 function countSeriesEpisodes(seasons: SeriesSeasons) {
-  return seasons.reduce((total, season) => total + season.episodesCount, 0)
+  return seasons
+    .filter((season) => season.number !== 0)
+    .reduce((total, season) => total + season.episodesCount, 0)
 }
 
 function calculateSeasonProgress(watchedCount: number, episodesCount: number) {

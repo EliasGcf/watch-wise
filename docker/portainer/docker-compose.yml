@@ -20,4 +20,3 @@ services:
       - proxy
     volumes:
       - ${VOLUME_DIR}/data:/usr/src/app/data
-
