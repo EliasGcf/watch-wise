@@ -369,7 +369,7 @@ test.group('Library series episodes', (group) => {
     }
   })
 
-  test('authenticated users can bulk mark an entire series as watched without unreleased episodes', async ({
+  test('authenticated users can bulk mark an entire series as watched without unreleased or special episodes', async ({
     assert,
     client,
   }) => {
@@ -406,7 +406,7 @@ test.group('Library series episodes', (group) => {
         .orderBy('season')
         .orderBy('episode')
 
-      assert.lengthOf(watchedMarks, 2)
+      assert.lengthOf(watchedMarks, 1)
       assert.notInclude(
         watchedMarks.map((mark) => mark.episode),
         2
@@ -422,14 +422,6 @@ test.group('Library series episodes', (group) => {
         })),
         [
           {
-            providerId: 'episode-0-1',
-            type: 'episode',
-            season: 0,
-            episode: 1,
-            duration: 28,
-            watchedAt: watchedAt.toISO(),
-          },
-          {
             providerId: 'episode-1-1',
             type: 'episode',
             season: 1,
@@ -441,7 +433,7 @@ test.group('Library series episodes', (group) => {
       )
 
       await user.refresh()
-      assert.equal(user.watchedTime, 52)
+      assert.equal(user.watchedTime, 24)
     } finally {
       Settings.now = Date.now
     }

@@ -27,12 +27,18 @@ export default class SeasonsController {
     }
 
     const episodesBySeason = await Promise.all(
-      catalogSerie.seasons.map((season) => catalog.episodes(serie.providerId, season.number))
+      catalogSerie.seasons
+        .filter((season) => season.number !== 0)
+        .map((season) => catalog.episodes(serie.providerId, season.number))
     )
 
     await db.transaction(async (trx) => {
       serie.useTransaction(trx)
-      await serie.watchEpisodes(episodesBySeason.flat().filter(isReleasedEpisode))
+      await serie.watchEpisodes(
+        episodesBySeason
+          .flat()
+          .filter((episode) => isReleasedEpisode(episode) && !episode.isSpecial)
+      )
     })
     await serie.load('watchedEpisodes')
 

@@ -120,10 +120,7 @@ test.group('Sonarr episode file deletion', (group) => {
 
     response.assertOk()
     await flushProviderAction()
-    assert.deepEqual(calls, [
-      { providerId: 'series-1', season: 0, episode: 1 },
-      { providerId: 'series-1', season: 1, episode: 1 },
-    ])
+    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
   })
 
   test('bulk marking does not retry Sonarr deletion for already watched episodes', async ({
