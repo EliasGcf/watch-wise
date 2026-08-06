@@ -8,42 +8,29 @@ type Event = InstanceType<typeof events.EpisodeWatched>
 
 export default class DeleteSonarrEpisodeFile {
   handle(event: Event) {
-    const run = () => {
-      this.deleteEpisodeFile(event).catch((error) => {
-        logger.error(
-          {
-            err: error,
-            userId: event.userId,
-            libraryEntryId: event.watched.libraryEntryId,
-            catalogProviderId: event.watched.providerId,
-            season: event.watched.season,
-            episode: event.watched.episode,
-          },
-          'Sonarr episode file deletion failed'
-        )
-      })
-    }
-
     if (event.$trx) {
-      event.$trx.after('commit', run)
+      event.$trx.after('commit', () => this.deleteEpisodeFile(event))
       return
     }
 
-    run()
+    void this.deleteEpisodeFile(event)
   }
 
   async deleteEpisodeFile(event: Event) {
-    const settings = await UserSettings.findBy('userId', event.userId)
-    if (!settings?.activeProviderActions.deleteSonarrEpisodeFiles) return
-
-    const serie = await Serie.query()
-      .where('id', event.watched.libraryEntryId)
-      .where('userId', event.userId)
-      .firstOrFail()
+    let catalogProviderId = event.watched.providerId
 
     try {
+      const settings = await UserSettings.findBy('userId', event.userId)
+      if (!settings?.activeProviderActions.deleteSonarrEpisodeFiles) return
+
+      const serie = await Serie.query()
+        .where('id', event.watched.libraryEntryId)
+        .where('userId', event.userId)
+        .firstOrFail()
+      catalogProviderId = serie.providerId
+
       await sonarr.deleteEpisodeFileByCatalogProviderId(
-        serie.providerId,
+        catalogProviderId,
         event.watched.season,
         event.watched.episode
       )
@@ -53,7 +40,7 @@ export default class DeleteSonarrEpisodeFile {
           err: error,
           userId: event.userId,
           libraryEntryId: event.watched.libraryEntryId,
-          catalogProviderId: serie.providerId,
+          catalogProviderId,
           season: event.watched.season,
           episode: event.watched.episode,
         },
