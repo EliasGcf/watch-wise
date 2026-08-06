@@ -6,8 +6,10 @@ emitter.listen(events.MovieWatched, [listeners.UpdateUserWatchedTime])
 
 emitter.listen(events.MovieUnwatched, [listeners.UpdateUserWatchedTime])
 
-emitter.listen(events.EpisodeWatched, [listeners.UpdateUserWatchedTime])
-emitter.listen(events.EpisodeWatched, [listeners.DeleteSonarrEpisodeFile])
+emitter.listen(events.EpisodeWatched, [
+  listeners.UpdateUserWatchedTime,
+  listeners.DeleteSonarrEpisodeFile,
+])
 
 emitter.listen(events.EpisodeUnwatched, [listeners.UpdateUserWatchedTime])
 
