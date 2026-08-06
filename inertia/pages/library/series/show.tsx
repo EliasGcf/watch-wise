@@ -197,6 +197,9 @@ function SeasonAccordion({
                     <span className="font-mono text-xs font-normal text-muted-foreground">
                       {watchedCount} / {season.episodesCount} watched
                     </span>
+                    <span className="ml-auto font-mono text-xs font-normal text-muted-foreground sm:hidden">
+                      {progress}%
+                    </span>
                   </div>
                   <Progress
                     value={progress}
@@ -205,7 +208,7 @@ function SeasonAccordion({
                   />
                 </div>
 
-                <div className="flex items-center sm:justify-end sm:text-right">
+                <div className="hidden items-center sm:flex sm:justify-end sm:text-right">
                   <span className="font-mono text-xs font-normal text-muted-foreground">
                     {progress}%
                   </span>
