@@ -18,3 +18,6 @@ services:
       - ../../stack.env
     networks:
       - proxy
+    volumes:
+      - ${VOLUME_DIR}/data:/usr/src/app/data
+
