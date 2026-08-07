@@ -49,6 +49,7 @@ export type Episode = {
 
 export abstract class CatalogProvider {
   abstract search(query: string): Promise<CatalogSearchResult[]>
+  abstract weekTrending(): Promise<CatalogSearchResult[]>
   abstract find(type: ItemType, providerId: string): Promise<Movie | Serie | null>
   abstract findMovieById(providerId: string): Promise<Movie | null>
   abstract findSerieById(providerId: string): Promise<Serie | null>

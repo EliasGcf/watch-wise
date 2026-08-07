@@ -32,6 +32,24 @@ test.group('Catalog search', (group) => {
     await page.assertTextContains('body', 'A pilot about a super-intelligent astronaut.')
   })
 
+  test('authenticated users see default titles when no search query is provided', async ({
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Taylor Browser',
+      email: 'browse@example.com',
+      password: 'secret123',
+    })
+
+    await browserContext.loginAs(user)
+
+    const page = await visit('/app/catalog/search')
+
+    await page.assertTextContains('body', 'Heat')
+    await page.assertTextContains('body', 'Heat Vision and Jack')
+  })
+
   test('provider failures are shown as catalog search limitations', async ({
     browserContext,
     visit,

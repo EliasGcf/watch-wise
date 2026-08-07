@@ -48,6 +48,10 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     return this.getOrSet(`search:${query}`, () => this.fetchSearch(query))
   }
 
+  async weekTrending(): Promise<CatalogSearchResult[]> {
+    return this.getOrSet('weekTrending', () => this.fetchWeekTrending())
+  }
+
   async find(type: ItemType, providerId: string): Promise<FindResult | null> {
     return this.getOrSet(`find:${type}:${providerId}`, async () => {
       if (type === 'movie') return this.findMovieById(providerId)
@@ -92,31 +96,23 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
     if (!response.data?.results) return []
 
-    return response.data.results.flatMap((result) => {
-      if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
+    return mapSearchResults(response.data.results, this.config)
+  }
 
-      const type = result.media_type === 'movie' ? 'movie' : 'serie'
-      const name = result.media_type === 'movie' ? result.title : result.name
-      const releasedAt = result.release_date
-      const bannerPath = result.backdrop_path
-      const posterPath = result.poster_path
-      if (!result.id || !name) return []
-
-      return [
-        {
-          provider: 'tmdb',
-          id: String(result.id),
-          type,
-          name: name,
-          bannerPath: bannerPath ?? null,
-          bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
-          posterPath: posterPath ?? null,
-          posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
-          releasedAt: releasedAt ?? null,
-          summary: result.overview ?? null,
-        },
-      ]
+  private async fetchWeekTrending(): Promise<CatalogSearchResult[]> {
+    const response = await this.tmdb.trending.all({
+      throwOnError: false,
+      path: { time_window: 'week' },
+      query: { language: 'en-US' },
     })
+
+    if (response.error) {
+      throw new CatalogProviderError('TMDB trending request failed', { cause: response.error })
+    }
+
+    if (!response.data?.results) return []
+
+    return mapSearchResults(response.data.results, this.config)
   }
 
   private async fetchMovieById(providerId: string): Promise<Movie | null> {
@@ -275,4 +271,46 @@ function makeImageUrl(baseImageUrl: string, path?: string) {
   if (!path) return null
 
   return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
+}
+
+type SearchApiResult = {
+  id?: number
+  title?: string
+  name?: string
+  backdrop_path?: string
+  poster_path?: string
+  release_date?: string
+  overview?: string
+  media_type?: string
+}
+
+function mapSearchResults(
+  results: SearchApiResult[],
+  config: TmdbCatalogProviderConfig
+): CatalogSearchResult[] {
+  return results.flatMap((result) => {
+    if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
+
+    const type = result.media_type === 'movie' ? 'movie' : 'serie'
+    const name = result.media_type === 'movie' ? result.title : result.name
+    const releasedAt = result.release_date
+    const bannerPath = result.backdrop_path
+    const posterPath = result.poster_path
+    if (!result.id || !name) return []
+
+    return [
+      {
+        provider: 'tmdb',
+        id: String(result.id),
+        type,
+        name,
+        bannerPath: bannerPath ?? null,
+        bannerUrl: makeImageUrl(config.baseImageUrl, bannerPath),
+        posterPath: posterPath ?? null,
+        posterUrl: makeImageUrl(config.baseImageUrl, posterPath),
+        releasedAt: releasedAt ?? null,
+        summary: result.overview ?? null,
+      },
+    ]
+  })
 }

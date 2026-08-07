@@ -23,6 +23,14 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       throw new CatalogProviderError('Fake catalog provider failure')
     }
 
+    return this.searchResults()
+  }
+
+  async weekTrending(): Promise<CatalogSearchResult[]> {
+    return this.searchResults()
+  }
+
+  private searchResults(): CatalogSearchResult[] {
     const response = fakeGet3SearchMultiResponse()
     const results = [
       {

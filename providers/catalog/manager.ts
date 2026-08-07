@@ -50,6 +50,10 @@ export class CatalogProviderManager extends CatalogProvider {
     return this.use().search(query)
   }
 
+  weekTrending() {
+    return this.use().weekTrending()
+  }
+
   find(type: ItemType, providerId: string) {
     return this.use().find(type, providerId)
   }

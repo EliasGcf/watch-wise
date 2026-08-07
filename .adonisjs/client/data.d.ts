@@ -8,6 +8,7 @@ import type { InferData, InferVariants } from '@adonisjs/core/types/transformers
 import type { InferSharedProps } from '@adonisjs/inertia/types'
 import type CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
 import type CatalogSerieTransformer from '#transformers/catalog/serie_transformer'
+import type CatalogSearchResultTransformer from '#transformers/catalog/search_result_transformer'
 import type MovieTransformer from '#transformers/movie_transformer'
 import type SerieTransformer from '#transformers/serie_transformer'
 import type UserSettingsTransformer from '#transformers/user_settings_transformer'
@@ -24,6 +25,10 @@ export namespace Data {
     export type Serie = InferData<CatalogSerieTransformer>
     export namespace Serie {
       export type Variants = InferVariants<CatalogSerieTransformer>
+    }
+    export type SearchResult = InferData<CatalogSearchResultTransformer>
+    export namespace SearchResult {
+      export type Variants = InferVariants<CatalogSearchResultTransformer>
     }
   }
   export type Movie = InferData<MovieTransformer>

@@ -1,4 +1,5 @@
 import { Form } from '@adonisjs/inertia/react'
+import { type Data } from '@generated/data'
 import dayjs from 'dayjs'
 import { LoaderCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
@@ -7,23 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { useAddLibraryEntryMutation } from '~/hooks/use_add_library_entry_mutation'
+import { type InertiaProps } from '~/types'
 
-type CatalogSearchResult = {
-  provider: string
-  id: string
-  type: 'movie' | 'serie'
-  name: string
-  bannerPath: string | null
-  bannerUrl: string | null
-  posterPath: string | null
-  posterUrl: string | null
-  releasedAt: string | null
-  summary: string | null
-}
-
-type Props = {
+type Props = InertiaProps & {
   query: string
-  results: CatalogSearchResult[]
+  results: Data.Catalog.SearchResult[]
   limitation: string | null
 }
 
@@ -76,20 +65,14 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
           <CatalogResultCard key={`${result.provider}:${result.id}`} result={result} />
         ))}
 
-        {!query && !limitation && results.length === 0 && (
+        {!limitation && results.length === 0 && (
           <Card className="lg:col-span-2">
             <CardContent>
               <p className="text-muted-foreground">
-                Search for a title to add movies and series to your library.
+                {query
+                  ? 'No movie or series titles found.'
+                  : 'Search for a title to add movies and series to your library.'}
               </p>
-            </CardContent>
-          </Card>
-        )}
-
-        {query && !limitation && results.length === 0 && (
-          <Card className="lg:col-span-2">
-            <CardContent>
-              <p className="text-muted-foreground">No movie or series titles found.</p>
             </CardContent>
           </Card>
         )}
@@ -98,7 +81,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
   )
 }
 
-function CatalogResultCard({ result }: { result: CatalogSearchResult }) {
+function CatalogResultCard({ result }: { result: Data.Catalog.SearchResult }) {
   const label = result.type === 'serie' ? 'Serie' : 'Movie'
   const addLibraryEntry = useAddLibraryEntryMutation()
   const canAddToLibrary = result.provider === 'tmdb'
