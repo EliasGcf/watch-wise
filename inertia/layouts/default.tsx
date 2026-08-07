@@ -37,7 +37,7 @@ function AppShell({ children }: { children: ReactElement<Data.SharedProps> }) {
     <div className="flex h-dvh flex-col overflow-hidden bg-background">
       <Header />
 
-      <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-border">
+      <main className="flex-1 overflow-y-auto scrollbar-gutter-stable scrollbar-thin scrollbar-thumb-border">
         <div className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-8 lg:py-10">{children}</div>
       </main>
     </div>
