@@ -89,15 +89,17 @@ export default function SeriesShow({ serie }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="-mx-5 sm:-mx-8">
+      <div className="-mx-5 sm:-mx-8 -mt-8 lg:-mt-10">
         {serie.bannerUrl ? (
-          <article className="relative min-h-72 overflow-hidden rounded-b-xl bg-muted sm:min-h-96 sm:rounded-xl">
+          <article className="relative min-h-72 overflow-hidden sm:min-h-96 ">
             <img
               src={serie.bannerUrl}
               alt=""
               className="absolute inset-0 h-full w-full object-cover object-top"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-background via-background/55 to-background/10" />
+            <div className="absolute inset-0 bg-linear-to-t from-background via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-background via-transparent to-background" />
             <div className="relative flex h-full min-h-72 flex-col gap-5 px-5 pt-5 pb-8 sm:min-h-96 sm:px-8 sm:pb-10">
               <Link
                 href="/app/library"
