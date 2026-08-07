@@ -1,6 +1,19 @@
 import { Link } from '@adonisjs/inertia/react'
+import { router } from '@inertiajs/react'
 import { useState } from 'react'
-import { Clock3, LoaderCircle } from 'lucide-react'
+import { ArrowLeft, Clock3, LoaderCircle, Trash2 } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '~/components/ui/alert_dialog'
+import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
 import {
   Accordion,
   AccordionContent,
@@ -9,7 +22,7 @@ import {
 } from '~/components/ui/accordion'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
@@ -75,57 +88,86 @@ export default function SeriesShow({ serie }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <Link
-        href="/app/library"
-        className={buttonVariants({ variant: 'outline', className: 'self-start' })}
-      >
-        Back to library
-      </Link>
-
-      <Card className="overflow-hidden border-primary/20 bg-card/80 py-0">
-        <div className="grid lg:grid-cols-[1.15fr_1fr]">
-          {serie.bannerUrl && (
-            <div className="relative min-h-64 bg-muted">
-              <img src={serie.bannerUrl} alt="" className="h-full w-full object-cover opacity-80" />
-              <div className="absolute inset-0 bg-linear-to-t from-background/70 to-transparent" />
-            </div>
-          )}
-          <div className="flex flex-col justify-center gap-4 py-5">
-            <CardHeader>
-              <CardDescription className="font-mono text-xs uppercase tracking-[0.22em]">
-                {serie.provider} ID: {serie.providerId}
-              </CardDescription>
-              <CardTitle className="max-w-xl text-4xl font-semibold tracking-[-0.06em] sm:text-6xl">
-                {serie.name}
-              </CardTitle>
-            </CardHeader>
-            {serie.summary && (
-              <CardContent>
-                <p className="max-w-2xl text-muted-foreground">{serie.summary}</p>
-              </CardContent>
-            )}
-            <CardContent className="flex flex-col gap-4">
-              <SeriesProgress value={serie.progress} />
-              <Button
-                type="button"
-                className="w-full sm:w-fit"
-                disabled={watchSeriesMutation.isPending || seriesMarked}
-                onClick={() => void watchSeries()}
-              >
-                {watchSeriesMutation.isPending && (
-                  <LoaderCircle data-icon="inline-start" className="animate-spin" />
+    <div className="flex flex-col gap-3">
+      <div className="-mx-5 sm:-mx-8">
+        {serie.bannerUrl ? (
+          <article className="relative min-h-72 overflow-hidden rounded-b-xl bg-muted sm:min-h-96 sm:rounded-xl">
+            <img
+              src={serie.bannerUrl}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-top"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-background via-background/55 to-background/10" />
+            <div className="relative flex h-full min-h-72 flex-col gap-5 px-5 pt-5 pb-8 sm:min-h-96 sm:px-8 sm:pb-10">
+              <Link
+                href="/app/library"
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'self-start rounded-lg bg-card text-foreground'
                 )}
-                {watchSeriesMutation.isPending
-                  ? 'Marking...'
-                  : seriesMarked
-                    ? 'All marked'
-                    : 'Mark all episodes'}
-              </Button>
-            </CardContent>
-          </div>
+              >
+                <ArrowLeft data-icon="inline-start" className="size-4" />
+                Back to library
+              </Link>
+              <CardHeader className="mt-auto sm:max-w-2xl">
+                <CardTitle className="text-4xl font-semibold tracking-[-0.04em] text-balance sm:text-6xl">
+                  {serie.name}
+                </CardTitle>
+              </CardHeader>
+              {serie.summary && <p className="max-w-2xl text-muted-foreground">{serie.summary}</p>}
+            </div>
+          </article>
+        ) : (
+          <Card className="py-0">
+            <div className="flex flex-col gap-6 px-5 pt-3 pb-6 sm:px-8">
+              <Link
+                href="/app/library"
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'lg' }),
+                  'self-start rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground'
+                )}
+              >
+                <ArrowLeft data-icon="inline-start" className="size-4" />
+                Back to library
+              </Link>
+              <CardHeader>
+                <CardTitle className="max-w-xl text-4xl font-semibold tracking-[-0.06em] text-balance sm:text-6xl">
+                  {serie.name}
+                </CardTitle>
+              </CardHeader>
+              {serie.summary && (
+                <CardContent>
+                  <p className="max-w-2xl text-muted-foreground">{serie.summary}</p>
+                </CardContent>
+              )}
+            </div>
+          </Card>
+        )}
+      </div>
+
+      <div className="flex flex-col gap-5 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
+        <div className="max-w-2xl">
+          <SeriesProgress value={serie.progress} />
         </div>
-      </Card>
+        <div className="flex w-full flex-row gap-2 sm:w-fit">
+          <Button
+            type="button"
+            className="flex-1 sm:flex-none"
+            disabled={watchSeriesMutation.isPending || seriesMarked}
+            onClick={() => void watchSeries()}
+          >
+            {watchSeriesMutation.isPending && (
+              <LoaderCircle data-icon="inline-start" className="animate-spin" />
+            )}
+            {watchSeriesMutation.isPending
+              ? 'Marking...'
+              : seriesMarked
+                ? 'All marked'
+                : 'Mark all episodes'}
+          </Button>
+          <RemoveEntryButton serie={serie} />
+        </div>
+      </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
@@ -157,6 +199,42 @@ function SeriesProgress({ value }: { value: number }) {
         {() => `${value}%`}
       </ProgressValue>
     </Progress>
+  )
+}
+
+function RemoveEntryButton({ serie }: { serie: Data.Serie }) {
+  const removeLibraryEntry = useRemoveLibraryEntryMutation(() => {
+    router.visit('/app/library')
+  })
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger
+        className={buttonVariants({ variant: 'destructive', size: 'icon' })}
+        aria-label={`Remove ${serie.name} from library`}
+      >
+        <Trash2 />
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Remove from library?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to remove {serie.name} from your library? This cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            variant="destructive"
+            disabled={removeLibraryEntry.isPending}
+            onClick={() => removeLibraryEntry.mutate({ params: { id: serie.id } })}
+          >
+            {removeLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
+            {removeLibraryEntry.isPending ? 'Removing...' : 'Remove from library'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 
@@ -193,7 +271,7 @@ function SeasonAccordion({
               disabled={season.episodesCount === 0}
               className="items-center hover:no-underline py-3"
             >
-              <div className="grid w-full grid-cols-[2.5rem_1fr] items-center pr-4 sm:grid-cols-[2.5rem_1fr_3rem] sm:items-center">
+              <div className="grid w-full grid-cols-[2.5rem_1fr] items-center pr-4">
                 <div className="flex items-center" onClick={(event) => event.stopPropagation()}>
                   <SeasonCompleteCheckbox
                     serie={serie}
@@ -209,9 +287,9 @@ function SeasonAccordion({
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                     <span className="font-medium">{season.name}</span>
                     <span className="font-mono text-xs font-normal text-muted-foreground">
-                      {watchedCount} / {season.episodesCount} watched
+                      {watchedCount} / {season.episodesCount}
                     </span>
-                    <span className="ml-auto font-mono text-xs font-normal text-muted-foreground sm:hidden">
+                    <span className="ml-auto font-mono text-xs font-normal text-muted-foreground">
                       {progress}%
                     </span>
                   </div>
@@ -220,12 +298,6 @@ function SeasonAccordion({
                     aria-label={`${season.name} progress`}
                     className="mt-2 gap-0"
                   />
-                </div>
-
-                <div className="hidden items-center sm:flex sm:justify-end sm:text-right">
-                  <span className="font-mono text-xs font-normal text-muted-foreground">
-                    {progress}%
-                  </span>
                 </div>
               </div>
             </AccordionTrigger>

@@ -741,8 +741,8 @@ test.group('Library series episodes', (group) => {
 
     await browserContext.loginAs(user)
     const detailsPage = await visit(`/app/library/series/${serie.id}`)
-    await detailsPage.assertTextContains('body', '1 / 1 watched')
-    await detailsPage.assertTextContains('body', '0 / 2 watched')
+    await detailsPage.assertTextContains('body', '1 / 1')
+    await detailsPage.assertTextContains('body', '0 / 2')
 
     await client
       .delete(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
