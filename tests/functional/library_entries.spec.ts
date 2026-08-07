@@ -61,7 +61,9 @@ test.group('Library entries', (group) => {
     await browserContext.loginAs(user)
 
     const libraryPage = await visit('/app/library')
-    await libraryPage.assertTextContains('body', 'Heat')
+    await libraryPage.assertExists(
+      libraryPage.getByRole('button', { name: 'Remove Heat from library' })
+    )
     await libraryPage.getByRole('button', { name: 'Remove Heat from library' }).click()
     await libraryPage.getByRole('button', { name: 'Remove from library' }).click()
     await libraryPage.assertTextContains('body', 'Title was removed from your library.')
@@ -468,7 +470,9 @@ test.group('Library entries', (group) => {
     await browserContext.loginAs(user)
 
     const libraryPage = await visit('/app/library')
-    await libraryPage.assertTextContains('body', 'Heat Vision and Jack')
+    await libraryPage.assertExists(
+      libraryPage.getByRole('button', { name: 'Remove Heat Vision and Jack from library' })
+    )
     await libraryPage
       .getByRole('button', { name: 'Remove Heat Vision and Jack from library' })
       .click()

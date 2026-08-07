@@ -34,15 +34,16 @@ test.group('Library movie watched records', (group) => {
 
     const libraryPage = await visit('/app/library')
     await delayMovieWatchApi(libraryPage)
-    const markButton = libraryPage.getByRole('button', { name: 'Mark Heat as watched' })
+    const markCheckbox = libraryPage.getByRole('checkbox', { name: 'Mark Heat as watched' })
+    await libraryPage.assertExists(markCheckbox)
     const markedResponse = libraryPage.waitForResponse('**/api/library/movies/*/watch')
-    await markButton.click()
-    await libraryPage.assertDisabled(markButton)
-    await libraryPage.assertTextContains('body', 'Marking...')
+    await markCheckbox.click()
     await markedResponse
 
     const markedPage = await visit('/app/library')
-    await markedPage.assertTextContains('body', 'Watched')
+    await markedPage.assertExists(
+      markedPage.getByRole('checkbox', { name: 'Unmark Heat as watched' })
+    )
     await markedPage.assertTextContains('body', '2h 50m')
     await markedPage.assertTextContains(
       'body',
@@ -64,13 +65,13 @@ test.group('Library movie watched records', (group) => {
     assert.equal(user.watchedTime, 170)
 
     await delayMovieWatchApi(markedPage)
-    const unmarkButton = markedPage.getByRole('button', { name: 'Unmark Heat as watched' })
+    const unmarkCheckbox = markedPage.getByRole('checkbox', { name: 'Unmark Heat as watched' })
     const unmarkedResponse = markedPage.waitForResponse('**/api/library/movies/*/watch')
-    await unmarkButton.click()
-    await markedPage.assertDisabled(unmarkButton)
-    await markedPage.assertTextContains('body', 'Unmarking...')
+    await unmarkCheckbox.click()
     await unmarkedResponse
-    await markedPage.assertTextContains('body', 'Mark as watched')
+    await markedPage.assertExists(
+      markedPage.getByRole('checkbox', { name: 'Mark Heat as watched' })
+    )
 
     assert.lengthOf(
       await WatchedMovie.query().where('userId', user.id).where('libraryEntryId', movie.id),
@@ -105,15 +106,17 @@ test.group('Library movie watched records', (group) => {
 
     const firstPage = await visit('/app/library')
     const duplicatePage = await visit('/app/library')
-    await firstPage.getByRole('button', { name: 'Mark Heat as watched' }).click()
-    await duplicatePage.getByRole('button', { name: 'Mark Heat as watched' }).click()
+    await firstPage.getByRole('checkbox', { name: 'Mark Heat as watched' }).click()
+    await duplicatePage.getByRole('checkbox', { name: 'Mark Heat as watched' }).click()
 
     await movie
       .merge({ name: 'Changed Heat', bannerPath: '', posterPath: '', summary: null })
       .save()
 
     const secondPage = await visit('/app/library')
-    await secondPage.assertTextContains('body', 'Watched')
+    await secondPage.assertExists(
+      secondPage.getByRole('checkbox', { name: 'Unmark Changed Heat as watched' })
+    )
 
     const moviesWatched = await WatchedMovie.query()
       .where('userId', user.id)
@@ -150,7 +153,7 @@ test.group('Library movie watched records', (group) => {
     await browserContext.loginAs(user)
 
     const page = await visit('/app/library')
-    await page.getByRole('button', { name: 'Mark Future Heat as watched' }).click()
+    await page.getByRole('checkbox', { name: 'Mark Future Heat as watched' }).click()
     await page.assertTextContains('body', 'Movie could not be marked as watched.')
 
     assert.lengthOf(

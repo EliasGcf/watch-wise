@@ -151,7 +151,15 @@ test.group('Library series episodes', (group) => {
 
     await browserContext.loginAs(user)
     const libraryPage = await visit('/app/library')
-    await libraryPage.assertTextContains('body', '50%')
+    await libraryPage.assertExists(
+      libraryPage.getByRole('progressbar', { name: 'Heat Vision and Jack progress' })
+    )
+    assert.equal(
+      await libraryPage
+        .getByRole('progressbar', { name: 'Heat Vision and Jack progress' })
+        .getAttribute('aria-valuenow'),
+      '50'
+    )
 
     await serie.merge({ providerId: 'series-1-changed' }).save()
     const persistedSnapshot = await WatchedEpisode.query()

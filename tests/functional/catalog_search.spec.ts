@@ -69,8 +69,9 @@ test.group('Catalog search', (group) => {
 
     const libraryPage = await visit('/app/library')
 
-    await libraryPage.assertTextContains('body', 'Heat')
-    await libraryPage.assertTextContains('body', 'movie')
+    await libraryPage.assertExists(
+      libraryPage.getByRole('button', { name: 'Remove Heat from library' })
+    )
 
     const movie = await user.related('movies').query().where('providerId', 'movie-1').firstOrFail()
     assert.include(movie.serialize(), {
@@ -101,8 +102,9 @@ test.group('Catalog search', (group) => {
 
     const libraryPage = await visit('/app/library')
 
-    await libraryPage.assertTextContains('body', 'Heat Vision and Jack')
-    await libraryPage.assertTextContains('body', 'series')
+    await libraryPage.assertExists(
+      libraryPage.getByRole('button', { name: 'Remove Heat Vision and Jack from library' })
+    )
 
     const serie = await user.related('series').query().where('providerId', 'series-1').firstOrFail()
     assert.include(serie.serialize(), {
@@ -232,8 +234,9 @@ test.group('Catalog search', (group) => {
 
     const libraryPage = await visit('/app/library')
 
-    await libraryPage.assertTextContains('body', 'Unknown Heat')
-    await libraryPage.assertTextContains('body', 'movie')
+    await libraryPage.assertExists(
+      libraryPage.getByRole('button', { name: 'Remove Unknown Heat from library' })
+    )
 
     const movie = await user.related('movies').query().where('providerId', 'movie-2').firstOrFail()
     assert.include(movie.serialize(), {
