@@ -33,7 +33,11 @@ export default function LibrarySeries({ query, series }: Props) {
           <p className="mt-3 text-muted-foreground">Search the series you have chosen to follow.</p>
         </div>
 
-        <Form action="/app/library/series" method="get">
+        <Form
+          action="/app/library/series"
+          method="get"
+          options={{ preserveState: true, preserveScroll: true }}
+        >
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="library-series-query">Search series</FieldLabel>

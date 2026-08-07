@@ -33,7 +33,11 @@ export default function LibraryMovies({ query, movies }: Props) {
           <p className="mt-3 text-muted-foreground">Search the movies you have chosen to follow.</p>
         </div>
 
-        <Form action="/app/library/movies" method="get">
+        <Form
+          action="/app/library/movies"
+          method="get"
+          options={{ preserveState: true, preserveScroll: true }}
+        >
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>

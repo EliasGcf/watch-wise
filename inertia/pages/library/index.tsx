@@ -24,7 +24,11 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
 
   return (
     <div className="flex flex-col gap-8">
-      <Form action="/app/library" method="get">
+      <Form
+        action="/app/library"
+        method="get"
+        options={{ preserveState: true, preserveScroll: true }}
+      >
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="library-query">Search your library</FieldLabel>

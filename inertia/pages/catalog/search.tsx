@@ -28,7 +28,11 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
           </p>
         </div>
 
-        <Form action="/app/catalog/search" method="get">
+        <Form
+          action="/app/catalog/search"
+          method="get"
+          options={{ preserveState: true, preserveScroll: true }}
+        >
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="catalog-query">Search the catalog</FieldLabel>
