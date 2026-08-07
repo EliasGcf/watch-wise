@@ -12,13 +12,13 @@ export default class LibraryController {
         .related('series')
         .query()
         .apply((scopes) => scopes.search({ name: query }))
-        .limit(4),
+        .limit(6),
       user
         .related('movies')
         .query()
         .apply((scopes) => scopes.search({ name: query }))
         .preload('watched')
-        .limit(4),
+        .limit(6),
       user
         .related('series')
         .query()
