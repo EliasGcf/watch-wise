@@ -185,7 +185,7 @@ test.group('Library entries', (group) => {
     assert.deepEqual(page.series, [])
   })
 
-  test('library summary limits movies and series to four entries with total counts', async ({
+  test('library summary limits movies and series to six entries with total counts', async ({
     assert,
     client,
   }) => {
@@ -195,7 +195,7 @@ test.group('Library entries', (group) => {
       password: 'secret123',
     })
 
-    for (let index = 1; index <= 5; index++) {
+    for (let index = 1; index <= 8; index++) {
       await Movie.create({
         userId: user.id,
         provider: 'tmdb',
@@ -227,10 +227,10 @@ test.group('Library entries', (group) => {
         .match(/data-page="([^"]+)"/)![1]
         .replaceAll('&quot;', '"')
     ).props
-    assert.lengthOf(page.movies, 4)
-    assert.lengthOf(page.series, 4)
-    assert.equal(page.moviesCount, 5)
-    assert.equal(page.seriesCount, 5)
+    assert.lengthOf(page.movies, 6)
+    assert.lengthOf(page.series, 6)
+    assert.equal(page.moviesCount, 8)
+    assert.equal(page.seriesCount, 8)
   })
 
   test('authenticated users can search their dedicated movie library page', async ({
