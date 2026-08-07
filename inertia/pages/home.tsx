@@ -2,7 +2,7 @@ import { Link } from '@adonisjs/inertia/react'
 import { buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { type InertiaProps } from '~/types'
-import { formatWatchedTime } from '~/lib/utils'
+import { cn, formatWatchedTime } from '~/lib/utils'
 
 type Props = InertiaProps<{
   moviesCount: number
@@ -20,56 +20,41 @@ export default function Home({ user, moviesCount, seriesCount, recentLibraryEntr
 
   return (
     <div className="flex flex-col gap-8">
-      <section className="grid gap-5 lg:grid-cols-[1.4fr_0.8fr]">
-        <Card className="border-primary/20 bg-gradient-to-br from-card via-card to-primary/5">
-          <CardHeader className="gap-4">
-            <CardDescription>
-              {hasLibraryEntries ? 'Library summary' : 'Empty library'}
-            </CardDescription>
-            <p className="text-sm font-medium text-muted-foreground">
-              {hasLibraryEntries ? 'Your library' : 'Start your library'}
-            </p>
-            <CardTitle className="max-w-2xl text-4xl leading-tight tracking-tight sm:text-6xl">
-              {hasLibraryEntries ? 'Your watch desk is open.' : 'Start your library.'}
-            </CardTitle>
-            <p className="max-w-xl text-muted-foreground">
-              {hasLibraryEntries
-                ? 'Keep going with movies and series already in your library.'
-                : 'Search the catalog for a movie or series, add it to your library, then track what you watch.'}
-            </p>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/app/catalog/search"
-                className={buttonVariants({ className: 'w-full sm:w-auto' })}
-              >
-                Search the catalog
-              </Link>
-              <Link
-                href="/app/library"
-                className={buttonVariants({ variant: 'outline', className: 'w-full sm:w-auto' })}
-              >
-                View library
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>At a glance</CardTitle>
-            <CardDescription>Known runtime and saved titles.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <dl className="grid gap-3">
-              <Metric label="Watched Time" value={formatWatchedTime(user?.watchedTime ?? 0)} />
-              <Metric label="Movies" value={moviesCount} />
-              <Metric label="Series" value={seriesCount} />
-            </dl>
-          </CardContent>
-        </Card>
-      </section>
+      <Card className="border-primary/25 bg-linear-to-b from-card via-card to-primary/5">
+        <CardHeader className="gap-4">
+          <CardTitle className="max-w-2xl text-4xl leading-tight tracking-tight sm:text-6xl">
+            The screen is waiting.
+          </CardTitle>
+          <div className="flex flex-row gap-3">
+            <Link
+              href="/app/catalog/search"
+              className={buttonVariants({ className: 'flex-1 sm:flex-none sm:w-auto' })}
+            >
+              Search the catalog
+            </Link>
+            <Link
+              href="/app/library"
+              className={buttonVariants({
+                variant: 'outline',
+                className: 'flex-1 sm:flex-none sm:w-auto',
+              })}
+            >
+              View library
+            </Link>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-border ring-1 ring-foreground/10 sm:grid-cols-3">
+            <Metric
+              label="Watched Time"
+              value={formatWatchedTime(user?.watchedTime ?? 0)}
+              className="col-span-2 sm:col-span-1"
+            />
+            <Metric label="Movies" value={moviesCount} />
+            <Metric label="Series" value={seriesCount} />
+          </dl>
+        </CardContent>
+      </Card>
 
       <section className="flex flex-col gap-3" aria-label="Up next from your library">
         <div className="flex items-end justify-between gap-4">
@@ -109,9 +94,17 @@ export default function Home({ user, moviesCount, seriesCount, recentLibraryEntr
   )
 }
 
-function Metric({ label, value }: { label: string; value: string | number }) {
+function Metric({
+  label,
+  value,
+  className,
+}: {
+  label: string
+  value: string | number
+  className?: string
+}) {
   return (
-    <div className="rounded-lg border bg-background/40 p-4">
+    <div className={cn('bg-card p-4', className)}>
       <dt className="text-xs text-muted-foreground">{label}</dt>
       <dd className="mt-1 text-3xl font-semibold tracking-tight">{value}</dd>
     </div>
