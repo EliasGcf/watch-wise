@@ -4,6 +4,17 @@ import { LoaderCircle } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '~/components/ui/alert_dialog'
 import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
 
@@ -101,17 +112,34 @@ function RemoveLibraryEntryForm({ entry }: { entry: Movie | Serie }) {
   const removeLibraryEntry = useRemoveLibraryEntryMutation()
 
   return (
-    <Button
-      type="button"
-      variant="destructive"
-      className="w-full"
-      aria-label={`Remove ${entry.name} from library`}
-      disabled={removeLibraryEntry.isPending}
-      onClick={() => removeLibraryEntry.mutate({ params: { id: entry.id } })}
-    >
-      {removeLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
-      {removeLibraryEntry.isPending ? 'Removing...' : 'Remove from library'}
-    </Button>
+    <AlertDialog>
+      <AlertDialogTrigger
+        className={buttonVariants({ variant: 'destructive', className: 'w-full' })}
+        aria-label={`Remove ${entry.name} from library`}
+      >
+        {removeLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
+        {removeLibraryEntry.isPending ? 'Removing...' : 'Remove from library'}
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Remove from library?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to remove {entry.name} from your library? This cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            variant="destructive"
+            disabled={removeLibraryEntry.isPending}
+            onClick={() => removeLibraryEntry.mutate({ params: { id: entry.id } })}
+          >
+            {removeLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
+            {removeLibraryEntry.isPending ? 'Removing...' : 'Remove from library'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 
