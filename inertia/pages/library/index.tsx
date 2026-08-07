@@ -1,12 +1,11 @@
 import { Form, Link } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import { Badge } from '~/components/ui/badge'
-import { Button, buttonVariants } from '~/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
-import { formatWatchedTime } from '~/lib/utils'
 import { LibraryGrid } from './components/library_cards'
 
 type Movie = Data.Movie
@@ -20,47 +19,11 @@ type Props = InertiaProps & {
   moviesCount: number
 }
 
-export default function LibraryIndex({
-  user,
-  query,
-  series,
-  movies,
-  seriesCount,
-  moviesCount,
-}: Props) {
+export default function LibraryIndex({ query, series, movies, seriesCount, moviesCount }: Props) {
   const isSearching = query.length > 0
 
   return (
     <div className="flex flex-col gap-8">
-      <section className="grid gap-5 lg:grid-cols-[1fr_18rem]">
-        <div className="flex flex-col justify-end gap-3 rounded-xl border bg-card p-5">
-          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Your library</p>
-          <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
-            Movies and series you have chosen to follow.
-          </h1>
-          <Link
-            href="/app/catalog/search"
-            className={buttonVariants({ className: 'mt-2 w-full sm:w-fit' })}
-          >
-            Search the catalog
-          </Link>
-        </div>
-
-        {user && (
-          <Card className="border-primary/20">
-            <CardHeader>
-              <CardDescription>Watched Time</CardDescription>
-              <CardTitle className="text-4xl">{formatWatchedTime(user.watchedTime)}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Watched Time from known movie and episode runtimes.
-              </p>
-            </CardContent>
-          </Card>
-        )}
-      </section>
-
       <Form action="/app/library" method="get">
         <FieldGroup>
           <Field>
@@ -74,7 +37,7 @@ export default function LibraryIndex({
                 placeholder="Search saved movies and series"
                 className="h-11 text-base"
               />
-              <Button type="submit" className="h-11 sm:w-auto">
+              <Button type="submit" className="h-11 sm:w-auto px-4">
                 Search
               </Button>
             </div>
