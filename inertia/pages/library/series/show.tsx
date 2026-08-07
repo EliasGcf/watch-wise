@@ -285,21 +285,23 @@ function SeasonAccordion({
                     onUnwatched={onUnwatched}
                   />
                 </div>
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <div className="grid min-w-0 grid-cols-[auto_1fr_auto] items-center gap-x-3">
+                  <div className="flex items-center gap-x-3">
                     <span className="font-medium">{season.name}</span>
                     <span className="font-mono text-xs font-normal text-muted-foreground">
                       {watchedCount} / {season.episodesCount}
                     </span>
-                    <span className="ml-auto font-mono text-xs font-normal text-muted-foreground">
-                      {progress}%
-                    </span>
                   </div>
-                  <Progress
-                    value={progress}
-                    aria-label={`${season.name} progress`}
-                    className="mt-2 gap-0"
-                  />
+                  <div className="min-w-0">
+                    <Progress
+                      value={progress}
+                      aria-label={`${season.name} progress`}
+                      className="gap-0"
+                    />
+                  </div>
+                  <span className="font-mono text-xs font-normal text-muted-foreground tabular-nums">
+                    {progress}%
+                  </span>
                 </div>
               </div>
             </AccordionTrigger>
