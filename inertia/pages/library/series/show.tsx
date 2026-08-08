@@ -44,46 +44,13 @@ type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: str
 type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
 export default function SeriesShow({ serie }: Props) {
-  const [watchedEpisodes, setWatchedEpisodes] = useState<WatchedEpisodeProgress[]>(
-    serie.watchedEpisodes ?? []
-  )
   const watchSeriesMutation = useWatchSeriesMutation()
   const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
-  const seriesMarked = seriesEpisodesCount > 0 && watchedEpisodes.length >= seriesEpisodesCount
-
-  function trackWatchedEpisode(episode: WatchedEpisodeProgress) {
-    trackWatchedEpisodes([episode])
-  }
-
-  function trackWatchedEpisodes(episodes: WatchedEpisodeProgress[]) {
-    setWatchedEpisodes((current) => {
-      const next = [...current]
-
-      for (const episode of episodes) {
-        if (
-          !next.some(
-            (watched) => watched.season === episode.season && watched.episode === episode.episode
-          )
-        ) {
-          next.push(episode)
-        }
-      }
-
-      return next
-    })
-  }
-
-  function untrackWatchedEpisode(episode: WatchedEpisodeProgress) {
-    setWatchedEpisodes((current) =>
-      current.filter(
-        (watched) => watched.season !== episode.season || watched.episode !== episode.episode
-      )
-    )
-  }
+  const seriesMarked =
+    seriesEpisodesCount > 0 && (serie.watchedEpisodes ?? []).length >= seriesEpisodesCount
 
   async function watchSeries() {
-    const response = await watchSeriesMutation.mutateAsync({ params: { id: serie.id } })
-    trackWatchedEpisodes(response.data.watchedEpisodes ?? [])
+    await watchSeriesMutation.mutateAsync({ params: { id: serie.id } })
   }
 
   return (
@@ -180,10 +147,7 @@ export default function SeriesShow({ serie }: Props) {
         <SeasonAccordion
           serie={serie}
           seasons={serie.catalog.seasons}
-          watchedEpisodes={watchedEpisodes}
-          onWatched={trackWatchedEpisode}
-          onBulkWatched={trackWatchedEpisodes}
-          onUnwatched={untrackWatchedEpisode}
+          watchedEpisodes={serie.watchedEpisodes ?? []}
         />
       </div>
     </div>
@@ -243,16 +207,10 @@ function SeasonAccordion({
   serie,
   seasons,
   watchedEpisodes,
-  onWatched,
-  onBulkWatched,
-  onUnwatched,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   watchedEpisodes: WatchedEpisodeProgress[]
-  onWatched: (episode: WatchedEpisodeProgress) => void
-  onBulkWatched: (episodes: WatchedEpisodeProgress[]) => void
-  onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
 
@@ -280,8 +238,6 @@ function SeasonAccordion({
                     watchedCount={watchedCount}
                     episodesCount={season.episodesCount}
                     watchedEpisodes={watchedEpisodes}
-                    onBulkWatched={onBulkWatched}
-                    onUnwatched={onUnwatched}
                   />
                 </div>
                 <div className="grid min-w-0 grid-cols-[auto_1fr_auto] items-center gap-x-3">
@@ -310,8 +266,6 @@ function SeasonAccordion({
                 season={season.number}
                 isOpen={openSeasons.includes(String(season.number))}
                 watchedEpisodes={watchedEpisodes}
-                onWatched={onWatched}
-                onUnwatched={onUnwatched}
               />
             </AccordionContent>
           </AccordionItem>
@@ -331,16 +285,12 @@ function SeasonCompleteCheckbox({
   watchedCount,
   episodesCount,
   watchedEpisodes,
-  onBulkWatched,
-  onUnwatched,
 }: {
   serie: Data.Serie
   season: number
   watchedCount: number
   episodesCount: number
   watchedEpisodes: WatchedEpisodeProgress[]
-  onBulkWatched: (episodes: WatchedEpisodeProgress[]) => void
-  onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
   const watchSeasonMutation = useWatchSeasonMutation()
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
@@ -349,10 +299,9 @@ function SeasonCompleteCheckbox({
 
   async function toggleSeasonComplete(shouldWatch: boolean) {
     if (shouldWatch) {
-      const response = await watchSeasonMutation.mutateAsync({
+      await watchSeasonMutation.mutateAsync({
         params: { id: serie.id, season },
       })
-      onBulkWatched(response.data.watchedEpisodes ?? [])
       return
     }
 
@@ -361,7 +310,6 @@ function SeasonCompleteCheckbox({
       await unwatchEpisodeMutation.mutateAsync({
         params: { id: serie.id, season: episode.season, episode: episode.episode },
       })
-      onUnwatched(episode)
     }
   }
 
@@ -393,15 +341,11 @@ function SeasonEpisodes({
   season,
   isOpen,
   watchedEpisodes,
-  onWatched,
-  onUnwatched,
 }: {
   serie: Data.Serie
   season: number
   isOpen: boolean
   watchedEpisodes: WatchedEpisodeProgress[]
-  onWatched: (episode: WatchedEpisodeProgress) => void
-  onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
   const episodesQuery = useSeriesEpisodesQuery({ serieId: serie.id, season, enabled: isOpen })
 
@@ -420,8 +364,6 @@ function SeasonEpisodes({
           serie={serie}
           episode={episode}
           watchedEpisodes={watchedEpisodes}
-          onWatched={onWatched}
-          onUnwatched={onUnwatched}
         />
       ))}
     </div>
@@ -456,20 +398,16 @@ function EpisodeRow({
   serie,
   episode,
   watchedEpisodes,
-  onWatched,
-  onUnwatched,
 }: {
   serie: Data.Serie
   episode: SeasonEpisode
   watchedEpisodes: WatchedEpisodeProgress[]
-  onWatched: (episode: WatchedEpisodeProgress) => void
-  onUnwatched: (episode: WatchedEpisodeProgress) => void
 }) {
   const watchedEpisode = watchedEpisodes.find(
     (watched) => watched.season === episode.season && watched.episode === episode.episode
   )
-  const watchedAt = watchedEpisode?.watchedAt ?? episode.watched?.watchedAt ?? null
-  const watched = watchedEpisode ? { watchedAt } : null
+  const watchedAt = watchedEpisode?.watchedAt ?? null
+  const watched = Boolean(watchedEpisode)
   const watchEpisodeMutation = useWatchEpisodeMutation()
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
   const isPending = watchEpisodeMutation.isPending || unwatchEpisodeMutation.isPending
@@ -479,14 +417,12 @@ function EpisodeRow({
       await watchEpisodeMutation.mutateAsync({
         params: { id: serie.id, season: episode.season, episode: episode.episode },
       })
-      onWatched(episode)
       return
     }
 
     await unwatchEpisodeMutation.mutateAsync({
       params: { id: serie.id, season: episode.season, episode: episode.episode },
     })
-    onUnwatched(episode)
   }
 
   return (
