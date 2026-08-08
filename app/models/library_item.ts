@@ -30,6 +30,12 @@ export default class LibraryItem extends LibraryEntrySchema {
     const name = params.name.trim().toLowerCase()
 
     if (name) query.whereRaw('lower(name) like ?', [`%${name}%`])
+
+    query.orderByRaw(`(
+      SELECT MAX(watched_at)
+      FROM watched_marks
+      WHERE watched_marks.library_entry_id = library_entries.id
+    ) DESC NULLS LAST`)
   })
 
   @beforeSave()
