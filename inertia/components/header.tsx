@@ -24,7 +24,7 @@ export function Header() {
           <Link href="/app" className="text-lg font-semibold tracking-tight">
             Watch Wise
           </Link>
-          <span className="hidden text-xs uppercase tracking-[0.25em] text-muted-foreground sm:inline">
+          <span className="hidden text-xs uppercase tracking-[0.25em] text-muted-foreground md:inline">
             Library tracker
           </span>
         </div>
