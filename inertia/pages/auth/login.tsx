@@ -17,18 +17,18 @@ export default function Login() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to Watch Wise</CardTitle>
-          <CardDescription>Enter your email and password to access your library.</CardDescription>
+          <CardDescription>Enter your email or username and password to access your library.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form route="app.session.store">
             {({ errors }) => (
               <FieldGroup>
                 <Field data-invalid={!!errors.email}>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <FieldLabel htmlFor="email">Email or username</FieldLabel>
                   <Input
                     id="email"
                     name="email"
-                    type="email"
+                    type="text"
                     autoComplete="username"
                     aria-invalid={!!errors.email}
                     required

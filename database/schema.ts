@@ -19,20 +19,7 @@ export class CacheSchema extends BaseModel {
 }
 
 export class LibraryEntrySchema extends BaseModel {
-  static $columns = [
-    'bannerPath',
-    'createdAt',
-    'id',
-    'name',
-    'posterPath',
-    'provider',
-    'providerId',
-    'releasedAt',
-    'summary',
-    'type',
-    'updatedAt',
-    'userId',
-  ] as const
+  static $columns = ['bannerPath', 'createdAt', 'id', 'name', 'posterPath', 'provider', 'providerId', 'releasedAt', 'summary', 'type', 'updatedAt', 'userId'] as const
   $columns = LibraryEntrySchema.$columns
   @column()
   declare bannerPath: string | null
@@ -61,14 +48,7 @@ export class LibraryEntrySchema extends BaseModel {
 }
 
 export class UserSettingSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'deleteRadarrMovieFiles',
-    'deleteSonarrEpisodeFiles',
-    'id',
-    'updatedAt',
-    'userId',
-  ] as const
+  static $columns = ['createdAt', 'deleteRadarrMovieFiles', 'deleteSonarrEpisodeFiles', 'id', 'updatedAt', 'userId'] as const
   $columns = UserSettingSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -85,15 +65,7 @@ export class UserSettingSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'email',
-    'fullName',
-    'id',
-    'password',
-    'updatedAt',
-    'watchedTime',
-  ] as const
+  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt', 'username', 'watchedTime'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -108,23 +80,13 @@ export class UserSchema extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
   @column()
+  declare username: string | null
+  @column()
   declare watchedTime: number
 }
 
 export class WatchedMarkSchema extends BaseModel {
-  static $columns = [
-    'createdAt',
-    'duration',
-    'episode',
-    'id',
-    'libraryEntryId',
-    'providerId',
-    'season',
-    'type',
-    'updatedAt',
-    'userId',
-    'watchedAt',
-  ] as const
+  static $columns = ['createdAt', 'duration', 'episode', 'id', 'libraryEntryId', 'providerId', 'season', 'type', 'updatedAt', 'userId', 'watchedAt'] as const
   $columns = WatchedMarkSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

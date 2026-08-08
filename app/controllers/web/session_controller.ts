@@ -8,7 +8,9 @@ export default class SessionController {
 
   async store({ request, auth, response }: HttpContext) {
     const { email, password } = request.all()
-    const user = await User.verifyCredentials(email, password)
+    const identifier = String(email ?? '').trim()
+    const uid = identifier.includes('@') ? identifier : identifier.toLowerCase()
+    const user = await User.verifyCredentials(uid, password)
 
     await auth.use('web').login(user)
     response.redirect().toRoute('app.home')

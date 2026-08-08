@@ -16,3 +16,22 @@ export const signupValidator = vine.create({
     confirmationField: 'passwordConfirmation',
   }),
 })
+
+/**
+ * Validator to use when updating a user's username.
+ */
+export const updateUsernameValidator = vine.create({
+  username: vine
+    .string()
+    .trim()
+    .toLowerCase()
+    .minLength(3)
+    .maxLength(32)
+    .regex(/^[a-z0-9_]+$/)
+    .unique({
+      table: 'users',
+      column: 'username',
+      filter: (query, _value, field) => query.whereNot('id', field.meta.userId),
+    })
+    .optional(),
+})
