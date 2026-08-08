@@ -11,8 +11,8 @@ export const controllers = {
       Episodes: () => import('#controllers/api/series/episodes_controller'),
       Seasons: () => import('#controllers/api/series/seasons_controller'),
     },
-    UserSettings: () => import('#controllers/api/user_settings_controller'),
     User: () => import('#controllers/api/user_controller'),
+    UserSettings: () => import('#controllers/api/user_settings_controller'),
   },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),

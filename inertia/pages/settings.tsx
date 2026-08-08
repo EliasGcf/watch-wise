@@ -59,40 +59,36 @@ export default function Settings({ user, settings, providerAvailability }: Props
           </h2>
         </div>
 
-        <Card>
-          <CardContent className="flex flex-col gap-4">
-            <Field>
-              <FieldLabel htmlFor="username">Username</FieldLabel>
-              <Input
-                id="username"
-                name="username"
-                type="text"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                autoComplete="username"
-                placeholder="Letters, numbers and underscores"
-              />
-              <FieldDescription>
-                {user?.username
-                  ? 'Your username is used to log in. Once set, it cannot be removed.'
-                  : 'Set a username to log in with it instead of your email.'}
-              </FieldDescription>
-            </Field>
-
-            <Field>
-              <Button
-                type="button"
-                onClick={() => updateUsername.mutate({ body: { username } })}
-                disabled={updateUsername.isPending || (!!user?.username && !username)}
-              >
-                {updateUsername.isPending && (
-                  <LoaderCircle className="size-4 animate-spin" aria-label="Saving" />
-                )}
-                Save username
-              </Button>
-            </Field>
-          </CardContent>
-        </Card>
+        <Field>
+          <FieldLabel htmlFor="username">Username</FieldLabel>
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              autoComplete="username"
+              placeholder="Letters, numbers and underscores"
+              className="md:w-72"
+            />
+            <Button
+              type="button"
+              onClick={() => updateUsername.mutate({ body: { username } })}
+              disabled={updateUsername.isPending || (!!user?.username && !username)}
+            >
+              {updateUsername.isPending && (
+                <LoaderCircle className="size-4 animate-spin" aria-label="Saving" />
+              )}
+              Save
+            </Button>
+          </div>
+          <FieldDescription>
+            {user?.username
+              ? 'Your username is used to log in. If you change it, you sign in with the new one.'
+              : 'Set a username to log in with it instead of your email.'}
+          </FieldDescription>
+        </Field>
       </section>
 
       <section className="flex flex-col gap-4" aria-labelledby="settings-services">
