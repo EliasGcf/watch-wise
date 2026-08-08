@@ -4,9 +4,11 @@ import { LoaderCircle } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { Field, FieldContent, FieldDescription, FieldLabel } from '~/components/ui/field'
+import { Input } from '~/components/ui/input'
 import { api } from '~/client'
 import { type InertiaProps } from '~/types'
 
@@ -20,15 +22,23 @@ type Props = InertiaProps<{
 
 type PendingIntegration = 'sonarr' | 'radarr' | null
 
-export default function Settings({ settings, providerAvailability }: Props) {
+export default function Settings({ user, settings, providerAvailability }: Props) {
   const [sonarrChecked, setSonarrChecked] = useState(settings.deleteSonarrEpisodeFiles)
   const [radarrChecked, setRadarrChecked] = useState(settings.deleteRadarrMovieFiles)
   const [pendingIntegration, setPendingIntegration] = useState<PendingIntegration>(null)
+  const [username, setUsername] = useState(user?.username ?? '')
 
   const updateSettings = useMutation(
     api.api.user.settings.update.mutationOptions({
       onSuccess: () => toast.success('Settings saved.'),
       onError: () => toast.error('Settings could not be saved.'),
+    })
+  )
+
+  const updateUsername = useMutation(
+    api.api.user.update.mutationOptions({
+      onSuccess: () => toast.success('Username saved.'),
+      onError: () => toast.error('Username could not be saved.'),
     })
   )
 
@@ -39,6 +49,46 @@ export default function Settings({ settings, providerAvailability }: Props) {
         <p className="max-w-2xl text-muted-foreground">
           Manage how Watch Wise behaves for your library and connected services.
         </p>
+      </section>
+
+      <section className="flex flex-col gap-4" aria-labelledby="settings-profile">
+        <div className="flex flex-col gap-1 border-b pb-3">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Profile</p>
+          <h2 id="settings-profile" className="text-2xl font-semibold tracking-tight">
+            Login details
+          </h2>
+        </div>
+
+        <Field>
+          <FieldLabel htmlFor="username">Username</FieldLabel>
+          <div className="flex flex-wrap items-center gap-2">
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              autoComplete="username"
+              placeholder="Letters, numbers and underscores"
+              className="md:w-72"
+            />
+            <Button
+              type="button"
+              onClick={() => updateUsername.mutate({ body: { username } })}
+              disabled={updateUsername.isPending || (!!user?.username && !username)}
+            >
+              {updateUsername.isPending && (
+                <LoaderCircle className="size-4 animate-spin" aria-label="Saving" />
+              )}
+              Save
+            </Button>
+          </div>
+          <FieldDescription>
+            {user?.username
+              ? 'Your username is used to log in. If you change it, you sign in with the new one.'
+              : 'Set a username to log in with it instead of your email.'}
+          </FieldDescription>
+        </Field>
       </section>
 
       <section className="flex flex-col gap-4" aria-labelledby="settings-services">

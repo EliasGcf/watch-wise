@@ -18,6 +18,12 @@ const routes = {
     tokens: [{"old":"/api/library","type":0,"val":"api","end":""},{"old":"/api/library","type":0,"val":"library","end":""}],
     types: placeholder as Registry['api.library.store']['types'],
   },
+  'api.user.update': {
+    methods: ["PATCH"],
+    pattern: '/api/user',
+    tokens: [{"old":"/api/user","type":0,"val":"api","end":""},{"old":"/api/user","type":0,"val":"user","end":""}],
+    types: placeholder as Registry['api.user.update']['types'],
+  },
   'api.user.settings.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/user/settings',

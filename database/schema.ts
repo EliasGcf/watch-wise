@@ -92,6 +92,7 @@ export class UserSchema extends BaseModel {
     'id',
     'password',
     'updatedAt',
+    'username',
     'watchedTime',
   ] as const
   $columns = UserSchema.$columns
@@ -107,6 +108,8 @@ export class UserSchema extends BaseModel {
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+  @column()
+  declare username: string | null
   @column()
   declare watchedTime: number
 }

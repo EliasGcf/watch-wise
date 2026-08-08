@@ -24,6 +24,7 @@ export interface ApiDefinition {
       }
     }
     user: {
+      update: typeof routes['api.user.update']
       settings: {
         show: typeof routes['api.user.settings.show']
         update: typeof routes['api.user.settings.update']

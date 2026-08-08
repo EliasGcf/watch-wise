@@ -9,6 +9,7 @@ const group = router.group(() => {
   router
     .group(() => {
       router.post('library', [controllers.api.Library, 'store']).as('library.store')
+      router.patch('user', [controllers.api.User, 'update']).as('user.update')
       router.get('user/settings', [controllers.api.UserSettings, 'show']).as('user.settings.show')
       router
         .patch('user/settings', [controllers.api.UserSettings, 'update'])

@@ -9,7 +9,10 @@ import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
 import { computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 
-export default class User extends compose(UserSchema, withAuthFinder(hash)) {
+export default class User extends compose(
+  UserSchema,
+  withAuthFinder(hash, { uids: ['email', 'username'] })
+) {
   @hasMany(() => LibraryItem)
   declare libraryEntries: HasMany<typeof LibraryItem>
 

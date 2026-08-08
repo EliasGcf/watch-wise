@@ -21,11 +21,15 @@ test.group('Home', (group) => {
     await browserContext.loginAs(user)
 
     const page = await visit('/app')
-    await page.assertTextContains('body', 'Start your library')
+    await page.assertTextContains('body', 'The screen is waiting.')
     await page.assertTextContains('body', 'Watched Time')
     await page.assertTextContains('body', '0m')
-    await page.assertTextContains('body', 'Movies\n0')
-    await page.assertTextContains('body', 'Series\n0')
+    await page.assertTextContains(
+      'body',
+      'Your library is empty. Search the catalog to add your first title.'
+    )
+    await page.assertTextContains('body', 'Movies')
+    await page.assertTextContains('body', 'Series')
 
     const searchLink = page.getByRole('link', { name: 'Search the catalog' })
     await searchLink.click()
@@ -71,11 +75,11 @@ test.group('Home', (group) => {
     await browserContext.loginAs(user)
 
     const page = await visit('/app')
-    await page.assertTextContains('body', 'Your library')
+    await page.assertTextContains('body', 'The screen is waiting.')
     await page.assertTextContains('body', 'Watched Time')
-    await page.assertTextContains('body', '2h 50m')
-    await page.assertTextContains('body', 'Movies\n1')
-    await page.assertTextContains('body', 'Series\n1')
+    await page.assertTextContains('body', '0m')
+    await page.assertTextContains('body', 'Movies')
+    await page.assertTextContains('body', 'Series')
     await page.assertTextContains('body', 'Up next from your library')
     await page.assertTextContains('body', 'Heat')
     await page.assertTextContains('body', 'Heat Vision and Jack')

@@ -20,14 +20,14 @@ test.group('Catalog search', (group) => {
     const page = await visit('/app/catalog/search?q=heat')
 
     await page.assertTextContains('body', 'Heat')
-    await page.assertTextContains('body', 'movie')
+    await page.assertTextContains('body', 'Movie')
     await page.assertTextContains('body', '1995')
     await page.assertTextContains(
       'body',
       'A professional thief and a relentless detective collide.'
     )
     await page.assertTextContains('body', 'Heat Vision and Jack')
-    await page.assertTextContains('body', 'series')
+    await page.assertTextContains('body', 'Serie')
     await page.assertTextContains('body', '1999')
     await page.assertTextContains('body', 'A pilot about a super-intelligent astronaut.')
   })

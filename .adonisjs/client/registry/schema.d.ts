@@ -31,6 +31,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'api.user.update': {
+    methods: ["PATCH"]
+    pattern: '/api/user'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').updateUsernameValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').updateUsernameValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/user_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/user_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'api.user.settings.show': {
     methods: ["GET","HEAD"]
     pattern: '/api/user/settings'

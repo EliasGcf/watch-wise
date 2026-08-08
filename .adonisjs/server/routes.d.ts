@@ -6,6 +6,7 @@ export type ScannedRoutes = {
   ALL: {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.store': { paramsTuple?: []; params?: {} }
+    'api.user.update': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
     'api.user.settings.update': { paramsTuple?: []; params?: {} }
     'api.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -68,6 +69,7 @@ export type ScannedRoutes = {
     'app.session.destroy': { paramsTuple?: []; params?: {} }
   }
   PATCH: {
+    'api.user.update': { paramsTuple?: []; params?: {} }
     'api.user.settings.update': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
