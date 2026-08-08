@@ -1,7 +1,7 @@
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import dayjs from 'dayjs'
-import { LoaderCircle } from 'lucide-react'
+import { CheckCircle2, LoaderCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
@@ -78,7 +78,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
 function CatalogResultCard({ result }: { result: Data.Catalog.SearchResult }) {
   const label = result.type === 'serie' ? 'Serie' : 'Movie'
   const addLibraryEntry = useAddLibraryEntryMutation()
-  const canAddToLibrary = result.provider === 'tmdb'
+  const canAddToLibrary = result.provider === 'tmdb' && !result.inLibrary
 
   return (
     <Card className="grid gap-0 py-0 transition-colors hover:border-primary/30 sm:grid-cols-[9rem_1fr]">
@@ -111,21 +111,28 @@ function CatalogResultCard({ result }: { result: Data.Catalog.SearchResult }) {
           ) : (
             <p className="text-muted-foreground">No summary available.</p>
           )}
-          <Button
-            type="button"
-            className="mt-auto w-full"
-            disabled={!canAddToLibrary || addLibraryEntry.isPending}
-            onClick={() => {
-              if (!canAddToLibrary) return
+          {result.inLibrary ? (
+            <div className="mt-auto flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm text-muted-foreground">
+              <CheckCircle2 className="size-4" />
+              In your library
+            </div>
+          ) : (
+            <Button
+              type="button"
+              className="mt-auto w-full"
+              disabled={!canAddToLibrary || addLibraryEntry.isPending}
+              onClick={() => {
+                if (!canAddToLibrary) return
 
-              addLibraryEntry.mutate({
-                body: { provider: 'tmdb', providerId: result.id, type: result.type },
-              })
-            }}
-          >
-            {addLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
-            {addLibraryEntry.isPending ? 'Adding...' : 'Add to library'}
-          </Button>
+                addLibraryEntry.mutate({
+                  body: { provider: 'tmdb', providerId: result.id, type: result.type },
+                })
+              }}
+            >
+              {addLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
+              {addLibraryEntry.isPending ? 'Adding...' : 'Add to library'}
+            </Button>
+          )}
         </CardContent>
       </div>
     </Card>

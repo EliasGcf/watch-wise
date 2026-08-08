@@ -232,6 +232,36 @@ test.group('Catalog search', (group) => {
     assert.lengthOf(await addingUser.related('series').query().where('providerId', 'series-1'), 1)
   })
 
+  test('catalog search shows items already in the library as such', async ({
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Drew Viewer',
+      email: 'drew@example.com',
+      password: 'secret123',
+    })
+
+    await user.related('movies').create({
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: null,
+      summary: 'A professional thief and a relentless detective collide.',
+    })
+
+    await browserContext.loginAs(user)
+
+    const searchPage = await visit('/app/catalog/search?q=heat')
+    await searchPage.assertTextContains('body', 'In your library')
+    await searchPage.assertElementsCount(
+      searchPage.getByRole('button', { name: 'Add to library' }),
+      2
+    )
+  })
+
   test('authenticated users can add generated catalog titles to their library', async ({
     assert,
     browserContext,
