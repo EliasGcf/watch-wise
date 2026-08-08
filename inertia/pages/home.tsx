@@ -23,7 +23,7 @@ export default function Home({ user, moviesCount, seriesCount, recentLibraryEntr
       <Card className="border-primary/25 bg-linear-to-b from-card via-card to-primary/5">
         <CardHeader className="gap-4">
           <CardTitle className="max-w-2xl text-4xl leading-tight tracking-tight sm:text-6xl">
-            The screen is waiting.
+            The screen is waiting
           </CardTitle>
           <div className="flex flex-row gap-3">
             <Link

@@ -21,7 +21,7 @@ test.group('Home', (group) => {
     await browserContext.loginAs(user)
 
     const page = await visit('/app')
-    await page.assertTextContains('body', 'The screen is waiting.')
+    await page.assertTextContains('body', 'The screen is waiting')
     await page.assertTextContains('body', 'Watched Time')
     await page.assertTextContains('body', '0m')
     await page.assertTextContains(
@@ -75,7 +75,7 @@ test.group('Home', (group) => {
     await browserContext.loginAs(user)
 
     const page = await visit('/app')
-    await page.assertTextContains('body', 'The screen is waiting.')
+    await page.assertTextContains('body', 'The screen is waiting')
     await page.assertTextContains('body', 'Watched Time')
     await page.assertTextContains('body', '0m')
     await page.assertTextContains('body', 'Movies')
