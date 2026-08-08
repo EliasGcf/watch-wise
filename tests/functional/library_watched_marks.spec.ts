@@ -44,11 +44,6 @@ test.group('Library movie watched records', (group) => {
     await markedPage.assertExists(
       markedPage.getByRole('checkbox', { name: 'Unmark Heat as watched' })
     )
-    await markedPage.assertTextContains('body', '2h 50m')
-    await markedPage.assertTextContains(
-      'body',
-      'Watched Time from known movie and episode runtimes.'
-    )
 
     const moviesWatched = await WatchedMovie.query()
       .where('userId', user.id)

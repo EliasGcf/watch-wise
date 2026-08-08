@@ -42,6 +42,7 @@ test.group('User profile', (group) => {
     const response = await client
       .patch('/api/user')
       .json({ username: 'TAKEN' })
+      .accept('application/json')
       .loginAs(second)
       .withCsrfToken()
 
@@ -78,7 +79,7 @@ test.group('User profile', (group) => {
     await page.click('button[type="submit"]')
 
     await page.assertPath('/app')
-    await page.assertTextContains('body', 'Start your library')
+    await page.assertTextContains('body', 'The screen is waiting.')
   })
 
   test('users can log in with their email', async ({ visit }) => {
@@ -94,6 +95,6 @@ test.group('User profile', (group) => {
     await page.click('button[type="submit"]')
 
     await page.assertPath('/app')
-    await page.assertTextContains('body', 'Start your library')
+    await page.assertTextContains('body', 'The screen is waiting.')
   })
 })
