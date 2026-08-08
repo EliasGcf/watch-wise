@@ -89,7 +89,7 @@ export default function SeriesShow({ serie }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="-mx-5 sm:-mx-8 -mt-8 lg:-mt-10">
+      <div className="-mx-5 sm:-mx-8 -mt-5 lg:-mt-6">
         {serie.bannerUrl ? (
           <article className="relative min-h-72 overflow-hidden sm:min-h-96 ">
             <img
