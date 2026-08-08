@@ -12,9 +12,7 @@ const password = () => vine.string().minLength(8).maxLength(32)
 export const signupValidator = vine.create({
   fullName: vine.string().nullable(),
   email: email().unique({ table: 'users', column: 'email' }),
-  password: password().confirmed({
-    confirmationField: 'passwordConfirmation',
-  }),
+  password: password().confirmed({ confirmationField: 'passwordConfirmation' }),
 })
 
 /**
@@ -28,10 +26,14 @@ export const updateUsernameValidator = vine.create({
     .minLength(3)
     .maxLength(32)
     .regex(/^[a-z0-9_]+$/)
-    .unique({
-      table: 'users',
-      column: 'username',
-      filter: (query, _value, field) => query.whereNot('id', field.meta.userId),
+    .unique(async (db, value, state) => {
+      const existingUser = await db
+        .from('users')
+        .where('username', value)
+        .whereNot('id', state.meta.userId)
+        .first()
+
+      return !existingUser
     })
     .optional(),
 })
