@@ -87,7 +87,11 @@ function LibrarySection({
   return (
     <section className="flex flex-col gap-3" aria-label={title}>
       <div className="flex items-center justify-between border-b pb-3">
-        <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">
+          <Link href={href} className="hover:underline">
+            {title}
+          </Link>
+        </h2>
         <div className="flex items-center gap-3">
           <Link href={href} className="text-sm font-medium text-primary hover:underline">
             See more

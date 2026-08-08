@@ -19,40 +19,30 @@ type Props = InertiaProps & {
 export default function CatalogSearch({ query, results, limitation }: Props) {
   return (
     <div className="flex flex-col gap-6">
-      <section className="rounded-xl border bg-card p-5 sm:p-6">
-        <div className="mb-5 max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Catalog</p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">Search titles</h1>
-          <p className="mt-3 text-muted-foreground">
-            Find movies and series to add to your library.
-          </p>
-        </div>
-
-        <Form
-          action="/app/catalog/search"
-          method="get"
-          options={{ preserveState: true, preserveScroll: true }}
-        >
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="catalog-query">Search the catalog</FieldLabel>
-              <div className="flex flex-col gap-2 sm:flex-row">
-                <Input
-                  id="catalog-query"
-                  name="q"
-                  type="search"
-                  defaultValue={query}
-                  placeholder="Search movies and series"
-                  className="h-11 text-base"
-                />
-                <Button type="submit" className="h-11 sm:w-auto">
-                  Search
-                </Button>
-              </div>
-            </Field>
-          </FieldGroup>
-        </Form>
-      </section>
+      <Form
+        action="/app/catalog/search"
+        method="get"
+        options={{ preserveState: true, preserveScroll: true }}
+      >
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="catalog-query">Search the catalog</FieldLabel>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                id="catalog-query"
+                name="q"
+                type="search"
+                defaultValue={query}
+                placeholder="Search movies and series"
+                className="h-11 text-base"
+              />
+              <Button type="submit" className="h-11 sm:w-auto px-4">
+                Search
+              </Button>
+            </div>
+          </Field>
+        </FieldGroup>
+      </Form>
 
       {limitation && (
         <Alert>
