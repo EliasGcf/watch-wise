@@ -17,7 +17,9 @@ export default function Login() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Login to Watch Wise</CardTitle>
-          <CardDescription>Enter your email or username and password to access your library.</CardDescription>
+          <CardDescription>
+            Enter your email or username and password to access your library.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form route="app.session.store">

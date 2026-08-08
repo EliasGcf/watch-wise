@@ -24,7 +24,10 @@ test.group('Home', (group) => {
     await page.assertTextContains('body', 'The screen is waiting.')
     await page.assertTextContains('body', 'Watched Time')
     await page.assertTextContains('body', '0m')
-    await page.assertTextContains('body', 'Your library is empty. Search the catalog to add your first title.')
+    await page.assertTextContains(
+      'body',
+      'Your library is empty. Search the catalog to add your first title.'
+    )
     await page.assertTextContains('body', 'Movies')
     await page.assertTextContains('body', 'Series')
 
