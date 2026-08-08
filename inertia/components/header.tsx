@@ -1,5 +1,16 @@
 import { Form, Link } from '@adonisjs/inertia/react'
 import { usePage } from '@inertiajs/react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '~/components/ui/alert_dialog'
 import { buttonVariants } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 
@@ -31,11 +42,30 @@ export function Header() {
           <NavLink href="/app/settings" current={url.startsWith('/app/settings')}>
             Settings
           </NavLink>
-          <Form action="/app/logout" method="post">
-            <button className={buttonVariants({ variant: 'ghost', size: 'sm' })} type="submit">
+          <AlertDialog>
+            <AlertDialogTrigger
+              className={buttonVariants({ variant: 'destructive', size: 'sm' })}
+              aria-label="Log out"
+            >
               Logout
-            </button>
-          </Form>
+            </AlertDialogTrigger>
+            <AlertDialogContent size="sm">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Log out?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to log out of your account?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Form action="/app/logout" method="post">
+                  <AlertDialogAction type="submit" variant="destructive" className="w-full">
+                    Logout
+                  </AlertDialogAction>
+                </Form>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </nav>
       </div>
     </header>
