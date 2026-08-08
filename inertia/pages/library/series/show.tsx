@@ -1,4 +1,3 @@
-import { Link } from '@adonisjs/inertia/react'
 import { router } from '@inertiajs/react'
 import { useState } from 'react'
 import { ArrowLeft, Clock3, LoaderCircle, Trash2 } from 'lucide-react'
@@ -101,16 +100,16 @@ export default function SeriesShow({ serie }: Props) {
             <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-transparent" />
             <div className="absolute inset-0 bg-linear-to-r from-background via-transparent to-background" />
             <div className="relative flex h-full min-h-72 flex-col gap-5 px-5 pt-5 pb-8 sm:min-h-96 sm:px-8 sm:pb-10">
-              <Link
-                href="/app/library"
-                className={cn(
-                  buttonVariants({ variant: 'ghost', size: 'lg' }),
-                  'self-start rounded-lg bg-card text-foreground'
-                )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                className="self-start rounded-lg bg-card text-foreground"
+                onClick={() => window.history.back()}
               >
                 <ArrowLeft data-icon="inline-start" className="size-4" />
                 Back to library
-              </Link>
+              </Button>
               <CardHeader className="mt-auto sm:max-w-2xl">
                 <CardTitle className="text-4xl font-semibold tracking-[-0.04em] text-balance sm:text-6xl">
                   {serie.name}
@@ -122,16 +121,16 @@ export default function SeriesShow({ serie }: Props) {
         ) : (
           <Card className="py-0">
             <div className="flex flex-col gap-6 px-5 pt-3 pb-6 sm:px-8">
-              <Link
-                href="/app/library"
-                className={cn(
-                  buttonVariants({ variant: 'ghost', size: 'lg' }),
-                  'self-start rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground'
-                )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="lg"
+                className="self-start rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground"
+                onClick={() => window.history.back()}
               >
                 <ArrowLeft data-icon="inline-start" className="size-4" />
                 Back to library
-              </Link>
+              </Button>
               <CardHeader>
                 <CardTitle className="max-w-xl text-4xl font-semibold tracking-[-0.06em] text-balance sm:text-6xl">
                   {serie.name}
