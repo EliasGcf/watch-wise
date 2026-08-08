@@ -47,7 +47,7 @@ export default function Settings({ user, settings, providerAvailability }: Props
       <section className="flex flex-col gap-3">
         <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">Settings</h1>
         <p className="max-w-2xl text-muted-foreground">
-          Manage how Watch Wise behaves for your library and connected services.
+          Manage your account and connected services.
         </p>
       </section>
 
@@ -61,7 +61,13 @@ export default function Settings({ user, settings, providerAvailability }: Props
 
         <Field>
           <FieldLabel htmlFor="username">Username</FieldLabel>
-          <div className="flex flex-wrap items-center gap-2">
+          <form
+            className="flex flex-wrap items-center gap-2"
+            onSubmit={(event) => {
+              event.preventDefault()
+              updateUsername.mutate({ body: { username } })
+            }}
+          >
             <Input
               id="username"
               name="username"
@@ -73,8 +79,7 @@ export default function Settings({ user, settings, providerAvailability }: Props
               className="md:w-72"
             />
             <Button
-              type="button"
-              onClick={() => updateUsername.mutate({ body: { username } })}
+              type="submit"
               disabled={updateUsername.isPending || (!!user?.username && !username)}
             >
               {updateUsername.isPending && (
@@ -82,7 +87,7 @@ export default function Settings({ user, settings, providerAvailability }: Props
               )}
               Save
             </Button>
-          </div>
+          </form>
           <FieldDescription>
             {user?.username
               ? 'Your username is used to log in. If you change it, you sign in with the new one.'
