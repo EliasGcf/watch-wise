@@ -185,6 +185,69 @@ test.group('Library entries', (group) => {
     assert.deepEqual(page.series, [])
   })
 
+  test('library entries order merges watched marks with their created at', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Ordering Viewer',
+      email: 'ordering-library@example.com',
+      password: 'secret123',
+    })
+
+    const movies = await Promise.all(
+      (
+        [
+          ['Alpha', '2024-01-10T00:00:00.000Z', null],
+          ['Bravo', '2024-01-20T00:00:00.000Z', '2024-03-01T10:00:00.000Z'],
+          ['Charlie', '2024-02-01T00:00:00.000Z', '2024-06-01T10:00:00.000Z'],
+          ['Delta', '2024-01-15T00:00:00.000Z', null],
+          ['Echo', '2024-01-25T00:00:00.000Z', '2024-02-10T10:00:00.000Z'],
+          ['Foxtrot', '2024-05-01T00:00:00.000Z', null],
+        ] as Array<[name: string, createdAt: string, watchedAt: string | null]>
+      ).map(async ([name, createdAt, watchedAt]) => {
+        const movie = await Movie.create({
+          userId: user.id,
+          provider: 'tmdb',
+          providerId: `movie-${name.toLowerCase()}`,
+          name,
+          createdAt: DateTime.fromISO(createdAt),
+          bannerPath: `/movie-${name.toLowerCase()}.jpg`,
+          posterPath: `/movie-${name.toLowerCase()}-poster.jpg`,
+          releasedAt: DateTime.fromISO('1995-12-15'),
+          summary: null,
+        })
+
+        if (watchedAt) {
+          await WatchedMovie.create({
+            userId: user.id,
+            libraryEntryId: movie.id,
+            providerId: movie.providerId,
+            duration: 100,
+            watchedAt: DateTime.fromISO(watchedAt),
+          })
+        }
+
+        return movie
+      })
+    )
+    assert.lengthOf(movies, 6)
+
+    const response = await client.get('/app/library').loginAs(user)
+    response.assertOk()
+
+    const page = JSON.parse(
+      response
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.deepEqual(
+      page.movies.map((movie: { name: string }) => movie.name),
+      ['Charlie', 'Foxtrot', 'Bravo', 'Echo', 'Delta', 'Alpha']
+    )
+  })
+
   test('library summary limits movies and series to six entries with total counts', async ({
     assert,
     client,
