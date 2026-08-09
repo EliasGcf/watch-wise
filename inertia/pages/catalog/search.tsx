@@ -1,13 +1,15 @@
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import dayjs from 'dayjs'
-import { CheckCircle2, LoaderCircle } from 'lucide-react'
+import { LoaderCircle, SaveCheck, SaveIcon } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
-import { Button } from '~/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
+import { Badge } from '~/components/ui/badge'
+import { Button, buttonVariants } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { useAddLibraryEntryMutation } from '~/hooks/use_add_library_entry_mutation'
+import { cn } from '~/lib/utils'
 import { type InertiaProps } from '~/types'
 
 type Props = InertiaProps & {
@@ -51,16 +53,17 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
         </Alert>
       )}
 
-      <section
-        className="grid grid-cols-1 gap-4 lg:grid-cols-2"
-        aria-label="Catalog search results"
-      >
-        {results.map((result) => (
-          <CatalogResultCard key={`${result.provider}:${result.id}`} result={result} />
-        ))}
+      <section className="flex flex-col gap-4" aria-label="Catalog search results">
+        {results.length > 0 && (
+          <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+            {results.map((result) => (
+              <ItemCard key={`${result.provider}:${result.id}`} result={result} />
+            ))}
+          </div>
+        )}
 
         {!limitation && results.length === 0 && (
-          <Card className="lg:col-span-2">
+          <Card>
             <CardContent>
               <p className="text-muted-foreground">
                 {query
@@ -75,66 +78,75 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
   )
 }
 
-function CatalogResultCard({ result }: { result: Data.Catalog.SearchResult }) {
+function ItemCard({ result }: { result: Data.Catalog.SearchResult }) {
   const label = result.type === 'serie' ? 'Serie' : 'Movie'
+  const year = result.releasedAt ? dayjs(result.releasedAt).year() : null
+
+  return (
+    <article className="group relative aspect-2/3 overflow-hidden rounded-xl border bg-muted">
+      {result.posterUrl ? (
+        <img src={result.posterUrl} alt="" className="h-full w-full object-cover" />
+      ) : (
+        <div className="flex h-full items-center justify-center p-2 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          {result.name}
+        </div>
+      )}
+
+      <Badge variant="ghost" className="pointer-events-none absolute top-0.5 left-0 sm:top-1">
+        {label}
+      </Badge>
+
+      {year !== null && (
+        <Badge
+          variant="ghost"
+          className="pointer-events-none absolute bottom-0.5 left-0 sm:bottom-1"
+        >
+          {year}
+        </Badge>
+      )}
+
+      <AddToLibraryButton result={result} name={result.name} />
+    </article>
+  )
+}
+
+function AddToLibraryButton({ result, name }: { result: Data.Catalog.SearchResult; name: string }) {
   const addLibraryEntry = useAddLibraryEntryMutation()
   const canAddToLibrary = result.provider === 'tmdb' && !result.inLibrary
 
-  return (
-    <Card className="grid gap-0 py-0 transition-colors hover:border-primary/30 sm:grid-cols-[9rem_1fr]">
-      <div className="relative aspect-[2/3] bg-muted">
-        {result.posterUrl ? (
-          <img src={result.posterUrl} alt="" className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full items-center justify-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {label}
-          </div>
+  if (result.inLibrary) {
+    return (
+      <span
+        className={cn(
+          buttonVariants({ variant: 'outline', size: 'icon' }),
+          'absolute bottom-2 right-2 pointer-events-none max-sm:size-7'
         )}
-        <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-2 bg-gradient-to-t from-background/95 via-background/70 to-transparent p-3 pt-10 text-xs">
-          <span className="rounded-full bg-background/90 px-2 py-1 font-medium shadow-sm">
-            {label}
-          </span>
-          {result.releasedAt && (
-            <span className="rounded-full bg-background/90 px-2 py-1 font-medium shadow-sm">
-              {dayjs(result.releasedAt).year()}
-            </span>
-          )}
-        </div>
-      </div>
-      <div className="flex min-w-0 flex-1 flex-col py-3">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-xl leading-tight">{result.name}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-1 flex-col gap-3">
-          {result.summary ? (
-            <p className="line-clamp-3 text-muted-foreground">{result.summary}</p>
-          ) : (
-            <p className="text-muted-foreground">No summary available.</p>
-          )}
-          {result.inLibrary ? (
-            <div className="mt-auto flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm text-muted-foreground">
-              <CheckCircle2 className="size-4" />
-              In your library
-            </div>
-          ) : (
-            <Button
-              type="button"
-              className="mt-auto w-full"
-              disabled={!canAddToLibrary || addLibraryEntry.isPending}
-              onClick={() => {
-                if (!canAddToLibrary) return
+        aria-label={`${name} is in your library`}
+        title={`${name} is in your library`}
+      >
+        <SaveCheck />
+      </span>
+    )
+  }
 
-                addLibraryEntry.mutate({
-                  body: { provider: 'tmdb', providerId: result.id, type: result.type },
-                })
-              }}
-            >
-              {addLibraryEntry.isPending && <LoaderCircle className="animate-spin" />}
-              {addLibraryEntry.isPending ? 'Adding...' : 'Add to library'}
-            </Button>
-          )}
-        </CardContent>
-      </div>
-    </Card>
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      aria-label={`Add ${name} to your library`}
+      title={`Add ${name} to your library`}
+      disabled={!canAddToLibrary || addLibraryEntry.isPending}
+      onClick={() => {
+        if (!canAddToLibrary) return
+
+        addLibraryEntry.mutate({
+          body: { provider: 'tmdb', providerId: result.id, type: result.type },
+        })
+      }}
+      className="absolute group bottom-1.5 right-1.5 max-sm:size-7 text-primary border-primary/50 hover:scale-110"
+    >
+      {addLibraryEntry.isPending ? <LoaderCircle className="animate-spin" /> : <SaveIcon />}
+    </Button>
   )
 }
