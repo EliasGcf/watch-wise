@@ -1,3 +1,5 @@
+import type Movie from '#models/movie'
+import type Serie from '#models/serie'
 import { catalog, CatalogProviderError } from '#services/catalog_provider'
 import CatalogSearchResultTransformer from '#transformers/catalog/search_result_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -8,22 +10,28 @@ export default class CatalogSearchController {
 
     try {
       const results = query ? await catalog.search(query) : await catalog.weekTrending()
-      const entries = results.length
-        ? await auth
-            .user!.related('libraryEntries')
-            .query()
-            .whereIn(
-              'providerId',
-              results.map((result) => result.id)
-            )
-            .select('provider', 'providerId')
-        : []
-      const inLibrary = new Set(entries.map((entry) => `${entry.provider}:${entry.providerId}`))
+      const catalogIds = results.map((result) => result.id)
+      const libraryEntries = new Map<string, Movie | Serie>()
+
+      if (results.length) {
+        const [movies, series] = await Promise.all([
+          auth.user!.related('movies').query().whereIn('providerId', catalogIds),
+          auth.user!.related('series').query().whereIn('providerId', catalogIds),
+        ])
+
+        for (const movie of movies) {
+          libraryEntries.set(`${movie.provider}:${movie.providerId}`, movie)
+        }
+
+        for (const serie of series) {
+          libraryEntries.set(`${serie.provider}:${serie.providerId}`, serie)
+        }
+      }
 
       return inertia.render('catalog/search', {
         query,
         limitation: null,
-        results: CatalogSearchResultTransformer.transform(results, inLibrary),
+        results: CatalogSearchResultTransformer.transform(results, libraryEntries),
       })
     } catch (error) {
       if (!(error instanceof CatalogProviderError)) {
