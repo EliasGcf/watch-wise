@@ -113,7 +113,9 @@ test.group('Catalog search', (group) => {
     await browserContext.loginAs(user)
 
     const searchPage = await visit('/app/catalog/search?q=heat')
-    await searchPage.getByRole('button', { name: 'Add Heat Vision and Jack to your library' }).click()
+    await searchPage
+      .getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
+      .click()
     await searchPage.assertTextContains('body', 'Title was added to your library.')
     await searchPage.assertPath('/app/catalog/search')
 
@@ -224,7 +226,9 @@ test.group('Catalog search', (group) => {
     await browserContext.loginAs(addingUser)
 
     const searchPage = await visit('/app/catalog/search?q=heat')
-    await searchPage.getByRole('button', { name: 'Add Heat Vision and Jack to your library' }).click()
+    await searchPage
+      .getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
+      .click()
     await searchPage.assertTextContains('body', 'Title was added to your library.')
 
     assert.lengthOf(await existingUser.related('series').query().where('providerId', 'series-1'), 1)
