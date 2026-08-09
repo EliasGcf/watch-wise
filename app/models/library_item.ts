@@ -31,11 +31,14 @@ export default class LibraryItem extends LibraryEntrySchema {
 
     if (name) query.whereRaw('lower(name) like ?', [`%${name}%`])
 
-    query.orderByRaw(`(
-      SELECT MAX(watched_at)
-      FROM watched_marks
-      WHERE watched_marks.library_entry_id = library_entries.id
-    ) DESC NULLS LAST`)
+    query.orderByRaw(`
+      COALESCE(
+        (SELECT MAX(watched_at)
+         FROM watched_marks
+         WHERE watched_marks.library_entry_id = library_entries.id),
+        library_entries.created_at
+      ) DESC
+    `)
   })
 
   @beforeSave()
