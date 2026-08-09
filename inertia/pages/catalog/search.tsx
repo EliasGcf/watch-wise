@@ -119,7 +119,7 @@ function AddToLibraryButton({ result, name }: { result: Data.Catalog.SearchResul
       <span
         className={cn(
           buttonVariants({ variant: 'outline', size: 'icon' }),
-          'absolute bottom-2 right-2 pointer-events-none max-sm:size-7'
+          'absolute bottom-1.5 right-1.5 pointer-events-none max-sm:size-7'
         )}
         aria-label={`${name} is in your library`}
         title={`${name} is in your library`}
