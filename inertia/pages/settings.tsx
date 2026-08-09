@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { type Data } from '@generated/data'
-import { LoaderCircle } from 'lucide-react'
+import { LoaderCircle, SaveIcon } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '~/components/ui/badge'
@@ -76,14 +76,16 @@ export default function Settings({ user, settings, providerAvailability }: Props
               onChange={(event) => setUsername(event.target.value)}
               autoComplete="username"
               placeholder="Letters, numbers and underscores"
-              className="md:w-72"
+              className="flex-1 basis-40 md:w-72 md:flex-none"
             />
             <Button
               type="submit"
               disabled={updateUsername.isPending || (!!user?.username && !username)}
             >
-              {updateUsername.isPending && (
+              {updateUsername.isPending ? (
                 <LoaderCircle className="size-4 animate-spin" aria-label="Saving" />
+              ) : (
+                <SaveIcon className="size-4" />
               )}
               Save
             </Button>
