@@ -1,5 +1,6 @@
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
+import { SearchIcon } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
@@ -25,17 +26,17 @@ export default function LibraryMovies({ query, movies }: Props) {
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex items-center gap-2">
               <Input
                 id="library-movies-query"
                 name="q"
                 type="search"
                 defaultValue={query}
                 placeholder="Search saved movies"
-                className="h-11 text-base"
+                className="h-11 min-w-0 flex-1 text-base"
               />
-              <Button type="submit" className="h-11 sm:w-auto px-4">
-                Search
+              <Button type="submit" aria-label="Search" className="size-11" size="icon">
+                <SearchIcon />
               </Button>
             </div>
           </Field>
