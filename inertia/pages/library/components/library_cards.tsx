@@ -96,25 +96,15 @@ function WatchedButton({ movie }: { movie: Movie }) {
     }
   }
 
+  if (isPending) return <LoaderCircle className="animate-spin text-primary" />
+
   return (
-    <span
-      className={buttonVariants({
-        variant: 'ghost',
-        size: 'icon',
-        className: 'size-8 bg-primary text-primary cursor-pointer',
-      })}
-    >
-      {isPending ? (
-        <LoaderCircle className="animate-spin" />
-      ) : (
-        <Checkbox
-          checked={watched}
-          aria-label={`${watched ? 'Unmark' : 'Mark'} ${movie.name} as watched`}
-          className="size-5 rounded-full [&>svg]:size-3.5"
-          onCheckedChange={(checked) => void toggleWatched(checked)}
-        />
-      )}
-    </span>
+    <Checkbox
+      checked={watched}
+      aria-label={`${watched ? 'Unmark' : 'Mark'} ${movie.name} as watched`}
+      className="size-5.5 rounded-full cursor-pointer border-primary"
+      onCheckedChange={(checked) => toggleWatched(Boolean(checked))}
+    />
   )
 }
 
