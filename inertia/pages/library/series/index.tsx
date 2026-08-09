@@ -33,10 +33,11 @@ export default function LibrarySeries({ query, series }: Props) {
                 type="search"
                 defaultValue={query}
                 placeholder="Search saved series"
-                className="h-11 min-w-0 flex-1 text-base"
+                className="h-11 min-w-0 flex-1"
               />
-              <Button type="submit" aria-label="Search" className="size-11" size="icon">
-                <SearchIcon />
+              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit">
+                <SearchIcon className="size-4.5" />
+                <span className="sr-only sm:not-sr-only">Search</span>
               </Button>
             </div>
           </Field>

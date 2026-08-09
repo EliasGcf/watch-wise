@@ -1,7 +1,7 @@
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import dayjs from 'dayjs'
-import { LoaderCircle, SaveCheck, SaveIcon } from 'lucide-react'
+import { LoaderCircle, SaveCheck, SaveIcon, SearchIcon } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
@@ -29,17 +29,18 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="catalog-query">Search the catalog</FieldLabel>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex items-center gap-2">
               <Input
                 id="catalog-query"
                 name="q"
                 type="search"
                 defaultValue={query}
                 placeholder="Search movies and series"
-                className="h-11 text-base"
+                className="h-11 min-w-0 flex-1"
               />
-              <Button type="submit" className="h-11 sm:w-auto px-4">
-                Search
+              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit">
+                <SearchIcon className="size-4.5" />
+                <span className="sr-only sm:not-sr-only">Search</span>
               </Button>
             </div>
           </Field>
