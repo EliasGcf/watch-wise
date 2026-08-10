@@ -18,7 +18,6 @@ declare module '@adonisjs/inertia/types' {
     'errors/not_found': ExtractProps<(typeof import('../../inertia/pages/errors/not_found.tsx'))['default']>
     'errors/server_error': ExtractProps<(typeof import('../../inertia/pages/errors/server_error.tsx'))['default']>
     'home': ExtractProps<(typeof import('../../inertia/pages/home.tsx'))['default']>
-    'library/components/library_cards': ExtractProps<(typeof import('../../inertia/pages/library/components/library_cards.tsx'))['default']>
     'library/index': ExtractProps<(typeof import('../../inertia/pages/library/index.tsx'))['default']>
     'library/movies': ExtractProps<(typeof import('../../inertia/pages/library/movies.tsx'))['default']>
     'library/series/index': ExtractProps<(typeof import('../../inertia/pages/library/series/index.tsx'))['default']>

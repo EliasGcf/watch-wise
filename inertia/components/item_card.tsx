@@ -1,8 +1,6 @@
 import { Link } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
-import { LoaderCircle, Trash2 } from 'lucide-react'
-import { buttonVariants } from '~/components/ui/button'
-import { Checkbox } from '~/components/ui/checkbox'
+import { LoaderCircle, SaveIcon, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,71 +12,138 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '~/components/ui/alert_dialog'
+import { Badge } from '~/components/ui/badge'
+import { Button, buttonVariants } from '~/components/ui/button'
+import { Checkbox } from '~/components/ui/checkbox'
+import { useAddLibraryEntryMutation } from '~/hooks/use_add_library_entry_mutation'
 import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
+import { cn } from '~/lib/utils'
 
 type Movie = Data.Movie
 type Serie = Data.Serie
 
-export function LibraryGrid({ entries }: { entries: Array<Movie | Serie> }) {
+type ItemCardProps = {
+  name: string
+  type: 'movie' | 'serie'
+  posterUrl: string | null
+  provider: string
+  providerId: string
+  libraryEntry: Movie | Serie | null
+}
+
+export function ItemGrid({ items }: { items: Array<ItemCardProps & { id: string | number }> }) {
   return (
     <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-      {entries.map((entry) => (
-        <LibraryCard key={`${entry.type}-${entry.id}`} entry={entry} />
+      {items.map((item) => (
+        <ItemCard key={item.id} {...item} />
       ))}
     </div>
   )
 }
 
-function LibraryCard({ entry }: { entry: Movie | Serie }) {
-  const poster = entry.posterUrl ? (
-    <img src={entry.posterUrl} alt="" className="h-full w-full object-cover" />
-  ) : (
-    <div className="flex h-full items-center justify-center p-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-      {entry.name}
-    </div>
-  )
+export function ItemCard({
+  name,
+  type,
+  posterUrl,
+  provider,
+  providerId,
+  libraryEntry,
+}: ItemCardProps) {
+  const label = type === 'serie' ? 'Serie' : 'Movie'
 
-  const controls = (
-    <>
-      <div className="absolute left-2 top-2">
-        <RemoveLibraryEntryButton entry={entry} />
-      </div>
-      <div className="absolute bottom-2 right-2">
-        {entry.type === 'movie' && <WatchedButton movie={entry} />}
-      </div>
-    </>
+  const poster = posterUrl ? (
+    <img src={posterUrl} alt="" className="h-full w-full object-cover" />
+  ) : (
+    <div className="flex h-full items-center justify-center p-2 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
+      {name}
+    </div>
   )
 
   return (
     <article className="group relative aspect-2/3 overflow-hidden rounded-xl border bg-muted">
-      {entry.type === 'serie' ? (
+      {libraryEntry?.type === 'serie' ? (
         <Link
-          href={`/app/library/series/${entry.id}`}
+          href={`/app/library/series/${libraryEntry.id}`}
           className="block h-full"
-          aria-label={entry.name}
+          aria-label={name}
         >
           {poster}
         </Link>
       ) : (
         poster
       )}
-      {entry.type === 'serie' && (
+
+      {libraryEntry?.type === 'serie' && (
         <>
           <div
             role="progressbar"
-            aria-label={`${entry.name} progress`}
+            aria-label={`${name} progress`}
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-valuenow={entry.progress}
+            aria-valuenow={libraryEntry.progress}
             className="pointer-events-none absolute bottom-0 left-0 h-1 bg-primary"
-            style={{ width: `${entry.progress}%` }}
+            style={{ width: `${libraryEntry.progress}%` }}
           />
           <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
         </>
       )}
-      {controls}
+
+      <Badge variant="ghost" className="pointer-events-none absolute bottom-0.5 left-0 sm:bottom-1">
+        {label}
+      </Badge>
+
+      {libraryEntry ? (
+        <>
+          <div className="absolute left-1 top-1">
+            <RemoveLibraryEntryButton entry={libraryEntry} />
+          </div>
+          {libraryEntry.type === 'movie' && (
+            <div className="absolute bottom-1.5 right-1.5">
+              <WatchedButton movie={libraryEntry} />
+            </div>
+          )}
+        </>
+      ) : (
+        <AddToLibraryButton provider={provider} providerId={providerId} type={type} name={name} />
+      )}
     </article>
+  )
+}
+
+function AddToLibraryButton({
+  provider,
+  providerId,
+  type,
+  name,
+}: {
+  provider: string
+  providerId: string
+  type: 'movie' | 'serie'
+  name: string
+}) {
+  const addLibraryEntry = useAddLibraryEntryMutation()
+  const canAddToLibrary = provider === 'tmdb'
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      aria-label={`Add ${name} to your library`}
+      title={`Add ${name} to your library`}
+      disabled={!canAddToLibrary || addLibraryEntry.isPending}
+      onClick={() => {
+        if (!canAddToLibrary) return
+
+        addLibraryEntry.mutate({
+          body: { provider: 'tmdb', providerId, type },
+        })
+      }}
+      className="absolute group bottom-1 right-1 max-sm:size-7 text-primary border-primary/50 hover:scale-110"
+    >
+      {addLibraryEntry.isPending ? <LoaderCircle className="animate-spin" /> : <SaveIcon />}
+    </Button>
   )
 }
 
@@ -114,12 +179,10 @@ function RemoveLibraryEntryButton({ entry }: { entry: Movie | Serie }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        className={buttonVariants({
-          variant: 'ghost',
-          size: 'icon',
-          className:
-            'size-8 border-transparent bg-[color-mix(in_oklch,var(--destructive)_55%,black_45%)] text-white hover:bg-[color-mix(in_oklch,var(--destructive)_40%,black_60%)]',
-        })}
+        className={cn(
+          buttonVariants({ variant: 'ghost', size: 'icon' }),
+          'max-sm:size-7 bg-[color-mix(in_oklch,var(--destructive)_55%,black_45%)] text-white hover:bg-[color-mix(in_oklch,var(--destructive)_40%,black_60%)]'
+        )}
         aria-label={`Remove ${entry.name} from library`}
       >
         {removeLibraryEntry.isPending ? <LoaderCircle className="animate-spin" /> : <Trash2 />}

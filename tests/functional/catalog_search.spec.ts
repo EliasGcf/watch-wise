@@ -1,6 +1,8 @@
 import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
+import { DateTime } from 'luxon'
+import type { Page } from 'playwright'
 
 test.group('Catalog search', (group) => {
   group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
@@ -20,9 +22,7 @@ test.group('Catalog search', (group) => {
     const page = await visit('/app/catalog/search?q=heat')
 
     await page.assertTextContains('body', 'Movie')
-    await page.assertTextContains('body', '1995')
     await page.assertTextContains('body', 'Serie')
-    await page.assertTextContains('body', '1999')
     await page.assertExists(page.getByRole('button', { name: 'Add Heat to your library' }))
     await page.assertExists(
       page.getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
@@ -251,17 +251,34 @@ test.group('Catalog search', (group) => {
       name: 'Heat',
       bannerPath: '/movie-1.jpg',
       posterPath: '/movie-1-poster.jpg',
-      releasedAt: null,
+      releasedAt: DateTime.fromISO('1995-12-15'),
       summary: 'A professional thief and a relentless detective collide.',
     })
 
     await browserContext.loginAs(user)
 
     const searchPage = await visit('/app/catalog/search?q=heat')
-    await searchPage.assertExists(searchPage.getByLabel('Heat is in your library'))
+    await searchPage.assertExists(
+      searchPage.getByRole('button', { name: 'Remove Heat from library' })
+    )
+    await searchPage.assertExists(
+      searchPage.getByRole('checkbox', { name: 'Mark Heat as watched' })
+    )
     await searchPage.assertElementsCount(
       searchPage.getByRole('button', { name: /Add .* to your library/ }),
       2
+    )
+
+    await delayMovieWatchApi(searchPage)
+    const watchResponse = searchPage.waitForResponse('**/api/library/movies/*/watch')
+    await searchPage.getByRole('checkbox', { name: 'Mark Heat as watched' }).click()
+    await watchResponse
+    await searchPage.assertTextContains('body', 'Movie was marked as watched.')
+    await searchPage.assertExists(
+      searchPage.getByRole('button', { name: 'Remove Heat from library' })
+    )
+    await searchPage.assertExists(
+      searchPage.getByRole('checkbox', { name: 'Unmark Heat as watched' })
     )
   })
 
@@ -302,3 +319,10 @@ test.group('Catalog search', (group) => {
     assert.equal(movie.releasedAt?.toISODate(), '2000-01-01')
   })
 })
+
+async function delayMovieWatchApi(page: Page) {
+  await page.route('**/api/library/movies/*/watch', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+    await route.continue()
+  })
+}
