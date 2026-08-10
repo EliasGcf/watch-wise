@@ -6,7 +6,7 @@ import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
-import { LibraryGrid } from '../components/library_cards'
+import { ItemGrid } from '~/components/item_card'
 
 type Props = InertiaProps & {
   query: string
@@ -53,7 +53,7 @@ export default function LibrarySeries({ query, series }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <LibraryGrid entries={series} />
+        <ItemGrid items={series.map((serie) => ({ ...serie, libraryEntry: serie }))} />
       )}
     </div>
   )

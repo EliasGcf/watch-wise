@@ -6,7 +6,7 @@ import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
-import { LibraryGrid } from './components/library_cards'
+import { ItemGrid } from '~/components/item_card'
 
 type Props = InertiaProps & {
   query: string
@@ -53,7 +53,7 @@ export default function LibraryMovies({ query, movies }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <LibraryGrid entries={movies} />
+        <ItemGrid items={movies.map((movie) => ({ ...movie, libraryEntry: movie }))} />
       )}
     </div>
   )

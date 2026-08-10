@@ -15,7 +15,7 @@ export default class CatalogSearchController {
 
       if (results.length) {
         const [movies, series] = await Promise.all([
-          auth.user!.related('movies').query().whereIn('providerId', catalogIds),
+          auth.user!.related('movies').query().whereIn('providerId', catalogIds).preload('watched'),
           auth.user!.related('series').query().whereIn('providerId', catalogIds),
         ])
 
