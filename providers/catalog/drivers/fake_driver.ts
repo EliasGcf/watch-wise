@@ -160,6 +160,26 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
   }
 
   async findSerieById(providerId: string): Promise<Serie | null> {
+    if (providerId === 'series-2') {
+      return {
+        provider: 'tmdb',
+        id: providerId,
+        type: 'serie',
+        name: 'Fake Multi Season Series',
+        bannerPath: '/series-2.jpg',
+        bannerUrl: makeImageUrl(this.config.baseImageUrl, '/series-2.jpg'),
+        posterPath: '/series-2-poster.jpg',
+        posterUrl: makeImageUrl(this.config.baseImageUrl, '/series-2-poster.jpg'),
+        releasedAt: '1998-01-01',
+        summary: 'A fake multi season series.',
+        episodesCount: 4,
+        seasons: [
+          { name: 'Season 1', number: 1, episodesCount: 2 },
+          { name: 'Season 2', number: 2, episodesCount: 2 },
+        ],
+      }
+    }
+
     if (providerId !== 'series-1' && providerId !== 'series-1-changed') return null
 
     const series = fakeGet3TvBySeriesIdResponse()
@@ -193,6 +213,60 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
   }
 
   async episodes(providerId: string, season: number): Promise<Episode[]> {
+    if (providerId === 'series-2') {
+      if (season === 1) {
+        return [
+          {
+            providerId: 'series-2-s1e1',
+            season: 1,
+            episode: 1,
+            name: 'Second Series Pilot',
+            releasedAt: '1998-01-01',
+            duration: 24,
+            summary: 'The fake second series pilot.',
+            isSpecial: false,
+          },
+          {
+            providerId: 'series-2-s1e2',
+            season: 1,
+            episode: 2,
+            name: 'Second Series Finale',
+            releasedAt: '1998-06-01',
+            duration: 25,
+            summary: 'The fake second series season finale.',
+            isSpecial: false,
+          },
+        ]
+      }
+
+      if (season === 2) {
+        return [
+          {
+            providerId: 'series-2-s2e1',
+            season: 2,
+            episode: 1,
+            name: 'Second Series Return',
+            releasedAt: '1999-01-01',
+            duration: 30,
+            summary: 'The fake second series returns.',
+            isSpecial: false,
+          },
+          {
+            providerId: 'series-2-s2e2',
+            season: 2,
+            episode: 2,
+            name: 'Second Series Future',
+            releasedAt: '2999-01-01',
+            duration: 31,
+            summary: 'A future fake episode.',
+            isSpecial: false,
+          },
+        ]
+      }
+
+      return []
+    }
+
     if (providerId !== 'series-1' && providerId !== 'series-1-changed') return []
 
     const firstEpisodeName = providerId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'
@@ -242,6 +316,62 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
   }
 
   async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
+    if (serieId === 'series-2') {
+      if (season === 1 && episode === 1) {
+        return {
+          providerId: 'series-2-s1e1',
+          season: 1,
+          episode: 1,
+          name: 'Second Series Pilot',
+          releasedAt: '1998-01-01',
+          duration: 24,
+          summary: 'The fake second series pilot.',
+          isSpecial: false,
+        }
+      }
+
+      if (season === 1 && episode === 2) {
+        return {
+          providerId: 'series-2-s1e2',
+          season: 1,
+          episode: 2,
+          name: 'Second Series Finale',
+          releasedAt: '1998-06-01',
+          duration: 25,
+          summary: 'The fake second series season finale.',
+          isSpecial: false,
+        }
+      }
+
+      if (season === 2 && episode === 1) {
+        return {
+          providerId: 'series-2-s2e1',
+          season: 2,
+          episode: 1,
+          name: 'Second Series Return',
+          releasedAt: '1999-01-01',
+          duration: 30,
+          summary: 'The fake second series returns.',
+          isSpecial: false,
+        }
+      }
+
+      if (season === 2 && episode === 2) {
+        return {
+          providerId: 'series-2-s2e2',
+          season: 2,
+          episode: 2,
+          name: 'Second Series Future',
+          releasedAt: '2999-01-01',
+          duration: 31,
+          summary: 'A future fake episode.',
+          isSpecial: false,
+        }
+      }
+
+      return null
+    }
+
     if (serieId !== 'series-1' && serieId !== 'series-1-changed') return null
 
     const firstEpisodeName = serieId === 'series-1-changed' ? 'Changed Pilot' : 'Pilot'

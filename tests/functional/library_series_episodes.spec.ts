@@ -796,4 +796,287 @@ test.group('Library series episodes', (group) => {
       0
     )
   })
+
+  test('authenticated users can mark a target episode and all released regular episodes before it in one operation', async ({
+    assert,
+    client,
+  }) => {
+    const watchedAt = DateTime.fromISO('2000-01-01T12:34:56Z')
+    Settings.now = () => watchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Catch Up Viewer',
+      email: 'catch-up-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    try {
+      const response = await client
+        .post(`/api/library/series/${serie.id}/seasons/2/episodes/1/watch-before`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+        .orderBy('season')
+        .orderBy('episode')
+
+      assert.deepEqual(
+        watchedMarks.map((mark) => ({
+          season: mark.season,
+          episode: mark.episode,
+          watchedAt: mark.watchedAt.toISO(),
+        })),
+        [
+          { season: 1, episode: 1, watchedAt: watchedAt.toISO() },
+          { season: 1, episode: 2, watchedAt: watchedAt.toISO() },
+          { season: 2, episode: 1, watchedAt: watchedAt.toISO() },
+        ]
+      )
+
+      await user.refresh()
+      assert.equal(user.watchedTime, 79)
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('marking all episodes before a target preserves existing watched marks and their dates', async ({
+    assert,
+    client,
+  }) => {
+    const originalWatchedAt = DateTime.fromISO('2001-02-03T04:05:06Z')
+    const catchUpWatchedAt = DateTime.fromISO('3000-01-01T09:10:11Z')
+    Settings.now = () => originalWatchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Catch Up Preserve Viewer',
+      email: 'catch-up-preserve-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    try {
+      await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      Settings.now = () => catchUpWatchedAt.toMillis()
+
+      const response = await client
+        .post(`/api/library/series/${serie.id}/seasons/2/episodes/1/watch-before`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+        .orderBy('season')
+        .orderBy('episode')
+
+      assert.deepEqual(
+        watchedMarks.map((mark) => ({
+          season: mark.season,
+          episode: mark.episode,
+          watchedAt: mark.watchedAt.toISO(),
+        })),
+        [
+          { season: 1, episode: 1, watchedAt: originalWatchedAt.toISO() },
+          { season: 1, episode: 2, watchedAt: catchUpWatchedAt.toISO() },
+          { season: 2, episode: 1, watchedAt: catchUpWatchedAt.toISO() },
+        ]
+      )
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('marking all episodes before a first season target only marks episodes up to the target', async ({
+    assert,
+    client,
+  }) => {
+    const watchedAt = DateTime.fromISO('2000-01-01T12:34:56Z')
+    Settings.now = () => watchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Catch Up First Season',
+      email: 'catch-up-first-season@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    try {
+      const response = await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/2/watch-before`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+        .orderBy('season')
+        .orderBy('episode')
+
+      assert.deepEqual(
+        watchedMarks.map((mark) => ({ season: mark.season, episode: mark.episode })),
+        [
+          { season: 1, episode: 1 },
+          { season: 1, episode: 2 },
+        ]
+      )
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('marking all episodes before the first episode of a series only marks the target', async ({
+    assert,
+    client,
+  }) => {
+    const watchedAt = DateTime.fromISO('2000-01-01T12:34:56Z')
+    Settings.now = () => watchedAt.toMillis()
+
+    const user = await User.create({
+      fullName: 'Catch Up First Episode',
+      email: 'catch-up-first-episode@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    try {
+      const response = await client
+        .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch-before`)
+        .loginAs(user)
+        .withCsrfToken()
+
+      response.assertOk()
+
+      const watchedMarks = await WatchedEpisode.query()
+        .where('userId', user.id)
+        .where('libraryEntryId', serie.id)
+
+      assert.lengthOf(watchedMarks, 1)
+      assert.deepInclude(watchedMarks[0].serialize(), {
+        season: 1,
+        episode: 1,
+        providerId: 'series-2-s1e1',
+      })
+    } finally {
+      Settings.now = Date.now
+    }
+  })
+
+  test('authenticated users cannot mark all episodes before an unreleased episode', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Catch Up Future Series',
+      email: 'catch-up-future-series@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/2/episodes/2/watch-before`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    response.assertStatus(422)
+    assert.lengthOf(
+      await WatchedEpisode.query().where('userId', user.id).where('libraryEntryId', serie.id),
+      0
+    )
+  })
+
+  test('authenticated users cannot mark all episodes before another user series episode', async ({
+    assert,
+    client,
+  }) => {
+    const owner = await User.create({
+      fullName: 'Owner Catch Up',
+      email: 'owner-catch-up@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Catch Up',
+      email: 'other-catch-up@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: owner.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/2/episodes/1/watch-before`)
+      .loginAs(otherUser)
+      .withCsrfToken()
+
+    response.assertNotFound()
+    assert.lengthOf(
+      await WatchedEpisode.query().where('userId', owner.id).where('libraryEntryId', serie.id),
+      0
+    )
+  })
 })

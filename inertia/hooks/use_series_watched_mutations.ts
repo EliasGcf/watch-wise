@@ -55,6 +55,23 @@ export function useWatchEpisodeMutation() {
   )
 }
 
+export function useWatchBeforeMutation() {
+  const queryClient = useQueryClient()
+
+  return useMutation(
+    api.api.library.series.episodes.watchBefore.mutationOptions({
+      onSuccess: async (_data, variables) => {
+        await queryClient.invalidateQueries(
+          api.api.library.series.seasons.episodes.queryFilter({
+            params: { id: variables.params.id, season: variables.params.season },
+          })
+        )
+        await refreshSeries(queryClient)
+      },
+    })
+  )
+}
+
 export function useUnwatchEpisodeMutation() {
   const queryClient = useQueryClient()
 

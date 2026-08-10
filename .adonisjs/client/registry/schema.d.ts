@@ -139,6 +139,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/seasons_controller').default['watchAll']>>>
     }
   }
+  'api.library.series.episodes.watch_before': {
+    methods: ["POST"]
+    pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch-before'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue, ParamValue]
+      params: { id: ParamValue; season: ParamValue; episode: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watchBefore']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watchBefore']>>>
+    }
+  }
   'api.library.series.episodes.watch': {
     methods: ["POST"]
     pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch'

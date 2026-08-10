@@ -72,6 +72,12 @@ const routes = {
     tokens: [{"old":"/api/library/series/:id/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/watch","type":0,"val":"watch","end":""}],
     types: placeholder as Registry['api.library.series.watch']['types'],
   },
+  'api.library.series.episodes.watch_before': {
+    methods: ["POST"],
+    pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch-before',
+    tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":0,"val":"episodes","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":1,"val":"episode","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch-before","type":0,"val":"watch-before","end":""}],
+    types: placeholder as Registry['api.library.series.episodes.watch_before']['types'],
+  },
   'api.library.series.episodes.watch': {
     methods: ["POST"],
     pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch',

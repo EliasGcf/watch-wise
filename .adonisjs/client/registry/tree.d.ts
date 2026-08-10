@@ -18,6 +18,7 @@ export interface ApiDefinition {
         }
         watch: typeof routes['api.library.series.watch']
         episodes: {
+          watchBefore: typeof routes['api.library.series.episodes.watch_before']
           watch: typeof routes['api.library.series.episodes.watch']
           unwatch: typeof routes['api.library.series.episodes.unwatch']
         }

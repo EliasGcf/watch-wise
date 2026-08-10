@@ -177,6 +177,46 @@ test.group('Sonarr episode file deletion', (group) => {
     assert.deepEqual(calls, [])
   })
 
+  test('deletes Sonarr episode files for newly marked episodes before a target', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const user = await User.create({
+      fullName: 'Sonarr Catch Up',
+      email: `sonarr-catch-up-${crypto.randomUUID()}@example.com`,
+      password: 'secret123',
+    })
+    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-2',
+      name: 'Fake Multi Season Series',
+      bannerPath: '/series-2.jpg',
+      posterPath: '/series-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1998-01-01'),
+      summary: 'A fake multi season series.',
+    })
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/2/episodes/1/watch-before`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    response.assertOk()
+    await flushProviderAction()
+    assert.deepEqual(
+      calls.sort((a, b) => a.season - b.season || a.episode - b.episode),
+      [
+        { providerId: 'series-2', season: 1, episode: 1 },
+        { providerId: 'series-2', season: 1, episode: 2 },
+        { providerId: 'series-2', season: 2, episode: 1 },
+      ]
+    )
+  })
+
   test('provider failures do not fail watched marking or watched time', async ({
     assert,
     cleanup,
