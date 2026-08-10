@@ -28,6 +28,7 @@ import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
 import {
   useUnwatchEpisodeMutation,
+  useWatchBeforeMutation,
   useWatchEpisodeMutation,
   useWatchSeasonMutation,
   useWatchSeriesMutation,
@@ -263,6 +264,7 @@ function SeasonAccordion({
             <AccordionContent>
               <SeasonEpisodes
                 serie={serie}
+                seasons={seasons}
                 season={season.number}
                 isOpen={openSeasons.includes(String(season.number))}
                 watchedEpisodes={watchedEpisodes}
@@ -338,11 +340,13 @@ function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
 
 function SeasonEpisodes({
   serie,
+  seasons,
   season,
   isOpen,
   watchedEpisodes,
 }: {
   serie: Data.Serie
+  seasons: SeriesSeasons
   season: number
   isOpen: boolean
   watchedEpisodes: WatchedEpisodeProgress[]
@@ -362,6 +366,7 @@ function SeasonEpisodes({
         <EpisodeRow
           key={episode.providerId}
           serie={serie}
+          seasons={seasons}
           episode={episode}
           watchedEpisodes={watchedEpisodes}
         />
@@ -394,12 +399,46 @@ function EpisodeSkeletonList() {
   )
 }
 
+function previousRegularEpisode(
+  episode: SeasonEpisode,
+  seasons: SeriesSeasons
+): { season: number; episode: number } | null {
+  if (episode.episode > 1) return { season: episode.season, episode: episode.episode - 1 }
+
+  const previousSeason = seasons
+    .filter((season) => season.number !== 0 && season.number < episode.season)
+    .sort((a, b) => b.number - a.number)[0]
+
+  if (!previousSeason || previousSeason.episodesCount === 0) return null
+
+  return { season: previousSeason.number, episode: previousSeason.episodesCount }
+}
+
+function requiresCatchUp(
+  episode: SeasonEpisode,
+  seasons: SeriesSeasons,
+  watchedEpisodes: WatchedEpisodeProgress[]
+) {
+  if (episode.isSpecial || episode.season === 0) return false
+
+  const previous = previousRegularEpisode(episode, seasons)
+  if (!previous) return false
+
+  const watched = watchedEpisodes.some(
+    (mark) => mark.season === previous.season && mark.episode === previous.episode
+  )
+
+  return !watched
+}
+
 function EpisodeRow({
   serie,
+  seasons,
   episode,
   watchedEpisodes,
 }: {
   serie: Data.Serie
+  seasons: SeriesSeasons
   episode: SeasonEpisode
   watchedEpisodes: WatchedEpisodeProgress[]
 }) {
@@ -410,71 +449,117 @@ function EpisodeRow({
   const watched = Boolean(watchedEpisode)
   const watchEpisodeMutation = useWatchEpisodeMutation()
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
-  const isPending = watchEpisodeMutation.isPending || unwatchEpisodeMutation.isPending
+  const watchBeforeMutation = useWatchBeforeMutation()
+  const [pendingCatchUp, setPendingCatchUp] = useState(false)
+  const isPending =
+    watchEpisodeMutation.isPending ||
+    unwatchEpisodeMutation.isPending ||
+    watchBeforeMutation.isPending
 
   async function toggleWatched(checked: boolean) {
-    if (checked) {
-      await watchEpisodeMutation.mutateAsync({
+    if (!checked) {
+      await unwatchEpisodeMutation.mutateAsync({
         params: { id: serie.id, season: episode.season, episode: episode.episode },
       })
       return
     }
 
-    await unwatchEpisodeMutation.mutateAsync({
+    if (requiresCatchUp(episode, seasons, watchedEpisodes)) {
+      setPendingCatchUp(true)
+      return
+    }
+
+    await watchEpisodeMutation.mutateAsync({
       params: { id: serie.id, season: episode.season, episode: episode.episode },
     })
   }
 
+  async function confirmCatchUp(includeBefore: boolean) {
+    setPendingCatchUp(false)
+    const params = { id: serie.id, season: episode.season, episode: episode.episode }
+
+    if (includeBefore) {
+      await watchBeforeMutation.mutateAsync({ params })
+      return
+    }
+
+    await watchEpisodeMutation.mutateAsync({ params })
+  }
+
   return (
-    <article
-      className={cn(
-        'grid grid-cols-[2.5rem_1fr_auto] items-center border-t py-4 first:border-t-0 first:pt-2 last:pb-0 sm:grid-cols-[2.5rem_1fr_10rem]',
-        watched && 'opacity-80'
-      )}
-    >
-      <div className="flex items-center">
-        {isPending ? (
-          <LoaderCircle className="size-5 animate-spin text-muted-foreground" aria-hidden="true" />
-        ) : (
-          <Checkbox
-            checked={Boolean(watched)}
-            disabled={!episode.isReleased}
-            aria-label={
-              watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
-            }
-            className="size-5 rounded-full"
-            onCheckedChange={(checked) => void toggleWatched(checked)}
-          />
+    <>
+      <article
+        className={cn(
+          'grid grid-cols-[2.5rem_1fr_auto] items-center border-t py-4 first:border-t-0 first:pt-2 last:pb-0 sm:grid-cols-[2.5rem_1fr_10rem]',
+          watched && 'opacity-80'
         )}
-      </div>
-
-      <div className="min-w-0 space-y-2">
-        <div className="flex flex-wrap items-center gap-x-4 leading-none">
-          <span className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
-            S{episode.season}·E{episode.episode}
-          </span>
-          {episode.duration && (
-            <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
-              <Clock3 className="size-3.5" aria-hidden="true" />
-              {episode.duration} min
-            </span>
+      >
+        <div className="flex items-center">
+          {isPending ? (
+            <LoaderCircle
+              className="size-5 animate-spin text-muted-foreground"
+              aria-hidden="true"
+            />
+          ) : (
+            <Checkbox
+              checked={Boolean(watched)}
+              disabled={!episode.isReleased}
+              aria-label={
+                watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
+              }
+              className="size-5 rounded-full"
+              onCheckedChange={(checked) => void toggleWatched(checked)}
+            />
           )}
-          {episode.isSpecial && <Badge variant="outline">Special</Badge>}
         </div>
-        <h3 className="text-base font-medium tracking-tight">{episode.name}</h3>
-        {episode.summary && (
-          <p className="hidden text-sm text-muted-foreground sm:block sm:line-clamp-2">
-            {episode.summary}
-          </p>
-        )}
-      </div>
 
-      <div className="flex flex-col items-end justify-center gap-1 text-sm text-muted-foreground sm:pr-3 sm:text-right">
-        {!watched &&
-          (episode.isReleased ? <span>Ready to watch</span> : <span>Not released yet</span>)}
-        {watchedAt && <span className="font-mono text-xs">{formatWatchedAt(watchedAt)}</span>}
-      </div>
-    </article>
+        <div className="min-w-0 space-y-2">
+          <div className="flex flex-wrap items-center gap-x-4 leading-none">
+            <span className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
+              S{episode.season}·E{episode.episode}
+            </span>
+            {episode.duration && (
+              <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
+                <Clock3 className="size-3.5" aria-hidden="true" />
+                {episode.duration} min
+              </span>
+            )}
+            {episode.isSpecial && <Badge variant="outline">Special</Badge>}
+          </div>
+          <h3 className="text-base font-medium tracking-tight">{episode.name}</h3>
+          {episode.summary && (
+            <p className="hidden text-sm text-muted-foreground sm:block sm:line-clamp-2">
+              {episode.summary}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col items-end justify-center gap-1 text-sm text-muted-foreground sm:pr-3 sm:text-right">
+          {!watched &&
+            (episode.isReleased ? <span>Ready to watch</span> : <span>Not released yet</span>)}
+          {watchedAt && <span className="font-mono text-xs">{formatWatchedAt(watchedAt)}</span>}
+        </div>
+      </article>
+
+      <AlertDialog open={pendingCatchUp} onOpenChange={setPendingCatchUp}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Mark previous episodes as watched?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Some earlier episodes have not been marked as watched. Mark them all as watched too?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => void confirmCatchUp(false)}>
+              Just this episode
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={() => void confirmCatchUp(true)}>
+              Mark all previous too
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }
 
