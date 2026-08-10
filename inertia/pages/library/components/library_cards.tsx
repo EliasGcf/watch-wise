@@ -16,6 +16,7 @@ import {
 } from '~/components/ui/alert_dialog'
 import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
+import { cn } from '~/lib/utils'
 
 type Movie = Data.Movie
 type Serie = Data.Serie
@@ -41,10 +42,10 @@ function LibraryCard({ entry }: { entry: Movie | Serie }) {
 
   const controls = (
     <>
-      <div className="absolute left-2 top-2">
+      <div className="absolute left-1.5 top-1.5">
         <RemoveLibraryEntryButton entry={entry} />
       </div>
-      <div className="absolute bottom-2 right-2">
+      <div className="absolute bottom-1.5 right-1.5">
         {entry.type === 'movie' && <WatchedButton movie={entry} />}
       </div>
     </>
@@ -114,12 +115,10 @@ function RemoveLibraryEntryButton({ entry }: { entry: Movie | Serie }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger
-        className={buttonVariants({
-          variant: 'ghost',
-          size: 'icon',
-          className:
-            'size-8 border-transparent bg-[color-mix(in_oklch,var(--destructive)_55%,black_45%)] text-white hover:bg-[color-mix(in_oklch,var(--destructive)_40%,black_60%)]',
-        })}
+        className={cn(
+          buttonVariants({ variant: 'ghost', size: 'icon' }),
+          'max-sm:size-7 bg-[color-mix(in_oklch,var(--destructive)_55%,black_45%)] text-white hover:bg-[color-mix(in_oklch,var(--destructive)_40%,black_60%)]'
+        )}
         aria-label={`Remove ${entry.name} from library`}
       >
         {removeLibraryEntry.isPending ? <LoaderCircle className="animate-spin" /> : <Trash2 />}
