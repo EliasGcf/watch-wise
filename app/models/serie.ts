@@ -18,25 +18,33 @@ export default class Serie extends LibraryItem {
   @hasMany(() => WatchedEpisode, { foreignKey: 'libraryEntryId' })
   declare watchedEpisodes: HasMany<typeof WatchedEpisode>
 
-  async watchEpisode(this: Serie, episode: Episode) {
-    await this.related('watchedEpisodes').firstOrCreate(
-      {
-        userId: this.userId,
-        season: episode.season,
-        episode: episode.episode,
-      },
-      {
-        userId: this.userId,
-        season: episode.season,
-        episode: episode.episode,
-        providerId: episode.providerId,
-        duration: episode.duration,
-        watchedAt: DateTime.now(),
-      }
-    )
+  async watchEpisode(this: Serie, episode: Episode, deleteFile = false) {
+    const watched = await this.related('watchedEpisodes')
+      .query()
+      .where('userId', this.userId)
+      .where('season', episode.season)
+      .where('episode', episode.episode)
+      .first()
+
+    if (watched) return watched
+
+    const created = new WatchedEpisode()
+    created.libraryEntryId = this.id
+    created.userId = this.userId
+    created.season = episode.season
+    created.episode = episode.episode
+    created.providerId = episode.providerId
+    created.duration = episode.duration
+    created.watchedAt = DateTime.now()
+    created.$extras.deleteFile = deleteFile
+    created.$trx = this.$trx
+
+    await created.save()
+
+    return created
   }
 
-  async watchEpisodes(this: Serie, episodes: Episode[]) {
+  async watchEpisodes(this: Serie, episodes: Episode[], deleteFile = false) {
     if (episodes.length === 0) return
 
     const watchedAt = DateTime.now()
@@ -56,16 +64,20 @@ export default class Serie extends LibraryItem {
 
     if (missingEpisodes.length === 0) return
 
-    await this.related('watchedEpisodes').createMany(
-      missingEpisodes.map((episode) => ({
-        userId: this.userId,
-        season: episode.season,
-        episode: episode.episode,
-        providerId: episode.providerId,
-        duration: episode.duration,
-        watchedAt,
-      }))
-    )
+    const toSave = missingEpisodes.map((episode) => {
+      const watched = new WatchedEpisode()
+      watched.userId = this.userId
+      watched.season = episode.season
+      watched.episode = episode.episode
+      watched.providerId = episode.providerId
+      watched.duration = episode.duration
+      watched.watchedAt = watchedAt
+      watched.$extras.deleteFile = deleteFile
+      watched.$trx = this.$trx
+      return watched
+    })
+
+    await this.related('watchedEpisodes').saveMany(toSave)
   }
 
   async unwatchEpisode(this: Serie, season: number, episode: number) {

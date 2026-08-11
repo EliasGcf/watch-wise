@@ -46,6 +46,69 @@ test.group('Sonarr episode file deletion', (group) => {
     assert.deepEqual(calls, [])
   })
 
+  test('deletes the Sonarr episode file when deleteFile is requested even with the setting disabled', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const { user, serie } = await makeUserWithSerie()
+
+    const response = await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .json({ deleteFile: true })
+      .loginAs(user)
+      .withCsrfToken()
+
+    response.assertOk()
+    await flushProviderAction()
+    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
+  })
+
+  test('does not retry deletion when an already watched episode is requested with deleteFile', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const { user, serie } = await makeUserWithSerie()
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .json({ deleteFile: true })
+      .loginAs(user)
+      .withCsrfToken()
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .json({ deleteFile: true })
+      .loginAs(user)
+      .withCsrfToken()
+
+    await flushProviderAction()
+    assert.lengthOf(calls, 1)
+  })
+
+  test('does not delete when Sonarr is unavailable even with deleteFile requested', async ({
+    assert,
+    cleanup,
+    client,
+  }) => {
+    const calls = spyOnSonarrDeletion(cleanup)
+    const sonarrDriver = app.config.get('sonarr_provider.default')
+    app.config.set('sonarr_provider.default', undefined)
+    cleanup(() => app.config.set('sonarr_provider.default', sonarrDriver))
+    const { user, serie } = await makeUserWithSerie()
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .json({ deleteFile: true })
+      .loginAs(user)
+      .withCsrfToken()
+
+    await flushProviderAction()
+    assert.deepEqual(calls, [])
+  })
+
   test('does not delete when Sonarr is unavailable', async ({ assert, cleanup, client }) => {
     const calls = spyOnSonarrDeletion(cleanup)
     const sonarrDriver = app.config.get('sonarr_provider.default')

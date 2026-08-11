@@ -23,6 +23,9 @@ test.group('User settings', (group) => {
       password: 'secret123',
     })
 
+    app.config.set('sonarr_provider.default', 'fake')
+    app.config.set('radarr_provider.default', 'fake')
+
     const response = await client.get('/api/user/settings').loginAs(user)
 
     response.assertOk()
@@ -33,6 +36,10 @@ test.group('User settings', (group) => {
         activeProviderActions: {
           deleteSonarrEpisodeFiles: false,
           deleteRadarrMovieFiles: false,
+        },
+        providerAvailability: {
+          sonarr: true,
+          radarr: true,
         },
       },
     })
@@ -66,6 +73,10 @@ test.group('User settings', (group) => {
         activeProviderActions: {
           deleteSonarrEpisodeFiles: true,
           deleteRadarrMovieFiles: false,
+        },
+        providerAvailability: {
+          sonarr: true,
+          radarr: true,
         },
       },
     })
@@ -137,6 +148,10 @@ test.group('User settings', (group) => {
         activeProviderActions: {
           deleteSonarrEpisodeFiles: false,
           deleteRadarrMovieFiles: false,
+        },
+        providerAvailability: {
+          sonarr: false,
+          radarr: false,
         },
       },
     })

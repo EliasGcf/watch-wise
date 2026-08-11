@@ -17,4 +17,11 @@ export default class UserSettings extends UserSettingSchema {
       deleteRadarrMovieFiles: Boolean(this.deleteRadarrMovieFiles) && isRadarrAvailable(),
     }
   }
+
+  get providerAvailability() {
+    return {
+      sonarr: isSonarrAvailable(),
+      radarr: isRadarrAvailable(),
+    }
+  }
 }

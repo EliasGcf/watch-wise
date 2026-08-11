@@ -73,7 +73,10 @@ export class WatchedEpisode extends WatchedMark {
 
   @afterCreate()
   static async dispatchWatchedEvent(episode: WatchedEpisode) {
-    await events.EpisodeWatched.dispatch(episode)
+    await events.EpisodeWatched.dispatch({
+      watched: episode,
+      deleteFile: Boolean(episode.$extras.deleteFile),
+    })
   }
 
   @afterDelete()

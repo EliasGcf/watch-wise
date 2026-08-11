@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowLeft, Clock3, LoaderCircle, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
@@ -23,9 +23,16 @@ import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Checkbox } from '~/components/ui/checkbox'
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '~/components/ui/context_menu'
 import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
+import { useUserSettingsQuery } from '~/hooks/use_user_settings_query'
 import {
   useUnwatchEpisodeMutation,
   useWatchBeforeMutation,
@@ -447,6 +454,8 @@ function EpisodeRow({
   episode: SeasonEpisode
   watchedEpisodes: WatchedEpisodeProgress[]
 }) {
+  const userSettingsQuery = useUserSettingsQuery()
+  const sonarrAvailable = userSettingsQuery.data?.data.providerAvailability.sonarr ?? false
   const watchedEpisode = watchedEpisodes.find(
     (watched) => watched.season === episode.season && watched.episode === episode.episode
   )
@@ -456,40 +465,74 @@ function EpisodeRow({
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
   const watchBeforeMutation = useWatchBeforeMutation()
   const [pendingCatchUp, setPendingCatchUp] = useState(false)
+  const [pendingCatchUpDeleteFile, setPendingCatchUpDeleteFile] = useState(false)
   const isPending =
     watchEpisodeMutation.isPending ||
     unwatchEpisodeMutation.isPending ||
     watchBeforeMutation.isPending
+  const contextMenuOpenRef = useRef(false)
 
-  async function toggleWatched(checked: boolean) {
+  function markWatched(deleteFile: boolean) {
+    if (requiresCatchUp(episode, seasons, watchedEpisodes)) {
+      setPendingCatchUpDeleteFile(deleteFile)
+      setPendingCatchUp(true)
+      return
+    }
+
+    watchEpisodeMutation.mutate({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+      ...(deleteFile ? { body: { deleteFile: true } } : {}),
+    })
+  }
+
+  function toggleWatched(checked: boolean) {
     if (!checked) {
-      await unwatchEpisodeMutation.mutateAsync({
+      unwatchEpisodeMutation.mutate({
         params: { id: serie.id, season: episode.season, episode: episode.episode },
       })
       return
     }
 
-    if (requiresCatchUp(episode, seasons, watchedEpisodes)) {
-      setPendingCatchUp(true)
-      return
-    }
-
-    await watchEpisodeMutation.mutateAsync({
-      params: { id: serie.id, season: episode.season, episode: episode.episode },
-    })
+    markWatched(false)
   }
 
   async function confirmCatchUp(includeBefore: boolean) {
     setPendingCatchUp(false)
+    const deleteFile = pendingCatchUpDeleteFile
+    setPendingCatchUpDeleteFile(false)
     const params = { id: serie.id, season: episode.season, episode: episode.episode }
+
+    if (includeBefore && deleteFile) {
+      await watchEpisodeMutation.mutateAsync({ params, body: { deleteFile: true } })
+      await watchBeforeMutation.mutateAsync({ params })
+      return
+    }
 
     if (includeBefore) {
       await watchBeforeMutation.mutateAsync({ params })
       return
     }
 
-    await watchEpisodeMutation.mutateAsync({ params })
+    await watchEpisodeMutation.mutateAsync({
+      params,
+      ...(deleteFile ? { body: { deleteFile: true } } : {}),
+    })
   }
+
+  const checkbox = isPending ? (
+    <LoaderCircle className="size-5 animate-spin text-muted-foreground" aria-hidden="true" />
+  ) : (
+    <Checkbox
+      checked={Boolean(watched)}
+      disabled={!episode.isReleased}
+      aria-label={watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`}
+      className="size-5 rounded-full"
+      onCheckedChange={(checked) => {
+        if (contextMenuOpenRef.current) return
+        void toggleWatched(Boolean(checked))
+      }}
+    />
+  )
 
   return (
     <>
@@ -500,21 +543,23 @@ function EpisodeRow({
         )}
       >
         <div className="flex items-center">
-          {isPending ? (
-            <LoaderCircle
-              className="size-5 animate-spin text-muted-foreground"
-              aria-hidden="true"
-            />
+          {sonarrAvailable && !watched && episode.isReleased ? (
+            <ContextMenu onOpenChange={(open) => (contextMenuOpenRef.current = open)}>
+              <ContextMenuTrigger>{checkbox}</ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem
+                  onClick={() => markWatched(true)}
+                  disabled={watchEpisodeMutation.isPending}
+                >
+                  {watchEpisodeMutation.isPending && (
+                    <LoaderCircle className="animate-spin" aria-hidden="true" />
+                  )}
+                  Mark as watched and delete file
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
           ) : (
-            <Checkbox
-              checked={Boolean(watched)}
-              disabled={!episode.isReleased}
-              aria-label={
-                watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
-              }
-              className="size-5 rounded-full"
-              onCheckedChange={(checked) => void toggleWatched(checked)}
-            />
+            checkbox
           )}
         </div>
 
@@ -547,7 +592,7 @@ function EpisodeRow({
       </article>
 
       <AlertDialog open={pendingCatchUp} onOpenChange={setPendingCatchUp}>
-        <AlertDialogContent>
+        <AlertDialogContent onClickOverlay={() => setPendingCatchUp(false)}>
           <AlertDialogHeader>
             <AlertDialogTitle>Mark previous episodes as watched?</AlertDialogTitle>
             <AlertDialogDescription>

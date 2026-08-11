@@ -155,12 +155,12 @@ export interface Registry {
     methods: ["POST"]
     pattern: '/api/library/series/:id/seasons/:season/episodes/:episode/watch'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/episode').watchEpisodeValidator)>>
       paramsTuple: [ParamValue, ParamValue, ParamValue]
       params: { id: ParamValue; season: ParamValue; episode: ParamValue }
-      query: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/episode').watchEpisodeValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watch']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['watch']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'api.library.series.episodes.unwatch': {

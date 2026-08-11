@@ -7,6 +7,7 @@ export default class UserSettingsTransformer extends BaseTransformer<UserSetting
       deleteSonarrEpisodeFiles: Boolean(this.resource.deleteSonarrEpisodeFiles),
       deleteRadarrMovieFiles: Boolean(this.resource.deleteRadarrMovieFiles),
       activeProviderActions: this.resource.activeProviderActions,
+      providerAvailability: this.resource.providerAvailability,
     }
   }
 }
