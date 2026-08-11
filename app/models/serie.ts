@@ -73,6 +73,7 @@ export default class Serie extends LibraryItem {
       watched.duration = episode.duration
       watched.watchedAt = watchedAt
       watched.$extras.deleteFile = deleteFile
+      watched.$trx = this.$trx
       return watched
     })
 
