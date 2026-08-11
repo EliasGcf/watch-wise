@@ -1,5 +1,5 @@
 import { router } from '@inertiajs/react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { ArrowLeft, Clock3, LoaderCircle, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
@@ -23,6 +23,12 @@ import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { Checkbox } from '~/components/ui/checkbox'
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '~/components/ui/context_menu'
 import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
@@ -42,9 +48,9 @@ type SeriesSeasons = Data.Serie.Variants['withCatalog']['catalog']['seasons']
 type SeasonEpisode = Data.Catalog.Episode
 type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: string | null }
 
-type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
+type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog']; sonarrAvailable: boolean }>
 
-export default function SeriesShow({ serie }: Props) {
+export default function SeriesShow({ serie, sonarrAvailable }: Props) {
   const watchSeriesMutation = useWatchSeriesMutation()
   const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
   const seriesMarked =
@@ -149,6 +155,7 @@ export default function SeriesShow({ serie }: Props) {
           serie={serie}
           seasons={serie.catalog.seasons}
           watchedEpisodes={serie.watchedEpisodes ?? []}
+          sonarrAvailable={sonarrAvailable}
         />
       </div>
     </div>
@@ -213,10 +220,12 @@ function SeasonAccordion({
   serie,
   seasons,
   watchedEpisodes,
+  sonarrAvailable,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   watchedEpisodes: WatchedEpisodeProgress[]
+  sonarrAvailable: boolean
 }) {
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
 
@@ -273,6 +282,7 @@ function SeasonAccordion({
                 season={season.number}
                 isOpen={openSeasons.includes(String(season.number))}
                 watchedEpisodes={watchedEpisodes}
+                sonarrAvailable={sonarrAvailable}
               />
             </AccordionContent>
           </AccordionItem>
@@ -349,12 +359,14 @@ function SeasonEpisodes({
   season,
   isOpen,
   watchedEpisodes,
+  sonarrAvailable,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   season: number
   isOpen: boolean
   watchedEpisodes: WatchedEpisodeProgress[]
+  sonarrAvailable: boolean
 }) {
   const episodesQuery = useSeriesEpisodesQuery({ serieId: serie.id, season, enabled: isOpen })
 
@@ -374,6 +386,7 @@ function SeasonEpisodes({
           seasons={seasons}
           episode={episode}
           watchedEpisodes={watchedEpisodes}
+          sonarrAvailable={sonarrAvailable}
         />
       ))}
     </div>
@@ -441,11 +454,13 @@ function EpisodeRow({
   seasons,
   episode,
   watchedEpisodes,
+  sonarrAvailable,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   episode: SeasonEpisode
   watchedEpisodes: WatchedEpisodeProgress[]
+  sonarrAvailable: boolean
 }) {
   const watchedEpisode = watchedEpisodes.find(
     (watched) => watched.season === episode.season && watched.episode === episode.episode
@@ -460,6 +475,14 @@ function EpisodeRow({
     watchEpisodeMutation.isPending ||
     unwatchEpisodeMutation.isPending ||
     watchBeforeMutation.isPending
+  const contextMenuOpenRef = useRef(false)
+
+  function markWatched(deleteFile: boolean) {
+    watchEpisodeMutation.mutate({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+      ...(deleteFile ? { body: { deleteFile: true } } : {}),
+    })
+  }
 
   async function toggleWatched(checked: boolean) {
     if (!checked) {
@@ -491,6 +514,21 @@ function EpisodeRow({
     await watchEpisodeMutation.mutateAsync({ params })
   }
 
+  const checkbox = isPending ? (
+    <LoaderCircle className="size-5 animate-spin text-muted-foreground" aria-hidden="true" />
+  ) : (
+    <Checkbox
+      checked={Boolean(watched)}
+      disabled={!episode.isReleased}
+      aria-label={watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`}
+      className="size-5 rounded-full"
+      onCheckedChange={(checked) => {
+        if (contextMenuOpenRef.current) return
+        void toggleWatched(Boolean(checked))
+      }}
+    />
+  )
+
   return (
     <>
       <article
@@ -500,21 +538,23 @@ function EpisodeRow({
         )}
       >
         <div className="flex items-center">
-          {isPending ? (
-            <LoaderCircle
-              className="size-5 animate-spin text-muted-foreground"
-              aria-hidden="true"
-            />
+          {sonarrAvailable && !watched && episode.isReleased ? (
+            <ContextMenu onOpenChange={(open) => (contextMenuOpenRef.current = open)}>
+              <ContextMenuTrigger>{checkbox}</ContextMenuTrigger>
+              <ContextMenuContent>
+                <ContextMenuItem
+                  onClick={() => markWatched(true)}
+                  disabled={watchEpisodeMutation.isPending}
+                >
+                  {watchEpisodeMutation.isPending && (
+                    <LoaderCircle className="animate-spin" aria-hidden="true" />
+                  )}
+                  Mark as watched and delete file
+                </ContextMenuItem>
+              </ContextMenuContent>
+            </ContextMenu>
           ) : (
-            <Checkbox
-              checked={Boolean(watched)}
-              disabled={!episode.isReleased}
-              aria-label={
-                watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`
-              }
-              className="size-5 rounded-full"
-              onCheckedChange={(checked) => void toggleWatched(checked)}
-            />
+            checkbox
           )}
         </div>
 

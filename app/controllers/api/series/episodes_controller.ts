@@ -1,6 +1,7 @@
 import { catalog } from '#services/catalog_provider'
 import CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
+import { watchEpisodeValidator } from '#validators/episode'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
@@ -19,7 +20,7 @@ export default class EpisodesController {
     return serialize(CatalogEpisodeTransformer.transform(episodes, serie.watchedEpisodes))
   }
 
-  async watch({ auth, params, response, serialize }: HttpContext) {
+  async watch({ auth, params, request, response, serialize }: HttpContext) {
     const serie = await auth.user!.related('series').query().where('id', params.id).firstOrFail()
     const episode = await catalog.findEpisode(
       serie.providerId,
@@ -35,7 +36,8 @@ export default class EpisodesController {
       return response.unprocessableEntity({ error: `${episode.name} has not been released yet.` })
     }
 
-    await serie.watchEpisode(episode)
+    const payload = await request.validateUsing(watchEpisodeValidator)
+    await serie.watchEpisode(episode, payload.deleteFile ?? false)
     await serie.load('watchedEpisodes')
 
     return serialize(SerieTransformer.transform(serie))

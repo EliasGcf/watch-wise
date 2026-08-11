@@ -1,3 +1,4 @@
+import { isSonarrAvailable } from '#services/sonarr_provider'
 import SerieTransformer from '#transformers/serie_transformer'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -26,6 +27,7 @@ export default class SeriesController {
 
     return inertia.render('library/series/show', {
       serie: SerieTransformer.transform(serie).useVariant('withCatalog'),
+      sonarrAvailable: isSonarrAvailable(),
     })
   }
 }
