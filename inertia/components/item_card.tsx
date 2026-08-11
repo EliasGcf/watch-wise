@@ -79,7 +79,10 @@ export function ItemCard({
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={libraryEntry.progress}
-            className="pointer-events-none absolute bottom-0 left-0 h-1 bg-primary"
+            className={cn(
+              'pointer-events-none absolute bottom-0 left-0 h-1',
+              libraryEntry.inProduction === false ? 'bg-violet-600' : 'bg-primary'
+            )}
             style={{ width: `${libraryEntry.progress}%` }}
           />
           <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />

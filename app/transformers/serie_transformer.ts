@@ -7,11 +7,18 @@ import { BaseTransformer } from '@adonisjs/core/transformers'
 
 export default class SerieTransformer extends BaseTransformer<Serie> {
   async toObject() {
-    const progress = await calculateSerieProgress(this.resource)
+    const catalogSerie = await catalog.findSerieById(this.resource.providerId)
+
+    if (!catalogSerie) {
+      throw new Error(`Serie with providerId "${this.resource.providerId}" not found in catalog.`)
+    }
+
+    const progress = await calculateSerieProgress(this.resource, catalogSerie)
 
     return {
       ...this.pick(this.resource, [...this.resource.$columns, 'bannerUrl', 'posterUrl']),
       progress,
+      inProduction: catalogSerie?.inProduction ?? true,
       watchedEpisodes: WatchedEpisodeTransformer.transform(
         this.whenLoaded(this.resource.watchedEpisodes)
       ),

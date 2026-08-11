@@ -155,6 +155,46 @@ test.group('Catalog provider', (group) => {
     )
   })
 
+  test('maps TMDB series detail response with in_production field', async ({ assert }) => {
+    const tmdb = makeTmdbSdk(
+      new Response(
+        JSON.stringify({
+          id: 1,
+          name: 'Heat Vision and Jack',
+          backdrop_path: '/heat-vision-backdrop.jpg',
+          poster_path: '/heat-vision.jpg',
+          first_air_date: '1999-01-01',
+          overview: 'A pilot about a super-intelligent astronaut.',
+          in_production: false,
+          seasons: [{ name: 'Season 1', season_number: 1, episode_count: 2 }],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      )
+    )
+
+    assert.deepEqual(
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+        tmdb
+      ).findSerieById('1'),
+      {
+        provider: 'tmdb',
+        id: '1',
+        type: 'serie',
+        name: 'Heat Vision and Jack',
+        bannerPath: '/heat-vision-backdrop.jpg',
+        bannerUrl: 'https://image.tmdb.org/t/p/original/heat-vision-backdrop.jpg',
+        posterPath: '/heat-vision.jpg',
+        posterUrl: 'https://image.tmdb.org/t/p/original/heat-vision.jpg',
+        releasedAt: '1999-01-01',
+        summary: 'A pilot about a super-intelligent astronaut.',
+        inProduction: false,
+        episodesCount: 2,
+        seasons: [{ name: 'Season 1', number: 1, episodesCount: 2 }],
+      }
+    )
+  })
+
   test('caches TMDB search results by query', async ({ assert }) => {
     let calls = 0
     const tmdb = new TmdbSdk({

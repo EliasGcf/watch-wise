@@ -1,14 +1,8 @@
 import type Serie from '#models/serie'
 import { WatchedEpisode } from '#models/watched_mark'
-import { catalog } from '#services/catalog_provider'
+import type { Serie as CatalogSerie } from '#providers/catalog/types'
 
-export async function calculateSerieProgress(serie: Serie) {
-  const catalogSerie = await catalog.findSerieById(serie.providerId)
-
-  if (!catalogSerie) {
-    throw new Error(`Serie with providerId ${serie.providerId} not found in catalog`)
-  }
-
+export async function calculateSerieProgress(serie: Serie, catalogSerie: CatalogSerie) {
   const watchedEpisodesCount = await WatchedEpisode.query()
     .where('userId', serie.userId)
     .where('libraryEntryId', serie.id)
