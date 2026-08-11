@@ -62,17 +62,14 @@ export function ItemCard({
 
   return (
     <article className="group relative aspect-2/3 overflow-hidden rounded-xl border bg-muted">
-      {libraryEntry?.type === 'serie' ? (
+      {libraryEntry?.type === 'serie' && (
         <Link
           href={`/app/library/series/${libraryEntry.id}`}
-          className="block h-full"
+          className="absolute inset-0"
           aria-label={name}
-        >
-          {poster}
-        </Link>
-      ) : (
-        poster
+        />
       )}
+      {poster}
 
       {libraryEntry?.type === 'serie' && (
         <>
