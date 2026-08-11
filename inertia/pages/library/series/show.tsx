@@ -116,7 +116,7 @@ export default function SeriesShow({ serie }: Props) {
 
       <div className="flex flex-col gap-5 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-2xl">
-          <SeriesProgress value={serie.progress} />
+          <SeriesProgress value={serie.progress} inProduction={serie.inProduction} />
         </div>
         <div className="flex w-full flex-row gap-2 sm:w-fit">
           <Button
@@ -155,9 +155,14 @@ export default function SeriesShow({ serie }: Props) {
   )
 }
 
-function SeriesProgress({ value }: { value: number }) {
+function SeriesProgress({ value, inProduction }: { value: number; inProduction?: boolean }) {
   return (
-    <Progress value={value} aria-label="Series progress" className="gap-2">
+    <Progress
+      value={value}
+      aria-label="Series progress"
+      className="gap-2"
+      indicatorClassName={inProduction === false ? 'bg-violet-600' : undefined}
+    >
       <ProgressLabel className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
         Series progress
       </ProgressLabel>

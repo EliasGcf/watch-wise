@@ -186,6 +186,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.first_air_date ?? null,
       summary: response.data.overview ?? null,
+      inProduction: response.data.in_production ?? true,
       episodesCount: seasons
         .filter((season) => season.number !== 0)
         .reduce((total, season) => total + season.episodesCount, 0),

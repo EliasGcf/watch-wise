@@ -172,6 +172,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         posterUrl: makeImageUrl(this.config.baseImageUrl, '/series-2-poster.jpg'),
         releasedAt: '1998-01-01',
         summary: 'A fake multi season series.',
+        inProduction: true,
         episodesCount: 4,
         seasons: [
           { name: 'Season 1', number: 1, episodesCount: 2 },
@@ -204,6 +205,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: series.first_air_date,
       summary: series.overview,
+      inProduction: series.in_production ?? true,
       episodesCount: 2,
       seasons: [
         { name: 'Specials', number: 0, episodesCount: 1 },

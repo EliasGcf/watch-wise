@@ -28,6 +28,7 @@ export type FindResult = {
   | { type: 'movie'; duration: number | null }
   | {
       type: 'serie'
+      inProduction: boolean
       episodesCount: number
       seasons: Array<{ name: string; number: number; episodesCount: number }>
     }
