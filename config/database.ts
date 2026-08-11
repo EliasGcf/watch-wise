@@ -51,6 +51,46 @@ const dbConfig = defineConfig({
     },
 
     /**
+     * SQLite connection used exclusively by the cache driver. It is not the
+     * default connection, and its migrations never touch the application
+     * database (and vice versa). Schema generation is disabled so that
+     * `migration:run --connection=cache` does not overwrite the shared
+     * `database/schema.ts` file.
+     */
+    cache: {
+      client: 'sqlite3',
+
+      /**
+       * Disable schema generation for the cache database.
+       */
+      schemaGeneration: { enabled: false },
+
+      connection: {
+        /**
+         * Cache database file location.
+         */
+        filename: env.get('CACHE_DATABASE_NAME', app.tmpPath('cache.sqlite3')),
+      },
+
+      /**
+       * Required by Knex for SQLite defaults.
+       */
+      useNullAsDefault: true,
+
+      migrations: {
+        /**
+         * Sort migration files naturally by filename.
+         */
+        naturalSort: true,
+
+        /**
+         * Paths containing the cache migrations.
+         */
+        paths: ['database/cache/migrations'],
+      },
+    },
+
+    /**
      * PostgreSQL connection.
      * Install package to switch: npm install pg
      */

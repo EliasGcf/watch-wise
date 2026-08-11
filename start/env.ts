@@ -27,6 +27,7 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   // Database
   DATABASE_NAME: Env.schema.string.optional(),
+  CACHE_DATABASE_NAME: Env.schema.string.optional(),
 
   // Cache
   CACHE_ENABLED: Env.schema.boolean.optional(),

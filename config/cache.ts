@@ -6,7 +6,7 @@ const cacheConfig = defineConfig({
   stores: {
     database: store().useL2Layer(
       drivers.database({
-        connectionName: 'sqlite',
+        connectionName: 'cache',
         tableName: 'cache',
         autoCreateTable: false,
       })

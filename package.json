@@ -109,6 +109,7 @@
     ]
   },
   "overrides": {
-    "eslint-plugin-react>eslint": "$eslint"
+    "eslint-plugin-react>eslint": "$eslint",
+    "jsonschema": "1.4.1"
   }
 }
