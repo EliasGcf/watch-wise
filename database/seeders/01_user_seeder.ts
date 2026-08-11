@@ -6,8 +6,8 @@ export default class extends BaseSeeder {
 
   async run() {
     await User.updateOrCreate(
-      { email: 'dev@mail.com' },
-      { email: 'dev@mail.com', fullName: 'Dev User', password: '12345678' }
+      { email: 'dev@mail.com', username: 'dev' },
+      { email: 'dev@mail.com', username: 'dev', fullName: 'Dev User', password: '123' }
     )
   }
 }
