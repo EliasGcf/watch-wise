@@ -31,6 +31,7 @@ ENV LOG_LEVEL=info
 ENV APP_URL=http://localhost:3333
 ENV SESSION_DRIVER=cookie
 ENV DATABASE_NAME=data/db.sqlite3
+ENV CACHE_DATABASE_NAME=data/cache.sqlite3
 ENV CATALOG_PROVIDER_DRIVER=tmdb
 
 # copy source files. This project runs TypeScript directly with Bun.
