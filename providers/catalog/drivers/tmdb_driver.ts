@@ -16,8 +16,6 @@ import { CatalogProviderError } from '#providers/catalog/types'
 const cacheTtl = '24h'
 
 export default class TmdbCatalogProviderDriver implements CatalogProvider {
-  private namespacedCache?: ReturnType<typeof cache.namespace>
-
   constructor(
     private config: TmdbCatalogProviderConfig,
     private tmdb: TmdbSdk = new TmdbSdk()
@@ -26,15 +24,11 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     tmdbClient.setConfig({ headers: { Authorization: `Bearer ${this.config.accessToken}` } })
   }
 
-  private get cache() {
-    return (this.namespacedCache ??= cache.namespace('tmdb'))
-  }
-
   private async getOrSet<T>(key: string, factory: () => Promise<T>) {
     if (this.config.cacheEnabled === false) return factory()
 
     try {
-      return await this.cache.getOrSet({ key, ttl: cacheTtl, factory })
+      return await cache.getOrSet({ key: `tmdb:${key}`, ttl: cacheTtl, factory })
     } catch (error) {
       if (error instanceof Error && error.cause instanceof CatalogProviderError) {
         throw error.cause
