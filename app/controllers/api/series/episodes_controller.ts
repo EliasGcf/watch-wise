@@ -37,7 +37,7 @@ export default class EpisodesController {
     }
 
     const payload = await request.validateUsing(watchEpisodeValidator)
-    await serie.watchEpisode(episode, payload.deleteFile ?? false)
+    await serie.watchEpisode(episode, payload.deleteFile)
     await serie.load('watchedEpisodes')
 
     return serialize(SerieTransformer.transform(serie))
