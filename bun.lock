@@ -72,7 +72,6 @@
   },
   "overrides": {
     "eslint": "10.4.0",
-    "jsonschema": "1.4.1",
   },
   "packages": {
     "@adonisjs/ace": ["@adonisjs/ace@14.1.0", "", { "dependencies": { "@poppinss/cliui": "^6.8.0", "@poppinss/hooks": "^7.3.0", "@poppinss/macroable": "^1.1.2", "@poppinss/prompts": "^3.1.6", "@poppinss/utils": "^7.0.1", "fastest-levenshtein": "^1.0.16", "jsonschema": "^1.5.0", "string-width": "^8.2.0", "yargs-parser": "^22.0.0" }, "peerDependencies": { "youch": "^4.1.0-beta.11 || ^4.1.0" } }, "sha512-8N8z1YKePBiXz7wLxHFz/HSqjCRSL/9Vzs4XQt8gk8G17u4PXwNncWt0vSgYEcDrvPAt+QOavY1vMeKOOWe29w=="],
@@ -1319,7 +1318,7 @@
 
     "jsonfile": ["jsonfile@6.2.1", "", { "dependencies": { "universalify": "^2.0.0" }, "optionalDependencies": { "graceful-fs": "^4.1.6" } }, "sha512-zwOTdL3rFQ/lRdBnntKVOX6k5cKJwEc1HdilT71BWEu7J41gXIB2MRp+vxduPSwZJPWBxEzv4yH1wYLJGUHX4Q=="],
 
-    "jsonschema": ["jsonschema@1.4.1", "", {}, "sha512-S6cATIPVv1z0IlxdN+zUk5EPjkGCdnhN4wVSBlvoUO1tOLJootbo9CquNJmbIh4yikWHiUedhRYrNPn1arpEmQ=="],
+    "jsonschema": ["jsonschema@1.5.0", "", {}, "sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw=="],
 
     "jsx-ast-utils": ["jsx-ast-utils@3.3.5", "", { "dependencies": { "array-includes": "^3.1.6", "array.prototype.flat": "^1.3.1", "object.assign": "^4.1.4", "object.values": "^1.1.6" } }, "sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ=="],
 

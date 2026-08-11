@@ -8,7 +8,7 @@ import { test } from '@japa/runner'
 
 test.group('Catalog provider', (group) => {
   group.each.setup(() => {
-    return () => cache.namespace('tmdb').clear()
+    return () => cache.clear()
   })
 
   test('maps TMDB multi search to movie and series titles only', async ({ assert }) => {

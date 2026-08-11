@@ -8,7 +8,7 @@ const cacheConfig = defineConfig({
       drivers.database({
         connectionName: 'cache',
         tableName: 'cache',
-        autoCreateTable: false,
+        autoCreateTable: true,
       })
     ),
   },

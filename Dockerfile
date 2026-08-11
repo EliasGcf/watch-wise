@@ -41,4 +41,4 @@ RUN mkdir -p data && chown -R 1000:1000 /usr/src/app
 # run the app
 USER 1000:1000
 EXPOSE 3333/tcp
-ENTRYPOINT [ "sh", "-c", "bun --bun bin/console.ts migration:run:all --force && exec bun bin/server.ts" ]
+ENTRYPOINT [ "sh", "-c", "bun --bun bin/console.ts migration:run --force && exec bun bin/server.ts" ]
