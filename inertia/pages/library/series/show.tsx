@@ -52,8 +52,6 @@ type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: str
 type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
 export default function SeriesShow({ serie }: Props) {
-  const userSettingsQuery = useUserSettingsQuery()
-  const sonarrAvailable = userSettingsQuery.data?.data.providerAvailability.sonarr ?? false
   const watchSeriesMutation = useWatchSeriesMutation()
   const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
   const seriesMarked =
@@ -158,7 +156,6 @@ export default function SeriesShow({ serie }: Props) {
           serie={serie}
           seasons={serie.catalog.seasons}
           watchedEpisodes={serie.watchedEpisodes ?? []}
-          sonarrAvailable={sonarrAvailable}
         />
       </div>
     </div>
@@ -223,12 +220,10 @@ function SeasonAccordion({
   serie,
   seasons,
   watchedEpisodes,
-  sonarrAvailable,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   watchedEpisodes: WatchedEpisodeProgress[]
-  sonarrAvailable: boolean
 }) {
   const [openSeasons, setOpenSeasons] = useState<string[]>([])
 
@@ -285,7 +280,6 @@ function SeasonAccordion({
                 season={season.number}
                 isOpen={openSeasons.includes(String(season.number))}
                 watchedEpisodes={watchedEpisodes}
-                sonarrAvailable={sonarrAvailable}
               />
             </AccordionContent>
           </AccordionItem>
@@ -362,14 +356,12 @@ function SeasonEpisodes({
   season,
   isOpen,
   watchedEpisodes,
-  sonarrAvailable,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   season: number
   isOpen: boolean
   watchedEpisodes: WatchedEpisodeProgress[]
-  sonarrAvailable: boolean
 }) {
   const episodesQuery = useSeriesEpisodesQuery({ serieId: serie.id, season, enabled: isOpen })
 
@@ -389,7 +381,6 @@ function SeasonEpisodes({
           seasons={seasons}
           episode={episode}
           watchedEpisodes={watchedEpisodes}
-          sonarrAvailable={sonarrAvailable}
         />
       ))}
     </div>
@@ -457,14 +448,14 @@ function EpisodeRow({
   seasons,
   episode,
   watchedEpisodes,
-  sonarrAvailable,
 }: {
   serie: Data.Serie
   seasons: SeriesSeasons
   episode: SeasonEpisode
   watchedEpisodes: WatchedEpisodeProgress[]
-  sonarrAvailable: boolean
 }) {
+  const userSettingsQuery = useUserSettingsQuery()
+  const sonarrAvailable = userSettingsQuery.data?.data.providerAvailability.sonarr ?? false
   const watchedEpisode = watchedEpisodes.find(
     (watched) => watched.season === episode.season && watched.episode === episode.episode
   )
