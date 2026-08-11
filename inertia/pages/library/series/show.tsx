@@ -474,6 +474,7 @@ function EpisodeRow({
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
   const watchBeforeMutation = useWatchBeforeMutation()
   const [pendingCatchUp, setPendingCatchUp] = useState(false)
+  const [pendingCatchUpDeleteFile, setPendingCatchUpDeleteFile] = useState(false)
   const isPending =
     watchEpisodeMutation.isPending ||
     unwatchEpisodeMutation.isPending ||
@@ -481,40 +482,50 @@ function EpisodeRow({
   const contextMenuOpenRef = useRef(false)
 
   function markWatched(deleteFile: boolean) {
+    if (requiresCatchUp(episode, seasons, watchedEpisodes)) {
+      setPendingCatchUpDeleteFile(deleteFile)
+      setPendingCatchUp(true)
+      return
+    }
+
     watchEpisodeMutation.mutate({
       params: { id: serie.id, season: episode.season, episode: episode.episode },
       ...(deleteFile ? { body: { deleteFile: true } } : {}),
     })
   }
 
-  async function toggleWatched(checked: boolean) {
+  function toggleWatched(checked: boolean) {
     if (!checked) {
-      await unwatchEpisodeMutation.mutateAsync({
+      unwatchEpisodeMutation.mutate({
         params: { id: serie.id, season: episode.season, episode: episode.episode },
       })
       return
     }
 
-    if (requiresCatchUp(episode, seasons, watchedEpisodes)) {
-      setPendingCatchUp(true)
-      return
-    }
-
-    await watchEpisodeMutation.mutateAsync({
-      params: { id: serie.id, season: episode.season, episode: episode.episode },
-    })
+    markWatched(false)
   }
 
   async function confirmCatchUp(includeBefore: boolean) {
     setPendingCatchUp(false)
+    const deleteFile = pendingCatchUpDeleteFile
+    setPendingCatchUpDeleteFile(false)
     const params = { id: serie.id, season: episode.season, episode: episode.episode }
+
+    if (includeBefore && deleteFile) {
+      await watchEpisodeMutation.mutateAsync({ params, body: { deleteFile: true } })
+      await watchBeforeMutation.mutateAsync({ params })
+      return
+    }
 
     if (includeBefore) {
       await watchBeforeMutation.mutateAsync({ params })
       return
     }
 
-    await watchEpisodeMutation.mutateAsync({ params })
+    await watchEpisodeMutation.mutateAsync({
+      params,
+      ...(deleteFile ? { body: { deleteFile: true } } : {}),
+    })
   }
 
   const checkbox = isPending ? (
