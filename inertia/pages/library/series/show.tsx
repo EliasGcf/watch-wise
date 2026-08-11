@@ -32,6 +32,7 @@ import {
 import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
+import { useUserSettingsQuery } from '~/hooks/use_user_settings_query'
 import {
   useUnwatchEpisodeMutation,
   useWatchBeforeMutation,
@@ -48,9 +49,11 @@ type SeriesSeasons = Data.Serie.Variants['withCatalog']['catalog']['seasons']
 type SeasonEpisode = Data.Catalog.Episode
 type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: string | null }
 
-type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog']; sonarrAvailable: boolean }>
+type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
-export default function SeriesShow({ serie, sonarrAvailable }: Props) {
+export default function SeriesShow({ serie }: Props) {
+  const userSettingsQuery = useUserSettingsQuery()
+  const sonarrAvailable = userSettingsQuery.data?.data.providerAvailability.sonarr ?? false
   const watchSeriesMutation = useWatchSeriesMutation()
   const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
   const seriesMarked =
