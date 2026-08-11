@@ -587,7 +587,7 @@ function EpisodeRow({
       </article>
 
       <AlertDialog open={pendingCatchUp} onOpenChange={setPendingCatchUp}>
-        <AlertDialogContent>
+        <AlertDialogContent onClickOverlay={() => setPendingCatchUp(false)}>
           <AlertDialogHeader>
             <AlertDialogTitle>Mark previous episodes as watched?</AlertDialogTitle>
             <AlertDialogDescription>
