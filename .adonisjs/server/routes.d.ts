@@ -18,9 +18,9 @@ export type ScannedRoutes = {
     'api.library.series.episodes.watch_before': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
-    'app.new_account.create': { paramsTuple?: []; params?: {} }
+    'app.new_account': { paramsTuple?: []; params?: {} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
-    'app.session.create': { paramsTuple?: []; params?: {} }
+    'app.login': { paramsTuple?: []; params?: {} }
     'app.session.store': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.session.destroy': { paramsTuple?: []; params?: {} }
@@ -35,8 +35,8 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
-    'app.new_account.create': { paramsTuple?: []; params?: {} }
-    'app.session.create': { paramsTuple?: []; params?: {} }
+    'app.new_account': { paramsTuple?: []; params?: {} }
+    'app.login': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
@@ -49,8 +49,8 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
-    'app.new_account.create': { paramsTuple?: []; params?: {} }
-    'app.session.create': { paramsTuple?: []; params?: {} }
+    'app.new_account': { paramsTuple?: []; params?: {} }
+    'app.login': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }

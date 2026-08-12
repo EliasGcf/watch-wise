@@ -33,12 +33,11 @@ export interface ApiDefinition {
     }
   }
   app: {
-    newAccount: {
-      create: typeof routes['app.new_account.create']
+    newAccount: typeof routes['app.new_account'] & {
       store: typeof routes['app.new_account.store']
     }
+    login: typeof routes['app.login']
     session: {
-      create: typeof routes['app.session.create']
       store: typeof routes['app.session.store']
       destroy: typeof routes['app.session.destroy']
     }

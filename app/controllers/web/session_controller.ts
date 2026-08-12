@@ -18,6 +18,6 @@ export default class SessionController {
 
   async destroy({ auth, response }: HttpContext) {
     await auth.use('web').logout()
-    response.redirect().toRoute('app.session.create')
+    response.redirect().toRoute('app.login')
   }
 }

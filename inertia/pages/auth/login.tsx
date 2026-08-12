@@ -60,7 +60,7 @@ export default function Login() {
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            Don&apos;t have an account? <Link route="app.new_account.create">Sign up</Link>
+            Don&apos;t have an account? <Link route="app.new_account">Sign up</Link>
           </p>
         </CardFooter>
       </Card>

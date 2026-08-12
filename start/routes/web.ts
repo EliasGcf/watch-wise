@@ -5,11 +5,11 @@ import router from '@adonisjs/core/services/router'
 const group = router.group(() => {
   router
     .group(() => {
-      router.get('signup', [controllers.web.NewAccount, 'create'])
-      router.post('signup', [controllers.web.NewAccount, 'store'])
+      router.get('signup', [controllers.web.NewAccount, 'create']).as('new_account')
+      router.post('signup', [controllers.web.NewAccount, 'store']).as('new_account.store')
 
-      router.get('login', [controllers.web.Session, 'create'])
-      router.post('login', [controllers.web.Session, 'store'])
+      router.get('login', [controllers.web.Session, 'create']).as('login')
+      router.post('login', [controllers.web.Session, 'store']).as('session.store')
     })
     .use(middleware.guest())
 

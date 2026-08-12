@@ -175,7 +175,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['unwatch']>>>
     }
   }
-  'app.new_account.create': {
+  'app.new_account': {
     methods: ["GET","HEAD"]
     pattern: '/app/signup'
     types: {
@@ -199,7 +199,7 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/new_account_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
-  'app.session.create': {
+  'app.login': {
     methods: ["GET","HEAD"]
     pattern: '/app/login'
     types: {
