@@ -86,7 +86,7 @@ export default function Signup() {
         </CardContent>
         <CardFooter>
           <p className="w-full text-center text-sm text-muted-foreground">
-            Already have an account? <Link href="/app/login">Login</Link>
+            Already have an account? <Link route="app.session.create">Login</Link>
           </p>
         </CardFooter>
       </Card>

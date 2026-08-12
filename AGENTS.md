@@ -20,6 +20,10 @@ Run a single test file with Japa's `--files` filter, for example `bun run test -
 
 Use Conventional Commits for all commit messages, e.g. `feat: add catalog search`, `fix: handle missing movie runtime`, `refactor: rename show model to serie`, `test: replace deprecated assertions`, or `chore: update generated SDK`.
 
+### Links
+
+Use the typed `route` prop on `<Link>` from `@adonisjs/inertia/react` instead of a raw `href` string, so route names are type-checked against `start/routes.ts`. Pass params with `routeParams`, e.g. `<Link route="app.library.series.show" routeParams={{ id: entry.id }}>`. Always point links at a GET route (`app.xxx.create` / `app.xxx.index`, never the `store`/`update` action routes used by `<Form>`).
+
 ### The .adonisjs folder
 
 The `.adonisjs` folder is generated. Do not edit files there manually unless explicitly instructed.

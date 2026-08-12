@@ -64,7 +64,8 @@ export function ItemCard({
     <article className="group relative aspect-2/3 overflow-hidden rounded-xl border bg-muted">
       {libraryEntry?.type === 'serie' && (
         <Link
-          href={`/app/library/series/${libraryEntry.id}`}
+          route="app.library.series.show"
+          routeParams={{ id: libraryEntry.id }}
           className="absolute inset-0"
           aria-label={name}
         />

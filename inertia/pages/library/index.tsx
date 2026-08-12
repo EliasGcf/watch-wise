@@ -1,4 +1,4 @@
-import { Form, Link } from '@adonisjs/inertia/react'
+import { Form, Link, type LinkProps } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import { SearchIcon } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
@@ -55,7 +55,7 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
         title="Movies"
         entries={movies}
         count={moviesCount}
-        href="/app/library/movies"
+        route="app.library.movies.index"
         emptyMessage={
           isSearching ? 'No movies match your search.' : 'No movies in your library yet.'
         }
@@ -64,7 +64,7 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
         title="Series"
         entries={series}
         count={seriesCount}
-        href="/app/library/series"
+        route="app.library.series.index"
         emptyMessage={
           isSearching ? 'No series match your search.' : 'No series in your library yet.'
         }
@@ -77,25 +77,25 @@ function LibrarySection({
   title,
   entries,
   count,
-  href,
+  route,
   emptyMessage,
 }: {
   title: string
   entries: Array<Movie | Serie>
   count: number
-  href: string
+  route: NonNullable<LinkProps['route']>
   emptyMessage: string
 }) {
   return (
     <section className="flex flex-col gap-3" aria-label={title}>
       <div className="flex items-center justify-between border-b pb-3">
         <h2 className="text-2xl font-semibold tracking-tight">
-          <Link href={href} className="hover:underline">
+          <Link route={route} className="hover:underline">
             {title}
           </Link>
         </h2>
         <div className="flex items-center gap-3">
-          <Link href={href} className="text-sm font-medium text-primary hover:underline">
+          <Link route={route} className="text-sm font-medium text-primary hover:underline">
             See more
           </Link>
           <Badge variant="outline">{count}</Badge>

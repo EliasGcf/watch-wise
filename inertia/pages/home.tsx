@@ -27,13 +27,13 @@ export default function Home({ user, moviesCount, seriesCount, recentLibraryEntr
           </CardTitle>
           <div className="flex flex-row gap-3">
             <Link
-              href="/app/catalog/search"
+              route="app.catalog.search"
               className={buttonVariants({ className: 'flex-1 sm:flex-none sm:w-auto' })}
             >
               Search the catalog
             </Link>
             <Link
-              href="/app/library"
+              route="app.library.index"
               className={buttonVariants({
                 variant: 'outline',
                 className: 'flex-1 sm:flex-none sm:w-auto',
