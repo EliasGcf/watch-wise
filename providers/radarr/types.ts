@@ -1,6 +1,8 @@
 export type RadarrDriver = 'fake' | 'radarr'
 
-export abstract class RadarrProvider {}
+export abstract class RadarrProvider {
+  abstract deleteMovieFileByCatalogProviderId(providerId: string): Promise<void>
+}
 
 export class RadarrProviderError extends Error {}
 

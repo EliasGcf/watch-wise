@@ -14,7 +14,9 @@ export class RadarrProviderManager extends RadarrProvider {
     super()
   }
 
-  use(name: RadarrDriver = this.enabledDriver()) {
+  use(name: RadarrDriver | undefined = this._config.default) {
+    if (!name) throw new RadarrProviderError('Radarr provider is not configured.')
+
     const cachedDriver = this.#drivers.get(name)
 
     if (cachedDriver) return cachedDriver
@@ -23,20 +25,6 @@ export class RadarrProviderManager extends RadarrProvider {
     this.#drivers.set(name, driver)
 
     return driver
-  }
-
-  config<T extends RadarrDriver>(
-    driver: T = this.enabledDriver() as T
-  ): RadarrProviderConfig['drivers'][T] {
-    const config = this._config.drivers[driver]
-    if (!config) throw new RadarrProviderError(`Unsupported Radarr provider driver "${driver}"`)
-    return config
-  }
-
-  private enabledDriver() {
-    if (!this._config.default) throw new RadarrProviderError('Radarr provider is not configured.')
-
-    return this._config.default
   }
 
   private createDriver(name: RadarrDriver) {
@@ -49,5 +37,9 @@ export class RadarrProviderManager extends RadarrProvider {
     }
 
     throw new RadarrProviderError(`Unsupported Radarr provider driver "${name}"`)
+  }
+
+  deleteMovieFileByCatalogProviderId(providerId: string) {
+    return this.use().deleteMovieFileByCatalogProviderId(providerId)
   }
 }

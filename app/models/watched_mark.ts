@@ -40,7 +40,10 @@ export class WatchedMovie extends WatchedMark {
 
   @afterCreate()
   static async dispatchWatchedEvent(movie: WatchedMovie) {
-    await events.MovieWatched.dispatch(movie)
+    await events.MovieWatched.dispatch({
+      watched: movie,
+      deleteFile: Boolean(movie.$extras.deleteFile),
+    })
   }
 
   @afterDelete()
