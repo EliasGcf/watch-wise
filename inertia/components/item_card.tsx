@@ -1,5 +1,6 @@
 import { Link } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
+import { useRef } from 'react'
 import { LoaderCircle, SaveIcon, Trash2 } from 'lucide-react'
 import {
   AlertDialog,
@@ -15,9 +16,16 @@ import {
 import { Badge } from '~/components/ui/badge'
 import { Button, buttonVariants } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '~/components/ui/context_menu'
 import { useAddLibraryEntryMutation } from '~/hooks/use_add_library_entry_mutation'
 import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
+import { useUserSettingsQuery } from '~/hooks/use_user_settings_query'
 import { cn } from '~/lib/utils'
 
 type Movie = Data.Movie
@@ -149,10 +157,13 @@ function AddToLibraryButton({
 }
 
 function WatchedButton({ movie }: { movie: Movie }) {
+  const userSettingsQuery = useUserSettingsQuery()
+  const radarrAvailable = userSettingsQuery.data?.data.providerAvailability.radarr ?? false
   const watchMovie = useWatchMovieMutation()
   const unwatchMovie = useUnwatchMovieMutation()
   const isPending = watchMovie.isPending || unwatchMovie.isPending
   const watched = Boolean(movie.watched)
+  const contextMenuOpenRef = useRef(false)
 
   function toggleWatched(checked: boolean) {
     if (checked) {
@@ -164,14 +175,38 @@ function WatchedButton({ movie }: { movie: Movie }) {
 
   if (isPending) return <LoaderCircle className="animate-spin text-primary" />
 
-  return (
+  const checkbox = (
     <Checkbox
       checked={watched}
       aria-label={`${watched ? 'Unmark' : 'Mark'} ${movie.name} as watched`}
       className="size-5.5 rounded-full cursor-pointer border-primary"
-      onCheckedChange={(checked) => toggleWatched(Boolean(checked))}
+      onCheckedChange={(checked) => {
+        if (contextMenuOpenRef.current) return
+        toggleWatched(Boolean(checked))
+      }}
     />
   )
+
+  if (radarrAvailable && !watched && movie.isReleased) {
+    return (
+      <ContextMenu onOpenChange={(open) => (contextMenuOpenRef.current = open)}>
+        <ContextMenuTrigger>{checkbox}</ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem
+            onClick={() =>
+              watchMovie.mutate({ params: { id: movie.id }, body: { deleteFile: true } })
+            }
+            disabled={watchMovie.isPending}
+          >
+            {watchMovie.isPending && <LoaderCircle className="animate-spin" aria-hidden="true" />}
+            Mark as watched and delete file
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    )
+  }
+
+  return checkbox
 }
 
 function RemoveLibraryEntryButton({ entry }: { entry: Movie | Serie }) {

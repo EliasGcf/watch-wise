@@ -83,12 +83,12 @@ export interface Registry {
     methods: ["POST"]
     pattern: '/api/library/movies/:id/watch'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/movie').watchMovieValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/movie').watchMovieValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['watch']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['watch']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/movies_controller').default['watch']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'api.library.movies.unwatch': {
