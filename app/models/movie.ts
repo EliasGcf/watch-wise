@@ -18,12 +18,11 @@ export default class Movie extends LibraryItem {
   declare watched: HasOne<typeof WatchedMovie>
 
   async watch(this: Movie, duration: number | null, deleteFile = false) {
-    const watched = await this.related('watched').query().where('userId', this.userId).first()
-
-    if (watched) return watched
+    const watched = await this.related('watched').query().first()
+    if (watched) return
 
     const created = new WatchedMovie()
-    created.libraryEntryId = this.id
+
     created.userId = this.userId
     created.providerId = this.providerId
     created.duration = duration
@@ -31,12 +30,11 @@ export default class Movie extends LibraryItem {
     created.$extras.deleteFile = deleteFile
     created.$trx = this.$trx
 
-    await created.save()
-    return created
+    await this.related('watched').save(created)
   }
 
   async unwatch(this: Movie) {
-    const watched = await this.related('watched').query().where('userId', this.userId).first()
+    const watched = await this.related('watched').query().first()
     await watched?.delete()
   }
 
