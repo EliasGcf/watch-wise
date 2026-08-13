@@ -34,6 +34,7 @@
     "#policies/*": "./app/policies/*.ts",
     "#abilities/*": "./app/abilities/*.ts",
     "#database/*": "./database/*.ts",
+    "#decorators/*": "./app/decorators/*.ts",
     "#tests/*": "./tests/*.ts",
     "#start/*": "./start/*.ts",
     "#config/*": "./config/*.ts"

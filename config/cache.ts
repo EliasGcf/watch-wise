@@ -1,3 +1,4 @@
+import env from '#start/env'
 import { defineConfig, drivers, store } from '@adonisjs/cache'
 import type { InferStores } from '@adonisjs/cache/types'
 
@@ -14,7 +15,7 @@ const cacheConfig = defineConfig({
   },
 })
 
-export default cacheConfig
+export default { ...cacheConfig, enabled: env.get('CACHE_ENABLED', true) }
 
 declare module '@adonisjs/cache/types' {
   interface CacheStores extends InferStores<typeof cacheConfig> {}

@@ -4,6 +4,7 @@ import FakeCatalogProviderDriver from '#providers/catalog/drivers/fake_driver'
 import TmdbCatalogProviderDriver from '#providers/catalog/drivers/tmdb_driver'
 import { CatalogProviderError } from '#services/catalog_provider'
 import cache from '@adonisjs/cache/services/main'
+import config from '@adonisjs/core/services/config'
 import { test } from '@japa/runner'
 
 test.group('Catalog provider', (group) => {
@@ -229,6 +230,7 @@ test.group('Catalog provider', (group) => {
   })
 
   test('bypasses TMDB cache when disabled', async ({ assert }) => {
+    config.set('cache.enabled', false)
     let calls = 0
     const tmdb = new TmdbSdk({
       client: createClient({
@@ -253,11 +255,7 @@ test.group('Catalog provider', (group) => {
       }),
     })
     const driver = new TmdbCatalogProviderDriver(
-      {
-        baseImageUrl: 'https://image.tmdb.org/t/p/original/',
-        accessToken: 'test-token',
-        cacheEnabled: false,
-      },
+      { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
       tmdb
     )
 
@@ -265,6 +263,7 @@ test.group('Catalog provider', (group) => {
     await driver.search('heat')
 
     assert.equal(calls, 2)
+    config.set('cache.enabled', true)
   })
 })
 

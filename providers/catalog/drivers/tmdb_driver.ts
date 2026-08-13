@@ -1,6 +1,5 @@
 import { client as tmdbClient } from '#generated/tmdb/client.gen'
 import { TmdbSdk } from '#generated/tmdb/sdk.gen'
-import cache from '@adonisjs/cache/services/main'
 import type {
   Episode,
   CatalogProvider,
@@ -12,8 +11,9 @@ import type {
   Serie,
 } from '#providers/catalog/types'
 import { CatalogProviderError } from '#providers/catalog/types'
+import { createCacheDecorator } from '#decorators/cache_decorator'
 
-const cacheTtl = '24h'
+const cache = createCacheDecorator({ prefixKey: 'tmdb' })
 
 export default class TmdbCatalogProviderDriver implements CatalogProvider {
   constructor(
@@ -24,57 +24,8 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     tmdbClient.setConfig({ headers: { Authorization: `Bearer ${this.config.accessToken}` } })
   }
 
-  private async getOrSet<T>(key: string, factory: () => Promise<T>) {
-    if (this.config.cacheEnabled === false) return factory()
-
-    try {
-      return await cache.getOrSet({ key: `tmdb:${key}`, ttl: cacheTtl, factory })
-    } catch (error) {
-      if (error instanceof Error && error.cause instanceof CatalogProviderError) {
-        throw error.cause
-      }
-
-      throw error
-    }
-  }
-
+  @cache()
   async search(query: string): Promise<CatalogSearchResult[]> {
-    return this.getOrSet(`search:${query}`, () => this.fetchSearch(query))
-  }
-
-  async weekTrending(): Promise<CatalogSearchResult[]> {
-    return this.getOrSet('weekTrending', () => this.fetchWeekTrending())
-  }
-
-  async find(type: ItemType, providerId: string): Promise<FindResult | null> {
-    return this.getOrSet(`find:${type}:${providerId}`, async () => {
-      if (type === 'movie') return this.findMovieById(providerId)
-
-      return this.findSerieById(providerId)
-    })
-  }
-
-  async findMovieById(providerId: string): Promise<Movie | null> {
-    return this.getOrSet(`findMovieById:${providerId}`, () => this.fetchMovieById(providerId))
-  }
-
-  async findSerieById(providerId: string): Promise<Serie | null> {
-    return this.getOrSet(`findSerieById:${providerId}`, () => this.fetchSerieById(providerId))
-  }
-
-  async episodes(providerId: string, season: number): Promise<Episode[]> {
-    return this.getOrSet(`episodes:${providerId}:${season}`, () =>
-      this.fetchEpisodes(providerId, season)
-    )
-  }
-
-  async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
-    return this.getOrSet(`findEpisode:${serieId}:${season}:${episode}`, () =>
-      this.fetchEpisode(serieId, season, episode)
-    )
-  }
-
-  private async fetchSearch(query: string): Promise<CatalogSearchResult[]> {
     const response = await this.tmdb.search.multi({
       throwOnError: false,
       query: {
@@ -83,43 +34,44 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
         language: 'en-US',
       },
     })
-
     if (response.error) {
       throw new CatalogProviderError('TMDB search request failed', { cause: response.error })
     }
-
     if (!response.data?.results) return []
-
     return mapSearchResults(response.data.results, this.config)
   }
 
-  private async fetchWeekTrending(): Promise<CatalogSearchResult[]> {
+  @cache()
+  async weekTrending(): Promise<CatalogSearchResult[]> {
     const response = await this.tmdb.trending.all({
       throwOnError: false,
       path: { time_window: 'week' },
       query: { language: 'en-US' },
     })
-
     if (response.error) {
       throw new CatalogProviderError('TMDB trending request failed', { cause: response.error })
     }
-
     if (!response.data?.results) return []
-
     return mapSearchResults(response.data.results, this.config)
   }
 
-  private async fetchMovieById(providerId: string): Promise<Movie | null> {
+  @cache()
+  async find(type: ItemType, providerId: string): Promise<FindResult | null> {
+    if (type === 'movie') return this.findMovieById(providerId)
+
+    return this.findSerieById(providerId)
+  }
+
+  @cache()
+  async findMovieById(providerId: string): Promise<Movie | null> {
     const response = await this.tmdb.movie.details({
       throwOnError: false,
       path: { movie_id: Number(providerId) },
       query: { language: 'en-US' },
     })
-
     if (response.error) {
       throw new CatalogProviderError('TMDB movie details request failed', { cause: response.error })
     }
-
     if (!response.data?.id) return null
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
@@ -140,25 +92,22 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
   }
 
-  private async fetchSerieById(providerId: string): Promise<Serie | null> {
+  @cache()
+  async findSerieById(providerId: string): Promise<Serie | null> {
     const response = await this.tmdb.tv.series.details({
       throwOnError: false,
       path: { series_id: Number(providerId) },
       query: { language: 'en-US' },
     })
-
     if (response.error) {
       throw new CatalogProviderError('TMDB serie details request failed', { cause: response.error })
     }
-
     if (!response.data) return null
-
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
     const seasons =
       response.data.seasons?.flatMap((season) => {
         if (season.season_number === undefined || season.episode_count === undefined) return []
-
         return [
           {
             name: season.name ?? `Season ${season.season_number}`,
@@ -188,21 +137,19 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
   }
 
-  private async fetchEpisodes(providerId: string, season: number): Promise<Episode[]> {
+  @cache()
+  async episodes(providerId: string, season: number): Promise<Episode[]> {
     const response = await this.tmdb.tv.season.details({
       throwOnError: false,
       path: { series_id: Number(providerId), season_number: season },
       query: { language: 'en-US' },
     })
-
     if (response.error) {
       throw new CatalogProviderError('TMDB season details request failed', {
         cause: response.error,
       })
     }
-
     if (!response.data?.episodes) return []
-
     return response.data.episodes.flatMap((episode) => {
       if (
         !episode.id ||
@@ -211,7 +158,6 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       ) {
         return []
       }
-
       return [
         {
           providerId: String(episode.id),
@@ -227,23 +173,18 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     })
   }
 
-  private async fetchEpisode(
-    serieId: string,
-    season: number,
-    episode: number
-  ): Promise<Episode | null> {
+  @cache()
+  async findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null> {
     const response = await this.tmdb.tv.episode.details({
       throwOnError: false,
       path: { series_id: Number(serieId), season_number: season, episode_number: episode },
       query: { language: 'en-US' },
     })
-
     if (response.error) {
       throw new CatalogProviderError('TMDB episode details request failed', {
         cause: response.error,
       })
     }
-
     if (!response.data?.id) return null
     if (response.data.season_number === undefined || response.data.episode_number === undefined) {
       return null
@@ -264,7 +205,6 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
 
 function makeImageUrl(baseImageUrl: string, path?: string) {
   if (!path) return null
-
   return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
 }
 
@@ -285,14 +225,12 @@ function mapSearchResults(
 ): CatalogSearchResult[] {
   return results.flatMap((result) => {
     if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
-
     const type = result.media_type === 'movie' ? 'movie' : 'serie'
     const name = result.media_type === 'movie' ? result.title : result.name
     const releasedAt = result.release_date
     const bannerPath = result.backdrop_path
     const posterPath = result.poster_path
     if (!result.id || !name) return []
-
     return [
       {
         provider: 'tmdb',
