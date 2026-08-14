@@ -1,6 +1,14 @@
 import { router } from '@inertiajs/react'
 import { useRef, useState } from 'react'
-import { ArrowLeft, Clock3, LoaderCircle, Trash2 } from 'lucide-react'
+import {
+  ArrowLeft,
+  Calendar,
+  CalendarCheck2,
+  CalendarClock,
+  Clock3,
+  LoaderCircle,
+  Trash2,
+} from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -524,7 +532,6 @@ function EpisodeRow({
   ) : (
     <Checkbox
       checked={Boolean(watched)}
-      disabled={!episode.isReleased}
       aria-label={watched ? `Unmark ${episode.name} as watched` : `Mark ${episode.name} as watched`}
       className="size-5 rounded-full"
       onCheckedChange={(checked) => {
@@ -538,57 +545,85 @@ function EpisodeRow({
     <>
       <article
         className={cn(
-          'grid grid-cols-[2.5rem_1fr_auto] items-center border-t py-4 first:border-t-0 first:pt-2 last:pb-0 sm:grid-cols-[2.5rem_1fr_10rem]',
+          'grid grid-cols-[2rem_1fr_auto] items-center gap-y-2 border-t py-4 first:border-t-0 first:pt-2 last:pb-0 sm:grid-cols-[2rem_1fr_10rem]',
           watched && 'opacity-80'
         )}
       >
-        <div className="flex items-center">
-          {sonarrAvailable && !watched && episode.isReleased ? (
-            <ContextMenu onOpenChange={(open) => (contextMenuOpenRef.current = open)}>
-              <ContextMenuTrigger>{checkbox}</ContextMenuTrigger>
-              <ContextMenuContent>
-                <ContextMenuItem
-                  onClick={() => markWatched(true)}
-                  disabled={watchEpisodeMutation.isPending}
-                >
-                  {watchEpisodeMutation.isPending && (
-                    <LoaderCircle className="animate-spin" aria-hidden="true" />
-                  )}
-                  Mark as watched and delete file
-                </ContextMenuItem>
-              </ContextMenuContent>
-            </ContextMenu>
-          ) : (
-            checkbox
-          )}
-        </div>
-
-        <div className="min-w-0 space-y-2">
-          <div className="flex flex-wrap items-center gap-x-4 leading-none">
-            <span className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
-              S{episode.season}·E{episode.episode}
+        <div className="col-start-2 flex flex-wrap items-center gap-x-4 leading-none">
+          <span className="font-mono text-xs uppercase leading-none tracking-[0.18em] text-muted-foreground">
+            S{episode.season}·E{episode.episode}
+          </span>
+          {episode.duration && (
+            <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
+              <Clock3 className="size-3.5" aria-hidden="true" />
+              {episode.duration} min
             </span>
-            {episode.duration && (
-              <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
-                <Clock3 className="size-3.5" aria-hidden="true" />
-                {episode.duration} min
-              </span>
-            )}
-            {episode.isSpecial && <Badge variant="outline">Special</Badge>}
-          </div>
-          <h3 className="text-base font-medium tracking-tight">{episode.name}</h3>
-          {episode.summary && (
-            <p className="hidden text-sm text-muted-foreground sm:block sm:line-clamp-2">
-              {episode.summary}
-            </p>
+          )}
+          {episode.releasedAt && (
+            <span className="inline-flex items-center gap-1 font-mono text-xs leading-none text-muted-foreground">
+              {episode.isReleased ? (
+                <Calendar className="size-3.5" aria-hidden="true" />
+              ) : (
+                <CalendarClock className="size-3.5" aria-hidden="true" />
+              )}
+              {formatDate(episode.releasedAt)}
+            </span>
+          )}
+          {episode.isSpecial && <Badge variant="outline">Special</Badge>}
+        </div>
+
+        <div className="row-start-2 col-start-3 hidden flex-col items-end justify-center gap-1 text-sm text-muted-foreground sm:flex sm:pr-3 sm:text-right">
+          {watchedAt && (
+            <span className="inline-flex items-center gap-1 font-mono text-xs">
+              <CalendarCheck2 className="size-3.5" aria-hidden="true" />
+              {formatDate(watchedAt)}
+            </span>
           )}
         </div>
 
-        <div className="flex flex-col items-end justify-center gap-1 text-sm text-muted-foreground sm:pr-3 sm:text-right">
-          {!watched &&
-            (episode.isReleased ? <span>Ready to watch</span> : <span>Not released yet</span>)}
-          {watchedAt && <span className="font-mono text-xs">{formatWatchedAt(watchedAt)}</span>}
+        <div className="row-start-2 self-start mt-0.5 flex items-center">
+          {episode.isReleased &&
+            (sonarrAvailable && !watched ? (
+              <ContextMenu onOpenChange={(open) => (contextMenuOpenRef.current = open)}>
+                <ContextMenuTrigger>{checkbox}</ContextMenuTrigger>
+                <ContextMenuContent>
+                  <ContextMenuItem
+                    onClick={() => markWatched(true)}
+                    disabled={watchEpisodeMutation.isPending}
+                  >
+                    {watchEpisodeMutation.isPending && (
+                      <LoaderCircle className="animate-spin" aria-hidden="true" />
+                    )}
+                    Mark as watched and delete file
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
+            ) : (
+              checkbox
+            ))}
         </div>
+
+        <h3 className="row-start-2 col-start-2 min-w-0 text-base font-medium tracking-tight">
+          {episode.name}
+        </h3>
+        {watchedAt ? (
+          <span className="col-start-2 row-start-3 inline-flex items-center gap-1 font-mono text-xs text-muted-foreground sm:hidden">
+            <CalendarCheck2 className="size-3.5" aria-hidden="true" />
+            {formatDate(watchedAt)}
+          </span>
+        ) : (
+          episode.isReleased && (
+            <span className="col-start-2 row-start-3 font-mono text-xs text-muted-foreground sm:hidden">
+              Ready to Watch
+            </span>
+          )
+        )}
+
+        {episode.summary && (
+          <p className="col-start-2 col-span-2 hidden text-sm text-muted-foreground sm:block sm:line-clamp-2">
+            {episode.summary}
+          </p>
+        )}
       </article>
 
       <AlertDialog open={pendingCatchUp} onOpenChange={setPendingCatchUp}>
@@ -613,8 +648,10 @@ function EpisodeRow({
   )
 }
 
-function formatWatchedAt(value: string) {
-  return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(
-    new Date(value)
-  )
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat(undefined, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(value))
 }
