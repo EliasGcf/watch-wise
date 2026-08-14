@@ -357,6 +357,86 @@ test.group('Library entries', (group) => {
     )
   })
 
+  test('authenticated users can filter their dedicated movie library page by watched status', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'Movie Filterer',
+      email: 'movie-filterer@example.com',
+      password: 'secret123',
+    })
+    const watchedMovie = await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-1',
+      name: 'Heat',
+      bannerPath: '/movie-1.jpg',
+      posterPath: '/movie-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: null,
+    })
+    await Movie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'movie-2',
+      name: 'Thief',
+      bannerPath: '/movie-2.jpg',
+      posterPath: '/movie-2-poster.jpg',
+      releasedAt: DateTime.fromISO('1981-03-27'),
+      summary: null,
+    })
+    await WatchedMovie.create({
+      userId: user.id,
+      libraryEntryId: watchedMovie.id,
+      providerId: watchedMovie.providerId,
+      duration: 170,
+      watchedAt: DateTime.now(),
+    })
+
+    const watchedResponse = await client.get('/app/library/movies?status=watched').loginAs(user)
+    watchedResponse.assertOk()
+    const watchedPage = JSON.parse(
+      watchedResponse
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.equal(watchedPage.status, 'watched')
+    assert.deepEqual(
+      watchedPage.movies.map((movie: { name: string }) => movie.name),
+      ['Heat']
+    )
+
+    const unwatchedResponse = await client.get('/app/library/movies?status=unwatched').loginAs(user)
+    unwatchedResponse.assertOk()
+    const unwatchedPage = JSON.parse(
+      unwatchedResponse
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.equal(unwatchedPage.status, 'unwatched')
+    assert.deepEqual(
+      unwatchedPage.movies.map((movie: { name: string }) => movie.name),
+      ['Thief']
+    )
+
+    const allResponse = await client.get('/app/library/movies').loginAs(user)
+    allResponse.assertOk()
+    const allPage = JSON.parse(
+      allResponse
+        .text()
+        .match(/data-page="([^"]+)"/)![1]
+        .replaceAll('&quot;', '"')
+    ).props
+    assert.equal(allPage.status, 'all')
+    assert.deepEqual(
+      allPage.movies.map((movie: { name: string }) => movie.name),
+      ['Heat', 'Thief']
+    )
+  })
+
   test('authenticated users can search their dedicated series library page', async ({
     assert,
     client,

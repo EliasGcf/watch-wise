@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react'
 import { Form } from '@adonisjs/inertia/react'
 import { type Data } from '@generated/data'
 import { SearchIcon } from 'lucide-react'
@@ -5,28 +6,69 @@ import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import { type InertiaProps } from '~/types'
 import { ItemGrid } from '~/components/item_card'
 
 type Props = InertiaProps & {
   query: string
+  status: string
   movies: Data.Movie[]
 }
 
-export default function LibraryMovies({ query, movies }: Props) {
+const statusItems = [
+  { value: 'all', label: 'All' },
+  { value: 'watched', label: 'Watched' },
+  { value: 'unwatched', label: 'Unwatched' },
+]
+
+export default function LibraryMovies({ query, status, movies }: Props) {
   const isSearching = query.length > 0
+
+  const handleStatusChange = (value: string | null) => {
+    const params: Record<string, string> = {}
+
+    if (query) params.q = query
+    if (value) params.status = value
+
+    router.get('/app/library/movies', params, {
+      preserveState: true,
+      preserveScroll: true,
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6">
       <Form
-        action="/app/library/movies"
-        method="get"
+        route="app.library.movies.index"
         options={{ preserveState: true, preserveScroll: true }}
       >
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>
+            <div className="flex items-end justify-between gap-2">
+              <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>
+              <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
+                <SelectTrigger
+                  aria-label="Filter movies by watched status"
+                  className="border-none pr-0 pb-0 items-end [&_svg]:mb-0.5"
+                >
+                  <SelectValue className="mt-auto" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="watched">Watched</SelectItem>
+                  <SelectItem value="unwatched">Unwatched</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="flex items-center gap-2">
+              <input type="hidden" name="status" value={status} />
               <Input
                 id="library-movies-query"
                 name="q"
