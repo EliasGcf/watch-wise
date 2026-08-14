@@ -22,18 +22,20 @@ type Props = InertiaProps & {
   movies: Data.Movie[]
 }
 
+const statusItems = [
+  { value: 'all', label: 'All' },
+  { value: 'watched', label: 'Watched' },
+  { value: 'unwatched', label: 'Unwatched' },
+]
+
 export default function LibraryMovies({ query, status, movies }: Props) {
   const isSearching = query.length > 0
 
-  const statusItems = [
-    { value: 'all', label: 'All' },
-    { value: 'watched', label: 'Watched' },
-    { value: 'unwatched', label: 'Unwatched' },
-  ]
-
   const handleStatusChange = (value: string | null) => {
-    const params: Record<string, string> = { q: query }
-    if (value && value !== 'all') params.status = value
+    const params: Record<string, string> = {}
+
+    if (query) params.q = query
+    if (value) params.status = value
 
     router.get('/app/library/movies', params, {
       preserveState: true,
@@ -44,20 +46,19 @@ export default function LibraryMovies({ query, status, movies }: Props) {
   return (
     <div className="flex flex-col gap-6">
       <Form
-        action="/app/library/movies"
-        method="get"
+        route="app.library.movies.index"
         options={{ preserveState: true, preserveScroll: true }}
       >
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>
-            <div className="flex items-center gap-2">
+            <div className="flex items-end justify-between gap-2">
+              <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>
               <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
                 <SelectTrigger
                   aria-label="Filter movies by watched status"
-                  className="data-[size=default]:h-11 w-30 shrink-0"
+                  className="border-none pr-0 pb-0 items-end [&_svg]:mb-0.5"
                 >
-                  <SelectValue />
+                  <SelectValue className="mt-auto" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
@@ -65,6 +66,8 @@ export default function LibraryMovies({ query, status, movies }: Props) {
                   <SelectItem value="unwatched">Unwatched</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="flex items-center gap-2">
               <input type="hidden" name="status" value={status} />
               <Input
                 id="library-movies-query"
