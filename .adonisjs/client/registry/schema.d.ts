@@ -278,9 +278,9 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/movies').indexMoviesValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['index']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/movies_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'app.library.series.index': {
