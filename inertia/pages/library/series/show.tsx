@@ -233,10 +233,23 @@ function SeasonAccordion({
   seasons: SeriesSeasons
   watchedEpisodes: WatchedEpisodeProgress[]
 }) {
-  const [openSeasons, setOpenSeasons] = useState<string[]>([])
+  const [openSeason, setOpenSeason] = useState(() => {
+    const params = new URLSearchParams(window.location.search)
+    return params.get('season')
+  })
+
+  function handleOpenChange(next: string[]) {
+    const current = next[next.length - 1]
+    window.history.replaceState(
+      window.history.state,
+      '',
+      current ? `?season=${current}` : window.location.pathname
+    )
+    setOpenSeason(current)
+  }
 
   return (
-    <Accordion value={openSeasons} onValueChange={setOpenSeasons} className="gap-3">
+    <Accordion value={[openSeason]} onValueChange={handleOpenChange} className="gap-3">
       {seasons.map((season) => {
         const watchedCount = countWatchedEpisodes(watchedEpisodes, season.number)
         const progress = calculateSeasonProgress(watchedCount, season.episodesCount)
@@ -286,7 +299,7 @@ function SeasonAccordion({
                 serie={serie}
                 seasons={seasons}
                 season={season.number}
-                isOpen={openSeasons.includes(String(season.number))}
+                isOpen={String(season.number) === openSeason}
                 watchedEpisodes={watchedEpisodes}
               />
             </AccordionContent>
