@@ -329,6 +329,7 @@ function SeasonCompleteCheckbox({
 }) {
   const watchSeasonMutation = useWatchSeasonMutation()
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
+  const [pendingUnwatch, setPendingUnwatch] = useState(false)
   const checked = episodesCount > 0 && watchedCount >= episodesCount
   const disabled = watchSeasonMutation.isPending || unwatchEpisodeMutation.isPending
 
@@ -340,6 +341,11 @@ function SeasonCompleteCheckbox({
       return
     }
 
+    setPendingUnwatch(true)
+  }
+
+  async function confirmUnwatchSeason() {
+    setPendingUnwatch(false)
     const toUnwatch = watchedEpisodes.filter((episode) => episode.season === season)
     for (const episode of toUnwatch) {
       await unwatchEpisodeMutation.mutateAsync({
@@ -349,13 +355,36 @@ function SeasonCompleteCheckbox({
   }
 
   return (
-    <Checkbox
-      checked={checked}
-      disabled={disabled}
-      aria-label={`Mark season ${season} as complete`}
-      className="size-5 rounded-full"
-      onCheckedChange={(value) => void toggleSeasonComplete(value)}
-    />
+    <>
+      <Checkbox
+        checked={checked}
+        disabled={disabled}
+        aria-label={`Mark season ${season} as complete`}
+        className="size-5 rounded-full"
+        onCheckedChange={(value) => void toggleSeasonComplete(value)}
+      />
+      <AlertDialog open={pendingUnwatch} onOpenChange={setPendingUnwatch}>
+        <AlertDialogContent onClickOverlay={() => setPendingUnwatch(false)}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Unmark season as watched?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to unmark all {watchedCount} episodes in season {season} as
+              watched?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={unwatchEpisodeMutation.isPending}
+              onClick={() => void confirmUnwatchSeason()}
+            >
+              {unwatchEpisodeMutation.isPending && <LoaderCircle className="animate-spin" />}
+              {unwatchEpisodeMutation.isPending ? 'Unmarking...' : 'Unmark season'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   )
 }
 
@@ -487,6 +516,7 @@ function EpisodeRow({
   const watchBeforeMutation = useWatchBeforeMutation()
   const [pendingCatchUp, setPendingCatchUp] = useState(false)
   const [pendingCatchUpDeleteFile, setPendingCatchUpDeleteFile] = useState(false)
+  const [pendingUnwatch, setPendingUnwatch] = useState(false)
   const isPending =
     watchEpisodeMutation.isPending ||
     unwatchEpisodeMutation.isPending ||
@@ -508,13 +538,18 @@ function EpisodeRow({
 
   function toggleWatched(checked: boolean) {
     if (!checked) {
-      unwatchEpisodeMutation.mutate({
-        params: { id: serie.id, season: episode.season, episode: episode.episode },
-      })
+      setPendingUnwatch(true)
       return
     }
 
     markWatched(false)
+  }
+
+  function confirmUnwatch() {
+    setPendingUnwatch(false)
+    unwatchEpisodeMutation.mutate({
+      params: { id: serie.id, season: episode.season, episode: episode.episode },
+    })
   }
 
   async function confirmCatchUp(includeBefore: boolean) {
@@ -653,6 +688,27 @@ function EpisodeRow({
             </AlertDialogCancel>
             <AlertDialogAction onClick={() => void confirmCatchUp(true)}>
               Mark all previous too
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={pendingUnwatch} onOpenChange={setPendingUnwatch}>
+        <AlertDialogContent onClickOverlay={() => setPendingUnwatch(false)}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Unmark as watched?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to unmark {episode.name} as watched?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={unwatchEpisodeMutation.isPending}
+              onClick={confirmUnwatch}
+            >
+              {unwatchEpisodeMutation.isPending && <LoaderCircle className="animate-spin" />}
+              {unwatchEpisodeMutation.isPending ? 'Unmarking...' : 'Unmark as watched'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
