@@ -252,7 +252,7 @@ function SeasonAccordion({
     <Accordion value={[openSeason]} onValueChange={handleOpenChange} className="gap-3">
       {seasons.map((season) => {
         const watchedCount = countWatchedEpisodes(watchedEpisodes, season.number)
-        const progress = calculateSeasonProgress(watchedCount, season.episodesCount)
+        const progress = calculateSeasonProgress(watchedCount, season.releasedEpisodesCount)
 
         return (
           <AccordionItem
@@ -270,7 +270,7 @@ function SeasonAccordion({
                     serie={serie}
                     season={season.number}
                     watchedCount={watchedCount}
-                    episodesCount={season.episodesCount}
+                    releasedEpisodesCount={season.releasedEpisodesCount}
                     watchedEpisodes={watchedEpisodes}
                   />
                 </div>
@@ -278,7 +278,7 @@ function SeasonAccordion({
                   <div className="flex items-center gap-x-3">
                     <span className="font-medium">{season.name}</span>
                     <span className="font-mono text-xs font-normal text-muted-foreground">
-                      {watchedCount} / {season.episodesCount}
+                      {watchedCount} / {season.releasedEpisodesCount}
                     </span>
                   </div>
                   <div className="min-w-0">
@@ -318,19 +318,19 @@ function SeasonCompleteCheckbox({
   serie,
   season,
   watchedCount,
-  episodesCount,
+  releasedEpisodesCount,
   watchedEpisodes,
 }: {
   serie: Data.Serie
   season: number
   watchedCount: number
-  episodesCount: number
+  releasedEpisodesCount: number
   watchedEpisodes: WatchedEpisodeProgress[]
 }) {
   const watchSeasonMutation = useWatchSeasonMutation()
   const unwatchEpisodeMutation = useUnwatchEpisodeMutation()
   const [pendingUnwatch, setPendingUnwatch] = useState(false)
-  const checked = episodesCount > 0 && watchedCount >= episodesCount
+  const checked = releasedEpisodesCount > 0 && watchedCount >= releasedEpisodesCount
   const disabled = watchSeasonMutation.isPending || unwatchEpisodeMutation.isPending
 
   async function toggleSeasonComplete(shouldWatch: boolean) {
@@ -392,7 +392,7 @@ function SeasonCompleteCheckbox({
 function countSeriesEpisodes(seasons: SeriesSeasons) {
   return seasons
     .filter((season) => season.number !== 0)
-    .reduce((total, season) => total + season.episodesCount, 0)
+    .reduce((total, season) => total + season.releasedEpisodesCount, 0)
 }
 
 function calculateSeasonProgress(watchedCount: number, episodesCount: number) {

@@ -174,9 +174,10 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         summary: 'A fake multi season series.',
         inProduction: true,
         episodesCount: 4,
+        releasedEpisodesCount: 3,
         seasons: [
-          { name: 'Season 1', number: 1, episodesCount: 2 },
-          { name: 'Season 2', number: 2, episodesCount: 2 },
+          { name: 'Season 1', number: 1, episodesCount: 2, releasedEpisodesCount: 2 },
+          { name: 'Season 2', number: 2, episodesCount: 2, releasedEpisodesCount: 1 },
         ],
       }
     }
@@ -207,9 +208,10 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       summary: series.overview,
       inProduction: series.in_production ?? true,
       episodesCount: 2,
+      releasedEpisodesCount: 1,
       seasons: [
-        { name: 'Specials', number: 0, episodesCount: 1 },
-        { name: 'Season 1', number: 1, episodesCount: 2 },
+        { name: 'Specials', number: 0, episodesCount: 1, releasedEpisodesCount: 1 },
+        { name: 'Season 1', number: 1, episodesCount: 2, releasedEpisodesCount: 1 },
       ],
     }
   }

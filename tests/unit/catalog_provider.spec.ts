@@ -191,7 +191,61 @@ test.group('Catalog provider', (group) => {
         summary: 'A pilot about a super-intelligent astronaut.',
         inProduction: false,
         episodesCount: 2,
-        seasons: [{ name: 'Season 1', number: 1, episodesCount: 2 }],
+        releasedEpisodesCount: 2,
+        seasons: [{ name: 'Season 1', number: 1, episodesCount: 2, releasedEpisodesCount: 2 }],
+      }
+    )
+  })
+
+  test('maps TMDB series detail response to released counts from last episode to air', async ({
+    assert,
+  }) => {
+    const tmdb = makeTmdbSdk(
+      new Response(
+        JSON.stringify({
+          id: 1,
+          name: 'Heat Vision and Jack',
+          backdrop_path: '/heat-vision-backdrop.jpg',
+          poster_path: '/heat-vision.jpg',
+          first_air_date: '1999-01-01',
+          overview: 'A pilot about a super-intelligent astronaut.',
+          last_episode_to_air: { episode_number: 1, season_number: 2 },
+          seasons: [
+            { name: 'Specials', season_number: 0, episode_count: 1 },
+            { name: 'Season 1', season_number: 1, episode_count: 3 },
+            { name: 'Season 2', season_number: 2, episode_count: 3 },
+            { name: 'Season 3', season_number: 3, episode_count: 2 },
+          ],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      )
+    )
+
+    assert.deepEqual(
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+        tmdb
+      ).findSerieById('1'),
+      {
+        provider: 'tmdb',
+        id: '1',
+        type: 'serie',
+        name: 'Heat Vision and Jack',
+        bannerPath: '/heat-vision-backdrop.jpg',
+        bannerUrl: 'https://image.tmdb.org/t/p/original/heat-vision-backdrop.jpg',
+        posterPath: '/heat-vision.jpg',
+        posterUrl: 'https://image.tmdb.org/t/p/original/heat-vision.jpg',
+        releasedAt: '1999-01-01',
+        summary: 'A pilot about a super-intelligent astronaut.',
+        inProduction: true,
+        episodesCount: 8,
+        releasedEpisodesCount: 4,
+        seasons: [
+          { name: 'Specials', number: 0, episodesCount: 1, releasedEpisodesCount: 1 },
+          { name: 'Season 1', number: 1, episodesCount: 3, releasedEpisodesCount: 3 },
+          { name: 'Season 2', number: 2, episodesCount: 3, releasedEpisodesCount: 1 },
+          { name: 'Season 3', number: 3, episodesCount: 2, releasedEpisodesCount: 0 },
+        ],
       }
     )
   })

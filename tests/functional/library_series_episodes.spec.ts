@@ -158,7 +158,7 @@ test.group('Library series episodes', (group) => {
       await libraryPage
         .getByRole('progressbar', { name: 'Heat Vision and Jack progress' })
         .getAttribute('aria-valuenow'),
-      '50'
+      '100'
     )
 
     await serie.merge({ providerId: 'series-1-changed' }).save()
@@ -224,7 +224,7 @@ test.group('Library series episodes', (group) => {
       .withCsrfToken()
 
     response.assertOk()
-    assert.equal(response.body().data.progress, 50)
+    assert.equal(response.body().data.progress, 100)
   })
 
   test('series details page receives watched episodes for season progress', async ({
@@ -750,7 +750,7 @@ test.group('Library series episodes', (group) => {
     await browserContext.loginAs(user)
     const detailsPage = await visit(`/app/library/series/${serie.id}`)
     await detailsPage.assertTextContains('body', '1 / 1')
-    await detailsPage.assertTextContains('body', '0 / 2')
+    await detailsPage.assertTextContains('body', '0 / 1')
 
     await client
       .delete(`/api/library/series/${serie.id}/seasons/0/episodes/1/watch`)
