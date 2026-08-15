@@ -11,8 +11,7 @@ export async function calculateSerieProgress(serie: Serie, catalogSerie: Catalog
     .firstOrFail()
 
   const total = Number(watchedEpisodesCount.$extras.total)
-  const released = catalogSerie.releasedEpisodesCount
-  if (released === 0) return 0
+  if (catalogSerie.releasedEpisodesCount === 0) return 0
 
-  return Math.min(100, Math.max(0, Math.round((total / released) * 100)))
+  return Math.min(100, Math.max(0, Math.round((total / catalogSerie.releasedEpisodesCount) * 100)))
 }
