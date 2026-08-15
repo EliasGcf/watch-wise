@@ -251,7 +251,7 @@ function SeasonAccordion({
               disabled={season.episodesCount === 0}
               className="items-center hover:no-underline py-3"
             >
-              <div className="grid w-full grid-cols-[2.5rem_1fr] items-center pr-4">
+              <div className="grid w-full grid-cols-[2rem_1fr] items-center pr-4">
                 <div className="flex items-center" onClick={(event) => event.stopPropagation()}>
                   <SeasonCompleteCheckbox
                     serie={serie}
