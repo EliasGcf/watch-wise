@@ -105,14 +105,27 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     if (!response.data) return null
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
+    const last = response.data.last_episode_to_air
+    const lastSeason = last?.season_number
+    const lastEpisode = last?.episode_number
+    const allReleased = lastSeason === undefined || lastSeason === 0 || lastEpisode === undefined
     const seasons =
       response.data.seasons?.flatMap((season) => {
         if (season.season_number === undefined || season.episode_count === undefined) return []
+        const releasedEpisodesCount =
+          season.season_number === 0 || allReleased
+            ? season.episode_count
+            : season.season_number < lastSeason
+              ? season.episode_count
+              : season.season_number === lastSeason
+                ? Math.min(lastEpisode, season.episode_count)
+                : 0
         return [
           {
             name: season.name ?? `Season ${season.season_number}`,
             number: season.season_number,
             episodesCount: season.episode_count,
+            releasedEpisodesCount,
           },
         ]
       }) ?? []
@@ -133,6 +146,9 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       episodesCount: seasons
         .filter((season) => season.number !== 0)
         .reduce((total, season) => total + season.episodesCount, 0),
+      releasedEpisodesCount: seasons
+        .filter((season) => season.number !== 0)
+        .reduce((total, season) => total + season.releasedEpisodesCount, 0),
       seasons,
     }
   }

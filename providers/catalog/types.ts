@@ -30,7 +30,13 @@ export type FindResult = {
       type: 'serie'
       inProduction: boolean
       episodesCount: number
-      seasons: Array<{ name: string; number: number; episodesCount: number }>
+      releasedEpisodesCount: number
+      seasons: Array<{
+        name: string
+        number: number
+        episodesCount: number
+        releasedEpisodesCount: number
+      }>
     }
 )
 
