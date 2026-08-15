@@ -105,9 +105,8 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     if (!response.data) return null
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
-    const last = response.data.last_episode_to_air
-    const lastSeason = last?.season_number
-    const lastEpisode = last?.episode_number
+    const lastSeason = response.data.last_episode_to_air?.season_number
+    const lastEpisode = response.data.last_episode_to_air?.episode_number
     const allReleased = lastSeason === undefined || lastSeason === 0 || lastEpisode === undefined
     const seasons =
       response.data.seasons?.flatMap((season) => {
