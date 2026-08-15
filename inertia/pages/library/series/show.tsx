@@ -375,6 +375,7 @@ function SeasonCompleteCheckbox({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
+              variant="destructive"
               disabled={unwatchEpisodeMutation.isPending}
               onClick={() => void confirmUnwatchSeason()}
             >
@@ -704,6 +705,7 @@ function EpisodeRow({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
+              variant="destructive"
               disabled={unwatchEpisodeMutation.isPending}
               onClick={confirmUnwatch}
             >
