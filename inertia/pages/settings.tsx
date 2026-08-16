@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { type Data } from '@generated/data'
-import { LoaderCircle, SaveIcon } from 'lucide-react'
+import { LoaderCircle, SaveIcon, Trash2 } from 'lucide-react'
 import { type ReactNode, useState } from 'react'
 import { toast } from 'sonner'
 import { Badge } from '~/components/ui/badge'
@@ -39,6 +39,12 @@ export default function Settings({ user, settings, providerAvailability }: Props
     api.api.user.update.mutationOptions({
       onSuccess: () => toast.success('Username saved.'),
       onError: () => toast.error('Username could not be saved.'),
+    })
+  )
+  const clearTmdbCache = useMutation(
+    api.api.cache.tmdb.clear.mutationOptions({
+      onSuccess: () => toast.success('TMDB cache cleared.'),
+      onError: () => toast.error('TMDB cache could not be cleared.'),
     })
   )
 
@@ -160,6 +166,33 @@ export default function Settings({ user, settings, providerAvailability }: Props
               }}
             />
           </IntegrationCard>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-4" aria-labelledby="settings-cache">
+        <div className="flex flex-col gap-1 border-b pb-3">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Cache</p>
+          <h2 id="settings-cache" className="text-2xl font-semibold tracking-tight">
+            TMDB
+          </h2>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <p className="max-w-xl text-sm text-muted-foreground">
+            Clear the cache to pick up TMDB metadata changes right away.
+          </p>
+          <Button
+            variant="destructive"
+            disabled={clearTmdbCache.isPending}
+            onClick={() => clearTmdbCache.mutate({})}
+          >
+            {clearTmdbCache.isPending ? (
+              <LoaderCircle className="size-4 animate-spin" aria-label="Clearing" />
+            ) : (
+              <Trash2 className="size-4" />
+            )}
+            Clear cache
+          </Button>
         </div>
       </section>
     </div>

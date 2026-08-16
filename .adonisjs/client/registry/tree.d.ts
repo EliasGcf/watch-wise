@@ -31,6 +31,11 @@ export interface ApiDefinition {
         update: typeof routes['api.user.settings.update']
       }
     }
+    cache: {
+      tmdb: {
+        clear: typeof routes['api.cache.tmdb.clear']
+      }
+    }
   }
   app: {
     newAccount: typeof routes['app.new_account'] & {

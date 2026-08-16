@@ -7,6 +7,7 @@ export type ScannedRoutes = {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.library.store': { paramsTuple?: []; params?: {} }
     'api.user.update': { paramsTuple?: []; params?: {} }
+    'api.cache.tmdb.clear': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
     'api.user.settings.update': { paramsTuple?: []; params?: {} }
     'api.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -75,6 +76,7 @@ export type ScannedRoutes = {
     'api.user.settings.update': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
+    'api.cache.tmdb.clear': { paramsTuple?: []; params?: {} }
     'api.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }

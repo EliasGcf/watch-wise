@@ -24,6 +24,12 @@ const routes = {
     tokens: [{"old":"/api/user","type":0,"val":"api","end":""},{"old":"/api/user","type":0,"val":"user","end":""}],
     types: placeholder as Registry['api.user.update']['types'],
   },
+  'api.cache.tmdb.clear': {
+    methods: ["DELETE"],
+    pattern: '/api/cache/tmdb',
+    tokens: [{"old":"/api/cache/tmdb","type":0,"val":"api","end":""},{"old":"/api/cache/tmdb","type":0,"val":"cache","end":""},{"old":"/api/cache/tmdb","type":0,"val":"tmdb","end":""}],
+    types: placeholder as Registry['api.cache.tmdb.clear']['types'],
+  },
   'api.user.settings.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/user/settings',

@@ -43,6 +43,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/user_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'api.cache.tmdb.clear': {
+    methods: ["DELETE"]
+    pattern: '/api/cache/tmdb'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/cache_controller').default['clearTmdb']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/cache_controller').default['clearTmdb']>>>
+    }
+  }
   'api.user.settings.show': {
     methods: ["GET","HEAD"]
     pattern: '/api/user/settings'

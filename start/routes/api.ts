@@ -10,6 +10,7 @@ const group = router.group(() => {
     .group(() => {
       router.post('library', [controllers.api.Library, 'store']).as('library.store')
       router.patch('user', [controllers.api.User, 'update']).as('user.update')
+      router.delete('cache/tmdb', [controllers.api.Cache, 'clearTmdb']).as('cache.tmdb.clear')
       router.get('user/settings', [controllers.api.UserSettings, 'show']).as('user.settings.show')
       router
         .patch('user/settings', [controllers.api.UserSettings, 'update'])

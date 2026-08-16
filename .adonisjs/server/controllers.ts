@@ -5,6 +5,7 @@
 
 export const controllers = {
   api: {
+    Cache: () => import('#controllers/api/cache_controller'),
     Library: () => import('#controllers/api/library_controller'),
     Movies: () => import('#controllers/api/movies_controller'),
     series: {
