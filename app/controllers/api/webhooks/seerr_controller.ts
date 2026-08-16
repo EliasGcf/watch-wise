@@ -8,10 +8,10 @@ import { timingSafeEqual } from 'node:crypto'
 
 export default class SeerrController {
   async handle({ request, response }: HttpContext) {
-    const username = env.get('SEERR_USERNAME')
+    const seerrUser = env.get('SEERR_USER')
     const authHeader = env.get('SEERR_AUTH_HEADER')
 
-    if (!username || !authHeader) {
+    if (!seerrUser || !authHeader) {
       return response.serviceUnavailable({ error: 'Seerr webhook is not configured.' })
     }
 
@@ -25,11 +25,15 @@ export default class SeerrController {
 
     const payload = await request.validateUsing(seerrWebhookValidator)
 
-    if (payload.request.requestedBy_username !== username) {
+    const isRequester =
+      payload.request.requestedBy_username === seerrUser ||
+      payload.request.requestedBy_email === seerrUser
+
+    if (!isRequester) {
       return response.forbidden({ error: 'Unknown requester.' })
     }
 
-    const user = await User.findBy('username', username)
+    const user = await User.query().where('username', seerrUser).orWhere('email', seerrUser).first()
 
     if (!user) {
       return response.internalServerError({ error: 'Seerr user was not found.' })

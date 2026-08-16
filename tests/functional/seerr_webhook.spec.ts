@@ -7,10 +7,11 @@ import { test } from '@japa/runner'
 type SeerrPayload = {
   notification_type: string
   media: { media_type: 'movie' | 'tv'; tmdbId: string }
-  request: { requestedBy_username: string }
+  request: { requestedBy_username: string; requestedBy_email: string }
 }
 
-const SEERR_USERNAME = 'john-doe'
+const SEERR_USER = 'john-doe'
+const SEERR_EMAIL = 'john-doe@example.com'
 const SEERR_AUTH_HEADER = 'webhook-secret'
 
 test.group('Seerr webhook', (group) => {
@@ -68,15 +69,36 @@ test.group('Seerr webhook', (group) => {
     assert.lengthOf(await Movie.query(), 0)
   })
 
-  test('rejects requests with an unknown requestedBy_username', async ({ assert, client }) => {
+  test('rejects requests with an unknown requestedBy username or email', async ({
+    assert,
+    client,
+  }) => {
     await makeSeerrUser()
     const response = await client
       .post('/api/webhooks/seerr')
       .header('Authorization', SEERR_AUTH_HEADER)
-      .json(seerrPayload('movie', 'movie-1', 'MEDIA_AUTO_APPROVED', 'somebody-else'))
+      .json(seerrPayload('movie', 'movie-1', 'MEDIA_AUTO_APPROVED', 'somebody-else', 'other@x.com'))
 
     response.assertForbidden()
     assert.lengthOf(await Movie.query(), 0)
+  })
+
+  test('accepts the requester when SEERR_USER matches the requestedBy email', async ({
+    assert,
+    client,
+  }) => {
+    await makeSeerrUser()
+    const response = await client
+      .post('/api/webhooks/seerr')
+      .header('Authorization', SEERR_AUTH_HEADER)
+      .json(seerrPayload('movie', 'movie-1', 'MEDIA_AUTO_APPROVED', 'someone-else', SEERR_USER))
+
+    response.assertCreated()
+    const movie = await Movie.query()
+      .where('provider', 'tmdb')
+      .where('providerId', 'movie-1')
+      .first()
+    assert.equal(movie?.name, 'Heat')
   })
 
   test('does not duplicate an existing library entry', async ({ assert, client }) => {
@@ -119,8 +141,8 @@ test.group('Seerr webhook', (group) => {
 
 function makeSeerrUser() {
   return User.create({
-    username: SEERR_USERNAME,
-    email: `webhook-${crypto.randomUUID()}@example.com`,
+    username: SEERR_USER,
+    email: SEERR_EMAIL,
     password: 'secret123',
   })
 }
@@ -129,11 +151,12 @@ function seerrPayload(
   mediaType: 'movie' | 'tv',
   tmdbId: string,
   notificationType = 'MEDIA_AUTO_APPROVED',
-  requestedByUsername = SEERR_USERNAME
+  requestedByUsername = SEERR_USER,
+  requestedByEmail = SEERR_EMAIL
 ): SeerrPayload {
   return {
     notification_type: notificationType,
     media: { media_type: mediaType, tmdbId },
-    request: { requestedBy_username: requestedByUsername },
+    request: { requestedBy_username: requestedByUsername, requestedBy_email: requestedByEmail },
   }
 }
