@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "bun bin/server.ts",
-    "dev": "bun --bun ace serve --watch",
+    "dev": "portless run bun --bun ace serve --watch",
     "test": "bun --bun --env-file=.env.test bin/test.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
