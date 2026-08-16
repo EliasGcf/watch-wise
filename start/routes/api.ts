@@ -54,6 +54,8 @@ const group = router.group(() => {
         .as('library.series.episodes.unwatch')
     })
     .use(middleware.auth())
+
+  router.post('webhooks/seerr', [controllers.api.webhooks.Seerr, 'handle']).as('webhooks.seerr')
 })
 
 group.as('api').prefix('/api')

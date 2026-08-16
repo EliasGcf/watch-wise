@@ -36,6 +36,9 @@ export interface ApiDefinition {
         clear: typeof routes['api.cache.tmdb.clear']
       }
     }
+    webhooks: {
+      seerr: typeof routes['api.webhooks.seerr']
+    }
   }
   app: {
     newAccount: typeof routes['app.new_account'] & {

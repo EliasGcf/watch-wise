@@ -19,6 +19,7 @@ export type ScannedRoutes = {
     'api.library.series.episodes.watch_before': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.unwatch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
+    'api.webhooks.seerr': { paramsTuple?: []; params?: {} }
     'app.new_account': { paramsTuple?: []; params?: {} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
     'app.login': { paramsTuple?: []; params?: {} }
@@ -67,6 +68,7 @@ export type ScannedRoutes = {
     'api.library.series.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.series.episodes.watch_before': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
     'api.library.series.episodes.watch': { paramsTuple: [ParamValue,ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue,'episode': ParamValue} }
+    'api.webhooks.seerr': { paramsTuple?: []; params?: {} }
     'app.new_account.store': { paramsTuple?: []; params?: {} }
     'app.session.store': { paramsTuple?: []; params?: {} }
     'app.session.destroy': { paramsTuple?: []; params?: {} }

@@ -187,6 +187,18 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['unwatch']>>>
     }
   }
+  'api.webhooks.seerr': {
+    methods: ["POST"]
+    pattern: '/api/webhooks/seerr'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/seerr_webhook').seerrWebhookValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/seerr_webhook').seerrWebhookValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/webhooks/seerr_controller').default['handle']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/webhooks/seerr_controller').default['handle']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'app.new_account': {
     methods: ["GET","HEAD"]
     pattern: '/app/signup'
