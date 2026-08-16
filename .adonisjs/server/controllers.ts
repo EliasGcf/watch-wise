@@ -14,6 +14,9 @@ export const controllers = {
     },
     User: () => import('#controllers/api/user_controller'),
     UserSettings: () => import('#controllers/api/user_settings_controller'),
+    webhooks: {
+      Seerr: () => import('#controllers/api/webhooks/seerr_controller'),
+    },
   },
   web: {
     CatalogSearch: () => import('#controllers/web/catalog_search_controller'),
