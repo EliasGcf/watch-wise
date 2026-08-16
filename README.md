@@ -88,6 +88,22 @@ The fake provider is intended for tests and controlled scenarios only:
 CATALOG_PROVIDER_DRIVER=fake
 ```
 
+## Seerr Webhook
+
+Optional integration: Seerr can notify this app through `POST /api/webhooks/seerr` so a `MEDIA_AUTO_APPROVED` request automatically adds the movie or serie to the user's library.
+
+Configure it with two optional env vars:
+
+```env
+SEERR_USERNAME=your_username
+SEERR_AUTH_HEADER=your_secret
+```
+
+- `SEERR_AUTH_HEADER` is the value the `Authorization` header of the webhook request must match.
+- `SEERR_USERNAME` must be the **username of the Watch Wise user** that will receive the titles in their library. The webhook only processes requests whose `requestedBy_username` matches it, so the username used in Seerr **has to be the same username the user has in this app**.
+
+When the vars are not set the endpoint responds `503` and the rest of the app is unaffected.
+
 ## Docker Environment
 
 The Docker image provides defaults for `NODE_ENV`, `HOST`, `PORT`, `LOG_LEVEL`, `APP_URL`, `SESSION_DRIVER`, `DATABASE_NAME`, and `CATALOG_PROVIDER_DRIVER`. The Docker default catalog provider is TMDB, and the default database path is `data/db.sqlite3`.
