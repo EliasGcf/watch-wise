@@ -100,7 +100,7 @@ SEERR_AUTH_HEADER=your_secret
 ```
 
 - `SEERR_AUTH_HEADER` is the value the `Authorization` header of the webhook request must match.
-- `SEERR_USER` is the **username or email of the Watch Wise user** that will receive the titles in their library. The webhook only processes requests whose requestedBy username or email matches it, so the username used in Seerr **has to be the same username the user has in this app**.
+- `SEERR_USER` is the **username or email of the Watch Wise user** that will receive the titles in their library. The webhook only processes requests whose requestedBy username or email matches it, so the username or email used in Seerr **has to be the same as the one registered in this app and set in `SEERR_USER`**.
 
 When the vars are not set the endpoint responds `503` and the rest of the app is unaffected.
 
