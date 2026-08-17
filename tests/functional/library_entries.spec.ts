@@ -29,11 +29,21 @@ test.group('Library entries', (group) => {
       summary: null,
     })
 
-    assert.include(movie.serialize(), {
+    assert.containSubset(movie.serialize(), {
       bannerPath: 'movie-paths.jpg',
       posterPath: 'movie-paths-poster.jpg',
-      bannerUrl: 'http://localhost:3000/images/movie-paths.jpg',
-      posterUrl: 'http://localhost:3000/images/movie-paths-poster.jpg',
+      bannerUrls: {
+        sm: 'http://localhost:3000/images/movie-paths.jpg',
+        md: 'http://localhost:3000/images/movie-paths.jpg',
+        lg: 'http://localhost:3000/images/movie-paths.jpg',
+        original: 'http://localhost:3000/images/movie-paths.jpg',
+      },
+      posterUrls: {
+        sm: 'http://localhost:3000/images/movie-paths-poster.jpg',
+        md: 'http://localhost:3000/images/movie-paths-poster.jpg',
+        lg: 'http://localhost:3000/images/movie-paths-poster.jpg',
+        original: 'http://localhost:3000/images/movie-paths-poster.jpg',
+      },
     })
   })
 

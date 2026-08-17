@@ -31,10 +31,17 @@ import { cn } from '~/lib/utils'
 type Movie = Data.Movie
 type Serie = Data.Serie
 
+type ImageUrls = {
+  sm: string | null
+  md: string | null
+  lg: string | null
+  original: string | null
+}
+
 type ItemCardProps = {
   name: string
   type: 'movie' | 'serie'
-  posterUrl: string | null
+  posterUrls: ImageUrls | null
   provider: string
   providerId: string
   libraryEntry: Movie | Serie | null
@@ -53,15 +60,15 @@ export function ItemGrid({ items }: { items: Array<ItemCardProps & { id: string 
 export function ItemCard({
   name,
   type,
-  posterUrl,
+  posterUrls,
   provider,
   providerId,
   libraryEntry,
 }: ItemCardProps) {
   const label = type === 'serie' ? 'Serie' : 'Movie'
 
-  const poster = posterUrl ? (
-    <img src={posterUrl} alt="" className="h-full w-full object-cover" />
+  const poster = posterUrls?.sm ? (
+    <img src={posterUrls.sm} alt="" className="h-full w-full object-cover" />
   ) : (
     <div className="flex h-full items-center justify-center p-2 text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
       {name}

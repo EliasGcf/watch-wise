@@ -6,8 +6,8 @@ export default class MovieTransformer extends BaseTransformer<Movie> {
     return {
       ...this.pick(this.resource, [
         ...this.resource.$columns,
-        'bannerUrl',
-        'posterUrl',
+        'bannerUrls',
+        'posterUrls',
         'isReleased',
       ]),
       watched: this.whenLoaded(this.resource.watched).value,

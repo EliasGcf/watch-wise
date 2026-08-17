@@ -9,11 +9,20 @@ import type {
   FindResult,
   Movie,
   Serie,
+  ImageKind,
+  ImageSize,
 } from '#providers/catalog/types'
 import { CatalogProviderError } from '#providers/catalog/types'
 import { createCacheDecorator } from '#decorators/cache_decorator'
 
 const cache = createCacheDecorator({ prefixKey: 'tmdb' })
+
+const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/'
+
+const TMDB_IMAGE_SIZES: Record<ImageKind, Record<ImageSize, string>> = {
+  poster: { sm: 'w342', md: 'w500', lg: 'w780', original: 'original' },
+  banner: { sm: 'w300', md: 'w780', lg: 'w1280', original: 'original' },
+}
 
 export default class TmdbCatalogProviderDriver implements CatalogProvider {
   constructor(
@@ -22,6 +31,12 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
   ) {
     if (!this.config.accessToken) throw new CatalogProviderError('TMDB access token is required.')
     tmdbClient.setConfig({ headers: { Authorization: `Bearer ${this.config.accessToken}` } })
+  }
+
+  imageUrl(kind: ImageKind, path: string | null, size: ImageSize) {
+    if (!path) return null
+
+    return `${TMDB_IMAGE_BASE_URL}${TMDB_IMAGE_SIZES[kind][size]}/${path.replace(/^\/+/, '')}`
   }
 
   @cache()
@@ -38,7 +53,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       throw new CatalogProviderError('TMDB search request failed', { cause: response.error })
     }
     if (!response.data?.results) return []
-    return mapSearchResults(response.data.results, this.config)
+    return mapSearchResults(response.data.results)
   }
 
   @cache()
@@ -52,7 +67,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       throw new CatalogProviderError('TMDB trending request failed', { cause: response.error })
     }
     if (!response.data?.results) return []
-    return mapSearchResults(response.data.results, this.config)
+    return mapSearchResults(response.data.results)
   }
 
   @cache()
@@ -83,9 +98,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       type: 'movie',
       name: response.data.title,
       bannerPath: bannerPath ?? null,
-      bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
       posterPath: posterPath ?? null,
-      posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.release_date ?? null,
       duration: response.data.runtime ?? null,
       summary: response.data.overview ?? null,
@@ -136,9 +149,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       type: 'serie',
       name: response.data.name,
       bannerPath: bannerPath ?? null,
-      bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
       posterPath: posterPath ?? null,
-      posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: response.data.first_air_date ?? null,
       summary: response.data.overview ?? null,
       inProduction: response.data.in_production ?? true,
@@ -218,11 +229,6 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
   }
 }
 
-function makeImageUrl(baseImageUrl: string, path?: string) {
-  if (!path) return null
-  return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()
-}
-
 type SearchApiResult = {
   id?: number
   title?: string
@@ -234,10 +240,7 @@ type SearchApiResult = {
   media_type?: string
 }
 
-function mapSearchResults(
-  results: SearchApiResult[],
-  config: TmdbCatalogProviderConfig
-): CatalogSearchResult[] {
+function mapSearchResults(results: SearchApiResult[]): CatalogSearchResult[] {
   return results.flatMap((result) => {
     if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
     const type = result.media_type === 'movie' ? 'movie' : 'serie'
@@ -253,9 +256,7 @@ function mapSearchResults(
         type,
         name,
         bannerPath: bannerPath ?? null,
-        bannerUrl: makeImageUrl(config.baseImageUrl, bannerPath),
         posterPath: posterPath ?? null,
-        posterUrl: makeImageUrl(config.baseImageUrl, posterPath),
         releasedAt: releasedAt ?? null,
         summary: result.overview ?? null,
       },

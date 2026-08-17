@@ -1,6 +1,7 @@
 import type Movie from '#models/movie'
 import type Serie from '#models/serie'
 import type { CatalogSearchResult } from '#providers/catalog/types'
+import { buildImageUrls } from '#services/catalog_provider'
 import MovieTransformer from '#transformers/movie_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
 import { BaseTransformer } from '@adonisjs/core/transformers'
@@ -18,6 +19,8 @@ export default class CatalogSearchResultTransformer extends BaseTransformer<Cata
 
     return {
       ...this.resource,
+      bannerUrls: buildImageUrls('banner', this.resource.bannerPath),
+      posterUrls: buildImageUrls('poster', this.resource.posterPath),
       inLibrary: entry
         ? this.resource.type === 'serie'
           ? SerieTransformer.transform(entry as Serie)
