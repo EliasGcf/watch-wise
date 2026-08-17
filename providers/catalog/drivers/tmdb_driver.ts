@@ -17,8 +17,6 @@ import { createCacheDecorator } from '#decorators/cache_decorator'
 
 const cache = createCacheDecorator({ prefixKey: 'tmdb' })
 
-const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/'
-
 const TMDB_IMAGE_SIZES: Record<ImageKind, Record<ImageSize, string>> = {
   poster: { sm: 'w342', md: 'w500', lg: 'w780', original: 'original' },
   banner: { sm: 'w300', md: 'w780', lg: 'w1280', original: 'original' },
@@ -36,7 +34,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
   imageUrl(kind: ImageKind, path: string | null, size: ImageSize) {
     if (!path) return null
 
-    return `${TMDB_IMAGE_BASE_URL}${TMDB_IMAGE_SIZES[kind][size]}/${path.replace(/^\/+/, '')}`
+    return `${this.config.baseImageUrl}${TMDB_IMAGE_SIZES[kind][size]}/${path.replace(/^\/+/, '')}`
   }
 
   @cache()

@@ -9,6 +9,7 @@ const catalogProviderConfig: CatalogProviderConfig = {
       failureQuery: 'fail',
     },
     tmdb: {
+      baseImageUrl: 'https://image.tmdb.org/t/p/',
       accessToken: env.get('TMDB_ACCESS_TOKEN'),
     },
   },

@@ -46,9 +46,10 @@ test.group('Catalog provider', (group) => {
       )
     )
 
-    const results = await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search(
-      'heat'
-    )
+    const results = await new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+      tmdb
+    ).search('heat')
 
     assert.deepEqual(results, [
       {
@@ -83,7 +84,11 @@ test.group('Catalog provider', (group) => {
     )
 
     await assert.rejects(
-      () => new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).search('heat'),
+      () =>
+        new TmdbCatalogProviderDriver(
+          { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+          tmdb
+        ).search('heat'),
       CatalogProviderError
     )
   })
@@ -125,7 +130,10 @@ test.group('Catalog provider', (group) => {
     )
 
     assert.deepEqual(
-      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findMovieById('1'),
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+        tmdb
+      ).findMovieById('1'),
       {
         provider: 'tmdb',
         id: '1',
@@ -158,7 +166,10 @@ test.group('Catalog provider', (group) => {
     )
 
     assert.deepEqual(
-      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findSerieById('1'),
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+        tmdb
+      ).findSerieById('1'),
       {
         provider: 'tmdb',
         id: '1',
@@ -201,7 +212,10 @@ test.group('Catalog provider', (group) => {
     )
 
     assert.deepEqual(
-      await new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb).findSerieById('1'),
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+        tmdb
+      ).findSerieById('1'),
       {
         provider: 'tmdb',
         id: '1',
@@ -248,7 +262,10 @@ test.group('Catalog provider', (group) => {
         },
       }),
     })
-    const driver = new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb)
+    const driver = new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+      tmdb
+    )
 
     assert.deepEqual(await driver.search('heat'), await driver.search('heat'))
     assert.equal(calls, 1)
@@ -279,7 +296,10 @@ test.group('Catalog provider', (group) => {
         },
       }),
     })
-    const driver = new TmdbCatalogProviderDriver({ accessToken: 'test-token' }, tmdb)
+    const driver = new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+      tmdb
+    )
 
     await driver.search('heat')
     await driver.search('heat')
@@ -289,7 +309,10 @@ test.group('Catalog provider', (group) => {
   })
 
   test('builds TMDB image URLs at each size per image kind', async ({ assert }) => {
-    const driver = new TmdbCatalogProviderDriver({ accessToken: 'test-token' })
+    const driver = new TmdbCatalogProviderDriver({
+      baseImageUrl: 'https://image.tmdb.org/t/p/',
+      accessToken: 'test-token',
+    })
 
     assert.equal(
       driver.imageUrl('poster', '/xyz.jpg', 'sm'),
