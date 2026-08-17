@@ -8,6 +8,7 @@ import {
   type CatalogDriver,
   type ImageKind,
   type ImageSize,
+  type ImageUrls,
 } from '#providers/catalog/types'
 
 export class CatalogProviderManager extends CatalogProvider {
@@ -78,5 +79,14 @@ export class CatalogProviderManager extends CatalogProvider {
 
   imageUrl(kind: ImageKind, path: string | null, size: ImageSize) {
     return this.use().imageUrl(kind, path, size)
+  }
+
+  imageUrls(kind: ImageKind, path: string | null): ImageUrls {
+    return {
+      sm: this.imageUrl(kind, path, 'sm'),
+      md: this.imageUrl(kind, path, 'md'),
+      lg: this.imageUrl(kind, path, 'lg'),
+      original: this.imageUrl(kind, path, 'original'),
+    }
   }
 }

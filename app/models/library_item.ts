@@ -1,6 +1,6 @@
 import { LibraryEntrySchema } from '#database/schema'
 import { events } from '#generated/events'
-import { buildImageUrls } from '#services/catalog_provider'
+import { catalog } from '#services/catalog_provider'
 import { beforeDelete, beforeSave, computed, scope } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
@@ -14,12 +14,12 @@ export default class LibraryItem extends LibraryEntrySchema {
 
   @computed()
   get bannerUrls() {
-    return buildImageUrls('banner', this.bannerPath)
+    return catalog.imageUrls('banner', this.bannerPath)
   }
 
   @computed()
   get posterUrls() {
-    return buildImageUrls('poster', this.posterPath)
+    return catalog.imageUrls('poster', this.posterPath)
   }
 
   static search = scope((query, params: { name: string }) => {
