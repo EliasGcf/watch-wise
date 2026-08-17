@@ -13,17 +13,13 @@ export default class LibraryItem extends LibraryEntrySchema {
   }
 
   @computed()
-  get bannerUrl() {
-    if (!this.bannerPath) return null
-
-    return new URL(this.bannerPath, catalog.config().baseImageUrl).toString()
+  get bannerUrls() {
+    return catalog.imageUrls('banner', this.bannerPath)
   }
 
   @computed()
-  get posterUrl() {
-    if (!this.posterPath) return null
-
-    return new URL(this.posterPath, catalog.config().baseImageUrl).toString()
+  get posterUrls() {
+    return catalog.imageUrls('poster', this.posterPath)
   }
 
   static search = scope((query, params: { name: string }) => {

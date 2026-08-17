@@ -6,6 +6,9 @@ import {
   type ItemType,
   type CatalogProviderConfig,
   type CatalogDriver,
+  type ImageKind,
+  type ImageSize,
+  type ImageUrls,
 } from '#providers/catalog/types'
 
 export class CatalogProviderManager extends CatalogProvider {
@@ -72,5 +75,18 @@ export class CatalogProviderManager extends CatalogProvider {
 
   findEpisode(serieId: string, season: number, episode: number) {
     return this.use().findEpisode(serieId, season, episode)
+  }
+
+  imageUrl(kind: ImageKind, path: string | null, size: ImageSize) {
+    return this.use().imageUrl(kind, path, size)
+  }
+
+  imageUrls(kind: ImageKind, path: string | null): ImageUrls {
+    return {
+      sm: this.imageUrl(kind, path, 'sm'),
+      md: this.imageUrl(kind, path, 'md'),
+      lg: this.imageUrl(kind, path, 'lg'),
+      original: this.imageUrl(kind, path, 'original'),
+    }
   }
 }

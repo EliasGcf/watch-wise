@@ -16,7 +16,7 @@ export default class SerieTransformer extends BaseTransformer<Serie> {
     const progress = await calculateSerieProgress(this.resource, catalogSerie)
 
     return {
-      ...this.pick(this.resource, [...this.resource.$columns, 'bannerUrl', 'posterUrl']),
+      ...this.pick(this.resource, [...this.resource.$columns, 'bannerUrls', 'posterUrls']),
       progress,
       inProduction: catalogSerie?.inProduction ?? true,
       watchedEpisodes: WatchedEpisodeTransformer.transform(

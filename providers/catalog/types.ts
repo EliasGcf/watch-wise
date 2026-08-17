@@ -2,6 +2,12 @@ export type CatalogDriver = 'fake' | 'tmdb'
 
 export type ItemType = 'movie' | 'serie'
 
+export type ImageSize = 'sm' | 'md' | 'lg' | 'original'
+
+export type ImageKind = 'poster' | 'banner'
+
+export type ImageUrls = Record<ImageSize, string | null>
+
 export type CatalogSearchResult = {
   provider: CatalogDriver
   id: string
@@ -9,9 +15,7 @@ export type CatalogSearchResult = {
   releasedAt: string | null
   summary: string | null
   bannerPath: string | null
-  bannerUrl: string | null
   posterPath: string | null
-  posterUrl: string | null
 } & ({ type: 'movie' } | { type: 'serie' })
 
 export type FindResult = {
@@ -21,9 +25,7 @@ export type FindResult = {
   releasedAt: string | null
   summary: string | null
   bannerPath: string | null
-  bannerUrl: string | null
   posterPath: string | null
-  posterUrl: string | null
 } & (
   | { type: 'movie'; duration: number | null }
   | {
@@ -62,6 +64,7 @@ export abstract class CatalogProvider {
   abstract findSerieById(providerId: string): Promise<Serie | null>
   abstract episodes(providerId: string, season: number): Promise<Episode[]>
   abstract findEpisode(serieId: string, season: number, episode: number): Promise<Episode | null>
+  abstract imageUrl(kind: ImageKind, path: string | null, size: ImageSize): string | null
 }
 
 export class CatalogProviderError extends Error {}

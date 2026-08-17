@@ -12,11 +12,17 @@ import type {
   ItemType,
   Movie,
   Serie,
+  ImageKind,
+  ImageSize,
 } from '#providers/catalog/types'
 import { CatalogProviderError } from '#providers/catalog/types'
 
 export default class FakeCatalogProviderDriver implements CatalogProvider {
   constructor(private config: FakeCatalogProviderConfig) {}
+
+  imageUrl(_kind: ImageKind, path: string | null, _size: ImageSize) {
+    return makeImageUrl(this.config.baseImageUrl, path)
+  }
 
   async search(query: string): Promise<CatalogSearchResult[]> {
     if (query === this.config.failureQuery) {
@@ -83,9 +89,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
           type: result.media_type === 'movie' ? 'movie' : 'serie',
           name,
           bannerPath,
-          bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
           posterPath,
-          posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
           releasedAt: result.release_date,
           summary: result.overview,
         },
@@ -119,9 +123,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         type: 'movie',
         name: movie.title,
         bannerPath,
-        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
         posterPath,
-        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
@@ -147,9 +149,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         type: 'movie',
         name: movie.title,
         bannerPath,
-        bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
         posterPath,
-        posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
         releasedAt: movie.release_date,
         duration: movie.runtime,
         summary: movie.overview,
@@ -167,9 +167,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         type: 'serie',
         name: 'Fake Multi Season Series',
         bannerPath: '/series-2.jpg',
-        bannerUrl: makeImageUrl(this.config.baseImageUrl, '/series-2.jpg'),
         posterPath: '/series-2-poster.jpg',
-        posterUrl: makeImageUrl(this.config.baseImageUrl, '/series-2-poster.jpg'),
         releasedAt: '1998-01-01',
         summary: 'A fake multi season series.',
         inProduction: true,
@@ -201,9 +199,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       type: 'serie',
       name: series.name,
       bannerPath,
-      bannerUrl: makeImageUrl(this.config.baseImageUrl, bannerPath),
       posterPath,
-      posterUrl: makeImageUrl(this.config.baseImageUrl, posterPath),
       releasedAt: series.first_air_date,
       summary: series.overview,
       inProduction: series.in_production ?? true,
@@ -424,7 +420,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
   }
 }
 
-function makeImageUrl(baseImageUrl: string, path?: string) {
+function makeImageUrl(baseImageUrl: string, path: string | null) {
   if (!path) return null
 
   return new URL(path.replace(/^\/+/, ''), baseImageUrl).toString()

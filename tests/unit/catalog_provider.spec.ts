@@ -47,7 +47,7 @@ test.group('Catalog provider', (group) => {
     )
 
     const results = await new TmdbCatalogProviderDriver(
-      { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
       tmdb
     ).search('heat')
 
@@ -58,9 +58,7 @@ test.group('Catalog provider', (group) => {
         type: 'movie',
         name: 'Heat',
         bannerPath: '/heat.jpg',
-        bannerUrl: 'https://image.tmdb.org/t/p/original/heat.jpg',
         posterPath: '/heat-poster.jpg',
-        posterUrl: 'https://image.tmdb.org/t/p/original/heat-poster.jpg',
         releasedAt: '1995-12-15',
         summary: 'A professional thief and a relentless detective collide.',
       },
@@ -70,9 +68,7 @@ test.group('Catalog provider', (group) => {
         type: 'serie',
         name: 'Heat Vision and Jack',
         bannerPath: '/heat-vision-backdrop.jpg',
-        bannerUrl: 'https://image.tmdb.org/t/p/original/heat-vision-backdrop.jpg',
         posterPath: '/heat-vision.jpg',
-        posterUrl: 'https://image.tmdb.org/t/p/original/heat-vision.jpg',
         releasedAt: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
       },
@@ -90,7 +86,7 @@ test.group('Catalog provider', (group) => {
     await assert.rejects(
       () =>
         new TmdbCatalogProviderDriver(
-          { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+          { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
           tmdb
         ).search('heat'),
       CatalogProviderError
@@ -109,9 +105,7 @@ test.group('Catalog provider', (group) => {
       type: 'movie',
       name: 'Heat',
       bannerPath: '/movie-1.jpg',
-      bannerUrl: 'https://image.tmdb.org/t/p/original/movie-1.jpg',
       posterPath: '/movie-1-poster.jpg',
-      posterUrl: 'https://image.tmdb.org/t/p/original/movie-1-poster.jpg',
       releasedAt: '1995-12-15',
       duration: 170,
       summary: 'A professional thief and a relentless detective collide.',
@@ -137,7 +131,7 @@ test.group('Catalog provider', (group) => {
 
     assert.deepEqual(
       await new TmdbCatalogProviderDriver(
-        { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
         tmdb
       ).findMovieById('1'),
       {
@@ -146,9 +140,7 @@ test.group('Catalog provider', (group) => {
         type: 'movie',
         name: 'Heat',
         bannerPath: '/heat.jpg',
-        bannerUrl: 'https://image.tmdb.org/t/p/original/heat.jpg',
         posterPath: '/heat-poster.jpg',
-        posterUrl: 'https://image.tmdb.org/t/p/original/heat-poster.jpg',
         releasedAt: '1995-12-15',
         duration: 170,
         summary: 'A professional thief and a relentless detective collide.',
@@ -175,7 +167,7 @@ test.group('Catalog provider', (group) => {
 
     assert.deepEqual(
       await new TmdbCatalogProviderDriver(
-        { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
         tmdb
       ).findSerieById('1'),
       {
@@ -184,9 +176,7 @@ test.group('Catalog provider', (group) => {
         type: 'serie',
         name: 'Heat Vision and Jack',
         bannerPath: '/heat-vision-backdrop.jpg',
-        bannerUrl: 'https://image.tmdb.org/t/p/original/heat-vision-backdrop.jpg',
         posterPath: '/heat-vision.jpg',
-        posterUrl: 'https://image.tmdb.org/t/p/original/heat-vision.jpg',
         releasedAt: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
         inProduction: false,
@@ -223,7 +213,7 @@ test.group('Catalog provider', (group) => {
 
     assert.deepEqual(
       await new TmdbCatalogProviderDriver(
-        { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
         tmdb
       ).findSerieById('1'),
       {
@@ -232,9 +222,7 @@ test.group('Catalog provider', (group) => {
         type: 'serie',
         name: 'Heat Vision and Jack',
         bannerPath: '/heat-vision-backdrop.jpg',
-        bannerUrl: 'https://image.tmdb.org/t/p/original/heat-vision-backdrop.jpg',
         posterPath: '/heat-vision.jpg',
-        posterUrl: 'https://image.tmdb.org/t/p/original/heat-vision.jpg',
         releasedAt: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
         inProduction: true,
@@ -275,7 +263,7 @@ test.group('Catalog provider', (group) => {
       }),
     })
     const driver = new TmdbCatalogProviderDriver(
-      { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
       tmdb
     )
 
@@ -309,7 +297,7 @@ test.group('Catalog provider', (group) => {
       }),
     })
     const driver = new TmdbCatalogProviderDriver(
-      { baseImageUrl: 'https://image.tmdb.org/t/p/original/', accessToken: 'test-token' },
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
       tmdb
     )
 
@@ -318,6 +306,56 @@ test.group('Catalog provider', (group) => {
 
     assert.equal(calls, 2)
     config.set('cache.enabled', true)
+  })
+
+  test('builds TMDB image URLs at each size per image kind', async ({ assert }) => {
+    const driver = new TmdbCatalogProviderDriver({
+      baseImageUrl: 'https://image.tmdb.org/t/p/',
+      accessToken: 'test-token',
+    })
+
+    assert.equal(
+      driver.imageUrl('poster', '/xyz.jpg', 'sm'),
+      'https://image.tmdb.org/t/p/w342/xyz.jpg'
+    )
+    assert.equal(
+      driver.imageUrl('poster', '/xyz.jpg', 'md'),
+      'https://image.tmdb.org/t/p/w500/xyz.jpg'
+    )
+    assert.equal(
+      driver.imageUrl('poster', '/xyz.jpg', 'lg'),
+      'https://image.tmdb.org/t/p/w780/xyz.jpg'
+    )
+    assert.equal(
+      driver.imageUrl('poster', '/xyz.jpg', 'original'),
+      'https://image.tmdb.org/t/p/original/xyz.jpg'
+    )
+    assert.equal(
+      driver.imageUrl('banner', '/xyz.jpg', 'sm'),
+      'https://image.tmdb.org/t/p/w300/xyz.jpg'
+    )
+    assert.equal(
+      driver.imageUrl('banner', '/xyz.jpg', 'lg'),
+      'https://image.tmdb.org/t/p/w1280/xyz.jpg'
+    )
+    assert.isNull(driver.imageUrl('poster', null, 'sm'))
+  })
+
+  test('fake driver builds image URLs from its base URL at every size', async ({ assert }) => {
+    const driver = new FakeCatalogProviderDriver({
+      baseImageUrl: 'https://image.tmdb.org/t/p/original/',
+      failureQuery: 'fail',
+    })
+
+    assert.equal(
+      driver.imageUrl('poster', '/xyz.jpg', 'sm'),
+      'https://image.tmdb.org/t/p/original/xyz.jpg'
+    )
+    assert.equal(
+      driver.imageUrl('banner', '/xyz.jpg', 'original'),
+      'https://image.tmdb.org/t/p/original/xyz.jpg'
+    )
+    assert.isNull(driver.imageUrl('poster', null, 'lg'))
   })
 })
 
