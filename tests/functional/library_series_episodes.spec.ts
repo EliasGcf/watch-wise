@@ -1079,4 +1079,31 @@ test.group('Library series episodes', (group) => {
       0
     )
   })
+
+  test('episode release date is displayed without timezone shift', async ({
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Date Display',
+      email: 'date-display@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await browserContext.loginAs(user)
+    const detailsPage = await visit(`/app/library/series/${serie.id}`)
+
+    await detailsPage.getByRole('button', { name: 'Season 1' }).click()
+    await detailsPage.assertTextContains('body', 'Jan 1, 1999')
+  })
 })

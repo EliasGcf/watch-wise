@@ -720,9 +720,10 @@ function EpisodeRow({
 }
 
 function formatDate(value: string) {
+  const date = value.includes('T') ? value : `${value}T00:00:00`
   return new Intl.DateTimeFormat(undefined, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-  }).format(new Date(value))
+  }).format(new Date(date))
 }
