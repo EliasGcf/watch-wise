@@ -23,7 +23,7 @@ The code is licensed under MIT, and you are welcome to read it, fork it, clone i
 
 ## Requirements
 
-- Bun 1.3.14
+- Bun 1.4.0
 - SQLite support through the installed `sqlite3` package
 - A TMDB access token only when using `CATALOG_PROVIDER_DRIVER=tmdb`
 

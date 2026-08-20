@@ -1,6 +1,6 @@
 # use the official Bun image
 # see all versions at https://hub.docker.com/r/oven/bun/tags
-FROM oven/bun:1.3.14-alpine AS dev-deps
+FROM oven/bun:1.4.0-alpine AS dev-deps
 WORKDIR /usr/src/app
 
 COPY package.json bun.lock bunfig.toml ./
@@ -15,13 +15,13 @@ RUN bun run vite:build \
   && mkdir -p data \
   && rm -rf build node_modules
 
-FROM oven/bun:1.3.14-alpine AS prod-deps
+FROM oven/bun:1.4.0-alpine AS prod-deps
 WORKDIR /usr/src/app
 
 COPY package.json bun.lock bunfig.toml ./
 RUN bun install --frozen-lockfile --production && bun pm cache rm
 
-FROM oven/bun:1.3.14-alpine AS release
+FROM oven/bun:1.4.0-alpine AS release
 WORKDIR /usr/src/app
 
 ENV NODE_ENV=production
