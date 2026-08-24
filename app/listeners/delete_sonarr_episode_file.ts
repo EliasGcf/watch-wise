@@ -9,7 +9,7 @@ type Event = InstanceType<typeof events.EpisodeWatched>
 export default class DeleteSonarrEpisodeFile {
   handle(event: Event) {
     if (event.$trx) {
-      event.$trx.after('commit', () => this.deleteEpisodeFile(event))
+      event.$trx.after('commit', () => void this.deleteEpisodeFile(event))
       return
     }
 
