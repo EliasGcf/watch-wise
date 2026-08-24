@@ -1,5 +1,5 @@
 import { catalog } from '#services/catalog_provider'
-import { loadLibraryListing, loadSeriesListing } from '#services/library_listing'
+import { loadLibraryListing } from '#services/library_listing'
 import MovieTransformer from '#transformers/movie_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
 import { libraryQueryValidator } from '#validators/library'
@@ -24,13 +24,6 @@ export default class LibraryController {
       seriesCount,
       moviesCount,
     })
-  }
-
-  async seriesIndex({ auth, request, serialize }: HttpContext) {
-    const { q } = await request.validateUsing(libraryQueryValidator)
-    const { query, loadedAt, series } = await loadSeriesListing(auth.user!, q ?? '')
-
-    return serialize({ query, loadedAt, series: SerieTransformer.transform(series) })
   }
 
   async store({ auth, request, response }: HttpContext) {

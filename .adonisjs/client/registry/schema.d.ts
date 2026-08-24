@@ -195,8 +195,8 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: ExtractQueryForGet<InferInput<(typeof import('#validators/library').libraryQueryValidator)>>
-      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesIndex']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesIndex']>>> | { status: 422; response: { errors: SimpleError[] } }
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'api.library.index': {

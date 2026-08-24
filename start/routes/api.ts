@@ -53,7 +53,7 @@ const group = router.group(() => {
         ])
         .as('library.series.episodes.unwatch')
       router
-        .get('library/series', [controllers.api.Library, 'seriesIndex'])
+        .get('library/series', [controllers.api.Series, 'index'])
         .use(middleware.auth())
         .as('library.series.index')
       router

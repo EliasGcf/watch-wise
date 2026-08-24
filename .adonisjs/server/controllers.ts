@@ -8,6 +8,7 @@ export const controllers = {
     Cache: () => import('#controllers/api/cache_controller'),
     Library: () => import('#controllers/api/library_controller'),
     Movies: () => import('#controllers/api/movies_controller'),
+    Series: () => import('#controllers/api/series_controller'),
     series: {
       Episodes: () => import('#controllers/api/series/episodes_controller'),
       Seasons: () => import('#controllers/api/series/seasons_controller'),
