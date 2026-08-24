@@ -9,11 +9,11 @@ type Event = InstanceType<typeof events.MovieWatched>
 export default class DeleteRadarrMovieFile {
   async handle(event: Event) {
     if (event.$trx) {
-      event.$trx.after('commit', () => this.deleteMovieFile(event))
+      event.$trx.after('commit', () => void this.deleteMovieFile(event))
       return
     }
 
-    await this.deleteMovieFile(event)
+    void this.deleteMovieFile(event)
   }
 
   async deleteMovieFile(event: Event) {

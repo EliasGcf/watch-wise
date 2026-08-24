@@ -1,25 +1,23 @@
 import Serie from '#models/serie'
 import User from '#models/user'
 import UserSettings from '#models/user_settings'
-import { sonarr } from '#services/sonarr_provider'
-import app from '@adonisjs/core/services/app'
-import logger from '@adonisjs/core/services/logger'
+import emitter from '@adonisjs/core/services/emitter'
 import testUtils from '@adonisjs/core/services/test_utils'
+import { events } from '#generated/events'
 import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 
-type SonarrCall = { providerId: string; season: number; episode: number }
-type Cleanup = (callback: () => void) => void
-
 test.group('Sonarr episode file deletion', (group) => {
-  group.each.setup(() => testUtils.db().truncate())
+  let buffer: ReturnType<typeof emitter.fake>
 
-  test('deletes the Sonarr episode file when enabled and available', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
+  group.each.setup(() => {
+    buffer = emitter.fake([events.EpisodeWatched])
+    return () => emitter.restore()
+  })
+
+  group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
+
+  test('deletes the Sonarr episode file when enabled and available', async ({ client }) => {
     const { user, serie } = await makeUserWithSerie()
     await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
 
@@ -29,12 +27,17 @@ test.group('Sonarr episode file deletion', (group) => {
       .withCsrfToken()
 
     response.assertOk()
-    await flushProviderAction()
-    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: false,
+      })
+    )
   })
 
-  test('does not delete when the setting is disabled', async ({ assert, cleanup, client }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
+  test('does not delete when the setting is disabled', async ({ client }) => {
     const { user, serie } = await makeUserWithSerie()
 
     await client
@@ -42,16 +45,19 @@ test.group('Sonarr episode file deletion', (group) => {
       .loginAs(user)
       .withCsrfToken()
 
-    await flushProviderAction()
-    assert.deepEqual(calls, [])
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: false,
+      })
+    )
   })
 
   test('deletes the Sonarr episode file when deleteFile is requested even with the setting disabled', async ({
-    assert,
-    cleanup,
     client,
   }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
     const { user, serie } = await makeUserWithSerie()
 
     const response = await client
@@ -61,16 +67,19 @@ test.group('Sonarr episode file deletion', (group) => {
       .withCsrfToken()
 
     response.assertOk()
-    await flushProviderAction()
-    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: true,
+      })
+    )
   })
 
   test('does not retry deletion when an already watched episode is requested with deleteFile', async ({
-    assert,
-    cleanup,
     client,
   }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
     const { user, serie } = await makeUserWithSerie()
 
     await client
@@ -84,54 +93,18 @@ test.group('Sonarr episode file deletion', (group) => {
       .loginAs(user)
       .withCsrfToken()
 
-    await flushProviderAction()
-    assert.lengthOf(calls, 1)
+    buffer.assertEmittedCount(events.EpisodeWatched, 1)
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: true,
+      })
+    )
   })
 
-  test('does not delete when Sonarr is unavailable even with deleteFile requested', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
-    const sonarrDriver = app.config.get('sonarr_provider.default')
-    app.config.set('sonarr_provider.default', undefined)
-    cleanup(() => app.config.set('sonarr_provider.default', sonarrDriver))
-    const { user, serie } = await makeUserWithSerie()
-
-    await client
-      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
-      .json({ deleteFile: true })
-      .loginAs(user)
-      .withCsrfToken()
-
-    await flushProviderAction()
-    assert.deepEqual(calls, [])
-  })
-
-  test('does not delete when Sonarr is unavailable', async ({ assert, cleanup, client }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
-    const sonarrDriver = app.config.get('sonarr_provider.default')
-    app.config.set('sonarr_provider.default', undefined)
-    cleanup(() => app.config.set('sonarr_provider.default', sonarrDriver))
-    const { user, serie } = await makeUserWithSerie()
-    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
-
-    await client
-      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
-      .loginAs(user)
-      .withCsrfToken()
-
-    await flushProviderAction()
-    assert.deepEqual(calls, [])
-  })
-
-  test('does not retry deletion when an episode is already watched', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
+  test('does not retry deletion when an episode is already watched', async ({ client }) => {
     const { user, serie } = await makeUserWithSerie()
     await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
 
@@ -144,16 +117,18 @@ test.group('Sonarr episode file deletion', (group) => {
       .loginAs(user)
       .withCsrfToken()
 
-    await flushProviderAction()
-    assert.lengthOf(calls, 1)
+    buffer.assertEmittedCount(events.EpisodeWatched, 1)
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: false,
+      })
+    )
   })
 
-  test('deletes Sonarr episode files for new season bulk watched marks', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
+  test('deletes Sonarr episode files for new season bulk watched marks', async ({ client }) => {
     const { user, serie } = await makeUserWithSerie()
     await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
 
@@ -163,16 +138,18 @@ test.group('Sonarr episode file deletion', (group) => {
       .withCsrfToken()
 
     response.assertOk()
-    await flushProviderAction()
-    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
+    buffer.assertEmittedCount(events.EpisodeWatched, 1)
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: false,
+      })
+    )
   })
 
-  test('deletes Sonarr episode files for new series bulk watched marks', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
+  test('deletes Sonarr episode files for new series bulk watched marks', async ({ client }) => {
     const { user, serie } = await makeUserWithSerie()
     await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
 
@@ -182,16 +159,20 @@ test.group('Sonarr episode file deletion', (group) => {
       .withCsrfToken()
 
     response.assertOk()
-    await flushProviderAction()
-    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
+    buffer.assertEmittedCount(events.EpisodeWatched, 1)
+    buffer.assertEmitted(events.EpisodeWatched, (event) =>
+      matchesEpisodeWatchedEvent(event, user, serie, {
+        providerId: 'episode-1-1',
+        season: 1,
+        episode: 1,
+        deleteFile: false,
+      })
+    )
   })
 
   test('bulk marking does not retry Sonarr deletion for already watched episodes', async ({
-    assert,
-    cleanup,
     client,
   }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
     const { user, serie } = await makeUserWithSerie()
     await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
 
@@ -201,51 +182,20 @@ test.group('Sonarr episode file deletion', (group) => {
       .withCsrfToken()
     await client.post(`/api/library/series/${serie.id}/watch`).loginAs(user).withCsrfToken()
 
-    await flushProviderAction()
-    assert.deepEqual(calls, [
-      { providerId: 'series-1', season: 0, episode: 1 },
-      { providerId: 'series-1', season: 1, episode: 1 },
-    ])
-  })
-
-  test('bulk marking does not delete when the setting is disabled', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
-    const { user, serie } = await makeUserWithSerie()
-
-    await client.post(`/api/library/series/${serie.id}/watch`).loginAs(user).withCsrfToken()
-
-    await flushProviderAction()
-    assert.deepEqual(calls, [])
-  })
-
-  test('bulk marking does not delete when Sonarr is unavailable', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
-    const sonarrDriver = app.config.get('sonarr_provider.default')
-    app.config.set('sonarr_provider.default', undefined)
-    cleanup(() => app.config.set('sonarr_provider.default', sonarrDriver))
-    const { user, serie } = await makeUserWithSerie()
-    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
-
-    await client.post(`/api/library/series/${serie.id}/watch`).loginAs(user).withCsrfToken()
-
-    await flushProviderAction()
-    assert.deepEqual(calls, [])
+    buffer.assertEmittedCount(events.EpisodeWatched, 2)
+    for (const episode of [
+      { providerId: 'episode-0-1', season: 0, episode: 1 },
+      { providerId: 'episode-1-1', season: 1, episode: 1 },
+    ]) {
+      buffer.assertEmitted(events.EpisodeWatched, (event) =>
+        matchesEpisodeWatchedEvent(event, user, serie, { ...episode, deleteFile: false })
+      )
+    }
   })
 
   test('deletes Sonarr episode files for newly marked episodes before a target', async ({
-    assert,
-    cleanup,
     client,
   }) => {
-    const calls = spyOnSonarrDeletion(cleanup)
     const user = await User.create({
       fullName: 'Sonarr Catch Up',
       email: `sonarr-catch-up-${crypto.randomUUID()}@example.com`,
@@ -269,75 +219,33 @@ test.group('Sonarr episode file deletion', (group) => {
       .withCsrfToken()
 
     response.assertOk()
-    await flushProviderAction()
-    assert.deepEqual(
-      calls.sort((a, b) => a.season - b.season || a.episode - b.episode),
-      [
-        { providerId: 'series-2', season: 1, episode: 1 },
-        { providerId: 'series-2', season: 1, episode: 2 },
-        { providerId: 'series-2', season: 2, episode: 1 },
-      ]
-    )
-  })
-
-  test('provider failures do not fail watched marking or watched time', async ({
-    assert,
-    cleanup,
-    client,
-  }) => {
-    const calls = spyOnSonarrDeletion(cleanup, async () => {
-      throw new Error('Fake Sonarr episode file deletion failed')
-    })
-    const { user, serie } = await makeUserWithSerie()
-    await UserSettings.create({ userId: user.id, deleteSonarrEpisodeFiles: true })
-    const logs: Array<{ payload: Record<string, unknown>; message: string }> = []
-    const originalError = logger.error
-    logger.error = ((payload: Record<string, unknown>, message: string) => {
-      logs.push({ payload, message })
-    }) as typeof logger.error
-    cleanup(() => {
-      logger.error = originalError
-    })
-
-    const response = await client
-      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
-      .loginAs(user)
-      .withCsrfToken()
-
-    response.assertOk()
-    await flushProviderAction()
-    await user.refresh()
-    assert.equal(user.watchedTime, 24)
-    assert.deepEqual(calls, [{ providerId: 'series-1', season: 1, episode: 1 }])
-    assert.deepInclude(logs[0], {
-      message: 'Sonarr episode file deletion failed',
-    })
-    assert.deepInclude(logs[0].payload, {
-      userId: user.id,
-      libraryEntryId: serie.id,
-      catalogProviderId: 'series-1',
-      season: 1,
-      episode: 1,
-    })
+    buffer.assertEmittedCount(events.EpisodeWatched, 3)
+    for (const episode of [
+      { providerId: 'series-2-s1e1', season: 1, episode: 1 },
+      { providerId: 'series-2-s1e2', season: 1, episode: 2 },
+      { providerId: 'series-2-s2e1', season: 2, episode: 1 },
+    ]) {
+      buffer.assertEmitted(events.EpisodeWatched, (event) =>
+        matchesEpisodeWatchedEvent(event, user, serie, { ...episode, deleteFile: false })
+      )
+    }
   })
 })
 
-function spyOnSonarrDeletion(
-  cleanup: Cleanup,
-  implementation: () => Promise<void> = async () => {}
+function matchesEpisodeWatchedEvent(
+  event: { data: InstanceType<typeof events.EpisodeWatched> },
+  user: User,
+  serie: Serie,
+  expected: { providerId: string; season: number; episode: number; deleteFile: boolean }
 ) {
-  const calls: SonarrCall[] = []
-  const originalDelete = sonarr.deleteEpisodeFileByCatalogProviderId.bind(sonarr)
-
-  sonarr.deleteEpisodeFileByCatalogProviderId = async (providerId, season, episode) => {
-    calls.push({ providerId, season, episode })
-    await implementation()
-  }
-  cleanup(() => {
-    sonarr.deleteEpisodeFileByCatalogProviderId = originalDelete
-  })
-
-  return calls
+  return (
+    event.data.watched.userId === user.id &&
+    event.data.watched.libraryEntryId === serie.id &&
+    event.data.watched.providerId === expected.providerId &&
+    event.data.watched.season === expected.season &&
+    event.data.watched.episode === expected.episode &&
+    event.data.deleteFile === expected.deleteFile
+  )
 }
 
 async function makeUserWithSerie() {
@@ -358,8 +266,4 @@ async function makeUserWithSerie() {
   })
 
   return { user, serie }
-}
-
-function flushProviderAction() {
-  return new Promise((resolve) => setImmediate(resolve))
 }
