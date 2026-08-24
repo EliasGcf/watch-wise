@@ -22,7 +22,9 @@ export interface ApiDefinition {
           watch: typeof routes['api.library.series.episodes.watch']
           unwatch: typeof routes['api.library.series.episodes.unwatch']
         }
+        index: typeof routes['api.library.series.index']
       }
+      index: typeof routes['api.library.index']
     }
     user: {
       update: typeof routes['api.user.update']

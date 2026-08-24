@@ -80,6 +80,7 @@ test.group('Library movie watched records', (group) => {
   test('re-marking a movie preserves a single movie watched record', async ({
     assert,
     browserContext,
+    client,
     visit,
   }) => {
     const user = await User.create({
@@ -99,16 +100,14 @@ test.group('Library movie watched records', (group) => {
     })
     await browserContext.loginAs(user)
 
-    const firstPage = await visit('/app/library')
-    const duplicatePage = await visit('/app/library')
-    await firstPage.getByRole('checkbox', { name: 'Mark Heat as watched' }).click()
-    await duplicatePage.getByRole('checkbox', { name: 'Mark Heat as watched' }).click()
+    await client.post(`/api/library/movies/${movie.id}/watch`).loginAs(user).withCsrfToken()
+    await client.post(`/api/library/movies/${movie.id}/watch`).loginAs(user).withCsrfToken()
 
     await movie
       .merge({ name: 'Changed Heat', bannerPath: '', posterPath: '', summary: null })
       .save()
 
-    const secondPage = await visit('/app/library')
+    const secondPage = await visit('/app/library?q=changed')
     await secondPage.assertExists(
       secondPage.getByRole('checkbox', { name: 'Unmark Changed Heat as watched' })
     )

@@ -306,6 +306,78 @@ test.group('Library entries', (group) => {
     assert.equal(page.seriesCount, 8)
   })
 
+  test('main library api scopes searched results, limits summaries, and returns counts', async ({
+    assert,
+    client,
+  }) => {
+    const user = await User.create({
+      fullName: 'API Library Viewer',
+      email: 'api-library-viewer@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other API Library Viewer',
+      email: 'other-api-library-viewer@example.com',
+      password: 'secret123',
+    })
+
+    for (let index = 1; index <= 7; index++) {
+      await Movie.create({
+        userId: user.id,
+        provider: 'tmdb',
+        providerId: `movie-${index}`,
+        name: `Heat Movie ${index}`,
+        bannerPath: `/movie-${index}.jpg`,
+        posterPath: `/movie-${index}-poster.jpg`,
+        releasedAt: DateTime.fromISO('1995-12-15'),
+        summary: null,
+      })
+      await Serie.create({
+        userId: user.id,
+        provider: `tmdb-${index}`,
+        providerId: 'series-1',
+        name: `Heat Series ${index}`,
+        bannerPath: `/series-${index}.jpg`,
+        posterPath: `/series-${index}-poster.jpg`,
+        releasedAt: DateTime.fromISO('1999-01-01'),
+        summary: null,
+      })
+    }
+    await Movie.create({
+      userId: otherUser.id,
+      provider: 'tmdb',
+      providerId: 'other-movie',
+      name: 'Heat Movie Other User',
+      bannerPath: '/other-movie.jpg',
+      posterPath: '/other-movie-poster.jpg',
+      releasedAt: DateTime.fromISO('1995-12-15'),
+      summary: null,
+    })
+
+    const response = await client.get('/api/library?q=%20heat%20').loginAs(user)
+    response.assertOk()
+    const { data } = response.body()
+    assert.equal(data.query, 'heat')
+    assert.lengthOf(data.movies, 6)
+    assert.lengthOf(data.series, 6)
+    assert.equal(data.moviesCount, 7)
+    assert.equal(data.seriesCount, 7)
+    assert.equal(data.movies[0].watched, null)
+    const serie = data.series[0]
+
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const refreshed = await client.get('/api/library?q=heat').loginAs(user)
+    refreshed.assertOk()
+    assert.equal(
+      refreshed.body().data.series.find((item: { id: number }) => item.id === serie.id).progress,
+      100
+    )
+  })
+
   test('authenticated users can search their dedicated movie library page', async ({
     assert,
     client,

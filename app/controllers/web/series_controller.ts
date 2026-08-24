@@ -1,17 +1,16 @@
 import SerieTransformer from '#transformers/serie_transformer'
+import { loadSeriesListing } from '#services/library_listing'
+import { libraryQueryValidator } from '#validators/library'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SeriesController {
   async index({ auth, inertia, request }: HttpContext) {
-    const query = String(request.input('q', '')).trim()
-
-    const series = await auth
-      .user!.related('series')
-      .query()
-      .apply((scopes) => scopes.search({ name: query }))
+    const { q } = await request.validateUsing(libraryQueryValidator)
+    const { query, loadedAt, series } = await loadSeriesListing(auth.user!, q ?? '')
 
     return inertia.render('library/series/index', {
       query,
+      loadedAt,
       series: SerieTransformer.transform(series),
     })
   }

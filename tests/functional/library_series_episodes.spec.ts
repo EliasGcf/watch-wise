@@ -36,16 +36,155 @@ test.group('Library series episodes', (group) => {
     await detailsPage.assertTextContains('body', 'Season 1')
   })
 
-  test('series listing api is not exposed', async ({ client }) => {
+  test('series listing api scopes searched serialized progress to the authenticated user', async ({
+    assert,
+    client,
+  }) => {
     const user = await User.create({
       fullName: 'Progress Viewer',
       email: 'progress-viewer@example.com',
       password: 'secret123',
     })
+    const otherUser = await User.create({
+      fullName: 'Other Progress Viewer',
+      email: 'other-progress-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+    await Serie.create({
+      userId: otherUser.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
 
-    const response = await client.get('/api/library/series').loginAs(user)
+    const response = await client.get('/api/library/series?q=%20heat%20').loginAs(user)
+    response.assertOk()
+    assert.equal(response.body().data.query, 'heat')
+    assert.deepEqual(
+      response.body().data.series.map((item: { id: number }) => item.id),
+      [serie.id]
+    )
+    assert.equal(response.body().data.series[0].progress, 0)
 
-    response.assertNotFound()
+    await client
+      .post(`/api/library/series/${serie.id}/seasons/1/episodes/1/watch`)
+      .loginAs(user)
+      .withCsrfToken()
+
+    const refreshed = await client.get('/api/library/series?q=heat').loginAs(user)
+    refreshed.assertOk()
+    assert.equal(refreshed.body().data.series[0].progress, 100)
+  })
+
+  test('browser history refreshes progress on the main library page', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Main Library History',
+      email: 'main-library-history@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await browserContext.loginAs(user)
+    const page = await visit('/app/library?q=heat')
+    const progress = page.getByRole('progressbar', { name: 'Heat Vision and Jack progress' })
+    assert.equal(await progress.getAttribute('aria-valuenow'), '0')
+
+    await page.getByRole('link', { name: 'Heat Vision and Jack' }).click()
+    await page.getByText('Season 1').click()
+    const marked = page.waitForResponse(
+      `**/api/library/series/${serie.id}/seasons/1/episodes/1/watch`
+    )
+    await page.getByRole('checkbox', { name: 'Mark Pilot as watched' }).click()
+    await marked
+
+    await page.goBack()
+    await page.assertPath('/app/library')
+    assert.equal(new URL(page.url()).search, '?q=heat')
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('[aria-label="Heat Vision and Jack progress"]')
+          ?.getAttribute('aria-valuenow') === '100'
+    )
+    assert.equal(await progress.getAttribute('aria-valuenow'), '100')
+  })
+
+  test('browser history refreshes progress on the series library page', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Series Library History',
+      email: 'series-library-history@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await browserContext.loginAs(user)
+    const page = await visit('/app/library/series?q=heat')
+    const progress = page.getByRole('progressbar', { name: 'Heat Vision and Jack progress' })
+    assert.equal(await progress.getAttribute('aria-valuenow'), '0')
+
+    await page.getByRole('link', { name: 'Heat Vision and Jack' }).click()
+    await page.getByText('Season 1').click()
+    const marked = page.waitForResponse(
+      `**/api/library/series/${serie.id}/seasons/1/episodes/1/watch`
+    )
+    await page.getByRole('checkbox', { name: 'Mark Pilot as watched' }).click()
+    await marked
+
+    await page.goBack()
+    await page.assertPath('/app/library/series')
+    assert.equal(new URL(page.url()).search, '?q=heat')
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('[aria-label="Heat Vision and Jack progress"]')
+          ?.getAttribute('aria-valuenow') === '100'
+    )
+    assert.equal(await progress.getAttribute('aria-valuenow'), '100')
+
+    await page.getByRole('link', { name: 'Heat Vision and Jack' }).click()
+    await page.getByRole('button', { name: 'Back to library' }).click()
+    await page.assertPath('/app/library/series')
+    assert.equal(new URL(page.url()).search, '?q=heat')
   })
 
   test('authenticated users load provider-sourced episodes for a single season', async ({

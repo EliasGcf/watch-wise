@@ -2,6 +2,7 @@ import { router } from '@inertiajs/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { api } from '~/client'
+import { invalidateLibraryQueries } from './use_library_queries'
 
 export function useRemoveLibraryEntryMutation(onSuccess?: () => void | Promise<void>) {
   const queryClient = useQueryClient()
@@ -15,7 +16,7 @@ export function useRemoveLibraryEntryMutation(onSuccess?: () => void | Promise<v
         } else {
           await new Promise<void>((resolve) => router.reload({ onFinish: () => resolve() }))
         }
-        await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
+        await invalidateLibraryQueries(queryClient)
       },
       onError: () => toast.error('Title could not be removed from your library.'),
     })

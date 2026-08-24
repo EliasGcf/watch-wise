@@ -187,6 +187,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/series/episodes_controller').default['unwatch']>>>
     }
   }
+  'api.library.series.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/library/series'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/library').libraryQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesIndex']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['seriesIndex']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'api.library.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/library'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/library').libraryQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/library_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'api.webhooks.seerr': {
     methods: ["POST"]
     pattern: '/api/webhooks/seerr'
@@ -290,9 +314,9 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/library').libraryQueryValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/library_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'app.library.movies.index': {
@@ -314,9 +338,9 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/library').libraryQueryValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'app.library.series.show': {

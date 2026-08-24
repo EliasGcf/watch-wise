@@ -1,10 +1,38 @@
 import { catalog } from '#services/catalog_provider'
+import { loadLibraryListing, loadSeriesListing } from '#services/library_listing'
+import MovieTransformer from '#transformers/movie_transformer'
+import SerieTransformer from '#transformers/serie_transformer'
+import { libraryQueryValidator } from '#validators/library'
 import { addLibraryEntryValidator } from '#validators/library_entry'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 import { DateTime } from 'luxon'
 
 export default class LibraryController {
+  async index({ auth, request, serialize }: HttpContext) {
+    const { q } = await request.validateUsing(libraryQueryValidator)
+    const { query, loadedAt, series, movies, seriesCount, moviesCount } = await loadLibraryListing(
+      auth.user!,
+      q ?? ''
+    )
+
+    return serialize({
+      query,
+      loadedAt,
+      series: SerieTransformer.transform(series),
+      movies: MovieTransformer.transform(movies),
+      seriesCount,
+      moviesCount,
+    })
+  }
+
+  async seriesIndex({ auth, request, serialize }: HttpContext) {
+    const { q } = await request.validateUsing(libraryQueryValidator)
+    const { query, loadedAt, series } = await loadSeriesListing(auth.user!, q ?? '')
+
+    return serialize({ query, loadedAt, series: SerieTransformer.transform(series) })
+  }
+
   async store({ auth, request, response }: HttpContext) {
     const payload = await request.validateUsing(addLibraryEntryValidator)
     const user = auth.user!

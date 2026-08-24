@@ -96,6 +96,18 @@ const routes = {
     tokens: [{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"api","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"library","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"series","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"id","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"seasons","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"season","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"episodes","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":1,"val":"episode","end":""},{"old":"/api/library/series/:id/seasons/:season/episodes/:episode/watch","type":0,"val":"watch","end":""}],
     types: placeholder as Registry['api.library.series.episodes.unwatch']['types'],
   },
+  'api.library.series.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/library/series',
+    tokens: [{"old":"/api/library/series","type":0,"val":"api","end":""},{"old":"/api/library/series","type":0,"val":"library","end":""},{"old":"/api/library/series","type":0,"val":"series","end":""}],
+    types: placeholder as Registry['api.library.series.index']['types'],
+  },
+  'api.library.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/library',
+    tokens: [{"old":"/api/library","type":0,"val":"api","end":""},{"old":"/api/library","type":0,"val":"library","end":""}],
+    types: placeholder as Registry['api.library.index']['types'],
+  },
   'api.webhooks.seerr': {
     methods: ["POST"],
     pattern: '/api/webhooks/seerr',

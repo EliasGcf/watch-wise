@@ -1,42 +1,24 @@
 import MovieTransformer from '#transformers/movie_transformer'
 import SerieTransformer from '#transformers/serie_transformer'
+import { loadLibraryListing } from '#services/library_listing'
+import { libraryQueryValidator } from '#validators/library'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LibraryController {
   async index({ inertia, auth, request }: HttpContext) {
-    const query = String(request.input('q', '')).trim()
-    const user = auth.user!
-
-    const [series, movies, [seriesCount], [moviesCount]] = await Promise.all([
-      user
-        .related('series')
-        .query()
-        .apply((scopes) => scopes.search({ name: query }))
-        .limit(6),
-      user
-        .related('movies')
-        .query()
-        .apply((scopes) => scopes.search({ name: query }))
-        .preload('watched')
-        .limit(6),
-      user
-        .related('series')
-        .query()
-        .apply((scopes) => scopes.search({ name: query }))
-        .count('* as total'),
-      user
-        .related('movies')
-        .query()
-        .apply((scopes) => scopes.search({ name: query }))
-        .count('* as total'),
-    ])
+    const { q } = await request.validateUsing(libraryQueryValidator)
+    const { query, loadedAt, series, movies, seriesCount, moviesCount } = await loadLibraryListing(
+      auth.user!,
+      q ?? ''
+    )
 
     return inertia.render('library/index', {
       query,
+      loadedAt,
       series: SerieTransformer.transform(series),
       movies: MovieTransformer.transform(movies),
-      seriesCount: Number(seriesCount.$extras.total),
-      moviesCount: Number(moviesCount.$extras.total),
+      seriesCount,
+      moviesCount,
     })
   }
 }

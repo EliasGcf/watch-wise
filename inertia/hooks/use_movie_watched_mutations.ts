@@ -2,10 +2,11 @@ import { router } from '@inertiajs/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { api } from '~/client'
+import { invalidateLibraryQueries } from './use_library_queries'
 
 async function refreshLibrary(queryClient: ReturnType<typeof useQueryClient>) {
   await new Promise<void>((resolve) => router.reload({ onFinish: () => resolve() }))
-  await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
+  await invalidateLibraryQueries(queryClient)
 }
 
 export function useWatchMovieMutation() {

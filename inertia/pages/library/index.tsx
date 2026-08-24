@@ -8,6 +8,7 @@ import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
 import { ItemGrid } from '~/components/item_card'
+import { useLibraryQuery } from '~/hooks/use_library_queries'
 
 type Movie = Data.Movie
 type Serie = Data.Serie
@@ -18,10 +19,22 @@ type Props = InertiaProps & {
   movies: Movie[]
   seriesCount: number
   moviesCount: number
+  loadedAt: number
 }
 
-export default function LibraryIndex({ query, series, movies, seriesCount, moviesCount }: Props) {
-  const isSearching = query.length > 0
+export default function LibraryIndex({
+  query,
+  series,
+  movies,
+  seriesCount,
+  moviesCount,
+  loadedAt,
+}: Props) {
+  const {
+    data: response = { data: { query, series, movies, seriesCount, moviesCount, loadedAt } },
+  } = useLibraryQuery(query, series, movies, seriesCount, moviesCount, loadedAt)
+  const data = response.data
+  const isSearching = data.query.length > 0
 
   return (
     <div className="flex flex-col gap-8">
@@ -53,8 +66,8 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
 
       <LibrarySection
         title="Movies"
-        entries={movies}
-        count={moviesCount}
+        entries={data.movies}
+        count={data.moviesCount}
         route="app.library.movies.index"
         emptyMessage={
           isSearching ? 'No movies match your search.' : 'No movies in your library yet.'
@@ -62,8 +75,8 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
       />
       <LibrarySection
         title="Series"
-        entries={series}
-        count={seriesCount}
+        entries={data.series}
+        count={data.seriesCount}
         route="app.library.series.index"
         emptyMessage={
           isSearching ? 'No series match your search.' : 'No series in your library yet.'

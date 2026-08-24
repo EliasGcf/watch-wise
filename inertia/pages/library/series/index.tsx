@@ -7,14 +7,22 @@ import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
 import { ItemGrid } from '~/components/item_card'
+import { useSeriesLibraryQuery } from '~/hooks/use_library_queries'
 
 type Props = InertiaProps & {
   query: string
+  loadedAt: number
   series: Data.Serie[]
 }
 
-export default function LibrarySeries({ query, series }: Props) {
-  const isSearching = query.length > 0
+export default function LibrarySeries({ query, loadedAt, series }: Props) {
+  const { data: response = { data: { query, loadedAt, series } } } = useSeriesLibraryQuery(
+    query,
+    series,
+    loadedAt
+  )
+  const data = response.data
+  const isSearching = data.query.length > 0
 
   return (
     <div className="flex flex-col gap-6">
@@ -44,7 +52,7 @@ export default function LibrarySeries({ query, series }: Props) {
         </FieldGroup>
       </Form>
 
-      {series.length === 0 ? (
+      {data.series.length === 0 ? (
         <Card>
           <CardContent>
             <p className="text-muted-foreground">
@@ -53,7 +61,7 @@ export default function LibrarySeries({ query, series }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <ItemGrid items={series.map((serie) => ({ ...serie, libraryEntry: serie }))} />
+        <ItemGrid items={data.series.map((serie) => ({ ...serie, libraryEntry: serie }))} />
       )}
     </div>
   )
