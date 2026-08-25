@@ -73,7 +73,6 @@ test.group('Library series episodes', (group) => {
 
     const response = await client.get('/api/library/series?q=%20heat%20').loginAs(user)
     response.assertOk()
-    assert.equal(response.body().data.query, 'heat')
     assert.deepEqual(
       response.body().data.series.map((item: { id: number }) => item.id),
       [serie.id]

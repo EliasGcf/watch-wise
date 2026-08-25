@@ -1,5 +1,4 @@
 import { Form, Link, type LinkProps } from '@adonisjs/inertia/react'
-import { type Data } from '@generated/data'
 import { SearchIcon } from 'lucide-react'
 import { Badge } from '~/components/ui/badge'
 import { Button } from '~/components/ui/button'
@@ -8,33 +7,13 @@ import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
 import { ItemGrid } from '~/components/item_card'
-import { useLibraryQuery } from '~/hooks/use_library_queries'
+import { useLibraryQuery, type LibraryQueryData } from '~/hooks/use_library_queries'
 
-type Movie = Data.Movie
-type Serie = Data.Serie
+type Props = InertiaProps<{ query: string; initialData: LibraryQueryData }>
 
-type Props = InertiaProps & {
-  query: string
-  series: Serie[]
-  movies: Movie[]
-  seriesCount: number
-  moviesCount: number
-  loadedAt: number
-}
-
-export default function LibraryIndex({
-  query,
-  series,
-  movies,
-  seriesCount,
-  moviesCount,
-  loadedAt,
-}: Props) {
-  const {
-    data: response = { data: { query, series, movies, seriesCount, moviesCount, loadedAt } },
-  } = useLibraryQuery(query, series, movies, seriesCount, moviesCount, loadedAt)
-  const data = response.data
-  const isSearching = data.query.length > 0
+export default function LibraryIndex({ query, initialData }: Props) {
+  const { data } = useLibraryQuery(query, initialData).data
+  const isSearching = query.length > 0
 
   return (
     <div className="flex flex-col gap-8">
@@ -94,7 +73,7 @@ function LibrarySection({
   emptyMessage,
 }: {
   title: string
-  entries: Array<Movie | Serie>
+  entries: Array<LibraryQueryData['movies'][number] | LibraryQueryData['series'][number]>
   count: number
   route: NonNullable<LinkProps['route']>
   emptyMessage: string

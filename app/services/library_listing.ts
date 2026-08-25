@@ -27,7 +27,6 @@ export async function loadLibraryListing(user: User, query: string) {
 
   return {
     query,
-    loadedAt: Date.now(),
     series,
     movies,
     seriesCount: Number(seriesCount.$extras.total),
@@ -38,7 +37,6 @@ export async function loadLibraryListing(user: User, query: string) {
 export async function loadSeriesListing(user: User, query: string) {
   return {
     query,
-    loadedAt: Date.now(),
     series: await user
       .related('series')
       .query()

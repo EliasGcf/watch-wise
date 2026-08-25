@@ -4,14 +4,17 @@ import { libraryQueryValidator } from '#validators/library'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SeriesController {
-  async index({ auth, inertia, request }: HttpContext) {
+  async index({ auth, inertia, request, serialize }: HttpContext) {
     const { q } = await request.validateUsing(libraryQueryValidator)
-    const { query, loadedAt, series } = await loadSeriesListing(auth.user!, q ?? '')
+    const { query, series } = await loadSeriesListing(auth.user!, q ?? '')
+
+    const initialData = await serialize.withoutWrapping({
+      series: SerieTransformer.transform(series),
+    })
 
     return inertia.render('library/series/index', {
       query,
-      loadedAt,
-      series: SerieTransformer.transform(series),
+      initialData,
     })
   }
 

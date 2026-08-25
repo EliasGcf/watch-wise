@@ -1,5 +1,4 @@
 import { Form } from '@adonisjs/inertia/react'
-import { type Data } from '@generated/data'
 import { SearchIcon } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
@@ -7,22 +6,13 @@ import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 import { type InertiaProps } from '~/types'
 import { ItemGrid } from '~/components/item_card'
-import { useSeriesLibraryQuery } from '~/hooks/use_library_queries'
+import { useSeriesLibraryQuery, type SeriesLibraryQueryData } from '~/hooks/use_library_queries'
 
-type Props = InertiaProps & {
-  query: string
-  loadedAt: number
-  series: Data.Serie[]
-}
+type Props = InertiaProps<{ query: string; initialData: SeriesLibraryQueryData }>
 
-export default function LibrarySeries({ query, loadedAt, series }: Props) {
-  const { data: response = { data: { query, loadedAt, series } } } = useSeriesLibraryQuery(
-    query,
-    series,
-    loadedAt
-  )
-  const data = response.data
-  const isSearching = data.query.length > 0
+export default function LibrarySeries({ query, initialData }: Props) {
+  const { data } = useSeriesLibraryQuery(query, initialData).data
+  const isSearching = query.length > 0
 
   return (
     <div className="flex flex-col gap-6">

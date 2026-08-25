@@ -11,14 +11,12 @@ import { DateTime } from 'luxon'
 export default class LibraryController {
   async index({ auth, request, serialize }: HttpContext) {
     const { q } = await request.validateUsing(libraryQueryValidator)
-    const { query, loadedAt, series, movies, seriesCount, moviesCount } = await loadLibraryListing(
+    const { series, movies, seriesCount, moviesCount } = await loadLibraryListing(
       auth.user!,
       q ?? ''
     )
 
     return serialize({
-      query,
-      loadedAt,
       series: SerieTransformer.transform(series),
       movies: MovieTransformer.transform(movies),
       seriesCount,

@@ -131,8 +131,8 @@ test.group('Library entries', (group) => {
         .match(/data-page="([^"]+)"/)![1]
         .replaceAll('&quot;', '"')
     ).props
-    assert.deepEqual(page.movies, [])
-    assert.deepEqual(page.series, [])
+    assert.deepEqual(page.initialData.movies, [])
+    assert.deepEqual(page.initialData.series, [])
     assert.equal(page.user.watchedTime, 0)
   })
 
@@ -189,10 +189,10 @@ test.group('Library entries', (group) => {
     ).props
     assert.equal(page.query, 'heat')
     assert.deepEqual(
-      page.movies.map((movie: { name: string }) => movie.name),
+      page.initialData.movies.map((movie: { name: string }) => movie.name),
       ['Heat']
     )
-    assert.deepEqual(page.series, [])
+    assert.deepEqual(page.initialData.series, [])
   })
 
   test('library entries order merges watched marks with their created at', async ({
@@ -253,7 +253,7 @@ test.group('Library entries', (group) => {
         .replaceAll('&quot;', '"')
     ).props
     assert.deepEqual(
-      page.movies.map((movie: { name: string }) => movie.name),
+      page.initialData.movies.map((movie: { name: string }) => movie.name),
       ['Charlie', 'Foxtrot', 'Bravo', 'Echo', 'Delta', 'Alpha']
     )
   })
@@ -300,10 +300,10 @@ test.group('Library entries', (group) => {
         .match(/data-page="([^"]+)"/)![1]
         .replaceAll('&quot;', '"')
     ).props
-    assert.lengthOf(page.movies, 6)
-    assert.lengthOf(page.series, 6)
-    assert.equal(page.moviesCount, 8)
-    assert.equal(page.seriesCount, 8)
+    assert.lengthOf(page.initialData.movies, 6)
+    assert.lengthOf(page.initialData.series, 6)
+    assert.equal(page.initialData.moviesCount, 8)
+    assert.equal(page.initialData.seriesCount, 8)
   })
 
   test('main library api scopes searched results, limits summaries, and returns counts', async ({
@@ -357,7 +357,6 @@ test.group('Library entries', (group) => {
     const response = await client.get('/api/library?q=%20heat%20').loginAs(user)
     response.assertOk()
     const { data } = response.body()
-    assert.equal(data.query, 'heat')
     assert.lengthOf(data.movies, 6)
     assert.lengthOf(data.series, 6)
     assert.equal(data.moviesCount, 7)
@@ -575,7 +574,7 @@ test.group('Library entries', (group) => {
     ).props
     assert.equal(page.query, 'severance')
     assert.deepEqual(
-      page.series.map((serie: { name: string }) => serie.name),
+      page.initialData.series.map((serie: { name: string }) => serie.name),
       ['Severance']
     )
   })

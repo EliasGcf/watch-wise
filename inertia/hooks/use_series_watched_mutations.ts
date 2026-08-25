@@ -27,7 +27,7 @@ export function useWatchSeasonMutation() {
 
   return useMutation(
     api.api.library.series.seasons.watch.mutationOptions({
-      onSuccess: async (_data, variables) => {
+      onSuccess: async (_response, variables) => {
         await queryClient.invalidateQueries(
           api.api.library.series.seasons.episodes.queryFilter({
             params: variables.params,
@@ -44,7 +44,7 @@ export function useWatchEpisodeMutation() {
 
   return useMutation(
     api.api.library.series.episodes.watch.mutationOptions({
-      onSuccess: async (_data, variables) => {
+      onSuccess: async (_response, variables) => {
         await queryClient.invalidateQueries(
           api.api.library.series.seasons.episodes.queryFilter({
             params: { id: variables.params.id, season: variables.params.season },
@@ -61,7 +61,7 @@ export function useWatchBeforeMutation() {
 
   return useMutation(
     api.api.library.series.episodes.watchBefore.mutationOptions({
-      onSuccess: async (_data, variables) => {
+      onSuccess: async (_response, variables) => {
         await queryClient.invalidateQueries(
           api.api.library.series.seasons.episodes.queryFilter({
             params: { id: variables.params.id, season: variables.params.season },
@@ -78,7 +78,7 @@ export function useUnwatchEpisodeMutation() {
 
   return useMutation(
     api.api.library.series.episodes.unwatch.mutationOptions({
-      onSuccess: async (_data, variables) => {
+      onSuccess: async (_response, variables) => {
         await queryClient.invalidateQueries(
           api.api.library.series.seasons.episodes.queryFilter({
             params: { id: variables.params.id, season: variables.params.season },

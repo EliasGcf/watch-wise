@@ -5,20 +5,23 @@ import { libraryQueryValidator } from '#validators/library'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LibraryController {
-  async index({ inertia, auth, request }: HttpContext) {
+  async index({ inertia, auth, request, serialize }: HttpContext) {
     const { q } = await request.validateUsing(libraryQueryValidator)
-    const { query, loadedAt, series, movies, seriesCount, moviesCount } = await loadLibraryListing(
+    const { query, series, movies, seriesCount, moviesCount } = await loadLibraryListing(
       auth.user!,
       q ?? ''
     )
 
-    return inertia.render('library/index', {
-      query,
-      loadedAt,
+    const initialData = await serialize.withoutWrapping({
       series: SerieTransformer.transform(series),
       movies: MovieTransformer.transform(movies),
       seriesCount,
       moviesCount,
+    })
+
+    return inertia.render('library/index', {
+      query,
+      initialData,
     })
   }
 }
