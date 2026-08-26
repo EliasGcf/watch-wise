@@ -1,4 +1,5 @@
 import User from '#models/user'
+import { loginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SessionController {
@@ -7,8 +8,8 @@ export default class SessionController {
   }
 
   async store({ request, auth, response }: HttpContext) {
-    const { email, password } = request.all()
-    const identifier = String(email ?? '').trim()
+    const { email, password } = await request.validateUsing(loginValidator)
+    const identifier = email.trim()
     const uid = identifier.includes('@') ? identifier : identifier.toLowerCase()
     const user = await User.verifyCredentials(uid, password)
 

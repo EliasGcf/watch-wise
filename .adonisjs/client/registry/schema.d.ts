@@ -239,12 +239,12 @@ export interface Registry {
     methods: ["POST"]
     pattern: '/app/login'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/user').loginValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').loginValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['store']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'app.home': {
@@ -314,9 +314,9 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/series').indexSeriesValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/series_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'app.library.series.show': {

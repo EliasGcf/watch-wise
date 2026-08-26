@@ -11,6 +11,10 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '~/components/ui/field'
 import { Input } from '~/components/ui/input'
 
+function getPasswordConfirmationError(errors: object) {
+  return (errors as { passwordConfirmation?: string }).passwordConfirmation
+}
+
 export default function Signup() {
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
@@ -64,17 +68,17 @@ export default function Signup() {
                   <FieldError>{errors.password}</FieldError>
                 </Field>
 
-                <Field data-invalid={!!errors.passwordConfirmation}>
+                <Field data-invalid={!!getPasswordConfirmationError(errors)}>
                   <FieldLabel htmlFor="passwordConfirmation">Confirm password</FieldLabel>
                   <Input
                     id="passwordConfirmation"
                     name="passwordConfirmation"
                     type="password"
                     autoComplete="new-password"
-                    aria-invalid={!!errors.passwordConfirmation}
+                    aria-invalid={!!getPasswordConfirmationError(errors)}
                     required
                   />
-                  <FieldError>{errors.passwordConfirmation}</FieldError>
+                  <FieldError>{getPasswordConfirmationError(errors)}</FieldError>
                 </Field>
 
                 <Field>

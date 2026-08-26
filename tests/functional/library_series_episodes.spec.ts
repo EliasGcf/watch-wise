@@ -298,15 +298,10 @@ test.group('Library series episodes', (group) => {
       .loginAs(user)
       .withCsrfToken()
 
-    const response = await client.get(`/app/library/series/${serie.id}`).loginAs(user)
+    const response = await client.get(`/app/library/series/${serie.id}`).withInertia().loginAs(user)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.deepInclude(page.serie.watchedEpisodes[0], {
       providerId: 'episode-1-1',
       season: 1,

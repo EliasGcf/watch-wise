@@ -47,9 +47,15 @@ type ItemCardProps = {
   libraryEntry: Movie | Serie | null
 }
 
-export function ItemGrid({ items }: { items: Array<ItemCardProps & { id: string | number }> }) {
+export function ItemGrid({
+  items,
+  id,
+}: {
+  items: Array<ItemCardProps & { id: string | number }>
+  id?: string
+}) {
   return (
-    <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+    <div id={id} className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       {items.map((item) => (
         <ItemCard key={item.id} {...item} />
       ))}

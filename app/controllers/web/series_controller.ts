@@ -1,18 +1,23 @@
 import SerieTransformer from '#transformers/serie_transformer'
+import { indexSeriesValidator } from '#validators/series'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SeriesController {
   async index({ auth, inertia, request }: HttpContext) {
-    const query = String(request.input('q', '')).trim()
+    const { q = '', page = 1 } = await request.validateUsing(indexSeriesValidator)
 
     const series = await auth
       .user!.related('series')
       .query()
-      .apply((scopes) => scopes.search({ name: query }))
+      .apply((scopes) => scopes.search({ name: q }))
+      .orderBy('id', 'desc')
+      .paginate(page, 24)
 
     return inertia.render('library/series/index', {
-      query,
-      series: SerieTransformer.transform(series),
+      query: q,
+      series: inertia
+        .scroll(SerieTransformer.paginate(series.all(), series.getMeta()))
+        .matchOn('id'),
     })
   }
 
