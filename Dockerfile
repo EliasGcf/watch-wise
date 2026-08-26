@@ -8,12 +8,10 @@ RUN bun install --frozen-lockfile && bun pm cache rm
 
 FROM dev-deps AS build
 COPY . .
-RUN bun run vite:build \
-  && rm -rf public/assets \
-  && mkdir -p public \
-  && cp -R build/public/assets public/assets \
+RUN rm -rf public/assets \
+  && bun run vite:build \
   && mkdir -p data \
-  && rm -rf build node_modules
+  && rm -rf node_modules
 
 FROM oven/bun:1.4.0-alpine AS prod-deps
 WORKDIR /usr/src/app
