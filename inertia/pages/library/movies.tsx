@@ -58,9 +58,9 @@ export default function LibraryMovies({ query, status, movies }: Props) {
               <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
                 <SelectTrigger
                   aria-label="Filter movies by watched status"
-                  className="border-none pr-0 pb-0 items-end [&_svg]:mb-0.5"
+                  className="h-4! border-none pr-0"
                 >
-                  <SelectValue className="mt-auto" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All</SelectItem>
