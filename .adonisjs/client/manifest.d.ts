@@ -11,3 +11,4 @@
 /// <reference path="../../config/logger.ts" />
 /// <reference path="../../config/radarr_provider.ts" />
 /// <reference path="../../config/sonarr_provider.ts" />
+/// <reference path="../../config/pagination.ts" />

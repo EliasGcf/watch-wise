@@ -1,6 +1,8 @@
 import { Form } from '@adonisjs/inertia/react'
+import { type Scroll } from '@adonisjs/inertia/types'
 import { type Data } from '@generated/data'
-import { SearchIcon } from 'lucide-react'
+import { InfiniteScroll } from '@inertiajs/react'
+import { LoaderCircle, SearchIcon } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
@@ -10,7 +12,7 @@ import { ItemGrid } from '~/components/item_card'
 
 type Props = InertiaProps & {
   query: string
-  series: Data.Serie[]
+  series: Scroll<Data.Serie>
 }
 
 export default function LibrarySeries({ query, series }: Props) {
@@ -19,9 +21,8 @@ export default function LibrarySeries({ query, series }: Props) {
   return (
     <div className="flex flex-col gap-6">
       <Form
-        action="/app/library/series"
-        method="get"
-        options={{ preserveState: true, preserveScroll: true }}
+        route="app.library.series.index"
+        options={{ only: ['query', 'series'], reset: ['series'] }}
       >
         <FieldGroup>
           <Field>
@@ -44,7 +45,7 @@ export default function LibrarySeries({ query, series }: Props) {
         </FieldGroup>
       </Form>
 
-      {series.length === 0 ? (
+      {series.data.length === 0 ? (
         <Card>
           <CardContent>
             <p className="text-muted-foreground">
@@ -53,7 +54,22 @@ export default function LibrarySeries({ query, series }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <ItemGrid items={series.map((serie) => ({ ...serie, libraryEntry: serie }))} />
+        <div>
+          <InfiniteScroll
+            data="series"
+            itemsElement="#library-series-grid"
+            loading={
+              <div className="flex justify-center py-4" role="status" aria-label="Loading series">
+                <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
+              </div>
+            }
+          >
+            <ItemGrid
+              id="library-series-grid"
+              items={series.data.map((serie) => ({ ...serie, libraryEntry: serie }))}
+            />
+          </InfiniteScroll>
+        </div>
       )}
     </div>
   )

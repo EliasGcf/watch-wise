@@ -1,7 +1,7 @@
-import { router } from '@inertiajs/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { api } from '~/client'
+import { reload } from '~/lib/on_promise_reload'
 
 export function useRemoveLibraryEntryMutation(onSuccess?: () => void | Promise<void>) {
   const queryClient = useQueryClient()
@@ -13,7 +13,7 @@ export function useRemoveLibraryEntryMutation(onSuccess?: () => void | Promise<v
         if (onSuccess) {
           await onSuccess()
         } else {
-          await new Promise<void>((resolve) => router.reload({ onFinish: () => resolve() }))
+          await reload()
         }
         await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
       },

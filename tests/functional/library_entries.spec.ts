@@ -1,13 +1,17 @@
+import { pagination } from '#config/pagination'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import User from '#models/user'
+import { catalog } from '#services/catalog_provider'
 import { WatchedEpisode, WatchedMovie } from '#models/watched_mark'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
+import sinon from 'sinon'
 
 test.group('Library entries', (group) => {
   group.each.setup(() => testUtils.db().wrapInGlobalTransaction())
+  group.each.teardown(() => sinon.restore())
 
   test('library entries save image paths relative to the configured image base URL', async ({
     assert,
@@ -122,15 +126,10 @@ test.group('Library entries', (group) => {
       .loginAs(owner)
       .withCsrfToken()
 
-    const response = await client.get('/app/library').loginAs(viewer)
+    const response = await client.get('/app/library').withInertia().loginAs(viewer)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.deepEqual(page.movies, [])
     assert.deepEqual(page.series, [])
     assert.equal(page.user.watchedTime, 0)
@@ -178,15 +177,10 @@ test.group('Library entries', (group) => {
       summary: null,
     })
 
-    const response = await client.get('/app/library?q=heat').loginAs(user)
+    const response = await client.get('/app/library?q=heat').withInertia().loginAs(user)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.equal(page.query, 'heat')
     assert.deepEqual(
       page.movies.map((movie: { name: string }) => movie.name),
@@ -243,15 +237,10 @@ test.group('Library entries', (group) => {
     )
     assert.lengthOf(movies, 6)
 
-    const response = await client.get('/app/library').loginAs(user)
+    const response = await client.get('/app/library').withInertia().loginAs(user)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.deepEqual(
       page.movies.map((movie: { name: string }) => movie.name),
       ['Charlie', 'Foxtrot', 'Bravo', 'Echo', 'Delta', 'Alpha']
@@ -291,15 +280,10 @@ test.group('Library entries', (group) => {
       })
     }
 
-    const response = await client.get('/app/library').loginAs(user)
+    const response = await client.get('/app/library').withInertia().loginAs(user)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.lengthOf(page.movies, 6)
     assert.lengthOf(page.series, 6)
     assert.equal(page.moviesCount, 8)
@@ -351,18 +335,13 @@ test.group('Library entries', (group) => {
       summary: null,
     })
 
-    const response = await client.get('/app/library/movies?q=heat').loginAs(user)
+    const response = await client.get('/app/library/movies?q=heat').withInertia().loginAs(user)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.equal(page.query, 'heat')
     assert.deepEqual(
-      page.movies.map((movie: { name: string }) => movie.name),
+      page.movies.data.map((movie: { name: string }) => movie.name),
       ['Heat']
     )
   })
@@ -404,46 +383,158 @@ test.group('Library entries', (group) => {
       watchedAt: DateTime.now(),
     })
 
-    const watchedResponse = await client.get('/app/library/movies?status=watched').loginAs(user)
+    const watchedResponse = await client
+      .get('/app/library/movies?status=watched')
+      .withInertia()
+      .loginAs(user)
     watchedResponse.assertOk()
-    const watchedPage = JSON.parse(
-      watchedResponse
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const watchedPage = watchedResponse.inertiaProps
     assert.equal(watchedPage.status, 'watched')
     assert.deepEqual(
-      watchedPage.movies.map((movie: { name: string }) => movie.name),
+      watchedPage.movies.data.map((movie: { name: string }) => movie.name),
       ['Heat']
     )
 
-    const unwatchedResponse = await client.get('/app/library/movies?status=unwatched').loginAs(user)
+    const unwatchedResponse = await client
+      .get('/app/library/movies?status=unwatched')
+      .withInertia()
+      .loginAs(user)
     unwatchedResponse.assertOk()
-    const unwatchedPage = JSON.parse(
-      unwatchedResponse
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const unwatchedPage = unwatchedResponse.inertiaProps
     assert.equal(unwatchedPage.status, 'unwatched')
     assert.deepEqual(
-      unwatchedPage.movies.map((movie: { name: string }) => movie.name),
+      unwatchedPage.movies.data.map((movie: { name: string }) => movie.name),
       ['Thief']
     )
 
-    const allResponse = await client.get('/app/library/movies').loginAs(user)
+    const allResponse = await client.get('/app/library/movies').withInertia().loginAs(user)
     allResponse.assertOk()
-    const allPage = JSON.parse(
-      allResponse
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const allPage = allResponse.inertiaProps
     assert.equal(allPage.status, 'all')
     assert.deepEqual(
-      allPage.movies.map((movie: { name: string }) => movie.name),
-      ['Heat', 'Thief']
+      allPage.movies.data.map((movie: { name: string }) => movie.name),
+      ['Thief', 'Heat']
+    )
+  })
+
+  test('dedicated movie library pages use the Inertia infinite scroll contract', async ({
+    assert,
+    browserContext,
+    client,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Movie Scroller',
+      email: 'movie-scroller@example.com',
+      password: 'secret123',
+    })
+    const catalogSerie = await catalog.findSerieById('series-1')
+    sinon.stub(catalog, 'findSerieById').resolves(catalogSerie)
+
+    await user.related('movies').createMany(
+      Array.from({ length: pagination.perPage * 2 }, (_, index) => ({
+        provider: 'tmdb' as const,
+        providerId: `scroll-movie-${index + 1}`,
+        name: `Scroll Movie ${index + 1}`,
+        bannerPath: `/scroll-movie-${index + 1}.jpg`,
+        posterPath: `/scroll-movie-${index + 1}-poster.jpg`,
+        releasedAt: DateTime.fromISO('2020-01-01'),
+        summary: null,
+      }))
+    )
+    await user.related('series').create({
+      provider: 'tmdb',
+      providerId: 'scroll-serie',
+      name: 'Scroll Serie',
+      bannerPath: '/scroll-serie.jpg',
+      posterPath: '/scroll-serie-poster.jpg',
+      releasedAt: DateTime.fromISO('2020-01-01'),
+      summary: null,
+    })
+
+    const firstResponse = await client
+      .get('/app/library/movies?q=Scroll')
+      .withInertia()
+      .loginAs(user)
+    firstResponse.assertOk()
+    const firstPage = firstResponse.body()
+
+    assert.lengthOf(firstPage.props.movies.data, pagination.perPage)
+    assert.equal(firstPage.props.movies.metadata.total, pagination.perPage * 2)
+    assert.equal(firstPage.scrollProps.movies.currentPage, 1)
+    assert.equal(firstPage.scrollProps.movies.nextPage, 2)
+    assert.include(firstPage.mergeProps, 'movies.data')
+    assert.include(firstPage.matchPropsOn, 'movies.data.id')
+
+    const secondResponse = await client
+      .get('/app/library/movies?q=Scroll&page=2')
+      .withInertia()
+      .loginAs(user)
+    secondResponse.assertOk()
+    const secondPage = secondResponse.body()
+
+    assert.lengthOf(secondPage.props.movies.data, pagination.perPage)
+    assert.equal(secondPage.scrollProps.movies.currentPage, 2)
+    assert.isNull(secondPage.scrollProps.movies.nextPage)
+    assert.notInclude(
+      firstPage.props.movies.data.map((movie: { id: string }) => movie.id),
+      secondPage.props.movies.data[0].id
+    )
+
+    const resetResponse = await client
+      .get('/app/library/movies?q=Scroll Movie 1')
+      .withInertiaPartialReload('library/movies', ['query', 'status', 'movies'])
+      .header('X-Inertia-Reset', 'movies')
+      .loginAs(user)
+    resetResponse.assertOk()
+
+    assert.isTrue(resetResponse.body().scrollProps.movies.reset)
+    assert.notInclude(resetResponse.body().mergeProps, 'movies.data')
+
+    await browserContext.loginAs(user)
+    const moviesPage = await visit('/app/library')
+    await moviesPage.getByRole('link', { name: 'Movies', exact: true }).click()
+    await moviesPage
+      .getByRole('button', {
+        name: `Remove Scroll Movie ${pagination.perPage + 1} from library`,
+        exact: true,
+      })
+      .scrollIntoViewIfNeeded()
+    await moviesPage.assertExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+    )
+    await moviesPage
+      .getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+      .scrollIntoViewIfNeeded()
+    await moviesPage.waitForURL((url) => url.searchParams.get('page') === '2')
+
+    await moviesPage.goBack()
+    await moviesPage.assertPath('/app/library')
+    const historyReload = moviesPage.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/app/library/movies'
+    )
+    await moviesPage.goForward()
+    await historyReload
+    await moviesPage.assertExists(
+      moviesPage.getByRole('button', {
+        name: `Remove Scroll Movie ${pagination.perPage * 2} from library`,
+        exact: true,
+      })
+    )
+    await moviesPage.assertExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+    )
+
+    await moviesPage
+      .getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+      .click()
+    await moviesPage.getByRole('button', { name: 'Remove from library' }).click()
+    await moviesPage.assertTextContains('body', 'Title was removed from your library.')
+    await moviesPage.assertNotExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+    )
+    await moviesPage.assertNotExists(
+      moviesPage.getByText('No movies match your search.', { exact: true })
     )
   })
 
@@ -492,19 +583,148 @@ test.group('Library entries', (group) => {
       summary: null,
     })
 
-    const response = await client.get('/app/library/series?q=severance').loginAs(user)
+    const response = await client.get('/app/library/series?q=severance').withInertia().loginAs(user)
     response.assertOk()
 
-    const page = JSON.parse(
-      response
-        .text()
-        .match(/data-page="([^"]+)"/)![1]
-        .replaceAll('&quot;', '"')
-    ).props
+    const page = response.inertiaProps
     assert.equal(page.query, 'severance')
     assert.deepEqual(
-      page.series.map((serie: { name: string }) => serie.name),
+      page.series.data.map((serie: { name: string }) => serie.name),
       ['Severance']
+    )
+  })
+
+  test('dedicated series library pages use the Inertia infinite scroll contract', async ({
+    assert,
+    browserContext,
+    client,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Series Scroller',
+      email: 'series-scroller@example.com',
+      password: 'secret123',
+    })
+    const otherUser = await User.create({
+      fullName: 'Other Series Scroller',
+      email: 'other-series-scroller@example.com',
+      password: 'secret123',
+    })
+    const catalogSerie = await catalog.findSerieById('series-1')
+    sinon.stub(catalog, 'findSerieById').resolves(catalogSerie)
+
+    await user.related('series').createMany(
+      Array.from({ length: pagination.perPage * 2 }, (_, index) => ({
+        provider: 'tmdb' as const,
+        providerId: `scroll-series-${index + 1}`,
+        name: `Scroll Series ${index + 1}`,
+        bannerPath: `/scroll-series-${index + 1}.jpg`,
+        posterPath: `/scroll-series-${index + 1}-poster.jpg`,
+        releasedAt: DateTime.fromISO('2020-01-01'),
+        summary: null,
+      }))
+    )
+    await user.related('movies').createMany(
+      Array.from({ length: pagination.perPage * 2 }, (_, index) => ({
+        provider: 'tmdb' as const,
+        providerId: `scroll-movie-${index + 1}`,
+        name: `Scroll Movie ${index + 1}`,
+        bannerPath: `/scroll-movie-${index + 1}.jpg`,
+        posterPath: `/scroll-movie-${index + 1}-poster.jpg`,
+        releasedAt: DateTime.fromISO('2020-01-01'),
+        summary: null,
+      }))
+    )
+    await otherUser.related('series').create({
+      provider: 'tmdb',
+      providerId: 'other-scroll-series',
+      name: 'Scroll Series Other User',
+      bannerPath: '/other-scroll-series.jpg',
+      posterPath: '/other-scroll-series-poster.jpg',
+      releasedAt: DateTime.fromISO('2020-01-01'),
+      summary: null,
+    })
+
+    const firstResponse = await client
+      .get('/app/library/series?q=Scroll')
+      .withInertia()
+      .loginAs(user)
+    firstResponse.assertOk()
+    const firstPage = firstResponse.body()
+
+    assert.lengthOf(firstPage.props.series.data, pagination.perPage)
+    assert.equal(firstPage.props.series.metadata.total, pagination.perPage * 2)
+    assert.equal(firstPage.scrollProps.series.currentPage, 1)
+    assert.equal(firstPage.scrollProps.series.nextPage, 2)
+    assert.include(firstPage.mergeProps, 'series.data')
+    assert.include(firstPage.matchPropsOn, 'series.data.id')
+
+    const secondResponse = await client
+      .get('/app/library/series?q=Scroll&page=2')
+      .withInertia()
+      .loginAs(user)
+    secondResponse.assertOk()
+    const secondPage = secondResponse.body()
+
+    assert.lengthOf(secondPage.props.series.data, pagination.perPage)
+    assert.equal(secondPage.scrollProps.series.currentPage, 2)
+    assert.isNull(secondPage.scrollProps.series.nextPage)
+    assert.notInclude(
+      firstPage.props.series.data.map((serie: { id: string }) => serie.id),
+      secondPage.props.series.data[0].id
+    )
+
+    const resetResponse = await client
+      .get('/app/library/series?q=Scroll Series 1')
+      .withInertiaPartialReload('library/series/index', ['query', 'series'])
+      .header('X-Inertia-Reset', 'series')
+      .loginAs(user)
+    resetResponse.assertOk()
+
+    assert.isTrue(resetResponse.body().scrollProps.series.reset)
+    assert.notInclude(resetResponse.body().mergeProps, 'series.data')
+
+    await browserContext.loginAs(user)
+    const seriesPage = await visit('/app/library')
+    await seriesPage.getByRole('link', { name: 'Series', exact: true }).click()
+    await seriesPage
+      .getByRole('link', { name: `Scroll Series ${pagination.perPage + 1}`, exact: true })
+      .scrollIntoViewIfNeeded()
+    await seriesPage.assertExists(
+      seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
+    )
+    await seriesPage
+      .getByRole('link', { name: 'Scroll Series 1', exact: true })
+      .scrollIntoViewIfNeeded()
+    await seriesPage.waitForURL((url) => url.searchParams.get('page') === '2')
+
+    await seriesPage.goBack()
+    await seriesPage.assertPath('/app/library')
+    const historyReload = seriesPage.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/app/library/series'
+    )
+    await seriesPage.goForward()
+    await historyReload
+    await seriesPage.assertExists(
+      seriesPage.getByRole('link', {
+        name: `Scroll Series ${pagination.perPage * 2}`,
+        exact: true,
+      })
+    )
+    await seriesPage.assertExists(
+      seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
+    )
+
+    await seriesPage
+      .getByRole('button', { name: 'Remove Scroll Series 1 from library', exact: true })
+      .click()
+    await seriesPage.getByRole('button', { name: 'Remove from library' }).click()
+    await seriesPage.assertTextContains('body', 'Title was removed from your library.')
+    await seriesPage.assertNotExists(
+      seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
+    )
+    await seriesPage.assertNotExists(
+      seriesPage.getByText('No series match your search.', { exact: true })
     )
   })
 

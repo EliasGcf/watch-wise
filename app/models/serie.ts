@@ -2,7 +2,14 @@ import LibraryItem from '#models/library_item'
 import User from '#models/user'
 import { WatchedEpisode } from '#models/watched_mark'
 import type { Episode } from '#providers/catalog/types'
-import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasMany } from '@adonisjs/lucid/orm'
+import {
+  beforeCreate,
+  beforeFetch,
+  beforeFind,
+  beforePaginate,
+  belongsTo,
+  hasMany,
+} from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
@@ -100,5 +107,13 @@ export default class Serie extends LibraryItem {
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Serie>) {
     query.where('type', 'serie').orderBy('createdAt', 'desc')
+  }
+
+  @beforePaginate()
+  static filterPaginatedType([countQuery]: [
+    ModelQueryBuilderContract<typeof Serie>,
+    ModelQueryBuilderContract<typeof Serie>,
+  ]) {
+    countQuery.where('type', 'serie')
   }
 }

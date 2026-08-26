@@ -1,5 +1,5 @@
 import './css/app.css'
-import { type ReactElement } from 'react'
+import { type ComponentType, type ReactElement } from 'react'
 import Layout from '~/layouts/default'
 import { type Data } from '@generated/data'
 import { createRoot } from 'react-dom/client'
@@ -14,12 +14,14 @@ reloadOnHistoryNavigation()
 
 createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),
-  resolve: (name) => {
-    return resolvePageComponent(
+  resolve: async (name) => {
+    const page = await resolvePageComponent(
       `./pages/${name}.tsx`,
-      import.meta.glob('./pages/**/*.tsx'),
-      (page: ReactElement<Data.SharedProps>) => <Layout children={page} />
+      import.meta.glob<{ default: ComponentType }>('./pages/**/*.tsx'),
+      (element: ReactElement<Data.SharedProps>) => <Layout children={element} />
     )
+
+    return page.default
   },
   setup({ el, App, props }) {
     createRoot(el).render(

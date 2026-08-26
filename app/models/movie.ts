@@ -1,6 +1,13 @@
 import { WatchedMovie } from '#models/watched_mark'
 import User from '#models/user'
-import { beforeCreate, beforeFetch, beforeFind, belongsTo, hasOne } from '@adonisjs/lucid/orm'
+import {
+  beforeCreate,
+  beforeFetch,
+  beforeFind,
+  beforePaginate,
+  belongsTo,
+  hasOne,
+} from '@adonisjs/lucid/orm'
 import type { ModelQueryBuilderContract } from '@adonisjs/lucid/types/model'
 import type { BelongsTo, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
@@ -47,5 +54,13 @@ export default class Movie extends LibraryItem {
   @beforeFetch()
   static filterType(query: ModelQueryBuilderContract<typeof Movie>) {
     query.where('type', 'movie').orderBy('createdAt', 'desc')
+  }
+
+  @beforePaginate()
+  static filterPaginatedType([countQuery]: [
+    ModelQueryBuilderContract<typeof Movie>,
+    ModelQueryBuilderContract<typeof Movie>,
+  ]) {
+    countQuery.where('type', 'movie')
   }
 }

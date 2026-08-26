@@ -4,10 +4,11 @@ export function reloadOnHistoryNavigation() {
   let restoringHistory = false
 
   window.addEventListener('popstate', () => (restoringHistory = true))
-  router.on('navigate', () => {
+
+  router.on('navigate', (event) => {
     if (!restoringHistory) return
 
     restoringHistory = false
-    router.reload()
+    router.reload({ only: Object.keys(event.detail.page.scrollProps ?? {}) })
   })
 }
