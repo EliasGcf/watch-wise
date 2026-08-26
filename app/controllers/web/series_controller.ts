@@ -1,3 +1,4 @@
+import { pagination } from '#config/pagination'
 import SerieTransformer from '#transformers/serie_transformer'
 import { indexSeriesValidator } from '#validators/series'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -11,7 +12,7 @@ export default class SeriesController {
       .query()
       .apply((scopes) => scopes.search({ name: q }))
       .orderBy('id', 'desc')
-      .paginate(page, 24)
+      .paginate(page, pagination.perPage)
 
     return inertia.render('library/series/index', {
       query: q,

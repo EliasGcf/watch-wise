@@ -1,3 +1,4 @@
+import { pagination } from '#config/pagination'
 import Movie from '#models/movie'
 import Serie from '#models/serie'
 import User from '#models/user'
@@ -431,7 +432,7 @@ test.group('Library entries', (group) => {
     sinon.stub(catalog, 'findSerieById').resolves(catalogSerie)
 
     await user.related('movies').createMany(
-      Array.from({ length: 48 }, (_, index) => ({
+      Array.from({ length: pagination.perPage * 2 }, (_, index) => ({
         provider: 'tmdb' as const,
         providerId: `scroll-movie-${index + 1}`,
         name: `Scroll Movie ${index + 1}`,
@@ -458,8 +459,8 @@ test.group('Library entries', (group) => {
     firstResponse.assertOk()
     const firstPage = firstResponse.body()
 
-    assert.lengthOf(firstPage.props.movies.data, 24)
-    assert.equal(firstPage.props.movies.metadata.total, 48)
+    assert.lengthOf(firstPage.props.movies.data, pagination.perPage)
+    assert.equal(firstPage.props.movies.metadata.total, pagination.perPage * 2)
     assert.equal(firstPage.scrollProps.movies.currentPage, 1)
     assert.equal(firstPage.scrollProps.movies.nextPage, 2)
     assert.include(firstPage.mergeProps, 'movies.data')
@@ -472,7 +473,7 @@ test.group('Library entries', (group) => {
     secondResponse.assertOk()
     const secondPage = secondResponse.body()
 
-    assert.lengthOf(secondPage.props.movies.data, 24)
+    assert.lengthOf(secondPage.props.movies.data, pagination.perPage)
     assert.equal(secondPage.scrollProps.movies.currentPage, 2)
     assert.isNull(secondPage.scrollProps.movies.nextPage)
     assert.notInclude(
@@ -494,7 +495,10 @@ test.group('Library entries', (group) => {
     const moviesPage = await visit('/app/library')
     await moviesPage.getByRole('link', { name: 'Movies', exact: true }).click()
     await moviesPage
-      .getByRole('button', { name: 'Remove Scroll Movie 25 from library', exact: true })
+      .getByRole('button', {
+        name: `Remove Scroll Movie ${pagination.perPage + 1} from library`,
+        exact: true,
+      })
       .scrollIntoViewIfNeeded()
     await moviesPage.assertExists(
       moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
@@ -512,7 +516,10 @@ test.group('Library entries', (group) => {
     await moviesPage.goForward()
     await historyReload
     await moviesPage.assertExists(
-      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 48 from library', exact: true })
+      moviesPage.getByRole('button', {
+        name: `Remove Scroll Movie ${pagination.perPage * 2} from library`,
+        exact: true,
+      })
     )
     await moviesPage.assertExists(
       moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
@@ -607,7 +614,7 @@ test.group('Library entries', (group) => {
     sinon.stub(catalog, 'findSerieById').resolves(catalogSerie)
 
     await user.related('series').createMany(
-      Array.from({ length: 48 }, (_, index) => ({
+      Array.from({ length: pagination.perPage * 2 }, (_, index) => ({
         provider: 'tmdb' as const,
         providerId: `scroll-series-${index + 1}`,
         name: `Scroll Series ${index + 1}`,
@@ -618,7 +625,7 @@ test.group('Library entries', (group) => {
       }))
     )
     await user.related('movies').createMany(
-      Array.from({ length: 48 }, (_, index) => ({
+      Array.from({ length: pagination.perPage * 2 }, (_, index) => ({
         provider: 'tmdb' as const,
         providerId: `scroll-movie-${index + 1}`,
         name: `Scroll Movie ${index + 1}`,
@@ -645,8 +652,8 @@ test.group('Library entries', (group) => {
     firstResponse.assertOk()
     const firstPage = firstResponse.body()
 
-    assert.lengthOf(firstPage.props.series.data, 24)
-    assert.equal(firstPage.props.series.metadata.total, 48)
+    assert.lengthOf(firstPage.props.series.data, pagination.perPage)
+    assert.equal(firstPage.props.series.metadata.total, pagination.perPage * 2)
     assert.equal(firstPage.scrollProps.series.currentPage, 1)
     assert.equal(firstPage.scrollProps.series.nextPage, 2)
     assert.include(firstPage.mergeProps, 'series.data')
@@ -659,7 +666,7 @@ test.group('Library entries', (group) => {
     secondResponse.assertOk()
     const secondPage = secondResponse.body()
 
-    assert.lengthOf(secondPage.props.series.data, 24)
+    assert.lengthOf(secondPage.props.series.data, pagination.perPage)
     assert.equal(secondPage.scrollProps.series.currentPage, 2)
     assert.isNull(secondPage.scrollProps.series.nextPage)
     assert.notInclude(
@@ -681,7 +688,7 @@ test.group('Library entries', (group) => {
     const seriesPage = await visit('/app/library')
     await seriesPage.getByRole('link', { name: 'Series', exact: true }).click()
     await seriesPage
-      .getByRole('link', { name: 'Scroll Series 25', exact: true })
+      .getByRole('link', { name: `Scroll Series ${pagination.perPage + 1}`, exact: true })
       .scrollIntoViewIfNeeded()
     await seriesPage.assertExists(
       seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
@@ -699,7 +706,10 @@ test.group('Library entries', (group) => {
     await seriesPage.goForward()
     await historyReload
     await seriesPage.assertExists(
-      seriesPage.getByRole('link', { name: 'Scroll Series 48', exact: true })
+      seriesPage.getByRole('link', {
+        name: `Scroll Series ${pagination.perPage * 2}`,
+        exact: true,
+      })
     )
     await seriesPage.assertExists(
       seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })

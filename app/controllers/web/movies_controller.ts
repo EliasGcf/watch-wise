@@ -1,3 +1,4 @@
+import { pagination } from '#config/pagination'
 import MovieTransformer from '#transformers/movie_transformer'
 import { indexMoviesValidator } from '#validators/movies'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -13,7 +14,10 @@ export default class MoviesController {
     if (status === 'watched') moviesQuery.whereHas('watched', () => {})
     if (status === 'unwatched') moviesQuery.whereDoesntHave('watched', () => {})
 
-    const movies = await moviesQuery.orderBy('id', 'desc').preload('watched').paginate(page, 24)
+    const movies = await moviesQuery
+      .orderBy('id', 'desc')
+      .preload('watched')
+      .paginate(page, pagination.perPage)
 
     return inertia.render('library/movies', {
       query: q,
