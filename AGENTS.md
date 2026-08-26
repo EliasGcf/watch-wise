@@ -31,7 +31,7 @@ The `.adonisjs` folder is generated. Do not edit files there manually unless exp
 Use the source command for the generated code you need:
 
 - Run `bun run generate:sdk` after changing OpenAPI SDK generation, such as TMDB/Sonarr/Radarr SDK files or their generated faker helpers.
-- Run `bun run dev` when Adonis app registries need refreshing, such as generated routes, controllers, pages, events, listeners, or Tuyau registry files.
+- Run `bun ace codegen` when Adonis app registries need refreshing, such as generated routes, controllers, pages, events, listeners, or Tuyau registry files. This avoids starting the dev server (`bun run dev`), which previously owned codegen.
 
 Keep generated `.adonisjs` changes produced by those commands.
 

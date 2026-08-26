@@ -1,9 +1,9 @@
 import './css/app.css'
-import { type ComponentType, type ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import Layout from '~/layouts/default'
 import { type Data } from '@generated/data'
 import { createRoot } from 'react-dom/client'
-import { createInertiaApp } from '@inertiajs/react'
+import { createInertiaApp, type ResolvedComponent } from '@inertiajs/react'
 import { AppProviders } from '~/providers'
 import { reloadOnHistoryNavigation } from '~/lib/reload_on_history_navigation'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
@@ -14,14 +14,12 @@ reloadOnHistoryNavigation()
 
 createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),
-  resolve: async (name) => {
-    const page = await resolvePageComponent(
+  resolve: (name) => {
+    return resolvePageComponent<ResolvedComponent>(
       `./pages/${name}.tsx`,
-      import.meta.glob<{ default: ComponentType }>('./pages/**/*.tsx'),
-      (element: ReactElement<Data.SharedProps>) => <Layout children={element} />
+      import.meta.glob<ResolvedComponent>('./pages/**/*.tsx'),
+      (page: ReactElement<Data.SharedProps>) => <Layout children={page} />
     )
-
-    return page.default
   },
   setup({ el, App, props }) {
     createRoot(el).render(

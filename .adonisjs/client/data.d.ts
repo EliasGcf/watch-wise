@@ -5,7 +5,7 @@
 
 /// <reference path="./manifest.d.ts" />
 import type { InferData, InferVariants } from '@adonisjs/core/types/transformers'
-import type { InferSharedProps } from '@adonisjs/inertia/types'
+import type { InferSharedProps, InferFlashData } from '@adonisjs/inertia/types'
 import type CatalogEpisodeTransformer from '#transformers/catalog/episode_transformer'
 import type CatalogSearchResultTransformer from '#transformers/catalog/search_result_transformer'
 import type CatalogSerieTransformer from '#transformers/catalog/serie_transformer'
@@ -52,4 +52,5 @@ export namespace Data {
     export type Variants = InferVariants<WatchedEpisodeTransformer>
   }
   export type SharedProps = InferSharedProps<InertiaMiddleware>
+  export type FlashMessages = InferFlashData<InertiaMiddleware>
 }

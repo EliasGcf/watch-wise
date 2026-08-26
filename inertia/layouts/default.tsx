@@ -7,7 +7,7 @@ import { Header } from '~/components/header'
 type Props = { children: ReactElement<Data.SharedProps> }
 
 export default function Layout({ children }: Props) {
-  const { url } = usePage()
+  const { url, flash } = usePage()
   const user = children.props.user
 
   useEffect(() => {
@@ -15,12 +15,12 @@ export default function Layout({ children }: Props) {
   }, [url])
 
   useEffect(() => {
-    if (children.props.flash.error) {
-      toast.error(children.props.flash.error)
+    if (flash?.error) {
+      toast.error(flash.error)
     }
 
-    if (children.props.flash.success) {
-      toast.success(children.props.flash.success)
+    if (flash?.success) {
+      toast.success(flash.success)
     }
   })
 
