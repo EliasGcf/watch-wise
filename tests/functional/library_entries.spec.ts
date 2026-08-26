@@ -502,6 +502,17 @@ test.group('Library entries', (group) => {
         summary: null,
       }))
     )
+    await user.related('movies').createMany(
+      Array.from({ length: 48 }, (_, index) => ({
+        provider: 'tmdb' as const,
+        providerId: `scroll-movie-${index + 1}`,
+        name: `Scroll Movie ${index + 1}`,
+        bannerPath: `/scroll-movie-${index + 1}.jpg`,
+        posterPath: `/scroll-movie-${index + 1}-poster.jpg`,
+        releasedAt: DateTime.fromISO('2020-01-01'),
+        summary: null,
+      }))
+    )
     await otherUser.related('series').create({
       provider: 'tmdb',
       providerId: 'other-scroll-series',
