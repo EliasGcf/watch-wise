@@ -54,20 +54,22 @@ export default function LibrarySeries({ query, series }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <InfiniteScroll
-          data="series"
-          itemsElement="#library-series-grid"
-          loading={
-            <div className="flex justify-center py-4" role="status" aria-label="Loading series">
-              <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
-            </div>
-          }
-        >
-          <ItemGrid
-            id="library-series-grid"
-            items={series.data.map((serie) => ({ ...serie, libraryEntry: serie }))}
-          />
-        </InfiniteScroll>
+        <div>
+          <InfiniteScroll
+            data="series"
+            itemsElement="#library-series-grid"
+            loading={
+              <div className="flex justify-center py-4" role="status" aria-label="Loading series">
+                <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
+              </div>
+            }
+          >
+            <ItemGrid
+              id="library-series-grid"
+              items={series.data.map((serie) => ({ ...serie, libraryEntry: serie }))}
+            />
+          </InfiniteScroll>
+        </div>
       )}
     </div>
   )

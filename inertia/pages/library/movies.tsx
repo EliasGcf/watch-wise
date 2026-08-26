@@ -97,20 +97,22 @@ export default function LibraryMovies({ query, status, movies }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <InfiniteScroll
-          data="movies"
-          itemsElement="#library-movies-grid"
-          loading={
-            <div className="flex justify-center py-4" role="status" aria-label="Loading movies">
-              <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
-            </div>
-          }
-        >
-          <ItemGrid
-            id="library-movies-grid"
-            items={movies.data.map((movie) => ({ ...movie, libraryEntry: movie }))}
-          />
-        </InfiniteScroll>
+        <div>
+          <InfiniteScroll
+            data="movies"
+            itemsElement="#library-movies-grid"
+            loading={
+              <div className="flex justify-center py-4" role="status" aria-label="Loading movies">
+                <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
+              </div>
+            }
+          >
+            <ItemGrid
+              id="library-movies-grid"
+              items={movies.data.map((movie) => ({ ...movie, libraryEntry: movie }))}
+            />
+          </InfiniteScroll>
+        </div>
       )}
     </div>
   )
