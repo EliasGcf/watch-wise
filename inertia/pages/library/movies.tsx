@@ -1,7 +1,9 @@
 import { router } from '@inertiajs/react'
 import { Form } from '@adonisjs/inertia/react'
+import { type Scroll } from '@adonisjs/inertia/types'
 import { type Data } from '@generated/data'
-import { SearchIcon } from 'lucide-react'
+import { InfiniteScroll } from '@inertiajs/react'
+import { LoaderCircle, SearchIcon } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import { Card, CardContent } from '~/components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
@@ -19,7 +21,7 @@ import { ItemGrid } from '~/components/item_card'
 type Props = InertiaProps & {
   query: string
   status: string
-  movies: Data.Movie[]
+  movies: Scroll<Data.Movie>
 }
 
 const statusItems = [
@@ -38,8 +40,8 @@ export default function LibraryMovies({ query, status, movies }: Props) {
     if (value) params.status = value
 
     router.get('/app/library/movies', params, {
-      preserveState: true,
-      preserveScroll: true,
+      only: ['query', 'status', 'movies'],
+      reset: ['movies'],
     })
   }
 
@@ -47,7 +49,7 @@ export default function LibraryMovies({ query, status, movies }: Props) {
     <div className="flex flex-col gap-6">
       <Form
         route="app.library.movies.index"
-        options={{ preserveState: true, preserveScroll: true }}
+        options={{ only: ['query', 'status', 'movies'], reset: ['movies'] }}
       >
         <FieldGroup>
           <Field>
@@ -86,7 +88,7 @@ export default function LibraryMovies({ query, status, movies }: Props) {
         </FieldGroup>
       </Form>
 
-      {movies.length === 0 ? (
+      {movies.data.length === 0 ? (
         <Card>
           <CardContent>
             <p className="text-muted-foreground">
@@ -95,7 +97,20 @@ export default function LibraryMovies({ query, status, movies }: Props) {
           </CardContent>
         </Card>
       ) : (
-        <ItemGrid items={movies.map((movie) => ({ ...movie, libraryEntry: movie }))} />
+        <InfiniteScroll
+          data="movies"
+          itemsElement="#library-movies-grid"
+          loading={
+            <div className="flex justify-center py-4" role="status" aria-label="Loading movies">
+              <LoaderCircle className="size-5 animate-spin" aria-hidden="true" />
+            </div>
+          }
+        >
+          <ItemGrid
+            id="library-movies-grid"
+            items={movies.data.map((movie) => ({ ...movie, libraryEntry: movie }))}
+          />
+        </InfiniteScroll>
       )}
     </div>
   )

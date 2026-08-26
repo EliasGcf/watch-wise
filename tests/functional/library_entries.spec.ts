@@ -340,7 +340,7 @@ test.group('Library entries', (group) => {
     const page = response.inertiaProps
     assert.equal(page.query, 'heat')
     assert.deepEqual(
-      page.movies.map((movie: { name: string }) => movie.name),
+      page.movies.data.map((movie: { name: string }) => movie.name),
       ['Heat']
     )
   })
@@ -390,7 +390,7 @@ test.group('Library entries', (group) => {
     const watchedPage = watchedResponse.inertiaProps
     assert.equal(watchedPage.status, 'watched')
     assert.deepEqual(
-      watchedPage.movies.map((movie: { name: string }) => movie.name),
+      watchedPage.movies.data.map((movie: { name: string }) => movie.name),
       ['Heat']
     )
 
@@ -402,7 +402,7 @@ test.group('Library entries', (group) => {
     const unwatchedPage = unwatchedResponse.inertiaProps
     assert.equal(unwatchedPage.status, 'unwatched')
     assert.deepEqual(
-      unwatchedPage.movies.map((movie: { name: string }) => movie.name),
+      unwatchedPage.movies.data.map((movie: { name: string }) => movie.name),
       ['Thief']
     )
 
@@ -411,8 +411,123 @@ test.group('Library entries', (group) => {
     const allPage = allResponse.inertiaProps
     assert.equal(allPage.status, 'all')
     assert.deepEqual(
-      allPage.movies.map((movie: { name: string }) => movie.name),
-      ['Heat', 'Thief']
+      allPage.movies.data.map((movie: { name: string }) => movie.name),
+      ['Thief', 'Heat']
+    )
+  })
+
+  test('dedicated movie library pages use the Inertia infinite scroll contract', async ({
+    assert,
+    browserContext,
+    client,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Movie Scroller',
+      email: 'movie-scroller@example.com',
+      password: 'secret123',
+    })
+    const catalogSerie = await catalog.findSerieById('series-1')
+    sinon.stub(catalog, 'findSerieById').resolves(catalogSerie)
+
+    await user.related('movies').createMany(
+      Array.from({ length: 48 }, (_, index) => ({
+        provider: 'tmdb' as const,
+        providerId: `scroll-movie-${index + 1}`,
+        name: `Scroll Movie ${index + 1}`,
+        bannerPath: `/scroll-movie-${index + 1}.jpg`,
+        posterPath: `/scroll-movie-${index + 1}-poster.jpg`,
+        releasedAt: DateTime.fromISO('2020-01-01'),
+        summary: null,
+      }))
+    )
+    await user.related('series').create({
+      provider: 'tmdb',
+      providerId: 'scroll-serie',
+      name: 'Scroll Serie',
+      bannerPath: '/scroll-serie.jpg',
+      posterPath: '/scroll-serie-poster.jpg',
+      releasedAt: DateTime.fromISO('2020-01-01'),
+      summary: null,
+    })
+
+    const firstResponse = await client
+      .get('/app/library/movies?q=Scroll')
+      .withInertia()
+      .loginAs(user)
+    firstResponse.assertOk()
+    const firstPage = firstResponse.body()
+
+    assert.lengthOf(firstPage.props.movies.data, 24)
+    assert.equal(firstPage.props.movies.metadata.total, 48)
+    assert.equal(firstPage.scrollProps.movies.currentPage, 1)
+    assert.equal(firstPage.scrollProps.movies.nextPage, 2)
+    assert.include(firstPage.mergeProps, 'movies.data')
+    assert.include(firstPage.matchPropsOn, 'movies.data.id')
+
+    const secondResponse = await client
+      .get('/app/library/movies?q=Scroll&page=2')
+      .withInertia()
+      .loginAs(user)
+    secondResponse.assertOk()
+    const secondPage = secondResponse.body()
+
+    assert.lengthOf(secondPage.props.movies.data, 24)
+    assert.equal(secondPage.scrollProps.movies.currentPage, 2)
+    assert.isNull(secondPage.scrollProps.movies.nextPage)
+    assert.notInclude(
+      firstPage.props.movies.data.map((movie: { id: string }) => movie.id),
+      secondPage.props.movies.data[0].id
+    )
+
+    const resetResponse = await client
+      .get('/app/library/movies?q=Scroll Movie 1')
+      .withInertiaPartialReload('library/movies', ['query', 'status', 'movies'])
+      .header('X-Inertia-Reset', 'movies')
+      .loginAs(user)
+    resetResponse.assertOk()
+
+    assert.isTrue(resetResponse.body().scrollProps.movies.reset)
+    assert.notInclude(resetResponse.body().mergeProps, 'movies.data')
+
+    await browserContext.loginAs(user)
+    const moviesPage = await visit('/app/library')
+    await moviesPage.getByRole('link', { name: 'Movies', exact: true }).click()
+    await moviesPage
+      .getByRole('button', { name: 'Remove Scroll Movie 25 from library', exact: true })
+      .scrollIntoViewIfNeeded()
+    await moviesPage.assertExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+    )
+    await moviesPage
+      .getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+      .scrollIntoViewIfNeeded()
+    await moviesPage.waitForURL((url) => url.searchParams.get('page') === '2')
+
+    await moviesPage.goBack()
+    await moviesPage.assertPath('/app/library')
+    const historyReload = moviesPage.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/app/library/movies'
+    )
+    await moviesPage.goForward()
+    await historyReload
+    await moviesPage.assertExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 48 from library', exact: true })
+    )
+    await moviesPage.assertExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+    )
+
+    await moviesPage
+      .getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+      .click()
+    await moviesPage.getByRole('button', { name: 'Remove from library' }).click()
+    await moviesPage.assertTextContains('body', 'Title was removed from your library.')
+    await moviesPage.assertNotExists(
+      moviesPage.getByRole('button', { name: 'Remove Scroll Movie 1 from library', exact: true })
+    )
+    await moviesPage.assertNotExists(
+      moviesPage.getByText('No movies match your search.', { exact: true })
     )
   })
 
