@@ -552,13 +552,33 @@ test.group('Library entries', (group) => {
     assert.notInclude(resetResponse.body().mergeProps, 'series.data')
 
     await browserContext.loginAs(user)
-    const seriesPage = await visit('/app/library/series?q=Scroll')
+    const seriesPage = await visit('/app/library')
+    await seriesPage.getByRole('link', { name: 'Series', exact: true }).click()
     await seriesPage
       .getByRole('link', { name: 'Scroll Series 25', exact: true })
       .scrollIntoViewIfNeeded()
     await seriesPage.assertExists(
       seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
     )
+    await seriesPage
+      .getByRole('link', { name: 'Scroll Series 1', exact: true })
+      .scrollIntoViewIfNeeded()
+    await seriesPage.waitForURL((url) => url.searchParams.get('page') === '2')
+
+    await seriesPage.goBack()
+    await seriesPage.assertPath('/app/library')
+    const historyReload = seriesPage.waitForResponse(
+      (response) => new URL(response.url()).pathname === '/app/library/series'
+    )
+    await seriesPage.goForward()
+    await historyReload
+    await seriesPage.assertExists(
+      seriesPage.getByRole('link', { name: 'Scroll Series 48', exact: true })
+    )
+    await seriesPage.assertExists(
+      seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
+    )
+
     await seriesPage
       .getByRole('button', { name: 'Remove Scroll Series 1 from library', exact: true })
       .click()
