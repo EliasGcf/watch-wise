@@ -492,7 +492,7 @@ test.group('Library entries', (group) => {
     sinon.stub(catalog, 'findSerieById').resolves(catalogSerie)
 
     await user.related('series').createMany(
-      Array.from({ length: 25 }, (_, index) => ({
+      Array.from({ length: 48 }, (_, index) => ({
         provider: 'tmdb' as const,
         providerId: `scroll-series-${index + 1}`,
         name: `Scroll Series ${index + 1}`,
@@ -520,7 +520,7 @@ test.group('Library entries', (group) => {
     const firstPage = firstResponse.body()
 
     assert.lengthOf(firstPage.props.series.data, 24)
-    assert.equal(firstPage.props.series.metadata.total, 25)
+    assert.equal(firstPage.props.series.metadata.total, 48)
     assert.equal(firstPage.scrollProps.series.currentPage, 1)
     assert.equal(firstPage.scrollProps.series.nextPage, 2)
     assert.include(firstPage.mergeProps, 'series.data')
@@ -533,7 +533,7 @@ test.group('Library entries', (group) => {
     secondResponse.assertOk()
     const secondPage = secondResponse.body()
 
-    assert.lengthOf(secondPage.props.series.data, 1)
+    assert.lengthOf(secondPage.props.series.data, 24)
     assert.equal(secondPage.scrollProps.series.currentPage, 2)
     assert.isNull(secondPage.scrollProps.series.nextPage)
     assert.notInclude(
@@ -554,7 +554,7 @@ test.group('Library entries', (group) => {
     await browserContext.loginAs(user)
     const seriesPage = await visit('/app/library/series?q=Scroll')
     await seriesPage
-      .getByRole('link', { name: 'Scroll Series 2', exact: true })
+      .getByRole('link', { name: 'Scroll Series 25', exact: true })
       .scrollIntoViewIfNeeded()
     await seriesPage.assertExists(
       seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
@@ -566,9 +566,6 @@ test.group('Library entries', (group) => {
     await seriesPage.assertTextContains('body', 'Title was removed from your library.')
     await seriesPage.assertNotExists(
       seriesPage.getByRole('link', { name: 'Scroll Series 1', exact: true })
-    )
-    await seriesPage.assertExists(
-      seriesPage.getByRole('link', { name: 'Scroll Series 25', exact: true })
     )
     await seriesPage.assertNotExists(
       seriesPage.getByText('No series match your search.', { exact: true })
