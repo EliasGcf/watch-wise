@@ -5,9 +5,12 @@ import { type Data } from '@generated/data'
 import { createRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react'
 import { AppProviders } from '~/providers'
+import { reloadOnHistoryNavigation } from '~/lib/reload_on_history_navigation'
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
 
 const appName = import.meta.env.VITE_APP_NAME || 'Watch Wise'
+
+reloadOnHistoryNavigation()
 
 createInertiaApp({
   title: (title) => (title ? `${title} - ${appName}` : appName),

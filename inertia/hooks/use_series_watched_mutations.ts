@@ -1,23 +1,10 @@
-import { router } from '@inertiajs/react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '~/client'
-
-async function refreshSeries(queryClient: ReturnType<typeof useQueryClient>) {
-  await new Promise<void>((resolve) =>
-    router.reload({ only: ['serie'], onFinish: () => resolve() })
-  )
-  await queryClient.invalidateQueries({ queryKey: api.app.library.index.queryKey() })
-}
+import { reload } from '~/lib/on_promise_reload'
 
 export function useWatchSeriesMutation() {
-  const queryClient = useQueryClient()
-
   return useMutation(
-    api.api.library.series.watch.mutationOptions({
-      onSuccess: async () => {
-        await refreshSeries(queryClient)
-      },
-    })
+    api.api.library.series.watch.mutationOptions({ onSuccess: async () => reload() })
   )
 }
 
@@ -26,13 +13,9 @@ export function useWatchSeasonMutation() {
 
   return useMutation(
     api.api.library.series.seasons.watch.mutationOptions({
-      onSuccess: async (_data, variables) => {
-        await queryClient.invalidateQueries(
-          api.api.library.series.seasons.episodes.queryFilter({
-            params: variables.params,
-          })
-        )
-        await refreshSeries(queryClient)
+      onSuccess: async (_data, { params }) => {
+        const query = api.api.library.series.seasons.episodes.queryFilter({ params })
+        await Promise.all([queryClient.invalidateQueries(query), reload()])
       },
     })
   )
@@ -43,13 +26,9 @@ export function useWatchEpisodeMutation() {
 
   return useMutation(
     api.api.library.series.episodes.watch.mutationOptions({
-      onSuccess: async (_data, variables) => {
-        await queryClient.invalidateQueries(
-          api.api.library.series.seasons.episodes.queryFilter({
-            params: { id: variables.params.id, season: variables.params.season },
-          })
-        )
-        await refreshSeries(queryClient)
+      onSuccess: async (_data, { params }) => {
+        const query = api.api.library.series.seasons.episodes.queryFilter({ params })
+        await Promise.all([queryClient.invalidateQueries(query), reload()])
       },
     })
   )
@@ -60,13 +39,9 @@ export function useWatchBeforeMutation() {
 
   return useMutation(
     api.api.library.series.episodes.watchBefore.mutationOptions({
-      onSuccess: async (_data, variables) => {
-        await queryClient.invalidateQueries(
-          api.api.library.series.seasons.episodes.queryFilter({
-            params: { id: variables.params.id, season: variables.params.season },
-          })
-        )
-        await refreshSeries(queryClient)
+      onSuccess: async (_data, { params }) => {
+        const query = api.api.library.series.seasons.episodes.queryFilter({ params })
+        await Promise.all([queryClient.invalidateQueries(query), reload()])
       },
     })
   )
@@ -77,13 +52,9 @@ export function useUnwatchEpisodeMutation() {
 
   return useMutation(
     api.api.library.series.episodes.unwatch.mutationOptions({
-      onSuccess: async (_data, variables) => {
-        await queryClient.invalidateQueries(
-          api.api.library.series.seasons.episodes.queryFilter({
-            params: { id: variables.params.id, season: variables.params.season },
-          })
-        )
-        await refreshSeries(queryClient)
+      onSuccess: async (_data, { params }) => {
+        const query = api.api.library.series.seasons.episodes.queryFilter({ params })
+        await Promise.all([queryClient.invalidateQueries(query), reload()])
       },
     })
   )
