@@ -199,6 +199,52 @@ test.group('Library series episodes', (group) => {
     assert.equal(user.watchedTime, 0)
   })
 
+  test('browser history restores fresh library progress without reloading normal visits', async ({
+    assert,
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'History Viewer',
+      email: 'history-viewer@example.com',
+      password: 'secret123',
+    })
+    const serie = await Serie.create({
+      userId: user.id,
+      provider: 'tmdb',
+      providerId: 'series-1',
+      name: 'Heat Vision and Jack',
+      bannerPath: '/series-1.jpg',
+      posterPath: '/series-1-poster.jpg',
+      releasedAt: DateTime.fromISO('1999-01-01'),
+      summary: 'A pilot about a super-intelligent astronaut.',
+    })
+
+    await browserContext.loginAs(user)
+    const page = await visit('/app/library')
+    const progress = page.getByRole('progressbar', { name: 'Heat Vision and Jack progress' })
+    assert.equal(await progress.getAttribute('aria-valuenow'), '0')
+
+    let detailsRequests = 0
+    page.on('request', (request) => {
+      if (new URL(request.url()).pathname === `/app/library/series/${serie.id}`) {
+        detailsRequests++
+      }
+    })
+    await page.getByRole('link', { name: 'Heat Vision and Jack' }).click()
+    await page.waitForLoadState('networkidle')
+    assert.equal(detailsRequests, 1)
+    await page.getByRole('button', { name: 'Season 1' }).click()
+    await page.getByRole('checkbox', { name: 'Mark Pilot as watched' }).click()
+    await page.assertExists(page.getByRole('checkbox', { name: 'Unmark Pilot as watched' }))
+
+    const refreshedLibrary = page.waitForResponse('**/app/library')
+    await page.goBack()
+    await refreshedLibrary
+    await page.assertPath('/app/library')
+    assert.equal(await progress.getAttribute('aria-valuenow'), '100')
+  })
+
   test('series progress is derived from watched marks when serialized', async ({
     assert,
     client,
