@@ -187,7 +187,7 @@ test.group('Catalog provider', (group) => {
     )
   })
 
-  test('maps TMDB series detail response to released counts from last episode to air', async ({
+  test('maps TMDB series detail response to released counts from the latest released episode', async ({
     assert,
   }) => {
     const tmdb = makeTmdbSdk(
@@ -200,6 +200,11 @@ test.group('Catalog provider', (group) => {
           first_air_date: '1999-01-01',
           overview: 'A pilot about a super-intelligent astronaut.',
           last_episode_to_air: { episode_number: 1, season_number: 2 },
+          next_episode_to_air: {
+            air_date: '1999-01-02',
+            episode_number: 2,
+            season_number: 2,
+          },
           seasons: [
             { name: 'Specials', season_number: 0, episode_count: 1 },
             { name: 'Season 1', season_number: 1, episode_count: 3 },
@@ -227,11 +232,11 @@ test.group('Catalog provider', (group) => {
         summary: 'A pilot about a super-intelligent astronaut.',
         inProduction: true,
         episodesCount: 8,
-        releasedEpisodesCount: 4,
+        releasedEpisodesCount: 5,
         seasons: [
           { name: 'Specials', number: 0, episodesCount: 1, releasedEpisodesCount: 1 },
           { name: 'Season 1', number: 1, episodesCount: 3, releasedEpisodesCount: 3 },
-          { name: 'Season 2', number: 2, episodesCount: 3, releasedEpisodesCount: 1 },
+          { name: 'Season 2', number: 2, episodesCount: 3, releasedEpisodesCount: 2 },
           { name: 'Season 3', number: 3, episodesCount: 2, releasedEpisodesCount: 0 },
         ],
       }
