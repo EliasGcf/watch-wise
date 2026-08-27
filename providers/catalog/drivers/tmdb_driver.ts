@@ -14,6 +14,7 @@ import type {
 } from '#providers/catalog/types'
 import { CatalogProviderError } from '#providers/catalog/types'
 import { createCacheDecorator } from '#decorators/cache_decorator'
+import { DateTime } from 'luxon'
 
 const cache = createCacheDecorator({ prefixKey: 'tmdb' })
 
@@ -116,8 +117,13 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     if (!response.data) return null
     const bannerPath = response.data.backdrop_path
     const posterPath = response.data.poster_path
-    const lastSeason = response.data.last_episode_to_air?.season_number
-    const lastEpisode = response.data.last_episode_to_air?.episode_number
+    const nextEpisode = response.data.next_episode_to_air
+    const latestReleasedEpisode =
+      nextEpisode?.air_date && DateTime.fromISO(nextEpisode.air_date) <= DateTime.now()
+        ? nextEpisode
+        : response.data.last_episode_to_air
+    const lastSeason = latestReleasedEpisode?.season_number
+    const lastEpisode = latestReleasedEpisode?.episode_number
     const allReleased = lastSeason === undefined || lastSeason === 0 || lastEpisode === undefined
     const seasons =
       response.data.seasons?.flatMap((season) => {
