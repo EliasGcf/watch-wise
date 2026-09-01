@@ -55,6 +55,7 @@ export default function CatalogSearch({ query, results, limitation }: Props) {
         {results.length > 0 && (
           <ItemGrid
             items={results.map((result) => ({
+              showType: true,
               ...result,
               providerId: result.id,
               libraryEntry: result.inLibrary,

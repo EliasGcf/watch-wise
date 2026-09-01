@@ -45,6 +45,7 @@ type ItemCardProps = {
   provider: string
   providerId: string
   libraryEntry: Movie | Serie | null
+  showType?: boolean
 }
 
 export function ItemGrid({
@@ -70,9 +71,8 @@ export function ItemCard({
   provider,
   providerId,
   libraryEntry,
+  showType = false,
 }: ItemCardProps) {
-  const label = type === 'serie' ? 'Serie' : 'Movie'
-
   const poster = posterUrls?.sm ? (
     <img src={posterUrls.sm} alt="" className="h-full w-full object-cover" />
   ) : (
@@ -111,13 +111,22 @@ export function ItemCard({
         </>
       )}
 
-      <Badge variant="ghost" className="pointer-events-none absolute bottom-0.5 left-0 sm:bottom-1">
-        {label}
-      </Badge>
+      {showType && (
+        <Badge
+          variant="default"
+          className={cn(
+            'pointer-events-none absolute top-1 left-1 font-bold text-white opacity-85 text-[10px] px-1.5 h-4 sm:text-xs sm:px-2 sm:h-5',
+            type === 'movie' && 'border-blue-500 bg-blue-600/80',
+            type === 'serie' && 'border-purple-600 bg-purple-600/80'
+          )}
+        >
+          {type.toUpperCase()}
+        </Badge>
+      )}
 
       {libraryEntry ? (
         <>
-          <div className="absolute left-1 top-1">
+          <div className="absolute right-1 top-1">
             <RemoveLibraryEntryButton entry={libraryEntry} />
           </div>
           {libraryEntry.type === 'movie' && (
@@ -230,7 +239,7 @@ function RemoveLibraryEntryButton({ entry }: { entry: Movie | Serie }) {
       <AlertDialogTrigger
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'icon' }),
-          'max-sm:size-7 bg-[color-mix(in_oklch,var(--destructive)_55%,black_45%)] text-white hover:bg-[color-mix(in_oklch,var(--destructive)_40%,black_60%)]'
+          'max-sm:size-7 bg-[color-mix(in_oklch,var(--destructive)_55%,black_45%)] text-white hover:bg-[color-mix(in_oklch,var(--destructive)_40%,black_60%)] border-none'
         )}
         aria-label={`Remove ${entry.name} from library`}
       >
