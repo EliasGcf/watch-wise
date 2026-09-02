@@ -9,6 +9,9 @@ export function reloadOnHistoryNavigation() {
     if (!restoringHistory) return
 
     restoringHistory = false
-    router.reload({ only: Object.keys(event.detail.page.scrollProps ?? {}) })
+
+    window.requestAnimationFrame(() => {
+      router.reload({ only: Object.keys(event.detail.page.scrollProps ?? {}) })
+    })
   })
 }
