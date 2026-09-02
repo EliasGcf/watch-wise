@@ -24,7 +24,7 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
   const isSearching = query.length > 0
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       <Form
         action="/app/library"
         method="get"
