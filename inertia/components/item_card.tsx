@@ -25,6 +25,7 @@ import {
 import { useAddLibraryEntryMutation } from '~/hooks/use_add_library_entry_mutation'
 import { useUnwatchMovieMutation, useWatchMovieMutation } from '~/hooks/use_movie_watched_mutations'
 import { useRemoveLibraryEntryMutation } from '~/hooks/use_remove_library_entry_mutation'
+import { useSeerr } from '~/hooks/use_seerr'
 import { useUserSettingsQuery } from '~/hooks/use_user_settings_query'
 import { cn } from '~/lib/utils'
 
@@ -73,6 +74,7 @@ export function ItemCard({
   libraryEntry,
   showType = false,
 }: ItemCardProps) {
+  const { seerr } = useSeerr()
   const poster = posterUrls?.sm ? (
     <img src={posterUrls.sm} alt="" className="h-full w-full object-cover" />
   ) : (
@@ -91,6 +93,19 @@ export function ItemCard({
           aria-label={name}
         />
       )}
+      {type === 'movie' && seerr.url && (
+        <>
+          <a
+            href={`${seerr.url.replace(/\/$/, '')}/movie/${providerId}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute inset-0"
+            aria-label={name}
+          />
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-black/20 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+        </>
+      )}
+
       {poster}
 
       {libraryEntry?.type === 'serie' && (

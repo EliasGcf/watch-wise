@@ -53,6 +53,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   RADARR_API_KEY: Env.schema.string.optionalWhen(process.env.RADARR_PROVIDER_DRIVER !== 'radarr'),
 
   // Seerr Webhook
+  SEERR_URL: Env.schema.string.optional({ format: 'url', tld: false }),
   SEERR_USER: Env.schema.string.optional(),
   SEERR_AUTH_HEADER: Env.schema.secret.optional(),
 })

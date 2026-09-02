@@ -6,6 +6,7 @@ import {
   CalendarCheck2,
   CalendarClock,
   Clock3,
+  ExternalLinkIcon,
   LoaderCircle,
   Trash2,
 } from 'lucide-react'
@@ -40,6 +41,7 @@ import {
 import { Progress, ProgressLabel, ProgressValue } from '~/components/ui/progress'
 import { Skeleton } from '~/components/ui/skeleton'
 import { useSeriesEpisodesQuery } from '~/hooks/use_series_episodes_query'
+import { useSeerr } from '~/hooks/use_seerr'
 import { useUserSettingsQuery } from '~/hooks/use_user_settings_query'
 import {
   useUnwatchEpisodeMutation,
@@ -60,6 +62,7 @@ type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: str
 type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
 export default function SeriesShow({ serie }: Props) {
+  const { seerr } = useSeerr()
   const watchSeriesMutation = useWatchSeriesMutation()
   const seriesEpisodesCount = countSeriesEpisodes(serie.catalog.seasons)
   const seriesMarked =
@@ -83,16 +86,28 @@ export default function SeriesShow({ serie }: Props) {
             <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-transparent" />
             <div className="absolute inset-0 bg-linear-to-r from-background via-transparent to-background" />
             <div className="relative flex h-full min-h-72 flex-col gap-5 px-5 pt-5 pb-8 sm:min-h-96 sm:px-8 sm:pb-10">
-              <Button
-                type="button"
-                variant="ghost"
-                size="lg"
-                className="self-start rounded-lg bg-card text-foreground"
-                onClick={() => window.history.back()}
-              >
-                <ArrowLeft data-icon="inline-start" className="size-4" />
-                Back to library
-              </Button>
+              <div className="flex items-center justify-between">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="lg"
+                  className="rounded-lg bg-card text-foreground"
+                  onClick={() => window.history.back()}
+                >
+                  <ArrowLeft data-icon="inline-start" className="size-4" />
+                  Back to library
+                </Button>
+                {seerr.url && (
+                  <a
+                    href={`${seerr.url.replace(/\/$/, '')}/tv/${serie.providerId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
+                  >
+                    <ExternalLinkIcon />
+                  </a>
+                )}
+              </div>
               <CardHeader className="mt-auto sm:max-w-2xl">
                 <CardTitle className="text-4xl font-semibold tracking-[-0.04em] text-balance sm:text-6xl">
                   {serie.name}
@@ -104,16 +119,28 @@ export default function SeriesShow({ serie }: Props) {
         ) : (
           <Card className="py-0">
             <div className="flex flex-col gap-6 px-5 pt-3 pb-6 sm:px-8">
-              <Button
-                type="button"
-                variant="ghost"
-                size="lg"
-                className="self-start rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground"
-                onClick={() => window.history.back()}
-              >
-                <ArrowLeft data-icon="inline-start" className="size-4" />
-                Back to library
-              </Button>
+              <div className="flex items-center justify-between">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="lg"
+                  className="rounded-lg bg-muted/60 text-muted-foreground hover:text-foreground"
+                  onClick={() => window.history.back()}
+                >
+                  <ArrowLeft data-icon="inline-start" className="size-4" />
+                  Back to library
+                </Button>
+                {seerr.url && (
+                  <a
+                    href={`${seerr.url.replace(/\/$/, '')}/tv/${serie.providerId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }))}
+                  >
+                    <ExternalLinkIcon />
+                  </a>
+                )}
+              </div>
               <CardHeader>
                 <CardTitle className="max-w-xl text-4xl font-semibold tracking-[-0.06em] text-balance sm:text-6xl">
                   {serie.name}
