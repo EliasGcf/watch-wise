@@ -725,7 +725,7 @@ test.group('Library entries', (group) => {
     await browserContext.loginAs(user)
     const showCallsBefore = findSerieById.callCount
     const detailsPage = await visit(`/app/library/series/${series[4].id}`)
-    await detailsPage.assertTextContains('body', '33.33%')
+    await detailsPage.assertTextContains('body', '33%')
     assert.equal(findSerieById.callCount - showCallsBefore, 1)
   })
 

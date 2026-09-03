@@ -61,8 +61,6 @@ type WatchedEpisodeProgress = { season: number; episode: number; watchedAt?: str
 
 type Props = InertiaProps<{ serie: Data.Serie.Variants['withCatalog'] }>
 
-const percentageFormatter = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 })
-
 export default function SeriesShow({ serie }: Props) {
   const { seerr } = useSeerr()
   const watchSeriesMutation = useWatchSeriesMutation()
@@ -211,7 +209,7 @@ function SeriesProgress({ value, inProduction }: { value: number; inProduction?:
         Series progress
       </ProgressLabel>
       <ProgressValue className="font-mono text-xs text-muted-foreground">
-        {() => `${percentageFormatter.format(value)}%`}
+        {() => formatProgress(value)}
       </ProgressValue>
     </Progress>
   )
@@ -318,7 +316,7 @@ function SeasonAccordion({
                     />
                   </div>
                   <span className="font-mono text-xs font-normal text-muted-foreground tabular-nums">
-                    {percentageFormatter.format(progress)}%
+                    {formatProgress(progress)}
                   </span>
                 </div>
               </div>
@@ -428,6 +426,10 @@ function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
   if (episodesCount === 0) return 0
 
   return Math.min(100, Math.max(0, (watchedCount / episodesCount) * 100))
+}
+
+function formatProgress(progress: number) {
+  return `${Math.trunc(progress)}%`
 }
 
 function SeasonEpisodes({
