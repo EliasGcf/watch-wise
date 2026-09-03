@@ -20,7 +20,7 @@ import { ItemGrid } from '~/components/item_card'
 type Props = InertiaProps & {
   query: string
   status: string
-  series: Scroll<Data.Serie>
+  series: Scroll<Data.Serie> & { metadata: { total: number } }
 }
 
 const statusItems = [
@@ -56,20 +56,25 @@ export default function LibrarySeries({ query, status, series }: Props) {
           <Field>
             <div className="flex items-end justify-between gap-2">
               <FieldLabel htmlFor="library-series-query">Search series</FieldLabel>
-              <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
-                <SelectTrigger
-                  aria-label="Filter series by watched status"
-                  className="h-4! border-none pr-0"
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="watching">Watching</SelectItem>
-                  <SelectItem value="finished">Finished</SelectItem>
-                  <SelectItem value="not-started">Not started</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">
+                  {series.metadata.total}
+                </span>
+                <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
+                  <SelectTrigger
+                    aria-label="Filter series by watched status"
+                    className="h-4! border-none pr-0"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All</SelectItem>
+                    <SelectItem value="watching">Watching</SelectItem>
+                    <SelectItem value="finished">Finished</SelectItem>
+                    <SelectItem value="not-started">Not started</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <input type="hidden" name="status" value={status} />
@@ -81,7 +86,7 @@ export default function LibrarySeries({ query, status, series }: Props) {
                 placeholder="Search saved series"
                 className="h-11 min-w-0 flex-1"
               />
-              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit">
+              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit px-3">
                 <SearchIcon className="size-4.5" />
                 <span className="sr-only sm:not-sr-only">Search</span>
               </Button>

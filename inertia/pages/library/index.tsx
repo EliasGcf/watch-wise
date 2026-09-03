@@ -42,7 +42,7 @@ export default function LibraryIndex({ query, series, movies, seriesCount, movie
                 placeholder="Search saved movies and series"
                 className="h-11 min-w-0 flex-1"
               />
-              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit">
+              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit px-3">
                 <SearchIcon className="size-4.5" />
                 <span className="sr-only sm:not-sr-only">Search</span>
               </Button>
