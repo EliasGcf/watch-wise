@@ -5,13 +5,15 @@ import type { InferStores } from '@adonisjs/cache/types'
 const cacheConfig = defineConfig({
   default: 'database',
   stores: {
-    database: store().useL2Layer(
-      drivers.database({
-        connectionName: 'cache',
-        tableName: 'cache',
-        autoCreateTable: true,
-      })
-    ),
+    database: store()
+      .useL1Layer(drivers.memory({ maxItems: 1_000 }))
+      .useL2Layer(
+        drivers.database({
+          connectionName: 'cache',
+          tableName: 'cache',
+          autoCreateTable: true,
+        })
+      ),
   },
 })
 

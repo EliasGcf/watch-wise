@@ -1,17 +1,15 @@
-import type Serie from '#models/serie'
-import { WatchedEpisode } from '#models/watched_mark'
-import type { Serie as CatalogSerie } from '#providers/catalog/types'
+export type SerieStatus = 'watching' | 'finished' | 'not-started'
 
-export async function calculateSerieProgress(serie: Serie, catalogSerie: CatalogSerie) {
-  const watchedEpisodesCount = await WatchedEpisode.query()
-    .where('userId', serie.userId)
-    .where('libraryEntryId', serie.id)
-    .whereNot('season', 0)
-    .count('* as total')
-    .firstOrFail()
+export function matchesSerieStatus(watched: number, released: number, status: SerieStatus) {
+  const finished = released > 0 && watched >= released
 
-  const total = Number(watchedEpisodesCount.$extras.total)
-  if (catalogSerie.releasedEpisodesCount === 0) return 0
+  if (status === 'not-started') return watched === 0
+  if (status === 'finished') return finished
+  return watched > 0 && !finished
+}
 
-  return Math.min(100, Math.max(0, Math.round((total / catalogSerie.releasedEpisodesCount) * 100)))
+export function calculateSerieProgress(watched: number, released: number) {
+  if (released === 0) return 0
+
+  return Math.min(100, Math.max(0, (watched / released) * 100))
 }
