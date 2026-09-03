@@ -6,7 +6,7 @@ const cacheConfig = defineConfig({
   default: 'database',
   stores: {
     database: store()
-      .useL1Layer(drivers.memory({ maxItems: 1_000 }))
+      .useL1Layer(drivers.memory())
       .useL2Layer(
         drivers.database({
           connectionName: 'cache',

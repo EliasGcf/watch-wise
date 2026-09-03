@@ -21,8 +21,8 @@ test.group('Catalog search', (group) => {
 
     const page = await visit('/app/catalog/search?q=heat')
 
-    await page.assertTextContains('body', 'Movie')
-    await page.assertTextContains('body', 'Serie')
+    await page.assertTextContains('body', 'MOVIE')
+    await page.assertTextContains('body', 'SERIE')
     await page.assertExists(page.getByRole('button', { name: 'Add Heat to your library' }))
     await page.assertExists(
       page.getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
