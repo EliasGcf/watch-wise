@@ -67,9 +67,11 @@ export default function LibraryMovies({ query, status, movies }: Props) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="watched">Watched</SelectItem>
-                    <SelectItem value="unwatched">Unwatched</SelectItem>
+                    {statusItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

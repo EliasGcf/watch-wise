@@ -68,10 +68,11 @@ export default function LibrarySeries({ query, status, series }: Props) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All</SelectItem>
-                    <SelectItem value="watching">Watching</SelectItem>
-                    <SelectItem value="finished">Finished</SelectItem>
-                    <SelectItem value="not-started">Not started</SelectItem>
+                    {statusItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
