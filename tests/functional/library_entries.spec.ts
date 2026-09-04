@@ -594,6 +594,141 @@ test.group('Library entries', (group) => {
     )
   })
 
+  test('authenticated users can filter series by exact tracking status', async ({
+    assert,
+    browserContext,
+    client,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Series Filterer',
+      email: 'series-filterer@example.com',
+      password: 'secret123',
+    })
+    const catalogSerie = await catalog.findSerieById('series-1')
+    const definitions = [
+      { name: 'Specials Only', total: 1, watched: 0, specials: 1, inProduction: true },
+      { name: 'Ended Complete', total: 2, watched: 2, specials: 0, inProduction: false },
+      { name: 'High Partial', total: 200, watched: 199, specials: 0, inProduction: false },
+      { name: 'Low Positive', total: 201, watched: 1, specials: 0, inProduction: true },
+      { name: 'Decimal Third', total: 3, watched: 1, specials: 0, inProduction: true },
+      { name: 'Ongoing Caught Up', total: 1, watched: 1, specials: 0, inProduction: true },
+    ]
+    const series: Serie[] = []
+    for (const [index, { name }] of definitions.entries()) {
+      series.push(
+        await Serie.create({
+          userId: user.id,
+          provider: 'tmdb',
+          providerId: `status-series-${index + 1}`,
+          name,
+          bannerPath: `/status-series-${index + 1}.jpg`,
+          posterPath: `/status-series-${index + 1}-poster.jpg`,
+          releasedAt: DateTime.fromISO('2020-01-01'),
+          summary: null,
+        })
+      )
+    }
+
+    const findSerieById = sinon.stub(catalog, 'findSerieById').callsFake(async (providerId) => {
+      const index = Number(providerId.replace('status-series-', '')) - 1
+      const definition = definitions[index]
+
+      return {
+        ...catalogSerie!,
+        id: providerId,
+        inProduction: definition.inProduction,
+        episodesCount: definition.total,
+        releasedEpisodesCount: definition.total,
+        seasons: [],
+      }
+    })
+
+    await Promise.all(
+      series.map((serie, index) => {
+        const definition = definitions[index]
+        return WatchedEpisode.createMany([
+          ...Array.from({ length: definition.watched }, (_, episode) => ({
+            userId: user.id,
+            libraryEntryId: serie.id,
+            providerId: `${serie.providerId}-episode-${episode + 1}`,
+            season: 1,
+            episode: episode + 1,
+            duration: 20,
+            watchedAt: DateTime.now(),
+          })),
+          ...Array.from({ length: definition.specials }, (_, episode) => ({
+            userId: user.id,
+            libraryEntryId: serie.id,
+            providerId: `${serie.providerId}-special-${episode + 1}`,
+            season: 0,
+            episode: episode + 1,
+            duration: 20,
+            watchedAt: DateTime.now(),
+          })),
+        ])
+      })
+    )
+
+    const expectedNames = {
+      'not-started': ['Specials Only'],
+      'watching': ['Decimal Third', 'Low Positive', 'High Partial'],
+      'finished': ['Ongoing Caught Up', 'Ended Complete'],
+      'all': definitions.map(({ name }) => name).reverse(),
+    }
+    const expectedCatalogCalls = {
+      'not-started': 1,
+      'watching': 5,
+      'finished': 5,
+      'all': 6,
+    }
+
+    for (const [status, names] of Object.entries(expectedNames)) {
+      const callsBefore = findSerieById.callCount
+      const response = await client
+        .get(`/app/library/series?status=${status}`)
+        .withInertia()
+        .loginAs(user)
+      response.assertOk()
+      assert.equal(response.inertiaProps.status, status)
+      assert.deepEqual(
+        response.inertiaProps.series.data.map((serie: { name: string }) => serie.name),
+        names
+      )
+      assert.equal(
+        findSerieById.callCount - callsBefore,
+        expectedCatalogCalls[status as keyof typeof expectedCatalogCalls]
+      )
+    }
+
+    const defaultCallsBefore = findSerieById.callCount
+    const defaultResponse = await client.get('/app/library/series').withInertia().loginAs(user)
+    defaultResponse.assertOk()
+    assert.equal(defaultResponse.inertiaProps.status, 'all')
+    assert.deepEqual(
+      defaultResponse.inertiaProps.series.data.map((serie: { name: string }) => serie.name),
+      expectedNames.all
+    )
+    assert.equal(findSerieById.callCount - defaultCallsBefore, definitions.length)
+
+    const progressByName = Object.fromEntries(
+      defaultResponse.inertiaProps.series.data.map((serie: { name: string; progress: number }) => [
+        serie.name,
+        serie.progress,
+      ])
+    )
+    assert.equal(progressByName['High Partial'], 99.5)
+    assert.equal(progressByName['Low Positive'], 100 / 201)
+    assert.equal(progressByName['Decimal Third'], (1 / 3) * 100)
+    assert.equal(progressByName['Specials Only'], 0)
+
+    await browserContext.loginAs(user)
+    const showCallsBefore = findSerieById.callCount
+    const detailsPage = await visit(`/app/library/series/${series[4].id}`)
+    await detailsPage.assertTextContains('body', '33%')
+    assert.equal(findSerieById.callCount - showCallsBefore, 1)
+  })
+
   test('dedicated series library pages use the Inertia infinite scroll contract', async ({
     assert,
     browserContext,
@@ -646,7 +781,7 @@ test.group('Library entries', (group) => {
     })
 
     const firstResponse = await client
-      .get('/app/library/series?q=Scroll')
+      .get('/app/library/series?q=Scroll&status=not-started')
       .withInertia()
       .loginAs(user)
     firstResponse.assertOk()
@@ -654,13 +789,14 @@ test.group('Library entries', (group) => {
 
     assert.lengthOf(firstPage.props.series.data, pagination.perPage)
     assert.equal(firstPage.props.series.metadata.total, pagination.perPage * 2)
+    assert.equal(firstPage.props.status, 'not-started')
     assert.equal(firstPage.scrollProps.series.currentPage, 1)
     assert.equal(firstPage.scrollProps.series.nextPage, 2)
     assert.include(firstPage.mergeProps, 'series.data')
     assert.include(firstPage.matchPropsOn, 'series.data.id')
 
     const secondResponse = await client
-      .get('/app/library/series?q=Scroll&page=2')
+      .get('/app/library/series?q=Scroll&status=not-started&page=2')
       .withInertia()
       .loginAs(user)
     secondResponse.assertOk()
@@ -675,13 +811,14 @@ test.group('Library entries', (group) => {
     )
 
     const resetResponse = await client
-      .get('/app/library/series?q=Scroll Series 1')
-      .withInertiaPartialReload('library/series/index', ['query', 'series'])
+      .get('/app/library/series?q=Scroll Series 1&status=not-started')
+      .withInertiaPartialReload('library/series/index', ['query', 'status', 'series'])
       .header('X-Inertia-Reset', 'series')
       .loginAs(user)
     resetResponse.assertOk()
 
     assert.isTrue(resetResponse.body().scrollProps.series.reset)
+    assert.equal(resetResponse.body().props.status, 'not-started')
     assert.notInclude(resetResponse.body().mergeProps, 'series.data')
 
     await browserContext.loginAs(user)

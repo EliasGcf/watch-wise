@@ -209,7 +209,7 @@ function SeriesProgress({ value, inProduction }: { value: number; inProduction?:
         Series progress
       </ProgressLabel>
       <ProgressValue className="font-mono text-xs text-muted-foreground">
-        {() => `${value}%`}
+        {() => formatProgress(value)}
       </ProgressValue>
     </Progress>
   )
@@ -316,7 +316,7 @@ function SeasonAccordion({
                     />
                   </div>
                   <span className="font-mono text-xs font-normal text-muted-foreground tabular-nums">
-                    {progress}%
+                    {formatProgress(progress)}
                   </span>
                 </div>
               </div>
@@ -425,7 +425,11 @@ function countSeriesEpisodes(seasons: SeriesSeasons) {
 function calculateSeasonProgress(watchedCount: number, episodesCount: number) {
   if (episodesCount === 0) return 0
 
-  return Math.min(100, Math.max(0, Math.round((watchedCount / episodesCount) * 100)))
+  return Math.min(100, Math.max(0, (watchedCount / episodesCount) * 100))
+}
+
+function formatProgress(progress: number) {
+  return `${Math.trunc(progress)}%`
 }
 
 function SeasonEpisodes({

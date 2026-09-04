@@ -21,7 +21,7 @@ import { ItemGrid } from '~/components/item_card'
 type Props = InertiaProps & {
   query: string
   status: string
-  movies: Scroll<Data.Movie>
+  movies: Scroll<Data.Movie> & { metadata: { total: number } }
 }
 
 const statusItems = [
@@ -55,19 +55,26 @@ export default function LibraryMovies({ query, status, movies }: Props) {
           <Field>
             <div className="flex items-end justify-between gap-2">
               <FieldLabel htmlFor="library-movies-query">Search movies</FieldLabel>
-              <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
-                <SelectTrigger
-                  aria-label="Filter movies by watched status"
-                  className="h-4! border-none pr-0"
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="watched">Watched</SelectItem>
-                  <SelectItem value="unwatched">Unwatched</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center">
+                <span className="font-mono text-xs text-muted-foreground tabular-nums">
+                  {movies.metadata.total}
+                </span>
+                <Select value={status} items={statusItems} onValueChange={handleStatusChange}>
+                  <SelectTrigger
+                    aria-label="Filter movies by watched status"
+                    className="h-4! border-none pr-0"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {statusItems.map((item) => (
+                      <SelectItem key={item.value} value={item.value}>
+                        {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
             <div className="flex items-center gap-2">
               <input type="hidden" name="status" value={status} />
@@ -79,7 +86,7 @@ export default function LibraryMovies({ query, status, movies }: Props) {
                 placeholder="Search saved movies"
                 className="h-11 min-w-0 flex-1"
               />
-              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit">
+              <Button type="submit" aria-label="Search" className="size-11 sm:w-fit px-3">
                 <SearchIcon className="size-4.5" />
                 <span className="sr-only sm:not-sr-only">Search</span>
               </Button>
