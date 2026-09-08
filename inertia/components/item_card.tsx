@@ -93,10 +93,10 @@ export function ItemCard({
           aria-label={name}
         />
       )}
-      {type === 'movie' && seerr.url && (
+      {(type === 'movie' || !libraryEntry) && seerr.url && (
         <>
           <a
-            href={`${seerr.url.replace(/\/$/, '')}/movie/${providerId}`}
+            href={`${seerr.url.replace(/\/$/, '')}/${type === 'serie' ? 'tv' : 'movie'}/${providerId}`}
             target="_blank"
             rel="noopener noreferrer"
             className="absolute inset-0"

@@ -30,6 +30,7 @@ test.group('Catalog search', (group) => {
   })
 
   test('authenticated users see default titles when no search query is provided', async ({
+    assert,
     browserContext,
     visit,
   }) => {
@@ -46,6 +47,10 @@ test.group('Catalog search', (group) => {
     await page.assertExists(page.getByRole('button', { name: 'Add Heat to your library' }))
     await page.assertExists(
       page.getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
+    )
+    assert.equal(
+      await page.getByRole('link', { name: 'Heat Vision and Jack' }).getAttribute('href'),
+      'http://seerr.local/tv/series-1'
     )
   })
 
