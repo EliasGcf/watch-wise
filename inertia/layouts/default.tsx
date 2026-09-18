@@ -3,6 +3,7 @@ import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
 import { type ReactElement, useEffect } from 'react'
 import { Header } from '~/components/header'
+import { Footer } from '~/components/footer'
 
 type Props = { children: ReactElement<Data.SharedProps> }
 
@@ -43,6 +44,8 @@ function AppShell({ children }: { children: ReactElement<Data.SharedProps> }) {
       >
         <div className="mx-auto w-full max-w-6xl px-5 py-5 sm:px-8 lg:py-6">{children}</div>
       </main>
+
+      <Footer />
     </div>
   )
 }
