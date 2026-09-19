@@ -1,4 +1,5 @@
 import { Form } from '@adonisjs/inertia/react'
+import { type ComponentProps } from 'react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,13 +13,17 @@ import {
 } from '~/components/ui/alert_dialog'
 
 type Props = {
-  children: React.ReactElement
+  children?: React.ReactElement
+  render?: ComponentProps<typeof AlertDialogTrigger>['render']
+  className?: string
 }
 
-export function LogOutAlertDialog({ children }: Props) {
+export function LogOutAlertDialog({ children, render, className }: Props) {
   return (
     <AlertDialog>
-      <AlertDialogTrigger aria-label="Log out" render={children} />
+      <AlertDialogTrigger className={className} aria-label="Log out" render={render}>
+        {children}
+      </AlertDialogTrigger>
 
       <AlertDialogContent size="sm">
         <AlertDialogHeader>

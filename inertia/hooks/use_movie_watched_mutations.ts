@@ -19,7 +19,6 @@ export function useWatchMovieMutation() {
   return useMutation(
     api.api.library.movies.watch.mutationOptions({
       onSuccess: async () => {
-        toast.success('Movie was marked as watched.')
         await refreshLibrary(queryClient, Object.keys(page.scrollProps ?? {}))
       },
       onError: () => toast.error('Movie could not be marked as watched.'),
@@ -34,7 +33,6 @@ export function useUnwatchMovieMutation() {
   return useMutation(
     api.api.library.movies.unwatch.mutationOptions({
       onSuccess: async () => {
-        toast.success('Movie is no longer marked as watched.')
         await refreshLibrary(queryClient, Object.keys(page.scrollProps ?? {}))
       },
       onError: () => toast.error('Movie could not be unmarked as watched.'),

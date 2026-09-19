@@ -9,7 +9,6 @@ export function useRemoveLibraryEntryMutation(onSuccess?: () => void | Promise<v
   return useMutation(
     api.api.library.destroy.mutationOptions({
       onSuccess: async () => {
-        toast.success('Title was removed from your library.')
         if (onSuccess) {
           await onSuccess()
         } else {

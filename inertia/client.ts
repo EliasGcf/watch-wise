@@ -13,3 +13,5 @@ export const queryClient = new QueryClient()
 export const api = createTuyauReactQueryClient({ client })
 
 export const urlFor = client.urlFor
+
+export type RouteNames = keyof typeof registry.routes
