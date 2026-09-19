@@ -1,6 +1,6 @@
 import { usePage } from '@inertiajs/react'
 import { Link } from '@adonisjs/inertia/react'
-import { LogOutIcon, TimerIcon } from 'lucide-react'
+import { LogOutIcon } from 'lucide-react'
 
 import { NavLink } from '~/components/nav_link'
 import { Button, buttonVariants } from '~/components/ui/button'
@@ -8,6 +8,9 @@ import { LogOutAlertDialog } from '~/components/log_out_alert_dialog'
 
 import { formatWatchedTime } from '~/lib/utils'
 import { type RouteNames } from '~/client'
+import { useRef } from 'react'
+import { TimerIcon, type TimerIconHandle } from '~/components/ui/timer_icon'
+import { useAfterFirstRender } from '~/hooks/use_after_first_render'
 
 const LINKS = [
   { route: 'app.home', name: 'Home' },
@@ -17,11 +20,16 @@ const LINKS = [
 ] satisfies { route: RouteNames; name: string }[]
 
 export function Header() {
+  const iconRef = useRef<TimerIconHandle>(null)
   const { props } = usePage()
 
   function getLinkClassName(current: boolean) {
     return buttonVariants({ variant: current ? 'secondary' : 'ghost', size: 'sm' })
   }
+
+  useAfterFirstRender(() => {
+    iconRef.current?.startAnimation()
+  }, [props.user?.watchedTime])
 
   return (
     <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
@@ -36,8 +44,10 @@ export function Header() {
         </div>
 
         <div className="flex shrink-0 items-center gap-1 text-muted-foreground">
-          <TimerIcon className="size-4" />
-          <span className="text-sm">{formatWatchedTime(props.user?.watchedTime ?? 0)}</span>
+          <TimerIcon ref={iconRef} className="size-4" size={16} />
+          <span className="text-sm tabular-nums">
+            {formatWatchedTime(props.user?.watchedTime ?? 0)}
+          </span>
         </div>
 
         <div className="flex">

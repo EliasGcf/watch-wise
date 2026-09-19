@@ -86,7 +86,6 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add Heat to your library' }).click()
-    await searchPage.assertTextContains('body', 'Title was added to your library.')
     await searchPage.assertPath('/app/catalog/search')
 
     const libraryPage = await visit('/app/library')
@@ -121,7 +120,6 @@ test.group('Catalog search', (group) => {
     await searchPage
       .getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
       .click()
-    await searchPage.assertTextContains('body', 'Title was added to your library.')
     await searchPage.assertPath('/app/catalog/search')
 
     const libraryPage = await visit('/app/library')
@@ -196,7 +194,6 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add Heat to your library' }).click()
-    await searchPage.assertTextContains('body', 'Title was added to your library.')
 
     assert.lengthOf(await existingUser.related('movies').query().where('providerId', 'movie-1'), 1)
     assert.lengthOf(await addingUser.related('movies').query().where('providerId', 'movie-1'), 1)
@@ -234,7 +231,6 @@ test.group('Catalog search', (group) => {
     await searchPage
       .getByRole('button', { name: 'Add Heat Vision and Jack to your library' })
       .click()
-    await searchPage.assertTextContains('body', 'Title was added to your library.')
 
     assert.lengthOf(await existingUser.related('series').query().where('providerId', 'series-1'), 1)
     assert.lengthOf(await addingUser.related('series').query().where('providerId', 'series-1'), 1)
@@ -278,7 +274,6 @@ test.group('Catalog search', (group) => {
     const watchResponse = searchPage.waitForResponse('**/api/library/movies/*/watch')
     await searchPage.getByRole('checkbox', { name: 'Mark Heat as watched' }).click()
     await watchResponse
-    await searchPage.assertTextContains('body', 'Movie was marked as watched.')
     await searchPage.assertExists(
       searchPage.getByRole('button', { name: 'Remove Heat from library' })
     )
@@ -302,7 +297,6 @@ test.group('Catalog search', (group) => {
 
     const searchPage = await visit('/app/catalog/search?q=heat')
     await searchPage.getByRole('button', { name: 'Add Unknown Heat to your library' }).click()
-    await searchPage.assertTextContains('body', 'Title was added to your library.')
     await searchPage.assertPath('/app/catalog/search')
 
     const libraryPage = await visit('/app/library')

@@ -23,7 +23,7 @@ test.group('Home', (group) => {
     const page = await visit('/app')
     await page.assertTextContains('body', 'The screen is waiting')
     await page.assertTextContains('body', 'Watched Time')
-    await page.assertTextContains('body', '0m')
+    await page.assertTextContains('body', '00m')
     await page.assertTextContains(
       'body',
       'Your library is empty. Search the catalog to add your first title.'
@@ -77,7 +77,7 @@ test.group('Home', (group) => {
     const page = await visit('/app')
     await page.assertTextContains('body', 'The screen is waiting')
     await page.assertTextContains('body', 'Watched Time')
-    await page.assertTextContains('body', '0m')
+    await page.assertTextContains('body', '02h 50m')
     await page.assertTextContains('body', 'Movies')
     await page.assertTextContains('body', 'Series')
     await page.assertTextContains('body', 'Up next from your library')

@@ -95,6 +95,7 @@
     "edge.js": "6.5.1",
     "lucide-react": "1.34.0",
     "luxon": "3.7.2",
+    "motion": "13.4.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "reflect-metadata": "0.2.2",
