@@ -1,30 +1,56 @@
-import { HomeIcon, ListIcon, SearchIcon, SettingsIcon } from 'lucide-react'
+import {} from //
+// HomeIcon,
+// ListIcon,
+// SearchIcon,
+// SettingsIcon,
+'lucide-react'
 
 import { NavLink } from '~/components/nav_link'
-import { type RouteNames } from '~/client'
-import { type ClassValue } from 'clsx'
-import { cn } from '~/lib/utils'
+import { HomeIcon, type HomeIconHandle as IconHandle } from '~/components/ui/home_icon'
+import { ListIcon } from '~/components/ui/list_icon'
+import { SearchIcon } from '~/components/ui/search_icon'
+import { SettingsIcon } from '~/components/ui/settings_icon'
+import { useRef } from 'react'
 
 const LINKS = {
   className: 'data-current:text-primary p-3',
   items: [
     {
       route: 'app.home',
-      icon: <HomeIcon className="size-6" />,
+      icon: HomeIcon,
     },
     {
       route: 'app.library.index',
-      icon: <ListIcon className="size-6" />,
+      icon: ListIcon,
     },
     {
       route: 'app.catalog.search',
-      icon: <SearchIcon className="size-6" />,
+      icon: SearchIcon,
     },
     {
       route: 'app.settings',
-      icon: <SettingsIcon className="size-6" />,
+      icon: SettingsIcon,
     },
-  ] as { route: RouteNames; icon: React.ReactNode; className?: ClassValue }[],
+  ],
+} as const
+
+function FooterNavLink({ link }: { link: (typeof LINKS.items)[number] }) {
+  const iconRef = useRef<IconHandle>(null)
+
+  function handleLinkClick() {
+    iconRef.current?.startAnimation()
+  }
+
+  return (
+    <NavLink
+      key={link.route}
+      route={link.route}
+      onClick={handleLinkClick}
+      className={LINKS.className}
+    >
+      <link.icon ref={iconRef} />
+    </NavLink>
+  )
 }
 
 export function Footer() {
@@ -32,13 +58,7 @@ export function Footer() {
     <footer className="md:hidden border-t bg-background/95 backdrop-blur px-3 py-2 pb-[max(0.5rem,calc(env(safe-area-inset-bottom)-0.625rem))]">
       <nav className="flex justify-between">
         {LINKS.items.map((link) => (
-          <NavLink
-            key={link.route}
-            route={link.route}
-            className={cn(LINKS.className, link.className)}
-          >
-            {link.icon}
-          </NavLink>
+          <FooterNavLink key={link.route} link={link} />
         ))}
       </nav>
     </footer>
