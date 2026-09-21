@@ -14145,7 +14145,29 @@
                       }
                     },
                     "name": { "type": "string", "example": "Game of Thrones" },
-                    "next_episode_to_air": {},
+                    "next_episode_to_air": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer", "example": 1551830, "default": 0 },
+                        "name": { "type": "string", "example": "The Iron Throne" },
+                        "overview": {
+                          "type": "string",
+                          "example": "In the aftermath of the devastating attack on King's Landing, Daenerys must face the survivors."
+                        },
+                        "vote_average": { "type": "number", "example": 4.809, "default": 0 },
+                        "vote_count": { "type": "integer", "example": 241, "default": 0 },
+                        "air_date": { "type": "string", "example": "2019-05-19" },
+                        "episode_number": { "type": "integer", "example": 6, "default": 0 },
+                        "production_code": { "type": "string", "example": "806" },
+                        "runtime": { "type": "integer", "example": 80, "default": 0 },
+                        "season_number": { "type": "integer", "example": 8, "default": 0 },
+                        "show_id": { "type": "integer", "example": 1399, "default": 0 },
+                        "still_path": {
+                          "type": "string",
+                          "example": "/zBi2O5EJfgTS6Ae0HdAYLm9o2nf.jpg"
+                        }
+                      }
+                    },
                     "networks": {
                       "type": "array",
                       "items": {

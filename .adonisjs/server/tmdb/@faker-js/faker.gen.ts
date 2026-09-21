@@ -5279,7 +5279,20 @@ export const fakeGet3TvBySeriesIdResponse = (options?: Options): Get3TvBySeriesI
                 ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { still_path: f.string.sample() }
             } },
         ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { name: f.string.sample() },
-        ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { next_episode_to_air: undefined },
+        ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { next_episode_to_air: {
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { id: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { name: f.string.sample() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { overview: f.string.sample() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { vote_average: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.float() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { vote_count: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { air_date: f.string.sample() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { episode_number: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { production_code: f.string.sample() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { runtime: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { season_number: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { show_id: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
+                ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { still_path: f.string.sample() }
+            } },
         ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { networks: f.helpers.multiple(() => ({
                 ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { id: resolveCondition(options?.useDefault ?? false, f) ? 0 : f.number.int() },
                 ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { logo_path: f.string.sample() },
