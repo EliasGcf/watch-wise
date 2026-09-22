@@ -13,7 +13,7 @@ import type {
   ImageSize,
 } from '#providers/catalog/types'
 import { CatalogProviderError } from '#providers/catalog/types'
-import { createCacheDecorator } from '#decorators/cache_decorator'
+import { createCacheDecorator, defaultTtl } from '#decorators/cache_decorator'
 import { DateTime } from 'luxon'
 
 const cache = createCacheDecorator({ prefixKey: 'tmdb' })
@@ -104,7 +104,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
     }
   }
 
-  @cache()
+  @cache({ ttl: (serie: Serie | null) => ttlUntilNextRelease(serie?.nextEpisodeReleasedAt) })
   async findSerieById(providerId: string): Promise<Serie | null> {
     const response = await this.tmdb.tv.series.details({
       throwOnError: false,
@@ -122,6 +122,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       nextEpisode?.air_date && DateTime.fromISO(nextEpisode.air_date) <= DateTime.now()
         ? nextEpisode
         : response.data.last_episode_to_air
+    const nextEpisodeReleasedAt = response.data.next_episode_to_air?.air_date ?? null
     const lastSeason = latestReleasedEpisode?.season_number
     const lastEpisode = latestReleasedEpisode?.episode_number
     const allReleased = lastSeason === undefined || lastSeason === 0 || lastEpisode === undefined
@@ -157,6 +158,7 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
       releasedAt: response.data.first_air_date ?? null,
       summary: response.data.overview ?? null,
       inProduction: response.data.in_production ?? true,
+      nextEpisodeReleasedAt,
       episodesCount: seasons
         .filter((season) => season.number !== 0)
         .reduce((total, season) => total + season.episodesCount, 0),
@@ -266,4 +268,15 @@ function mapSearchResults(results: SearchApiResult[]): CatalogSearchResult[] {
       },
     ]
   })
+}
+
+function ttlUntilNextRelease(releasedAt: string | null | undefined): number {
+  if (!releasedAt) return defaultTtl
+
+  const releaseAt = DateTime.fromISO(releasedAt)
+  const remainingMs = releaseAt.toMillis() - DateTime.now().toMillis()
+
+  if (remainingMs <= 0) return defaultTtl
+
+  return Math.min(remainingMs, defaultTtl)
 }

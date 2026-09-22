@@ -1,11 +1,12 @@
 import cacheService from '@adonisjs/cache/services/main'
+import { type Duration } from '@adonisjs/cache/types'
 import config from '@adonisjs/core/services/config'
 
-const defaultTtl = '24h'
+export const defaultTtl = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
 
 type CacheDecoratorDefaults = {
   prefixKey?: string
-  ttl?: string
+  ttl?: Duration | ((result: any) => string | number)
 }
 
 type AnyMethod = (...args: any[]) => any
@@ -30,8 +31,14 @@ export function createCacheDecorator(defaults: CacheDecoratorDefaults = {}) {
         try {
           return await cacheService.getOrSet({
             key,
-            ttl,
-            factory: () => original.apply(this, args),
+            ttl: typeof ttl === 'function' ? undefined : ttl,
+            factory: async (ctx) => {
+              if (typeof ttl !== 'function') return original.apply(this, args)
+
+              const result = await original.apply(this, args)
+              ctx.setOptions({ ttl: ttl(result) })
+              return result
+            },
           })
         } catch (error) {
           if (error instanceof Error && error.cause instanceof Error) {

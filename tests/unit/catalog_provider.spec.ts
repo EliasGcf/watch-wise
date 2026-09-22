@@ -6,6 +6,7 @@ import { CatalogProviderError } from '#services/catalog_provider'
 import cache from '@adonisjs/cache/services/main'
 import config from '@adonisjs/core/services/config'
 import { test } from '@japa/runner'
+import timekeeper from 'timekeeper'
 
 test.group('Catalog provider', (group) => {
   group.each.setup(() => {
@@ -180,6 +181,7 @@ test.group('Catalog provider', (group) => {
         releasedAt: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
         inProduction: false,
+        nextEpisodeReleasedAt: null,
         episodesCount: 2,
         releasedEpisodesCount: 2,
         seasons: [{ name: 'Season 1', number: 1, episodesCount: 2, releasedEpisodesCount: 2 }],
@@ -231,6 +233,7 @@ test.group('Catalog provider', (group) => {
         releasedAt: '1999-01-01',
         summary: 'A pilot about a super-intelligent astronaut.',
         inProduction: true,
+        nextEpisodeReleasedAt: '1999-01-02',
         episodesCount: 8,
         releasedEpisodesCount: 5,
         seasons: [
@@ -274,6 +277,55 @@ test.group('Catalog provider', (group) => {
 
     assert.deepEqual(await driver.search('heat'), await driver.search('heat'))
     assert.equal(calls, 1)
+  })
+
+  test('refreshes released episode counts after an episode air date passes', async ({ assert }) => {
+    await cache.clear()
+
+    let calls = 0
+
+    const tmdb = new TmdbSdk({
+      client: createClient({
+        baseUrl: 'https://api.themoviedb.org',
+        fetch: async () => {
+          calls += 1
+
+          return new Response(
+            JSON.stringify({
+              id: 1,
+              name: 'Time Series',
+              first_air_date: '2020-01-01',
+              last_episode_to_air: { season_number: 1, episode_number: 1 },
+              next_episode_to_air: {
+                air_date: '2026-09-21',
+                season_number: 1,
+                episode_number: 2,
+              },
+              seasons: [{ name: 'Season 1', season_number: 1, episode_count: 2 }],
+            }),
+            { status: 200, headers: { 'content-type': 'application/json' } }
+          )
+        },
+      }),
+    })
+    const driver = new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+      tmdb
+    )
+
+    try {
+      timekeeper.freeze('2026-09-20T12:00:00Z')
+      const beforeRelease = await driver.findSerieById('1')
+
+      timekeeper.freeze('2026-09-21T12:00:00Z')
+      const afterRelease = await driver.findSerieById('1')
+
+      assert.equal(beforeRelease?.releasedEpisodesCount, 1)
+      assert.equal(afterRelease?.releasedEpisodesCount, 2)
+      assert.equal(calls, 2)
+    } finally {
+      timekeeper.reset()
+    }
   })
 
   test('bypasses TMDB cache when disabled', async ({ assert }) => {

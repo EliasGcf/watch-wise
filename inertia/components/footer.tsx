@@ -1,10 +1,3 @@
-import {} from //
-// HomeIcon,
-// ListIcon,
-// SearchIcon,
-// SettingsIcon,
-'lucide-react'
-
 import { NavLink } from '~/components/nav_link'
 import { HomeIcon, type HomeIconHandle as IconHandle } from '~/components/ui/home_icon'
 import { ListIcon } from '~/components/ui/list_icon'

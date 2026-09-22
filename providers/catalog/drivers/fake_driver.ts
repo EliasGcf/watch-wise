@@ -171,6 +171,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
         releasedAt: '1998-01-01',
         summary: 'A fake multi season series.',
         inProduction: true,
+        nextEpisodeReleasedAt: null,
         episodesCount: 4,
         releasedEpisodesCount: 3,
         seasons: [
@@ -203,6 +204,7 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
       releasedAt: series.first_air_date,
       summary: series.overview,
       inProduction: series.in_production ?? true,
+      nextEpisodeReleasedAt: null,
       episodesCount: 2,
       releasedEpisodesCount: 1,
       seasons: [

@@ -33,6 +33,7 @@ export type FindResult = {
       inProduction: boolean
       episodesCount: number
       releasedEpisodesCount: number
+      nextEpisodeReleasedAt: string | null
       seasons: Array<{
         name: string
         number: number
