@@ -9,7 +9,7 @@ export interface HomeIconHandle {
   stopAnimation: () => void
 }
 
-type HomeIconProps = React.ComponentProps<'div'> & {
+type HomeIconProps = Omit<React.ComponentProps<'div'>, 'ref'> & {
   ref: React.Ref<HomeIconHandle>
   size?: number
 }

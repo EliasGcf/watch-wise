@@ -8,7 +8,7 @@ export interface SettingsIconHandle {
   stopAnimation: () => void
 }
 
-type SettingsIconProps = React.ComponentProps<'div'> & {
+type SettingsIconProps = Omit<React.ComponentProps<'div'>, 'ref'> & {
   ref: React.Ref<SettingsIconHandle>
   size?: number
 }

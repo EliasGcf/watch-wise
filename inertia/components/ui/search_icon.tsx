@@ -8,7 +8,7 @@ export interface SearchIconHandle {
   stopAnimation: () => void
 }
 
-type SearchIconProps = React.ComponentProps<typeof m.div> & {
+type SearchIconProps = Omit<React.ComponentProps<typeof m.div>, 'ref'> & {
   ref: React.Ref<SearchIconHandle>
   size?: number
   duration?: number

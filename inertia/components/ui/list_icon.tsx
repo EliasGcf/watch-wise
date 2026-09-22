@@ -8,7 +8,7 @@ export interface ListIconHandle {
   stopAnimation: () => void
 }
 
-type ListIconProps = React.ComponentProps<typeof m.div> & {
+type ListIconProps = Omit<React.ComponentProps<typeof m.div>, 'ref'> & {
   ref: React.Ref<ListIconHandle>
   size?: number
   duration?: number

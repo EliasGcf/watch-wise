@@ -9,7 +9,7 @@ export interface TimerIconHandle {
   stopAnimation: () => void
 }
 
-type TimerIconProps = React.ComponentProps<'div'> & {
+type TimerIconProps = Omit<React.ComponentProps<'div'>, 'ref'> & {
   ref: React.Ref<TimerIconHandle>
   size?: number
 }
