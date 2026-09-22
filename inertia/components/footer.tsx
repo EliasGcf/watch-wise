@@ -30,15 +30,15 @@ const LINKS = {
 function FooterNavLink({ link }: { link: (typeof LINKS.items)[number] }) {
   const iconRef = useRef<IconHandle>(null)
 
-  function handleLinkClick() {
-    iconRef.current?.startAnimation()
+  function handleCurrentChange(current: boolean) {
+    if (current) iconRef.current?.startAnimation()
   }
 
   return (
     <NavLink
       key={link.route}
       route={link.route}
-      onClick={handleLinkClick}
+      onCurrentChange={handleCurrentChange}
       className={LINKS.className}
     >
       <link.icon ref={iconRef} />
