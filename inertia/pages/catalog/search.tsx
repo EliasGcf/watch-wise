@@ -103,7 +103,7 @@ export default function CatalogSearch({ query, type, results, limitation }: Prop
         </Alert>
       )}
 
-      <section className="flex flex-col gap-4" aria-label="Catalog search results">
+      <section aria-label="Catalog search results">
         {results.data.length > 0 && (
           <InfiniteScroll
             data="results"
