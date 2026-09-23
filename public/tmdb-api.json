@@ -13414,6 +13414,11 @@
             "in": "query",
             "description": "`ISO-639-1`-`ISO-3166-1` code",
             "schema": { "type": "string", "default": "en-US" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "format": "int32", "default": 1 }
           }
         ],
         "responses": {

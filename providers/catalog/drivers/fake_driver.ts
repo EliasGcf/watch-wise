@@ -3,10 +3,13 @@ import {
   fakeGet3SearchMultiResponse,
   fakeGet3TvBySeriesIdResponse,
 } from '#generated/tmdb/@faker-js/faker.gen'
+import { pagination } from '#config/pagination'
 import type {
   Episode,
   CatalogProvider,
   CatalogSearchResult,
+  CatalogSearchPage,
+  CatalogSearchType,
   FindResult,
   FakeCatalogProviderConfig,
   ItemType,
@@ -24,19 +27,67 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
     return makeImageUrl(this.config.baseImageUrl, path)
   }
 
-  async search(query: string): Promise<CatalogSearchResult[]> {
+  async search(
+    query: string,
+    type: CatalogSearchType = 'all',
+    page = 1
+  ): Promise<CatalogSearchPage> {
     if (query === this.config.failureQuery) {
       throw new CatalogProviderError('Fake catalog provider failure')
     }
 
-    return this.searchResults()
+    const results = filterByType(this.searchResults(query), type)
+    const start = (page - 1) * pagination.perPage
+
+    return {
+      data: results.slice(start, start + pagination.perPage),
+      currentPage: page,
+      lastPage: Math.max(1, Math.ceil(results.length / pagination.perPage)),
+      total: results.length,
+    }
   }
 
-  async weekTrending(): Promise<CatalogSearchResult[]> {
-    return this.searchResults()
+  async weekTrending(type: CatalogSearchType = 'all', page = 1): Promise<CatalogSearchPage> {
+    const results = filterByType(
+      [
+        ...this.searchResults(),
+        ...Array.from({ length: 33 }, (_, index) => ({
+          provider: 'tmdb' as const,
+          id: `trending-${index + 1}`,
+          type: 'movie' as const,
+          name: `Trending Movie ${index + 1}`,
+          bannerPath: `/trending-${index + 1}.jpg`,
+          posterPath: `/trending-${index + 1}-poster.jpg`,
+          releasedAt: '2020-01-01',
+          summary: null,
+        })),
+      ],
+      type
+    )
+    const start = (page - 1) * pagination.perPage
+
+    return {
+      data: results.slice(start, start + pagination.perPage),
+      currentPage: page,
+      lastPage: Math.max(1, Math.ceil(results.length / pagination.perPage)),
+      total: results.length,
+    }
   }
 
-  private searchResults(): CatalogSearchResult[] {
+  private searchResults(query = ''): CatalogSearchResult[] {
+    if (query === 'scroll') {
+      return Array.from({ length: 36 }, (_, index) => ({
+        provider: 'tmdb' as const,
+        id: `scroll-${index + 1}`,
+        type: 'movie' as const,
+        name: `Scroll Movie ${index + 1}`,
+        bannerPath: `/scroll-${index + 1}.jpg`,
+        posterPath: `/scroll-${index + 1}-poster.jpg`,
+        releasedAt: '2020-01-01',
+        summary: null,
+      }))
+    }
+
     const response = fakeGet3SearchMultiResponse()
     const results = [
       {
@@ -420,6 +471,10 @@ export default class FakeCatalogProviderDriver implements CatalogProvider {
 
     return null
   }
+}
+
+function filterByType(results: CatalogSearchResult[], type: CatalogSearchType) {
+  return type === 'all' ? results : results.filter((result) => result.type === type)
 }
 
 function makeImageUrl(baseImageUrl: string, path: string | null) {

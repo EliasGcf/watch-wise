@@ -3,6 +3,7 @@ import TmdbCatalogProviderDriver from '#providers/catalog/drivers/tmdb_driver'
 import {
   CatalogProvider,
   CatalogProviderError,
+  type CatalogSearchType,
   type ItemType,
   type CatalogProviderConfig,
   type CatalogDriver,
@@ -49,12 +50,12 @@ export class CatalogProviderManager extends CatalogProvider {
     throw new CatalogProviderError(`Unsupported catalog provider driver "${name}"`)
   }
 
-  search(query: string) {
-    return this.use().search(query)
+  search(query: string, type: CatalogSearchType = 'all', page?: number) {
+    return this.use().search(query, type, page)
   }
 
-  weekTrending() {
-    return this.use().weekTrending()
+  weekTrending(type: CatalogSearchType = 'all', page?: number) {
+    return this.use().weekTrending(type, page)
   }
 
   find(type: ItemType, providerId: string) {

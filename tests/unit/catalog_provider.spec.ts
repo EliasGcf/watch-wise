@@ -52,7 +52,7 @@ test.group('Catalog provider', (group) => {
       tmdb
     ).search('heat')
 
-    assert.deepEqual(results, [
+    assert.deepEqual(results.data, [
       {
         provider: 'tmdb',
         id: '1',
@@ -94,6 +94,69 @@ test.group('Catalog provider', (group) => {
     )
   })
 
+  test('maps TMDB search pagination metadata', async ({ assert }) => {
+    const tmdb = makeTmdbSdk(
+      new Response(
+        JSON.stringify({
+          page: 2,
+          total_pages: 4,
+          total_results: 73,
+          results: [],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      )
+    )
+
+    assert.deepEqual(
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+        tmdb
+      ).search('heat', 'all', 2),
+      { data: [], currentPage: 2, lastPage: 4, total: 73 }
+    )
+  })
+
+  test('maps typed TMDB search results without media_type', async ({ assert }) => {
+    const tmdb = makeTmdbSdk(
+      new Response(
+        JSON.stringify({
+          results: [{ id: 1, title: 'Heat', release_date: '1995-12-15' }],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      )
+    )
+
+    const result = await new TmdbCatalogProviderDriver(
+      { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+      tmdb
+    ).search('heat', 'movie')
+
+    assert.equal(result.data[0].type, 'movie')
+    assert.equal(result.data[0].name, 'Heat')
+  })
+
+  test('maps TMDB trending pagination metadata', async ({ assert }) => {
+    const tmdb = makeTmdbSdk(
+      new Response(
+        JSON.stringify({
+          page: 2,
+          total_pages: 3,
+          total_results: 60,
+          results: [],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } }
+      )
+    )
+
+    assert.deepEqual(
+      await new TmdbCatalogProviderDriver(
+        { baseImageUrl: 'https://image.tmdb.org/t/p/', accessToken: 'test-token' },
+        tmdb
+      ).weekTrending('all', 2),
+      { data: [], currentPage: 2, lastPage: 3, total: 60 }
+    )
+  })
+
   test('finds fake catalog titles by provider id and type', async ({ assert }) => {
     const driver = new FakeCatalogProviderDriver({
       baseImageUrl: 'https://image.tmdb.org/t/p/original/',
@@ -112,6 +175,18 @@ test.group('Catalog provider', (group) => {
       summary: 'A professional thief and a relentless detective collide.',
     })
     assert.isNull(await driver.find('serie', 'movie-1'))
+
+    const movies = await driver.search('heat', 'movie')
+    const series = await driver.search('heat', 'serie')
+
+    assert.deepEqual(
+      movies.data.map((result) => result.type),
+      ['movie', 'movie']
+    )
+    assert.deepEqual(
+      series.data.map((result) => result.type),
+      ['serie']
+    )
   })
 
   test('maps TMDB detail responses to catalog titles', async ({ assert }) => {
@@ -275,7 +350,10 @@ test.group('Catalog provider', (group) => {
       tmdb
     )
 
-    assert.deepEqual(await driver.search('heat'), await driver.search('heat'))
+    const firstSearch = await driver.search('heat')
+    const secondSearch = await driver.search('heat')
+
+    assert.deepEqual(firstSearch.data, secondSearch.data)
     assert.equal(calls, 1)
   })
 

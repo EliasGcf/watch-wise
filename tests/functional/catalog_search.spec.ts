@@ -29,6 +29,31 @@ test.group('Catalog search', (group) => {
     )
   })
 
+  test('authenticated users can filter catalog results by type', async ({
+    browserContext,
+    visit,
+  }) => {
+    const user = await User.create({
+      fullName: 'Taylor Filter',
+      email: 'taylor-filter@example.com',
+      password: 'secret123',
+    })
+
+    await browserContext.loginAs(user)
+
+    const moviePage = await visit('/app/catalog/search?q=heat&type=movie')
+    await moviePage.assertExists(moviePage.getByRole('link', { name: 'Heat', exact: true }))
+    await moviePage.assertNotExists(
+      moviePage.getByRole('link', { name: 'Heat Vision and Jack', exact: true })
+    )
+
+    const seriesPage = await visit('/app/catalog/search?q=heat&type=serie')
+    await seriesPage.assertExists(
+      seriesPage.getByRole('link', { name: 'Heat Vision and Jack', exact: true })
+    )
+    await seriesPage.assertNotExists(seriesPage.getByRole('link', { name: 'Heat', exact: true }))
+  })
+
   test('authenticated users see default titles when no search query is provided', async ({
     assert,
     browserContext,

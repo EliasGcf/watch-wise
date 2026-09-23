@@ -1,6 +1,7 @@
 export type CatalogDriver = 'fake' | 'tmdb'
 
 export type ItemType = 'movie' | 'serie'
+export type CatalogSearchType = ItemType | 'all'
 
 export type ImageSize = 'sm' | 'md' | 'lg' | 'original'
 
@@ -17,6 +18,13 @@ export type CatalogSearchResult = {
   bannerPath: string | null
   posterPath: string | null
 } & ({ type: 'movie' } | { type: 'serie' })
+
+export type CatalogSearchPage = {
+  data: CatalogSearchResult[]
+  currentPage: number
+  lastPage: number
+  total: number
+}
 
 export type FindResult = {
   provider: CatalogDriver
@@ -58,8 +66,12 @@ export type Episode = {
 }
 
 export abstract class CatalogProvider {
-  abstract search(query: string): Promise<CatalogSearchResult[]>
-  abstract weekTrending(): Promise<CatalogSearchResult[]>
+  abstract search(
+    query: string,
+    type?: CatalogSearchType,
+    page?: number
+  ): Promise<CatalogSearchPage>
+  abstract weekTrending(type?: CatalogSearchType, page?: number): Promise<CatalogSearchPage>
   abstract find(type: ItemType, providerId: string): Promise<Movie | Serie | null>
   abstract findMovieById(providerId: string): Promise<Movie | null>
   abstract findSerieById(providerId: string): Promise<Serie | null>

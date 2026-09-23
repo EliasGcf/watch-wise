@@ -4,6 +4,8 @@ import type {
   Episode,
   CatalogProvider,
   CatalogSearchResult,
+  CatalogSearchPage,
+  CatalogSearchType,
   TmdbCatalogProviderConfig,
   ItemType,
   FindResult,
@@ -39,34 +41,65 @@ export default class TmdbCatalogProviderDriver implements CatalogProvider {
   }
 
   @cache()
-  async search(query: string): Promise<CatalogSearchResult[]> {
-    const response = await this.tmdb.search.multi({
-      throwOnError: false,
+  async search(
+    query: string,
+    type: CatalogSearchType = 'all',
+    page = 1
+  ): Promise<CatalogSearchPage> {
+    const options = {
+      throwOnError: false as const,
       query: {
         query,
         include_adult: false,
         language: 'en-US',
+        page,
       },
-    })
+    }
+    const response =
+      type === 'movie'
+        ? await this.tmdb.search.movie(options)
+        : type === 'serie'
+          ? await this.tmdb.search.tv(options)
+          : await this.tmdb.search.multi(options)
     if (response.error) {
       throw new CatalogProviderError('TMDB search request failed', { cause: response.error })
     }
-    if (!response.data?.results) return []
-    return mapSearchResults(response.data.results)
+    if (!response.data?.results) {
+      return { data: [], currentPage: page, lastPage: page, total: 0 }
+    }
+
+    return {
+      data: mapSearchResults(response.data.results, type === 'all' ? undefined : type),
+      currentPage: response.data.page ?? page,
+      lastPage: response.data.total_pages ?? page,
+      total: response.data.total_results ?? response.data.results.length,
+    }
   }
 
   @cache()
-  async weekTrending(): Promise<CatalogSearchResult[]> {
+  async weekTrending(type: CatalogSearchType = 'all', page = 1): Promise<CatalogSearchPage> {
     const response = await this.tmdb.trending.all({
       throwOnError: false,
       path: { time_window: 'week' },
-      query: { language: 'en-US' },
+      query: { language: 'en-US', page },
     })
     if (response.error) {
       throw new CatalogProviderError('TMDB trending request failed', { cause: response.error })
     }
-    if (!response.data?.results) return []
-    return mapSearchResults(response.data.results)
+    if (!response.data?.results) {
+      return { data: [], currentPage: page, lastPage: page, total: 0 }
+    }
+
+    const data = mapSearchResults(response.data.results).filter(
+      (result) => type === 'all' || result.type === type
+    )
+
+    return {
+      data,
+      currentPage: response.data.page ?? page,
+      lastPage: response.data.total_pages ?? page,
+      total: response.data.total_results ?? response.data.results.length,
+    }
   }
 
   @cache()
@@ -246,11 +279,14 @@ type SearchApiResult = {
   media_type?: string
 }
 
-function mapSearchResults(results: SearchApiResult[]): CatalogSearchResult[] {
+function mapSearchResults(
+  results: SearchApiResult[],
+  forcedType?: ItemType
+): CatalogSearchResult[] {
   return results.flatMap((result) => {
-    if (result.media_type !== 'movie' && result.media_type !== 'tv') return []
-    const type = result.media_type === 'movie' ? 'movie' : 'serie'
-    const name = result.media_type === 'movie' ? result.title : result.name
+    const type = forcedType ?? (result.media_type === 'movie' ? 'movie' : 'serie')
+    if (!forcedType && result.media_type !== 'movie' && result.media_type !== 'tv') return []
+    const name = type === 'movie' ? result.title : result.name
     const releasedAt = result.release_date
     const bannerPath = result.backdrop_path
     const posterPath = result.poster_path

@@ -5415,6 +5415,7 @@ export type Get3TrendingAllByTimeWindowData = {
          * `ISO-639-1`-`ISO-3166-1` code
          */
         language?: string;
+        page?: number;
     };
     url: '/3/trending/all/{time_window}';
 };

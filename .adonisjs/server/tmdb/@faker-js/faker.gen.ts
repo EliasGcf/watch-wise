@@ -4934,7 +4934,8 @@ export const fakeGet3TrendingAllByTimeWindowRequest = (options?: Options): Omit<
             time_window: resolveCondition(options?.useDefault ?? false, f) ? 'day' : f.helpers.arrayElement(['day', 'week'])
         },
         query: {
-            ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { language: resolveCondition(options?.useDefault ?? false, f) ? 'en-US' : f.string.sample() }
+            ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { language: resolveCondition(options?.useDefault ?? false, f) ? 'en-US' : f.string.sample() },
+            ...!resolveCondition(options?.includeOptional ?? true, f) ? {} : { page: resolveCondition(options?.useDefault ?? false, f) ? 1 : f.number.int() }
         }
     };
 };
