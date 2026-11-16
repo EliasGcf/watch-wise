@@ -13,19 +13,23 @@ type OidcSession = {
 const usernamePattern = /^[a-z0-9_]{3,32}$/
 
 export default class OidcAuthController {
-  async redirect({ session, response, containerResolver }: HttpContext) {
+  async redirect({ inertia, session, response, containerResolver }: HttpContext) {
     const oidc = await containerResolver.make(OidcService)
     if (!(await oidc.isEnabled())) return response.notFound()
 
-    const request = await oidc.createAuthorizationRequest()
+    const authorization = await oidc.createAuthorizationRequest()
 
     session.put('oidc', {
-      state: request.state,
-      nonce: request.nonce,
-      codeVerifier: request.codeVerifier,
+      state: authorization.state,
+      nonce: authorization.nonce,
+      codeVerifier: authorization.codeVerifier,
     })
 
-    return response.redirect(request.url)
+    // Inertia visits are XHR, and an XHR cannot follow the redirect to the
+    // provider (cross-origin). The location header turns it into a page load.
+    if (inertia.requestInfo().isInertiaRequest) return inertia.location(authorization.url)
+
+    return response.redirect(authorization.url)
   }
 
   async callback({ request, session, response, auth, logger, containerResolver }: HttpContext) {
