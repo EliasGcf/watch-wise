@@ -104,6 +104,20 @@ SEERR_AUTH_HEADER=your_secret
 
 When the vars are not set the endpoint responds `503` and the rest of the app is unaffected.
 
+## Single Sign-On (OIDC)
+
+Watch Wise can sign users in through any OpenID Connect provider (Pocket ID, Keycloak, Authentik, ...) while keeping local email/password login as a fallback. The provider is configured in the app instead of environment variables.
+
+Log in, open **Settings → Single sign-on**, and fill in:
+
+- **Issuer URL**: the issuer identifier from the provider's `/.well-known/openid-configuration`, for example `https://id.example.com`
+- **Client ID** and **Client secret**: from a confidential OIDC client with PKCE enabled
+- **Callback URL**: shown on the same screen; register it exactly in the provider
+
+Saving runs the discovery request against the issuer and refuses to store settings that cannot be reached. The client secret is encrypted with `APP_KEY` and never returned by the API. The login page only shows **Sign in with SSO** when single sign-on is enabled with a complete configuration.
+
+Users who sign in through OIDC are created on the first sign in, or linked by a verified email to an existing account. Their local password is a random unguessable hash, so they cannot log in with a password. With `NODE_ENV=production` the session cookie is `Secure`, so the app must be served over HTTPS for the sign in to complete.
+
 ## Docker Environment
 
 The Docker image provides defaults for `NODE_ENV`, `HOST`, `PORT`, `LOG_LEVEL`, `APP_URL`, `SESSION_DRIVER`, `DATABASE_NAME`, and `CATALOG_PROVIDER_DRIVER`. The Docker default catalog provider is TMDB, and the default database path is `data/db.sqlite3`.
