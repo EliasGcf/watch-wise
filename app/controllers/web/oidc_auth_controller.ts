@@ -33,7 +33,6 @@ export default class OidcAuthController {
     if (!(await oidc.isEnabled())) return response.notFound()
 
     const pending = session.get('oidc') as OidcSession | undefined
-
     if (request.input('error')) {
       session.forget('oidc')
       session.flash('error', 'Sign in was cancelled.')
