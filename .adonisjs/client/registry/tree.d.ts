@@ -36,6 +36,12 @@ export interface ApiDefinition {
         clear: typeof routes['api.cache.tmdb.clear']
       }
     }
+    settings: {
+      oidc: {
+        show: typeof routes['api.settings.oidc.show']
+        update: typeof routes['api.settings.oidc.update']
+      }
+    }
     webhooks: {
       seerr: typeof routes['api.webhooks.seerr']
     }
@@ -48,6 +54,10 @@ export interface ApiDefinition {
     session: {
       store: typeof routes['app.session.store']
       destroy: typeof routes['app.session.destroy']
+    }
+    oidc: {
+      redirect: typeof routes['app.oidc.redirect']
+      callback: typeof routes['app.oidc.callback']
     }
     home: typeof routes['app.home']
     catalog: {

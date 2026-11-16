@@ -64,6 +64,7 @@ export default defineConfig({
     () => import('#providers/catalog/catalog_provider'),
     () => import('#providers/sonarr/sonarr_provider'),
     () => import('#providers/radarr/radarr_provider'),
+    () => import('#providers/oidc_provider'),
   ],
 
   /*

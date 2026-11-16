@@ -10,6 +10,7 @@ import type CatalogEpisodeTransformer from '#transformers/catalog/episode_transf
 import type CatalogSearchResultTransformer from '#transformers/catalog/search_result_transformer'
 import type CatalogSerieTransformer from '#transformers/catalog/serie_transformer'
 import type MovieTransformer from '#transformers/movie_transformer'
+import type OidcSettingsTransformer from '#transformers/oidc_settings_transformer'
 import type SerieTransformer from '#transformers/serie_transformer'
 import type UserSettingsTransformer from '#transformers/user_settings_transformer'
 import type UserTransformer from '#transformers/user_transformer'
@@ -34,6 +35,10 @@ export namespace Data {
   export type Movie = InferData<MovieTransformer>
   export namespace Movie {
     export type Variants = InferVariants<MovieTransformer>
+  }
+  export type OidcSettings = InferData<OidcSettingsTransformer>
+  export namespace OidcSettings {
+    export type Variants = InferVariants<OidcSettingsTransformer>
   }
   export type Serie = InferData<SerieTransformer>
   export namespace Serie {

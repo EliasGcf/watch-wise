@@ -42,6 +42,18 @@ const routes = {
     tokens: [{"old":"/api/user/settings","type":0,"val":"api","end":""},{"old":"/api/user/settings","type":0,"val":"user","end":""},{"old":"/api/user/settings","type":0,"val":"settings","end":""}],
     types: placeholder as Registry['api.user.settings.update']['types'],
   },
+  'api.settings.oidc.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/settings/oidc',
+    tokens: [{"old":"/api/settings/oidc","type":0,"val":"api","end":""},{"old":"/api/settings/oidc","type":0,"val":"settings","end":""},{"old":"/api/settings/oidc","type":0,"val":"oidc","end":""}],
+    types: placeholder as Registry['api.settings.oidc.show']['types'],
+  },
+  'api.settings.oidc.update': {
+    methods: ["PATCH"],
+    pattern: '/api/settings/oidc',
+    tokens: [{"old":"/api/settings/oidc","type":0,"val":"api","end":""},{"old":"/api/settings/oidc","type":0,"val":"settings","end":""},{"old":"/api/settings/oidc","type":0,"val":"oidc","end":""}],
+    types: placeholder as Registry['api.settings.oidc.update']['types'],
+  },
   'api.library.destroy': {
     methods: ["DELETE"],
     pattern: '/api/library/:id',
@@ -125,6 +137,18 @@ const routes = {
     pattern: '/app/login',
     tokens: [{"old":"/app/login","type":0,"val":"app","end":""},{"old":"/app/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['app.session.store']['types'],
+  },
+  'app.oidc.redirect': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/auth/oidc/redirect',
+    tokens: [{"old":"/app/auth/oidc/redirect","type":0,"val":"app","end":""},{"old":"/app/auth/oidc/redirect","type":0,"val":"auth","end":""},{"old":"/app/auth/oidc/redirect","type":0,"val":"oidc","end":""},{"old":"/app/auth/oidc/redirect","type":0,"val":"redirect","end":""}],
+    types: placeholder as Registry['app.oidc.redirect']['types'],
+  },
+  'app.oidc.callback': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/auth/oidc/callback',
+    tokens: [{"old":"/app/auth/oidc/callback","type":0,"val":"app","end":""},{"old":"/app/auth/oidc/callback","type":0,"val":"auth","end":""},{"old":"/app/auth/oidc/callback","type":0,"val":"oidc","end":""},{"old":"/app/auth/oidc/callback","type":0,"val":"callback","end":""}],
+    types: placeholder as Registry['app.oidc.callback']['types'],
   },
   'app.home': {
     methods: ["GET","HEAD"],

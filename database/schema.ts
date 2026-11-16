@@ -49,6 +49,33 @@ export class LibraryEntrySchema extends BaseModel {
   declare userId: number
 }
 
+export class OidcSettingSchema extends BaseModel {
+  static $columns = [
+    'clientId',
+    'clientSecret',
+    'createdAt',
+    'enabled',
+    'id',
+    'issuerUrl',
+    'updatedAt',
+  ] as const
+  $columns = OidcSettingSchema.$columns
+  @column()
+  declare clientId: string | null
+  @column()
+  declare clientSecret: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare enabled: boolean
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare issuerUrl: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSettingSchema extends BaseModel {
   static $columns = [
     'createdAt',
@@ -79,6 +106,8 @@ export class UserSchema extends BaseModel {
     'email',
     'fullName',
     'id',
+    'oidcProvider',
+    'oidcSubject',
     'password',
     'updatedAt',
     'username',
@@ -93,6 +122,10 @@ export class UserSchema extends BaseModel {
   declare fullName: string | null
   @column({ isPrimary: true })
   declare id: number
+  @column()
+  declare oidcProvider: string | null
+  @column()
+  declare oidcSubject: string | null
   @column({ serializeAs: null })
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })

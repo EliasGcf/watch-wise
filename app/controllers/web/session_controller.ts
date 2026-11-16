@@ -1,10 +1,13 @@
 import User from '#models/user'
+import OidcService from '#services/oidc_service'
 import { loginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SessionController {
-  async create({ inertia }: HttpContext) {
-    return inertia.render('auth/login', {})
+  async create({ inertia, containerResolver }: HttpContext) {
+    const oidc = await containerResolver.make(OidcService)
+
+    return inertia.render('auth/login', { oidcEnabled: await oidc.isEnabled() })
   }
 
   async store({ request, auth, response }: HttpContext) {
