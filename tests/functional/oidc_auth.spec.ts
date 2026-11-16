@@ -36,6 +36,7 @@ class FakeOidcService {
   exchangeError: Error | null = null
   validationError: Error | null = null
   callbackUrl = 'http://localhost:3334/app/auth/oidc/callback'
+  exchangedUrl: URL | null = null
 
   isEnabled() {
     return this.enabled
@@ -45,7 +46,8 @@ class FakeOidcService {
     return authorizationRequest
   }
 
-  async exchangeCode() {
+  async exchangeCode(url: URL) {
+    this.exchangedUrl = url
     if (this.exchangeError) throw this.exchangeError
     return this.claims
   }
@@ -133,6 +135,8 @@ test.group('OIDC sign in', (group) => {
 
     response.assertStatus(302)
     assert.equal(locationPath(response), '/app')
+    assert.include(oidc.exchangedUrl!.search, 'code=code-1')
+    assert.include(oidc.exchangedUrl!.search, 'state=state-1')
     response.assertSessionMissing('oidc')
 
     const user = await User.findBy('email', 'oidc-user@example.com')
@@ -244,6 +248,7 @@ test.group('OIDC sign in', (group) => {
 
     response.assertStatus(302)
     assert.equal(locationPath(response), '/app/login')
+    assert.notInclude(response.header('location')!, 'code=')
     response.assertSessionMissing('oidc')
     response.assertSessionMissing('auth_web')
   })

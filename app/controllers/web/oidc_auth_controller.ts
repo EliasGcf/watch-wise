@@ -36,7 +36,7 @@ export default class OidcAuthController {
     if (request.input('error')) {
       session.forget('oidc')
       session.flash('error', 'Sign in was cancelled.')
-      return response.redirect().toRoute('app.login')
+      return response.redirect().withQs(false).toRoute('app.login')
     }
 
     if (!pending || !request.input('state') || request.input('state') !== pending.state) {
@@ -47,15 +47,25 @@ export default class OidcAuthController {
     let claims: OidcClaims
 
     try {
-      claims = await oidc.exchangeCode(new URL(request.url(), oidc.callbackUrl), {
+      // the query string carries the code and state, and url() drops it by default
+      claims = await oidc.exchangeCode(new URL(request.url(true), oidc.callbackUrl), {
         codeVerifier: pending.codeVerifier,
         state: pending.state,
         nonce: pending.nonce,
       })
     } catch (error) {
-      logger.warn({ errorName: (error as Error).name }, 'OIDC code exchange failed')
+      const failure = error as Error & { code?: string; cause?: unknown }
+      logger.warn(
+        {
+          errorName: failure.name,
+          errorCode: failure.code,
+          errorMessage: failure.message,
+          errorCause: failure.cause,
+        },
+        'OIDC code exchange failed'
+      )
       session.flash('error', 'Sign in failed. Please try again.')
-      return response.redirect().toRoute('app.login')
+      return response.redirect().withQs(false).toRoute('app.login')
     } finally {
       session.forget('oidc')
     }
@@ -91,7 +101,7 @@ export default class OidcAuthController {
 
     await auth.use('web').login(user)
 
-    return response.redirect().toRoute('app.home')
+    return response.redirect().withQs(false).toRoute('app.home')
   }
 
   private async createUser(provider: string, email: string, claims: OidcClaims) {
