@@ -1,4 +1,5 @@
 import { Form, Link } from '@adonisjs/inertia/react'
+import { urlFor } from '~/client'
 import { Button, buttonVariants } from '~/components/ui/button'
 import {
   Card,
@@ -24,12 +25,13 @@ export default function Login({ oidcEnabled }: { oidcEnabled: boolean }) {
         <CardContent>
           {oidcEnabled && (
             <div className="mb-4 flex flex-col gap-4">
-              <Link
-                route="app.oidc.redirect"
+              {/* plain anchor: the redirect leaves the app, so it must not be an Inertia visit */}
+              <a
+                href={urlFor('app.oidc.redirect')}
                 className={buttonVariants({ variant: 'outline', className: 'w-full' })}
               >
                 Sign in with SSO
-              </Link>
+              </a>
               <p className="text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">
                 or
               </p>
