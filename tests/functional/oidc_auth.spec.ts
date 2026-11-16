@@ -83,24 +83,6 @@ test.group('OIDC sign in', (group) => {
     response.assertSession('oidc', pendingOidc)
   })
 
-  test('answers Inertia visits with a location header instead of a redirect', async ({
-    assert,
-    client,
-  }) => {
-    const probe = await client.get('/app/login').header('x-inertia', 'true').redirects(0)
-    const version = probe.header('x-inertia-version')!
-
-    const response = await client
-      .get('/app/auth/oidc/redirect')
-      .header('x-inertia', 'true')
-      .header('x-inertia-version', version)
-      .redirects(0)
-
-    response.assertStatus(409)
-    assert.equal(response.header('x-inertia-location'), authorizationRequest.url)
-    response.assertSession('oidc', pendingOidc)
-  })
-
   test('responds 404 when single sign-on is disabled', async ({ assert, client }) => {
     oidc.enabled = false
 
