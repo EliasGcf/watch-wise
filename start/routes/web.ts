@@ -13,6 +13,10 @@ const group = router.group(() => {
     })
     .use(middleware.guest())
 
+  // kept out of guest() so a logged in user can still start a new sign in
+  router.get('auth/oidc/redirect', [controllers.web.OidcAuth, 'redirect']).as('oidc.redirect')
+  router.get('auth/oidc/callback', [controllers.web.OidcAuth, 'callback']).as('oidc.callback')
+
   router
     .group(() => {
       router.get('/', [controllers.web.Home, 'index']).as('home')

@@ -24,6 +24,8 @@ export type ScannedRoutes = {
     'app.new_account.store': { paramsTuple?: []; params?: {} }
     'app.login': { paramsTuple?: []; params?: {} }
     'app.session.store': { paramsTuple?: []; params?: {} }
+    'app.oidc.redirect': { paramsTuple?: []; params?: {} }
+    'app.oidc.callback': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.session.destroy': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
@@ -39,6 +41,8 @@ export type ScannedRoutes = {
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.new_account': { paramsTuple?: []; params?: {} }
     'app.login': { paramsTuple?: []; params?: {} }
+    'app.oidc.redirect': { paramsTuple?: []; params?: {} }
+    'app.oidc.callback': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }
@@ -53,6 +57,8 @@ export type ScannedRoutes = {
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.new_account': { paramsTuple?: []; params?: {} }
     'app.login': { paramsTuple?: []; params?: {} }
+    'app.oidc.redirect': { paramsTuple?: []; params?: {} }
+    'app.oidc.callback': { paramsTuple?: []; params?: {} }
     'app.home': { paramsTuple?: []; params?: {} }
     'app.catalog.search': { paramsTuple?: []; params?: {} }
     'app.library.index': { paramsTuple?: []; params?: {} }

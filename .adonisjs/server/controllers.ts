@@ -24,6 +24,7 @@ export const controllers = {
     Library: () => import('#controllers/web/library_controller'),
     Movies: () => import('#controllers/web/movies_controller'),
     NewAccount: () => import('#controllers/web/new_account_controller'),
+    OidcAuth: () => import('#controllers/web/oidc_auth_controller'),
     Series: () => import('#controllers/web/series_controller'),
     Session: () => import('#controllers/web/session_controller'),
     Settings: () => import('#controllers/web/settings_controller'),

@@ -126,6 +126,18 @@ const routes = {
     tokens: [{"old":"/app/login","type":0,"val":"app","end":""},{"old":"/app/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['app.session.store']['types'],
   },
+  'app.oidc.redirect': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/auth/oidc/redirect',
+    tokens: [{"old":"/app/auth/oidc/redirect","type":0,"val":"app","end":""},{"old":"/app/auth/oidc/redirect","type":0,"val":"auth","end":""},{"old":"/app/auth/oidc/redirect","type":0,"val":"oidc","end":""},{"old":"/app/auth/oidc/redirect","type":0,"val":"redirect","end":""}],
+    types: placeholder as Registry['app.oidc.redirect']['types'],
+  },
+  'app.oidc.callback': {
+    methods: ["GET","HEAD"],
+    pattern: '/app/auth/oidc/callback',
+    tokens: [{"old":"/app/auth/oidc/callback","type":0,"val":"app","end":""},{"old":"/app/auth/oidc/callback","type":0,"val":"auth","end":""},{"old":"/app/auth/oidc/callback","type":0,"val":"oidc","end":""},{"old":"/app/auth/oidc/callback","type":0,"val":"callback","end":""}],
+    types: placeholder as Registry['app.oidc.callback']['types'],
+  },
   'app.home': {
     methods: ["GET","HEAD"],
     pattern: '/app',

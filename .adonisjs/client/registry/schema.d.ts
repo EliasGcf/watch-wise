@@ -247,6 +247,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/session_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'app.oidc.redirect': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/auth/oidc/redirect'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/oidc_auth_controller').default['redirect']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/oidc_auth_controller').default['redirect']>>>
+    }
+  }
+  'app.oidc.callback': {
+    methods: ["GET","HEAD"]
+    pattern: '/app/auth/oidc/callback'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/web/oidc_auth_controller').default['callback']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/web/oidc_auth_controller').default['callback']>>>
+    }
+  }
   'app.home': {
     methods: ["GET","HEAD"]
     pattern: '/app'

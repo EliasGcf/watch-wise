@@ -49,6 +49,10 @@ export interface ApiDefinition {
       store: typeof routes['app.session.store']
       destroy: typeof routes['app.session.destroy']
     }
+    oidc: {
+      redirect: typeof routes['app.oidc.redirect']
+      callback: typeof routes['app.oidc.callback']
+    }
     home: typeof routes['app.home']
     catalog: {
       search: typeof routes['app.catalog.search']
