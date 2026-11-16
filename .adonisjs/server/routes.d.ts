@@ -10,6 +10,8 @@ export type ScannedRoutes = {
     'api.cache.tmdb.clear': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
     'api.user.settings.update': { paramsTuple?: []; params?: {} }
+    'api.settings.oidc.show': { paramsTuple?: []; params?: {} }
+    'api.settings.oidc.update': { paramsTuple?: []; params?: {} }
     'api.library.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.movies.watch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.library.movies.unwatch': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -38,6 +40,7 @@ export type ScannedRoutes = {
   GET: {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
+    'api.settings.oidc.show': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.new_account': { paramsTuple?: []; params?: {} }
     'app.login': { paramsTuple?: []; params?: {} }
@@ -54,6 +57,7 @@ export type ScannedRoutes = {
   HEAD: {
     'api.hello': { paramsTuple?: []; params?: {} }
     'api.user.settings.show': { paramsTuple?: []; params?: {} }
+    'api.settings.oidc.show': { paramsTuple?: []; params?: {} }
     'api.library.series.seasons.episodes': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'season': ParamValue} }
     'app.new_account': { paramsTuple?: []; params?: {} }
     'app.login': { paramsTuple?: []; params?: {} }
@@ -82,6 +86,7 @@ export type ScannedRoutes = {
   PATCH: {
     'api.user.update': { paramsTuple?: []; params?: {} }
     'api.user.settings.update': { paramsTuple?: []; params?: {} }
+    'api.settings.oidc.update': { paramsTuple?: []; params?: {} }
   }
   DELETE: {
     'api.cache.tmdb.clear': { paramsTuple?: []; params?: {} }

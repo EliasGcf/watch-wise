@@ -14,6 +14,10 @@ import {
 
 const scopes = 'openid profile email'
 
+export function oidcCallbackUrl() {
+  return new URL('/app/auth/oidc/callback', env.get('APP_URL')).toString()
+}
+
 export type OidcAuthorizationRequest = {
   state: string
   nonce: string
@@ -50,7 +54,7 @@ export default class OidcService {
   #discovery: { key: string; configuration: Configuration } | null = null
 
   get callbackUrl() {
-    return new URL('/app/auth/oidc/callback', env.get('APP_URL')).toString()
+    return oidcCallbackUrl()
   }
 
   async isEnabled() {

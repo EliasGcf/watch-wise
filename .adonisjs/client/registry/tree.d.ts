@@ -36,6 +36,12 @@ export interface ApiDefinition {
         clear: typeof routes['api.cache.tmdb.clear']
       }
     }
+    settings: {
+      oidc: {
+        show: typeof routes['api.settings.oidc.show']
+        update: typeof routes['api.settings.oidc.update']
+      }
+    }
     webhooks: {
       seerr: typeof routes['api.webhooks.seerr']
     }

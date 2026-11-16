@@ -42,6 +42,18 @@ const routes = {
     tokens: [{"old":"/api/user/settings","type":0,"val":"api","end":""},{"old":"/api/user/settings","type":0,"val":"user","end":""},{"old":"/api/user/settings","type":0,"val":"settings","end":""}],
     types: placeholder as Registry['api.user.settings.update']['types'],
   },
+  'api.settings.oidc.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/settings/oidc',
+    tokens: [{"old":"/api/settings/oidc","type":0,"val":"api","end":""},{"old":"/api/settings/oidc","type":0,"val":"settings","end":""},{"old":"/api/settings/oidc","type":0,"val":"oidc","end":""}],
+    types: placeholder as Registry['api.settings.oidc.show']['types'],
+  },
+  'api.settings.oidc.update': {
+    methods: ["PATCH"],
+    pattern: '/api/settings/oidc',
+    tokens: [{"old":"/api/settings/oidc","type":0,"val":"api","end":""},{"old":"/api/settings/oidc","type":0,"val":"settings","end":""},{"old":"/api/settings/oidc","type":0,"val":"oidc","end":""}],
+    types: placeholder as Registry['api.settings.oidc.update']['types'],
+  },
   'api.library.destroy': {
     methods: ["DELETE"],
     pattern: '/api/library/:id',

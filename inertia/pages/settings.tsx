@@ -18,15 +18,22 @@ type Props = InertiaProps<{
     sonarr: boolean
     radarr: boolean
   }
+  oidc: Data.OidcSettings
 }>
 
 type PendingIntegration = 'sonarr' | 'radarr' | null
 
-export default function Settings({ user, settings, providerAvailability }: Props) {
+export default function Settings({ user, settings, providerAvailability, oidc }: Props) {
   const [sonarrChecked, setSonarrChecked] = useState(settings.deleteSonarrEpisodeFiles)
   const [radarrChecked, setRadarrChecked] = useState(settings.deleteRadarrMovieFiles)
   const [pendingIntegration, setPendingIntegration] = useState<PendingIntegration>(null)
   const [username, setUsername] = useState(user?.username ?? '')
+  const [oidcForm, setOidcForm] = useState({
+    enabled: oidc.enabled,
+    issuerUrl: oidc.issuerUrl ?? '',
+    clientId: oidc.clientId ?? '',
+    clientSecret: '',
+  })
 
   const updateSettings = useMutation(
     api.api.user.settings.update.mutationOptions({
@@ -45,6 +52,16 @@ export default function Settings({ user, settings, providerAvailability }: Props
     api.api.cache.tmdb.clear.mutationOptions({
       onSuccess: () => toast.success('TMDB cache cleared.'),
       onError: () => toast.error('TMDB cache could not be cleared.'),
+    })
+  )
+
+  const updateOidc = useMutation(
+    api.api.settings.oidc.update.mutationOptions({
+      onSuccess: () => {
+        toast.success('Single sign-on settings saved.')
+        setOidcForm((form) => ({ ...form, clientSecret: '' }))
+      },
+      onError: () => toast.error('Single sign-on settings could not be saved.'),
     })
   )
 
@@ -167,6 +184,112 @@ export default function Settings({ user, settings, providerAvailability }: Props
             />
           </IntegrationCard>
         </div>
+      </section>
+
+      <section className="flex flex-col gap-4" aria-labelledby="settings-oidc">
+        <div className="flex flex-col gap-1 border-b pb-3">
+          <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">Security</p>
+          <h2 id="settings-oidc" className="text-2xl font-semibold tracking-tight">
+            Single sign-on
+          </h2>
+        </div>
+
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={(event) => {
+            event.preventDefault()
+            updateOidc.mutate({
+              body: {
+                enabled: oidcForm.enabled,
+                issuerUrl: oidcForm.issuerUrl.trim() || null,
+                clientId: oidcForm.clientId.trim() || null,
+                clientSecret: oidcForm.clientSecret.trim() || null,
+              },
+            })
+          }}
+        >
+          <Field orientation="horizontal" className="items-start gap-3">
+            <div className="mt-0.5 flex size-4 shrink-0 items-center justify-center">
+              <Checkbox
+                id="oidc-enabled"
+                checked={oidcForm.enabled}
+                onCheckedChange={(checked) =>
+                  setOidcForm((form) => ({ ...form, enabled: Boolean(checked) }))
+                }
+              />
+            </div>
+            <FieldContent>
+              <FieldLabel htmlFor="oidc-enabled">Show single sign-on on the login page</FieldLabel>
+              <FieldDescription>
+                Requires an issuer URL, a client ID and a client secret.
+              </FieldDescription>
+            </FieldContent>
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="oidc-issuer-url">Issuer URL</FieldLabel>
+            <Input
+              id="oidc-issuer-url"
+              name="issuerUrl"
+              type="url"
+              placeholder="https://id.example.com"
+              value={oidcForm.issuerUrl}
+              onChange={(event) =>
+                setOidcForm((form) => ({ ...form, issuerUrl: event.target.value }))
+              }
+            />
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="oidc-client-id">Client ID</FieldLabel>
+            <Input
+              id="oidc-client-id"
+              name="clientId"
+              type="text"
+              value={oidcForm.clientId}
+              onChange={(event) =>
+                setOidcForm((form) => ({ ...form, clientId: event.target.value }))
+              }
+            />
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="oidc-client-secret">Client secret</FieldLabel>
+            <Input
+              id="oidc-client-secret"
+              name="clientSecret"
+              type="password"
+              autoComplete="off"
+              placeholder={
+                oidc.hasSecret ? 'Leave empty to keep the current secret' : 'Client secret'
+              }
+              value={oidcForm.clientSecret}
+              onChange={(event) =>
+                setOidcForm((form) => ({ ...form, clientSecret: event.target.value }))
+              }
+            />
+            <FieldDescription>
+              The secret is stored encrypted and never shown again.
+            </FieldDescription>
+          </Field>
+
+          <Field>
+            <FieldLabel htmlFor="oidc-callback-url">Callback URL</FieldLabel>
+            <Input id="oidc-callback-url" type="text" readOnly value={oidc.callbackUrl} />
+            <FieldDescription>Register this exact URL in the identity provider.</FieldDescription>
+          </Field>
+
+          <div>
+            <Button type="submit" disabled={updateOidc.isPending}>
+              {updateOidc.isPending ? (
+                <LoaderCircle className="size-4 animate-spin" aria-label="Saving" />
+              ) : (
+                <SaveIcon className="size-4" />
+              )}
+              Save
+            </Button>
+          </div>
+        </form>
       </section>
 
       <section className="flex flex-col gap-4" aria-labelledby="settings-cache">

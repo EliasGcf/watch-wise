@@ -15,6 +15,10 @@ const group = router.group(() => {
       router
         .patch('user/settings', [controllers.api.UserSettings, 'update'])
         .as('user.settings.update')
+      router.get('settings/oidc', [controllers.api.OidcSettings, 'show']).as('settings.oidc.show')
+      router
+        .patch('settings/oidc', [controllers.api.OidcSettings, 'update'])
+        .as('settings.oidc.update')
       router.delete('library/:id', [controllers.api.Library, 'destroy']).as('library.destroy')
       router
         .post('library/movies/:id/watch', [controllers.api.Movies, 'watch'])

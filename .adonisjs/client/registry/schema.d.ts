@@ -79,6 +79,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/user_settings_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'api.settings.oidc.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/settings/oidc'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/oidc_settings_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/oidc_settings_controller').default['show']>>>
+    }
+  }
+  'api.settings.oidc.update': {
+    methods: ["PATCH"]
+    pattern: '/api/settings/oidc'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/oidc_settings').updateOidcSettingsValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/oidc_settings').updateOidcSettingsValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/oidc_settings_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/oidc_settings_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'api.library.destroy': {
     methods: ["DELETE"]
     pattern: '/api/library/:id'
